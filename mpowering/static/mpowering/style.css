@@ -3,6 +3,12 @@
  #495525 - DC dark green r73,g85,b37
  #77A240 - DC mid green r119,g162, b64
  #a5c727 - DC light green r165,g199,b39
+ 
+ 2596b4 - light blue
+ 2a6083 - mid blue
+ 033f62 - dark blue
+ ff0054 - pink/red
+ 
  */
 
 /* Move down content because we have a fixed navbar that is 50px tall */
@@ -12,12 +18,12 @@ body {
 
 
 a {
-    color: #495525;
+    color: #2596b4;
     text-decoration: none;
 }
 
 a:hover, a:focus {
-    color: #495525;
+    color: #ff0054;
     text-decoration: underline;
 }
 
@@ -34,8 +40,8 @@ a:hover, a:focus {
 }
 
 .navbar-inverse {
-    background-color: #77A240;
-    border-color: #495525;
+    background-color: #033f62;
+    border-color: #ff0054;
 }
 
 .navbar-inverse .navbar-brand {
@@ -51,7 +57,7 @@ a:hover, a:focus {
 
 .navbar-inverse .navbar-nav > li > a:hover,
 .navbar-inverse .navbar-nav > li > a:focus {
-    background-color: #495525;
+    background-color: #033f62;
 }
 
 /*
@@ -186,7 +192,7 @@ a:hover, a:focus {
  */
  
 #footer {
-	border-top: 1px solid #a5c727;
+	border-top: 1px solid #ff0054;
 	margin-top:50px;
 	padding-top: 20px;
 	text-align:right;
