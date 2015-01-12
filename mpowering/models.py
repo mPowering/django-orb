@@ -83,7 +83,7 @@ class Resource (models.Model):
         return ResourceURL.objects.filter(resource=self)
     
     def get_categories(self):
-        categories = Category.objects.filter(tag__resourcetag__resource=self).order_by('order_by')
+        categories = Category.objects.filter(tag__resourcetag__resource=self).distinct().order_by('order_by')
         for c in categories:
             c.tags = Tag.objects.filter(resourcetag__resource=self, category=c)
         return categories
