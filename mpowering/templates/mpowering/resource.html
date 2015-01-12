@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center">{{ resource.title }}</h2>
+
+<p style="text-align:center">
+From:
+{% for o in organisations %}
+	{% if o.url %}
+		<a href="{{ o.url }}">{{ o.name }} </a>
+	{% else %}
+		{{ o.name }}
+	{% endif %}
+
+{% endfor %}
+</p>
+<p>
+{{ resource.description }}
+</p>
+
+<h4>Files</h4>
+
+
+<h4>URLs</h4>
+
+
+<h4>Health Topic</h4>
+
+
+<h4>Audience</h4>
+
+<h4>Device</h4>
+
+<h4>Resource Type</h4>
+
+<h4>License</h4>
+
+{% endblock %}

@@ -49,11 +49,13 @@ class Resource (models.Model):
     
     title = models.TextField(blank=False, null=False)
     description = models.TextField(blank=False, null=False) 
+    image = models.ImageField(upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
+    status = models.CharField(max_length=50,choices=STATUS_TYPES)
     create_date = models.DateTimeField(default=timezone.now)
     create_user = models.ForeignKey(User, related_name='resource_create_user')
     update_date = models.DateTimeField(default=timezone.now) 
     update_user = models.ForeignKey(User, related_name='resource_update_user')
-    status = models.CharField(max_length=50,choices=STATUS_TYPES)
+    slug = models.CharField(blank=True, null=True, max_length=100)
     
     class Meta:
         verbose_name = _('Resource')
@@ -62,6 +64,16 @@ class Resource (models.Model):
     def __unicode__(self):
         return self.title
     
+    def save(self, *args, **kwargs):
+        # If there is not already a slug in place...
+        if not self.slug:
+            # Import django's builtin slug function
+            from django.template.defaultfilters import slugify
+            # Call this slug function on the field you want the slug to be made of
+            self.slug = slugify(self.title)
+            # Call the rest of the old save() method
+            super(Resource, self).save(*args, **kwargs)
+            
 # ResourceURL
 class ResourceURL (models.Model):
     url = models.URLField(blank=False, null=False, max_length=500)
@@ -80,7 +92,7 @@ class ResourceURL (models.Model):
     
 # ResourceFile
 class ResourceFile (models.Model):
-    file = models.FileField(upload_to='mpowering/%Y/%m/%d', max_length=200)
+    file = models.FileField(upload_to='resource/%Y/%m/%d', max_length=200)
     resource = models.ForeignKey(Resource)
     description = models.TextField(blank=True, null=True) 
     create_date = models.DateTimeField(default=timezone.now)
@@ -115,7 +127,7 @@ class ResourceRelationship (models.Model):
 class Category (models.Model):
     name = models.CharField(blank=False, null=False, max_length=100) 
     top_level = models.BooleanField(null=False,default=False)
-    slug = models.CharField(blank=False, null=False, max_length=100) 
+    slug = models.CharField(blank=True, null=True, max_length=100) 
     order_by = models.IntegerField(default=0)
     
     class Meta:
@@ -125,6 +137,16 @@ class Category (models.Model):
     def __unicode__(self):
         return self.name
     
+    def save(self, *args, **kwargs):
+        # If there is not already a slug in place...
+        if not self.slug:
+            # Import django's builtin slug function
+            from django.template.defaultfilters import slugify
+            # Call this slug function on the field you want the slug to be made of
+            self.slug = slugify(self.name)
+            # Call the rest of the old save() method
+            super(Category, self).save(*args, **kwargs)
+            
 # Tag
 class Tag (models.Model):
     category = models.ForeignKey(Category)

@@ -5,7 +5,7 @@
 <h2 style="text-align:center">{{ tag.name }}</h2>
 
 {% for r in resources %}
-	{{ r.title }}
+	<a href="{% url 'mpowering_resource' r.slug %}">{{ r.title }}</a>
 {% endfor %}
 
 {% endblock %}
