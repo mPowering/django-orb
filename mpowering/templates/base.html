@@ -15,8 +15,12 @@
     <link href="{{ STATIC_URL }}mpowering/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
     
     <link href="{{ STATIC_URL }}mpowering/style.css" rel="stylesheet"/>
+    <link href="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.min.css" rel="stylesheet"/>
+    <link href="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.structure.min.css" rel="stylesheet"/>
+    <link href="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.theme.min.css" rel="stylesheet"/>
     <link rel="shortcut icon" href="{{ STATIC_URL }}mpowering/images/favicon.ico"/>	
-    
+    <script src="{{ STATIC_URL }}mpowering/js/jquery-1.11.0.min.js"></script>
+    <script src="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.min.js"></script>
     {% block extra_styles %}
     {% endblock extra_styles %}
 	
@@ -46,6 +50,7 @@
     </p>
 </div>
     
+<script src="{{ STATIC_URL }}mpowering/bootstrap-3.1.1/js/bootstrap.min.js"></script>
 {% if OPPIA_GOOGLE_ANALYTICS_ENABLED %}
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

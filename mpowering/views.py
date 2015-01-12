@@ -23,7 +23,6 @@ def tag_view(request,tag_slug):
   
 def resource_view(request,resource_slug):
     resource = Resource.objects.get(slug=resource_slug, status=Resource.APPROVED)
-    organisations = Organisation.objects.filter(resourceorganisation__resource=resource)
     '''
     health_topic
     audience
@@ -33,6 +32,5 @@ def resource_view(request,resource_slug):
     '''
     return render_to_response('mpowering/resource.html',
                               {'resource': resource, 
-                               'organisations': organisations,
                                },
                               context_instance=RequestContext(request))  

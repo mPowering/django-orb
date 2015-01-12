@@ -1,11 +1,13 @@
 {% extends "base.html" %}
-
+{% load i18n %} 
 {% block content %}
 
 <h2 style="text-align:center">{{ tag.name }}</h2>
 
+<ul>
 {% for r in resources %}
-	<a href="{% url 'mpowering_resource' r.slug %}">{{ r.title }}</a>
+	<li><a href="{% url 'mpowering_resource' r.slug %}">{{ r.title }}</a></li>
 {% endfor %}
+</ul>
 
 {% endblock %}

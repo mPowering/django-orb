@@ -46,7 +46,6 @@ class Resource (models.Model):
         (APPROVED, _('Approved')),
     )
     
-    
     title = models.TextField(blank=False, null=False)
     description = models.TextField(blank=False, null=False) 
     image = models.ImageField(upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
@@ -71,8 +70,23 @@ class Resource (models.Model):
             from django.template.defaultfilters import slugify
             # Call this slug function on the field you want the slug to be made of
             self.slug = slugify(self.title)
-            # Call the rest of the old save() method
-            super(Resource, self).save(*args, **kwargs)
+        # Call the rest of the old save() method
+        super(Resource, self).save(*args, **kwargs)
+    
+    def get_organisations(self):
+        return Organisation.objects.filter(resourceorganisation__resource=self)
+    
+    def get_files(self):
+        return ResourceFile.objects.filter(resource=self)
+    
+    def get_urls(self):
+        return ResourceURL.objects.filter(resource=self)
+    
+    def get_categories(self):
+        categories = Category.objects.filter(tag__resourcetag__resource=self).order_by('order_by')
+        for c in categories:
+            c.tags = Tag.objects.filter(resourcetag__resource=self, category=c)
+        return categories
             
 # ResourceURL
 class ResourceURL (models.Model):
@@ -144,8 +158,9 @@ class Category (models.Model):
             from django.template.defaultfilters import slugify
             # Call this slug function on the field you want the slug to be made of
             self.slug = slugify(self.name)
-            # Call the rest of the old save() method
-            super(Category, self).save(*args, **kwargs)
+        # Call the rest of the old save() method
+        super(Category, self).save(*args, **kwargs)
+        
             
 # Tag
 class Tag (models.Model):
@@ -173,9 +188,9 @@ class Tag (models.Model):
             from django.template.defaultfilters import slugify
             # Call this slug function on the field you want the slug to be made of
             self.slug = slugify(self.name)
-            # Call the rest of the old save() method
-            super(Tag, self).save(*args, **kwargs)
-    
+        # Call the rest of the old save() method
+        super(Tag, self).save(*args, **kwargs)
+        
 # ResourceTag
 class ResourceTag (models.Model):
     resource = models.ForeignKey(Resource)

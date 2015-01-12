@@ -1,14 +1,14 @@
 {% extends "base.html" %}
-
+{% load i18n %} 
 {% block content %}
 
 <h2 style="text-align:center">{{ resource.title }}</h2>
 
 <p style="text-align:center">
 From:
-{% for o in organisations %}
+{% for o in resource.get_organisations %}
 	{% if o.url %}
-		<a href="{{ o.url }}">{{ o.name }} </a>
+		<a href="{{ o.url }}" target="_blank">{{ o.name }} </a>
 	{% else %}
 		{{ o.name }}
 	{% endif %}
@@ -19,21 +19,46 @@ From:
 {{ resource.description }}
 </p>
 
-<h4>Files</h4>
+{% if resource.get_files %}
+	<h4>{% trans 'Files' %}</h4>
+	<ul>
+	{% for f in resource.get_files %}
+		<li>
+			{% if f.description %}
+				<a href="{{ f.url }}">{{ f.description }}</a>
+			{% else %}
+				<a href="{{ u.url }}">{{ f.url }}</a>
+			{% endif %}
+		</li>
+	{% endfor %}
+	</ul>
+{% endif %}
 
+{% if resource.get_urls %}
+	<h4>{% trans 'Links' %}</h4>
+	<ul>
+	{% for u in resource.get_urls %}
+		<li>
+			{% if u.description %}
+				<a href="{{ u.url }}">{{ u.description }}</a>
+			{% else %}
+				<a href="{{ u.url }}">{{ u.url }}</a>
+			{% endif %}
+		</li>
+	{% endfor %}
+	</ul>
+{% endif %}
 
-<h4>URLs</h4>
+{% if resource.get_categories %}
+	{% for c in resource.get_categories %}
+		<h4>{{ c.name }}</h4>
+		<ul>
+			{% for t in c.tags %}
+				<li><a href="{% url 'mpowering_tags' t.slug %}">{{ t.name }}</a></li>
+			{% endfor %}
+		</ul>
+	{% endfor %}
+{% endif %}
 
-
-<h4>Health Topic</h4>
-
-
-<h4>Audience</h4>
-
-<h4>Device</h4>
-
-<h4>Resource Type</h4>
-
-<h4>License</h4>
 
 {% endblock %}
