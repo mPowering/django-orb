@@ -33,12 +33,23 @@ class UserProfile (models.Model):
     
 # Resource
 class Resource (models.Model):
+    REJECTED = 'rejected'
+    PENDING = 'pending'
+    APPROVED = 'approved'
+    STATUS_TYPES = (
+        (REJECTED, _('Rejected')),
+        (PENDING, _('Pending')),
+        (APPROVED, _('Approved')),
+    )
+    
+    
     title = models.TextField(blank=False, null=False)
     description = models.TextField(blank=False, null=False) 
     create_date = models.DateTimeField(default=timezone.now)
     create_user = models.ForeignKey(User, related_name='resource_create_user')
     update_date = models.DateTimeField(default=timezone.now) 
     update_user = models.ForeignKey(User, related_name='resource_update_user')
+    status = models.CharField(max_length=50,choices=STATUS_TYPES)
     
 # ResourceURL
 class ResourceURL (models.Model):
@@ -79,18 +90,36 @@ class ResourceRelationship (models.Model):
     
 # Category
 class Category (models.Model):
-    name = models.TextField(blank=False, null=False) 
-    slug = models.TextField(blank=False, null=False)
+    name = models.CharField(blank=False, null=False, max_length=100) 
     top_level = models.BooleanField(null=False,default=False)
+    slug = models.CharField(blank=False, null=False, max_length=100) 
+    order_by = models.IntegerField(default=0)
+    
+    class Meta:
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
+        
+    def __unicode__(self):
+        return self.name
     
 # Tag
 class Tag (models.Model):
     category = models.ForeignKey(Category)
-    name = models.TextField(blank=False, null=False)
+    name = models.CharField(blank=False, null=False, max_length=100)
     create_date = models.DateTimeField(default=timezone.now)
     create_user = models.ForeignKey(User, related_name='tag_create_user')
     update_date = models.DateTimeField(default=timezone.now) 
     update_user = models.ForeignKey(User, related_name='tag_update_user')
+    image = models.ImageField(upload_to='tag')
+    slug = models.CharField(blank=False, null=False, max_length=100)
+    order_by = models.IntegerField(default=0)
+    
+    class Meta:
+        verbose_name = _('Tag')
+        verbose_name_plural = _('Tags')
+        
+    def __unicode__(self):
+        return self.name
     
 # ResourceTag
 class ResourceTag (models.Model):
