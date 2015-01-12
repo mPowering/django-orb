@@ -16,10 +16,14 @@ models.signals.post_save.connect(create_api_key, sender=User)
 class Organisation (models.Model):
     name = models.TextField(blank=False, null=False)
     location = models.TextField(blank=True, null=True, default=None)
+    url = models.URLField(blank=True, null=True, default=None)
     create_date = models.DateTimeField(default=timezone.now)
     create_user = models.ForeignKey(User, related_name='organisation_create_user')
     update_date = models.DateTimeField(default=timezone.now) 
     update_user = models.ForeignKey(User, related_name='organisation_update_user')
+    
+    def __unicode__(self):
+        return self.name
     
 # UserProfile
 class UserProfile (models.Model):
@@ -51,26 +55,45 @@ class Resource (models.Model):
     update_user = models.ForeignKey(User, related_name='resource_update_user')
     status = models.CharField(max_length=50,choices=STATUS_TYPES)
     
+    class Meta:
+        verbose_name = _('Resource')
+        verbose_name_plural = _('Resources')
+        
+    def __unicode__(self):
+        return self.title
+    
 # ResourceURL
 class ResourceURL (models.Model):
-    url = models.TextField(blank=False, null=False)
+    url = models.URLField(blank=False, null=False, max_length=500)
     resource = models.ForeignKey(Resource)
-    description = models.TextField(blank=False, null=False) 
+    description = models.TextField(blank=True, null=True) 
     create_date = models.DateTimeField(default=timezone.now)
     create_user = models.ForeignKey(User, related_name='resource_url_create_user')
     update_date = models.DateTimeField(default=timezone.now) 
     update_user = models.ForeignKey(User, related_name='resource_url_update_user')
 
+    def __unicode__(self):
+        if self.description is None:
+            return self.url
+        else:
+            return self.description
+    
 # ResourceFile
 class ResourceFile (models.Model):
     file = models.FileField(upload_to='mpowering/%Y/%m/%d', max_length=200)
     resource = models.ForeignKey(Resource)
-    description = models.TextField(blank=False, null=False) 
+    description = models.TextField(blank=True, null=True) 
     create_date = models.DateTimeField(default=timezone.now)
     create_user = models.ForeignKey(User, related_name='resource_file_create_user')
     update_date = models.DateTimeField(default=timezone.now) 
     update_user = models.ForeignKey(User, related_name='resource_file_update_user')
     
+    def __unicode__(self):
+        if self.description is None:
+            return self.file
+        else:
+            return self.description
+
 # ResourceRelationship
 class ResourceRelationship (models.Model):
     RELATIONSHIP_TYPES = (
@@ -110,8 +133,8 @@ class Tag (models.Model):
     create_user = models.ForeignKey(User, related_name='tag_create_user')
     update_date = models.DateTimeField(default=timezone.now) 
     update_user = models.ForeignKey(User, related_name='tag_update_user')
-    image = models.ImageField(upload_to='tag')
-    slug = models.CharField(blank=False, null=False, max_length=100)
+    image = models.ImageField(upload_to='tag', null=True, blank=True)
+    slug = models.CharField(blank=True, null=True, max_length=100)
     order_by = models.IntegerField(default=0)
     
     class Meta:
@@ -121,10 +144,26 @@ class Tag (models.Model):
     def __unicode__(self):
         return self.name
     
+    def save(self, *args, **kwargs):
+        # If there is not already a slug in place...
+        if not self.slug:
+            # Import django's builtin slug function
+            from django.template.defaultfilters import slugify
+            # Call this slug function on the field you want the slug to be made of
+            self.slug = slugify(self.name)
+            # Call the rest of the old save() method
+            super(Tag, self).save(*args, **kwargs)
+    
 # ResourceTag
 class ResourceTag (models.Model):
     resource = models.ForeignKey(Resource)
     tag = models.ForeignKey(Tag)
     create_date = models.DateTimeField(default=timezone.now)
     create_user = models.ForeignKey(User, related_name='resourcetag_create_user')   
-    
+
+# ResourceOrganisation
+class ResourceOrganisation (models.Model):
+    resource = models.ForeignKey(Resource)
+    organisation = models.ForeignKey(Organisation)
+    create_date = models.DateTimeField(default=timezone.now)
+    create_user = models.ForeignKey(User)  

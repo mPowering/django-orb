@@ -2,6 +2,18 @@
 
 {% block content %}
 
-<h1>Mpowering home</h1>
+
+<h2 style="text-align:center">Connecting Frontline Health Workers to resources and each other to expand their knowledge, organize content into courses, and share their learning with the community. </h2>
+
+<div style="text-align:center; margin: 20px auto;">
+{% for t in topics %}
+	<div style="display:block; min-width:300px; float:left; min-height:300px;">
+		<a href="{% url 'mpowering_tags' t.slug %}">
+			<img src="{{ MEDIA_URL }}{{ t.image }}"/>
+			<h3 style="text-align:center">{{ t.name }}</h3>
+		</a> 
+	</div>
+{% endfor %}
+</div>
 
 {% endblock %}

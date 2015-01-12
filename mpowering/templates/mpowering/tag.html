@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h2 style="text-align:center">{{ tag.name }}</h2>
+
+{% for r in resources %}
+	{{ r.title }}
+{% endfor %}
+
+{% endblock %}
