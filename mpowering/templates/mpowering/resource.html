@@ -19,7 +19,10 @@ From:
 {{ resource.description }}
 </p>
 
+
+
 {% if resource.get_files %}
+	<hr/>
 	<h4>{% trans 'Files' %}</h4>
 	<ul>
 	{% for f in resource.get_files %}
@@ -35,6 +38,7 @@ From:
 {% endif %}
 
 {% if resource.get_urls %}
+	<hr/>
 	<h4>{% trans 'Links' %}</h4>
 	<ul>
 	{% for u in resource.get_urls %}
@@ -51,6 +55,8 @@ From:
 
 {% if resource.get_categories %}
 	{% for c in resource.get_categories %}
+		<hr/>
+		
 		<h4>{{ c.name }}</h4>
 		<ul>
 			{% for t in c.tags %}
@@ -59,6 +65,8 @@ From:
 		</ul>
 	{% endfor %}
 {% endif %}
+
+<hr/>
 
 
 {% endblock %}
