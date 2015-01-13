@@ -21,10 +21,14 @@ class Organisation (models.Model):
     create_user = models.ForeignKey(User, related_name='organisation_create_user')
     update_date = models.DateTimeField(default=timezone.now) 
     update_user = models.ForeignKey(User, related_name='organisation_update_user')
-    
+     
     def __unicode__(self):
         return self.name
     
+    def save(self, *args, **kwargs):
+        self.update_date = timezone.now()
+        super(Organisation, self).save(*args, **kwargs)
+        
 # UserProfile
 class UserProfile (models.Model):
     user = models.OneToOneField(User)
@@ -35,6 +39,10 @@ class UserProfile (models.Model):
     create_date = models.DateTimeField(default=timezone.now)
     update_date = models.DateTimeField(default=timezone.now)
     
+    def save(self, *args, **kwargs):
+        self.update_date = timezone.now()
+        super(UserProfile, self).save(*args, **kwargs)
+        
 # Resource
 class Resource (models.Model):
     REJECTED = 'rejected'
@@ -71,6 +79,7 @@ class Resource (models.Model):
             # Call this slug function on the field you want the slug to be made of
             self.slug = slugify(self.title)
         # Call the rest of the old save() method
+        self.update_date = timezone.now()
         super(Resource, self).save(*args, **kwargs)
     
     def get_organisations(self):
@@ -103,7 +112,11 @@ class ResourceURL (models.Model):
             return self.url
         else:
             return self.description
-    
+        
+    def save(self, *args, **kwargs):
+        self.update_date = timezone.now()
+        super(ResourceURL, self).save(*args, **kwargs)
+        
 # ResourceFile
 class ResourceFile (models.Model):
     file = models.FileField(upload_to='resource/%Y/%m/%d', max_length=200)
@@ -120,6 +133,10 @@ class ResourceFile (models.Model):
         else:
             return self.description
 
+    def save(self, *args, **kwargs):
+        self.update_date = timezone.now()
+        super(ResourceFile, self).save(*args, **kwargs)
+        
 # ResourceRelationship
 class ResourceRelationship (models.Model):
     RELATIONSHIP_TYPES = (
@@ -137,6 +154,10 @@ class ResourceRelationship (models.Model):
     update_date = models.DateTimeField(default=timezone.now) 
     update_user = models.ForeignKey(User, related_name='resource_relationship_update_user')
     
+    def save(self, *args, **kwargs):
+        self.update_date = timezone.now()
+        super(ResourceRelationship, self).save(*args, **kwargs)
+        
 # Category
 class Category (models.Model):
     name = models.CharField(blank=False, null=False, max_length=100) 
@@ -189,6 +210,7 @@ class Tag (models.Model):
             # Call this slug function on the field you want the slug to be made of
             self.slug = slugify(self.name)
         # Call the rest of the old save() method
+        self.update_date = timezone.now()
         super(Tag, self).save(*args, **kwargs)
         
 # ResourceTag

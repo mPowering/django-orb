@@ -67,6 +67,7 @@ From:
 {% endif %}
 
 <hr/>
-
+<small>Resource uploaded by {{ resource.create_user.first_name }} {{ resource.create_user.last_name }} at {{ resource.create_date }} 
+and last updated by {{ resource.update_user.first_name }} {{ resource.update_user.last_name }} at {{ resource.update_date }}</small>
 
 {% endblock %}
