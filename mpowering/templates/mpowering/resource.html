@@ -15,6 +15,9 @@ From:
 
 {% endfor %}
 </p>
+{% if resource.image %}
+	<img style="display:block; margin: 20px auto; max-width:90%" src="{{ MEDIA_URL }}{{ resource.image }}"/>
+{% endif %}
 <p>
 {{ resource.description }}
 </p>

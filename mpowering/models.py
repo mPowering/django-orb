@@ -96,6 +96,14 @@ class Resource (models.Model):
         for c in categories:
             c.tags = Tag.objects.filter(resourcetag__resource=self, category=c)
         return categories
+    
+    def get_category(self, category_slug):
+        tags = Tag.objects.filter(resourcetag__resource=self, category__slug=category_slug)
+        return tags
+    
+    def get_type_tags(self):
+        tags = Tag.objects.filter(resourcetag__resource=self, category__slug='type')
+        return tags
             
 # ResourceURL
 class ResourceURL (models.Model):

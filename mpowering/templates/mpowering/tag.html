@@ -1,13 +1,28 @@
 {% extends "base.html" %}
 {% load i18n %} 
+
 {% block content %}
 
 <h2 style="text-align:center">{{ tag.name }}</h2>
 
-<ul>
+
 {% for r in resources %}
-	<li><a href="{% url 'mpowering_resource' r.slug %}">{{ r.title }}</a></li>
+	<div style="clear:both;">
+		<img src="{{ MEDIA_URL }}{{ r.image }}" style="float:left; max-width: 20%; margin-right: 20px;" class="thumbnail"/>
+		<a href="{% url 'mpowering_resource' r.slug %}"><h3>{{ r.title }}</h3></a>
+		
+		<h4>
+		{% for t in r.get_type_tags %}
+			{{ t.name }}
+		{% endfor %}
+		</h4>
+		
+		{% for o in r.get_organisations %}
+			{{ o.name }}
+		{% endfor %}
+	
+	</div>
 {% endfor %}
-</ul>
+
 
 {% endblock %}
