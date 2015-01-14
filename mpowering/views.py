@@ -2,6 +2,7 @@
 from django.shortcuts import render,render_to_response
 from django.template import RequestContext
 
+from mpowering.forms import ResourceCreateForm
 from mpowering.models import Tag, Resource, Organisation
 
 # Create your views here.
@@ -23,14 +24,17 @@ def tag_view(request,tag_slug):
   
 def resource_view(request,resource_slug):
     resource = Resource.objects.get(slug=resource_slug, status=Resource.APPROVED)
-    '''
-    health_topic
-    audience
-    device
-    type
-    license
-    '''
-    return render_to_response('mpowering/resource.html',
+    return render_to_response('mpowering/resource/view.html',
                               {'resource': resource, 
                                },
                               context_instance=RequestContext(request))  
+    
+def resource_create_view(request):
+    if request.method == 'POST':
+        pass
+    else:
+         form = ResourceCreateForm()
+    return render_to_response('mpowering/resource/create.html',
+                              {'form': form, 
+                               },
+                              context_instance=RequestContext(request)) 

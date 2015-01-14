@@ -234,3 +234,4 @@ class ResourceOrganisation (models.Model):
     organisation = models.ForeignKey(Organisation)
     create_date = models.DateTimeField(default=timezone.now)
     create_user = models.ForeignKey(User)  
+    
