@@ -1,20 +1,31 @@
-{% load i18n %}
+{% load i18n %} 
 {% block content %}
 <div class="container-fluid">
-	  <div class="navbar-header">
-	    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-	      <span class="sr-only">Toggle navigation</span>
-	      <span class="icon-bar"></span>
-	      <span class="icon-bar"></span>
-	      <span class="icon-bar"></span>
-	    </button>
-	    <a class="navbar-brand" href="{% url 'mpowering_home' %}"><img src="{{ STATIC_URL }}mpowering/images/logo.png" height="24"/>{% trans 'mPowering' %}</a>
-	  </div>
-	  <div class="navbar-collapse collapse">
-		    <ul class="nav navbar-nav navbar-right">
-		        <li><a href="">{% trans 'Login' %}</a></li>
-		        <li><a href="">{% trans 'Register' %}</a></li>
-		    </ul>
-	  </div>
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse"
+			data-target=".navbar-collapse">
+			<span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span>
+			<span class="icon-bar"></span> <span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="{% url 'mpowering_home' %}"><img
+			src="{{ STATIC_URL }}mpowering/images/logo.png" height="24" />{% trans 'mPowering' %}</a>
+	</div>
+	<div class="navbar-collapse collapse">
+		<ul class="nav navbar-nav navbar-right">
+			{% for m in header_menu_categories %}
+				<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">{{ m.name }} <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						{% for t in m.tags %}
+							<li><a href="{% url 'mpowering_tags' t.slug %}">{{ t.name }}</a></li>
+						{% endfor %}
+					</ul>
+				</li>
+			{% endfor %}
+			
+			<li><a href="">{% trans 'Add a Resource' %}</a></li>
+			<li><a href="">{% trans 'Login' %}</a></li>
+			<li><a href="">{% trans 'Register' %}</a></li>
+		</ul>
+	</div>
 </div>
 {% endblock content %}
