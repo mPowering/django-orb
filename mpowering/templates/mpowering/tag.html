@@ -13,12 +13,12 @@
 		
 		<h4>
 		{% for t in r.get_type_tags %}
-			{{ t.name }}
+			{{ t.name }}{% if not forloop.last %}, {% endif %}
 		{% endfor %}
 		</h4>
 		
 		{% for o in r.get_organisations %}
-			{{ o.name }}
+			{{ o.name }}{% if not forloop.last %}, {% endif %}
 		{% endfor %}
 	
 	</div>
