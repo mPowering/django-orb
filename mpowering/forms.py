@@ -24,7 +24,8 @@ class ResourceCreateForm(forms.Form):
                 error_messages={},)
     file = forms.FileField(
                 required=False,
-                error_messages={},)
+                error_messages={},
+                help_text=_('Either a file or a url is required'), )
     url = forms.CharField(
                 required=False,
                 error_messages={},)
@@ -65,6 +66,7 @@ class ResourceCreateForm(forms.Form):
                 'organisation',
                 'description',
                 'image',
+                Row (HTML('<hr>')),
                 'file',
                 'url',
                 Row (HTML('<hr>')),
@@ -85,4 +87,12 @@ class ResourceCreateForm(forms.Form):
                    css_class='col-lg-offset-2 col-lg-8',
                 ),
             )
-    
+        
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        file = cleaned_data.get("file")
+        url = cleaned_data.get("url").strip()
+        if file is None and (url is None or url == ''):
+            print "form not valid"
+            raise forms.ValidationError( _(u"Please submit a file and/or a url for this resource"))
+        return self.cleaned_data

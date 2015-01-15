@@ -1,6 +1,8 @@
 
+from django.contrib import messages
 from django.shortcuts import render,render_to_response
 from django.template import RequestContext
+from django.utils.translation import ugettext as _
 
 from mpowering.forms import ResourceCreateForm
 from mpowering.models import Tag, Resource, Organisation
@@ -31,17 +33,27 @@ def resource_view(request,resource_slug):
     
 def resource_create_view(request):
     if request.method == 'POST':
-        form = ResourceCreateForm(request.POST)
+        form = ResourceCreateForm(request.POST, request.FILES)
+        resource_form_set_choices(form)
+        if form.is_valid():
+            pass
+        else: 
+            messages.error(request, _(u'Please correct the errors below and resubmit.'))
     else:
         form = ResourceCreateForm()
+        resource_form_set_choices(form)
+        
+    return render_to_response('mpowering/resource/create.html',
+                              {'form': form, 
+                               },
+                              context_instance=RequestContext(request))
+    
+
+def resource_form_set_choices(form):
     form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='health-topic').order_by('order_by')]
     form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').order_by('order_by')]
     form.fields['audience'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by')]
     form.fields['geography'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='geography').order_by('order_by')]
     form.fields['device'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='device').order_by('order_by')]
     form.fields['license'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='license').order_by('order_by')]
-        
-    return render_to_response('mpowering/resource/create.html',
-                              {'form': form, 
-                               },
-                              context_instance=RequestContext(request)) 
+    return form 
