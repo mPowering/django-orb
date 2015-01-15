@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block content %}
+<h2>{% trans 'Registration complete' %}</h2>
+{% url 'mpowering_home' as mpowering_home %}
+<p>{% blocktrans %}Thanks for registering. You are now logged in. <a href="{{ mpowering_home }}">Return to the homepage</a>{% endblocktrans %}</p>
+{% endblock %}

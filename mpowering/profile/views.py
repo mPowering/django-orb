@@ -62,7 +62,14 @@ def register(request):
             user_profile = UserProfile()
             user_profile.user = user
             user_profile.job_title = form.cleaned_data.get("job_title")
-            organisation = Organisation.objects.get_or_create(name=form.cleaned_data.get("organisation"))
+            try:
+                organisation = Organisation.objects.get(name=form.cleaned_data.get("organisation"))
+            except Organisation.DoesNotExist:
+                organisation = Organisation()
+                organisation.name = form.cleaned_data.get("organisation")
+                organisation.create_user = user
+                organisation.update_user = user
+                organisation.save()
             user_profile.organisation = organisation
             user_profile.save()
             u = authenticate(username=username, password=password)
