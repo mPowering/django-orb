@@ -4,10 +4,10 @@
  #77A240 - DC mid green r119,g162, b64
  #a5c727 - DC light green r165,g199,b39
  
- 2596b4 - light blue
- 2a6083 - mid blue
- 033f62 - dark blue
- ff0054 - pink/red
+ #2596b4 - light blue - r37 g150 b180
+ #2a6083 - mid blue - r42 g96 b131
+ #033f62 - dark blue - r3 g63 b98
+ #ff0054 - pink/red - r255 g0 b84
  
  */
 
@@ -102,15 +102,15 @@ a:hover, a:focus {
 
 .nav-sidebar > .active > a {
   color: #fff;
-  background-color: #77A240;
+  background-color: #2a6083;
 }
 
 .nav > li > a:hover {
-  background-color: #77A240;
+  background-color: #2a6083;
   color: #fff;
 }
 .nav > li > a:focus {
-  background-color: #77A240;
+  background-color: #2a6083;
   color: #fff;
 }
 
@@ -159,21 +159,21 @@ a:hover, a:focus {
  */
  
 .form-control:focus {
-	border-color: #a5c727;
-	box-shadow: 0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(165,199,39,0.6);
+	border-color: #2596b4;
+	box-shadow: 0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(37,150,180,0.6);
 	outline: 0 none;
 }
 
 .btn-primary {
-    background-color: #77A240;
-    border-color: #495525;
+    background-color: #2a6083;
+    border-color: #033f62;
     color: #FFFFFF;
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active,
 	.btn-primary.active, .open .dropdown-toggle.btn-primary {
-    background-color: #77A240;
-    border-color: #495525;
+    background-color: #033f62;
+    border-color: #033f62;
     color: #FFFFFF;
 }
 
