@@ -1,5 +1,6 @@
 
 from django.contrib import messages
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render,render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -49,10 +50,11 @@ def resource_create_view(request):
                               context_instance=RequestContext(request))
     
 def resource_link_view(request, id):
-    url = ResourceURL.objects.get(pk=id)
-    return render_to_response('mpowering/resource/link.html',
-                              {'url': url},
-                              context_instance=RequestContext(request))
+    try:
+        url = ResourceURL.objects.get(pk=id)
+        return HttpResponseRedirect(url.url)
+    except ResourceURL.DoesNotExist:
+        raise Http404()
     
 def resource_file_view(request, id):
     return render_to_response('mpowering/resource/file.html',
