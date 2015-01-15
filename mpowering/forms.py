@@ -28,12 +28,30 @@ class ResourceCreateForm(forms.Form):
     url = forms.CharField(
                 required=False,
                 error_messages={},)
-    health_topic = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
-    resource_type = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
-    audience = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
-    geography = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
-    device = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
-    license = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple)
+    health_topic = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=True,
+                        error_messages={'required': _('Please select at least one health topic')},)
+    resource_type = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=True,
+                        error_messages={'required': _('Please select at least one resource type')},)
+    audience = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=True,
+                        error_messages={'required': _('Please select at least one audience')},)
+    geography = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=True,
+                        error_messages={'required': _('Please select at least one geographical area')},)
+    device = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=True,
+                        error_messages={'required': _('Please select at least one device')},)
+    license = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=True,
+                        error_messages={'required': _('Please select at least one license')},)
 
     
     def __init__(self, *args, **kwargs):
@@ -49,18 +67,22 @@ class ResourceCreateForm(forms.Form):
                 'image',
                 'file',
                 'url',
+                Row (HTML('<hr>')),
                 'health_topic',
+                Row (HTML('<hr>')),
                 'resource_type',
+                Row (HTML('<hr>')),
                 'audience',
+                Row (HTML('<hr>')),
                 'geography',
+                Row (HTML('<hr>')),
                 'device',
+                Row (HTML('<hr>')),
                 'license',
+                Row (HTML('<hr>')),
                 Div(
                    Submit('submit', _(u'Save'), css_class='btn btn-default'),
                    css_class='col-lg-offset-2 col-lg-8',
                 ),
             )
-        
-class TagForm(forms.Form):
-    name = forms.BooleanField()
     
