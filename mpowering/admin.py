@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from mpowering.models import Organisation, Category, Tag, Resource, ResourceURL, ResourceFile, ResourceTag, ResourceOrganisation
+from mpowering.models import Organisation, Category, Tag, Resource, ResourceURL
+from mpowering.models import ResourceFile, ResourceTag, ResourceOrganisation, UserProfile
 # Register your models here.
 
     
@@ -27,7 +28,10 @@ class ResourceOrganisationAdmin(admin.ModelAdmin):
     
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name','category', 'slug','order_by')
-             
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'about', 'job_title', 'organisation')
+                 
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Tag, TagAdmin) 
 admin.site.register(Resource, ResourceAdmin) 
@@ -36,3 +40,4 @@ admin.site.register(ResourceFile, ResourceFileAdmin)
 admin.site.register(ResourceTag, ResourceTagAdmin)
 admin.site.register(ResourceOrganisation, ResourceOrganisationAdmin)
 admin.site.register(Organisation, OrganisationAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)

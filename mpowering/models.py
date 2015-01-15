@@ -34,7 +34,7 @@ class UserProfile (models.Model):
     user = models.OneToOneField(User)
     about = models.TextField(blank=True, null=True, default=None)
     job_title = models.TextField(blank=True, null=True, default=None)
-    organisation = models.OneToOneField(Organisation)
+    organisation = models.ForeignKey(Organisation)
     phone_number = models.TextField(blank=True, null=True, default=None)
     create_date = models.DateTimeField(default=timezone.now)
     update_date = models.DateTimeField(default=timezone.now)

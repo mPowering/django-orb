@@ -167,7 +167,7 @@ class Migration(migrations.Migration):
                 ('phone_number', models.TextField(default=None, null=True, blank=True)),
                 ('create_date', models.DateTimeField(default=django.utils.timezone.now)),
                 ('update_date', models.DateTimeField(default=django.utils.timezone.now)),
-                ('organisation', models.OneToOneField(to='mpowering.Organisation')),
+                ('organisation', models.ForeignKey(to='mpowering.Organisation')),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
             options={

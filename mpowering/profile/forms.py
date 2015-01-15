@@ -183,7 +183,7 @@ class ProfileForm(forms.Form):
                                 min_length=2,
                                 required=True)
     job_title = forms.CharField(max_length=100,required=False)
-    organisation = forms.CharField(max_length=100,required=False)
+    organisation = forms.CharField(max_length=100,required=True)
     
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
@@ -221,8 +221,8 @@ class ProfileForm(forms.Form):
                     'email',
                     'first_name',
                     'last_name',
-                    'job_title',
                     'organisation',
+                    'job_title',
                     Div(
                         HTML("""<h3>"""+_(u'Change password') + """</h3>"""),
                         ),

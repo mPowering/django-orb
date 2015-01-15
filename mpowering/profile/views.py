@@ -125,15 +125,24 @@ def edit(request):
             request.user.save()
             
             try:
+                organisation = Organisation.objects.get(name=form.cleaned_data.get("organisation"))
+            except Organisation.DoesNotExist:
+                organisation = Organisation()
+                organisation.name = form.cleaned_data.get("organisation")
+                organisation.create_user = request.user
+                organisation.update_user = request.user
+                organisation.save()
+                
+            try:
                 user_profile = UserProfile.objects.get(user=request.user)
                 user_profile.job_title = form.cleaned_data.get("job_title")
-                user_profile.organisation = form.cleaned_data.get("organisation")
+                user_profile.organisation = organisation
                 user_profile.save()
             except UserProfile.DoesNotExist:
                 user_profile = UserProfile()
                 user_profile.user = request.user
                 user_profile.job_title = form.cleaned_data.get("job_title")
-                user_profile.organisation = form.cleaned_data.get("organisation")
+                user_profile.organisation = organisation
                 user_profile.save()
             messages.success(request, _(u"Profile updated"))
             

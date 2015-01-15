@@ -5,5 +5,5 @@
 .settings/
 /build
 /dist
-/django_oppia.egg-info
+/django_mpowering.egg-info
 /src
