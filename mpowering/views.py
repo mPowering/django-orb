@@ -31,9 +31,16 @@ def resource_view(request,resource_slug):
     
 def resource_create_view(request):
     if request.method == 'POST':
-        pass
+        form = ResourceCreateForm(request.POST)
     else:
-         form = ResourceCreateForm()
+        form = ResourceCreateForm()
+    form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='health-topic').order_by('order_by')]
+    form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').order_by('order_by')]
+    form.fields['audience'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by')]
+    form.fields['geography'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='geography').order_by('order_by')]
+    form.fields['device'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='device').order_by('order_by')]
+    form.fields['license'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='license').order_by('order_by')]
+        
     return render_to_response('mpowering/resource/create.html',
                               {'form': form, 
                                },
