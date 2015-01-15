@@ -5,7 +5,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 from mpowering.forms import ResourceCreateForm
-from mpowering.models import Tag, Resource, Organisation
+from mpowering.models import Tag, Resource, Organisation, ResourceURL, ResourceFile
 
 # Create your views here.
 
@@ -48,6 +48,15 @@ def resource_create_view(request):
                                },
                               context_instance=RequestContext(request))
     
+def resource_link_view(request, id):
+    url = ResourceURL.objects.get(pk=id)
+    return render_to_response('mpowering/resource/link.html',
+                              {'url': url},
+                              context_instance=RequestContext(request))
+    
+def resource_file_view(request, id):
+    return render_to_response('mpowering/resource/file.html',
+                              context_instance=RequestContext(request))
 
 def resource_form_set_choices(form):
     form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='health-topic').order_by('order_by')]

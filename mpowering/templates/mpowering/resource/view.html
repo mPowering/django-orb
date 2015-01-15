@@ -47,9 +47,9 @@ From:
 	{% for u in resource.get_urls %}
 		<li>
 			{% if u.description %}
-				<a href="{{ u.url }}">{{ u.description }}</a>
+				<a href="{% url 'mpowering_resource_view_link' u.id %}">{{ u.description }}</a>
 			{% else %}
-				<a href="{{ u.url }}">{{ u.url }}</a>
+				<a href="{% url 'mpowering_resource_view_link' u.id %}">{{ u.url }}</a>
 			{% endif %}
 		</li>
 	{% endfor %}
