@@ -23,8 +23,8 @@
 			{% endfor %}
 			
 			<li><a href="{% url 'mpowering_resource_create' %}">{% trans 'Add Resource' %}</a></li>
-			<li><a href="">{% trans 'Login' %}</a></li>
-			<li><a href="">{% trans 'Register' %}</a></li>
+			<li><a href="{% url 'profile_login' %}">{% trans 'Login' %}</a></li>
+			<li><a href="{% url 'profile_register' %}">{% trans 'Register' %}</a></li>
 		</ul>
 	</div>
 </div>
