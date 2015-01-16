@@ -49,8 +49,8 @@ class ResourceCreateForm(forms.Form):
                         widget=forms.CheckboxSelectMultiple,
                         required=True,
                         error_messages={'required': _('Please select at least one device')},)
-    license = forms.MultipleChoiceField(
-                        widget=forms.CheckboxSelectMultiple,
+    license = forms.ChoiceField(
+                        widget=forms.RadioSelect,
                         required=True,
                         error_messages={'required': _('Please select at least one license')},)
 
