@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %} 
+
+{% block content %}
+
+<h2 style="text-align:center">{% trans 'Login required' %}</h2>
+
+<p>{{ message }}</p>
+
+{% url 'profile_login' as login %}
+{% url 'profile_register' as register %}
+<p>{% blocktrans %}Please <a href="{{ login }}">login</a> or <a href="{{ register }}">register</a>{% endblocktrans %}</p>
+
+
+{% endblock %}

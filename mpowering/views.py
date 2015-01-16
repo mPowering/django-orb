@@ -35,6 +35,10 @@ def resource_view(request,resource_slug):
                               context_instance=RequestContext(request))  
     
 def resource_create_view(request):
+    if request.user.is_anonymous():
+        return render_to_response('mpowering/login_required.html',
+                              {'message': _(u'You need to be logged in to add a resource.') },
+                              context_instance=RequestContext(request))
     if request.method == 'POST':
         form = ResourceCreateForm(request.POST, request.FILES)
         resource_form_set_choices(form)
