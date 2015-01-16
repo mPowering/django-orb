@@ -40,8 +40,6 @@ def resource_create_view(request):
         resource_form_set_choices(form)
         if form.is_valid():
             pass
-        else: 
-            messages.error(request, _(u'Please correct the errors below and resubmit.'))
     else:
         form = ResourceCreateForm()
         resource_form_set_choices(form)

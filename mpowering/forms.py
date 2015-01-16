@@ -93,6 +93,7 @@ class ResourceCreateForm(forms.Form):
         file = cleaned_data.get("file")
         url = cleaned_data.get("url").strip()
         if file is None and (url is None or url == ''):
-            print "form not valid"
             raise forms.ValidationError( _(u"Please submit a file and/or a url for this resource"))
+        if self._errors:
+            raise forms.ValidationError( _(u"Please correct the errors below and resubmit the form."))
         return self.cleaned_data
