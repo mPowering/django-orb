@@ -235,3 +235,24 @@ class ResourceOrganisation (models.Model):
     create_date = models.DateTimeField(default=timezone.now)
     create_user = models.ForeignKey(User)  
     
+class Tracker(models.Model):
+    VIEW = 'view'
+    EDIT = 'edit'
+    DOWNLOAD = 'download'
+    CREATE = 'create'
+    TRACKER_TYPES = (
+        (VIEW, _(u'View')),
+        (EDIT, _(u'Edit')),
+        (DOWNLOAD, _(u'Download')),
+        (CREATE, _(u'Create')),
+    )
+    user = models.ForeignKey(User, blank=True, null=True, default=None)
+    type = models.CharField(max_length=50,choices=TRACKER_TYPES)
+    resource = models.ForeignKey(Resource, blank=True, null=True, default=None)
+    resource_file = models.ForeignKey(ResourceFile, blank=True, null=True, default=None)
+    resource_url = models.ForeignKey(ResourceURL, blank=True, null=True, default=None)
+    access_date = models.DateTimeField(default=timezone.now)
+    ip = models.IPAddressField(blank=True, null=True, default=None)
+    user_agent = models.TextField(blank=True, null=True, default=None)
+    extra_data = models.TextField(blank=True, null=True, default=None)
+    
