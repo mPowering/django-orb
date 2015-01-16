@@ -8,6 +8,7 @@ from django.utils.translation import ugettext as _
 from mpowering.forms import ResourceCreateForm
 from mpowering.models import Tag, Resource, Organisation, ResourceURL, ResourceFile
 
+from mpowering.signals import resource_viewed, resource_url_viewed
 # Create your views here.
 
 
@@ -27,6 +28,7 @@ def tag_view(request,tag_slug):
   
 def resource_view(request,resource_slug):
     resource = Resource.objects.get(slug=resource_slug, status=Resource.APPROVED)
+    resource_viewed.send(sender=resource, resource=resource, request=request)
     return render_to_response('mpowering/resource/view.html',
                               {'resource': resource, 
                                },
@@ -52,6 +54,7 @@ def resource_create_view(request):
 def resource_link_view(request, id):
     try:
         url = ResourceURL.objects.get(pk=id)
+        resource_url_viewed.send(sender=url, resource_url=url, request=request)
         return HttpResponseRedirect(url.url)
     except ResourceURL.DoesNotExist:
         raise Http404()
