@@ -6,7 +6,8 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 from mpowering.forms import ResourceCreateForm
-from mpowering.models import Tag, Resource, Organisation, ResourceURL, ResourceFile
+from mpowering.models import Tag, Resource, Organisation, ResourceURL 
+from mpowering.models import ResourceFile, ResourceOrganisation, ResourceTag
 
 from mpowering.signals import resource_viewed, resource_url_viewed
 # Create your views here.
@@ -19,7 +20,10 @@ def home_view(request):
                               context_instance=RequestContext(request))
 
 def tag_view(request,tag_slug):
-    tag = Tag.objects.get(slug=tag_slug)
+    try:
+        tag = Tag.objects.get(slug=tag_slug)
+    except Tag.DoesNotExist:
+        raise Http404()
     resources = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED)
     return render_to_response('mpowering/tag.html',
                               {'resources': resources,
@@ -27,7 +31,10 @@ def tag_view(request,tag_slug):
                               context_instance=RequestContext(request))
   
 def resource_view(request,resource_slug):
-    resource = Resource.objects.get(slug=resource_slug, status=Resource.APPROVED)
+    try:
+        resource = Resource.objects.get(slug=resource_slug, status=Resource.APPROVED)
+    except Resource.DoesNotExist:
+        raise Http404()
     resource_viewed.send(sender=resource, resource=resource, request=request)
     return render_to_response('mpowering/resource/view.html',
                               {'resource': resource, 
@@ -43,7 +50,46 @@ def resource_create_view(request):
         form = ResourceCreateForm(request.POST, request.FILES)
         resource_form_set_choices(form)
         if form.is_valid():
-            pass
+            # save resource
+            resource = Resource(status = Resource.PENDING, create_user = request.user, update_user = request.user)
+            resource.title = form.cleaned_data.get("title")
+            resource.description = form.cleaned_data.get("description")
+            if request.FILES.has_key('image'):
+                resource.image = request.FILES["image"]
+            resource.save()
+            
+            # add organisation(s)
+            organisations = [x.strip() for x in form.cleaned_data.get("organisations").split(',')]
+            for o in organisations:
+                try:
+                    organisation = Organisation.objects.get(name = o)
+                except Organisation.DoesNotExist:
+                    organisation = Organisation(name =o, create_user=request.user, update_user=request.user).save()
+                ResourceOrganisation(resource=resource, organisation=organisation,create_user=request.user).save()
+                
+            # add file and url
+            if request.FILES.has_key('file'):
+                rf = ResourceFile(resource=resource, create_user=request.user, update_user=request.user)
+                rf.file=request.FILES["file"]
+                rf.save()
+                
+            # add tags
+            tag_categories = ["health_topic", "resource_type", "audience", "geography", "device"]
+            for tc in tag_categories:
+                tag_category = form.cleaned_data.get(tc)
+                for ht in tag_category:
+                    tag = Tag.objects.get(pk=ht)
+                    ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
+                    
+            # add license
+            license = form.cleaned_data.get("license")
+            tag = Tag.objects.get(pk=license)
+            ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
+                    
+            # add misc_tags
+            
+            
+            
     else:
         form = ResourceCreateForm()
         resource_form_set_choices(form)

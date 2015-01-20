@@ -12,7 +12,7 @@ class OrganisationAdmin(admin.ModelAdmin):
     list_display = ('name', 'location', 'url')
 
 class ResourceAdmin(admin.ModelAdmin):
-    list_display = ('title','status')
+    list_display = ('title','status', 'create_user', 'create_date', 'slug')
     
 class ResourceURLAdmin(admin.ModelAdmin):
     list_display = ('resource', 'url','description')

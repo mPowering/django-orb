@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from tastypie.models import create_api_key
+from utils.unique_slugify import unique_slugify
 
 models.signals.post_save.connect(create_api_key, sender=User)
 
@@ -72,13 +73,7 @@ class Resource (models.Model):
         return self.title
     
     def save(self, *args, **kwargs):
-        # If there is not already a slug in place...
-        if not self.slug:
-            # Import django's builtin slug function
-            from django.template.defaultfilters import slugify
-            # Call this slug function on the field you want the slug to be made of
-            self.slug = slugify(self.title)
-        # Call the rest of the old save() method
+        unique_slugify(self, self.title)
         self.update_date = timezone.now()
         super(Resource, self).save(*args, **kwargs)
     
@@ -134,12 +129,6 @@ class ResourceFile (models.Model):
     create_user = models.ForeignKey(User, related_name='resource_file_create_user')
     update_date = models.DateTimeField(default=timezone.now) 
     update_user = models.ForeignKey(User, related_name='resource_file_update_user')
-    
-    def __unicode__(self):
-        if self.description is None:
-            return self.file
-        else:
-            return self.description
 
     def save(self, *args, **kwargs):
         self.update_date = timezone.now()
@@ -211,13 +200,7 @@ class Tag (models.Model):
         return self.name
     
     def save(self, *args, **kwargs):
-        # If there is not already a slug in place...
-        if not self.slug:
-            # Import django's builtin slug function
-            from django.template.defaultfilters import slugify
-            # Call this slug function on the field you want the slug to be made of
-            self.slug = slugify(self.name)
-        # Call the rest of the old save() method
+        unique_slugify(self, self.name)
         self.update_date = timezone.now()
         super(Tag, self).save(*args, **kwargs)
         

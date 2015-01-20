@@ -11,7 +11,7 @@ class ResourceCreateForm(forms.Form):
     title = forms.CharField(
                 required=True,
                 error_messages={'required': _('Please enter a title')},)
-    organisation = forms.CharField(
+    organisations = forms.CharField(
                 help_text=_('Comma separated if entering more than one organisation'),               
                 required=True,
                 error_messages={'required': _('Please enter at least one organisation')},)
@@ -63,7 +63,7 @@ class ResourceCreateForm(forms.Form):
         self.helper.field_class = 'col-lg-8'
         self.helper.layout = Layout(
                 'title',
-                'organisation',
+                'organisations',
                 'description',
                 'image',
                 Row (HTML('<hr>')),
@@ -92,8 +92,9 @@ class ResourceCreateForm(forms.Form):
         cleaned_data = self.cleaned_data
         file = cleaned_data.get("file")
         url = cleaned_data.get("url").strip()
-        if file is None and (url is None or url == ''):
-            raise forms.ValidationError( _(u"Please submit a file and/or a url for this resource"))
         if self._errors:
             raise forms.ValidationError( _(u"Please correct the errors below and resubmit the form."))
+        if file is None and (url is None or url == ''):
+            raise forms.ValidationError( _(u"Please submit a file and/or a url for this resource"))
+        
         return self.cleaned_data
