@@ -1,4 +1,4 @@
-
+import os
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -133,6 +133,9 @@ class ResourceFile (models.Model):
     def save(self, *args, **kwargs):
         self.update_date = timezone.now()
         super(ResourceFile, self).save(*args, **kwargs)
+    
+    def filename(self):
+        return os.path.basename(self.file.name)
         
 # ResourceRelationship
 class ResourceRelationship (models.Model):

@@ -9,7 +9,7 @@ from mpowering.forms import ResourceCreateForm
 from mpowering.models import Tag, Resource, Organisation, ResourceURL 
 from mpowering.models import ResourceFile, ResourceOrganisation, ResourceTag
 
-from mpowering.signals import resource_viewed, resource_url_viewed
+from mpowering.signals import resource_viewed, resource_url_viewed, resource_file_viewed
 # Create your views here.
 
 
@@ -89,6 +89,8 @@ def resource_create_view(request):
             # add misc_tags
             
             
+            # redirect to info page
+            
             
     else:
         form = ResourceCreateForm()
@@ -100,6 +102,7 @@ def resource_create_view(request):
                               context_instance=RequestContext(request))
     
 def resource_link_view(request, id):
+    # TODO check that resource is approved
     try:
         url = ResourceURL.objects.get(pk=id)
         resource_url_viewed.send(sender=url, resource_url=url, request=request)
@@ -108,6 +111,17 @@ def resource_link_view(request, id):
         raise Http404()
     
 def resource_file_view(request, id):
+    # TODO check that resource is approved
+    try:
+        file = ResourceFile.objects.get(pk=id)
+        resource_file_viewed.send(sender=file, resource_file=file, request=request)
+        response = HttpResponse(file.file, content_type='application/vnd.ms-excel;charset=utf-8')
+        response['Content-Disposition'] = "attachment; filename=" + file.filename()
+        return response
+    except ResourceFile.DoesNotExist:
+        raise Http404()
+    
+    
     return render_to_response('mpowering/resource/file.html',
                               context_instance=RequestContext(request))
 

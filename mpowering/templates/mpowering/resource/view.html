@@ -30,10 +30,10 @@ From:
 	<ul>
 	{% for f in resource.get_files %}
 		<li>
-			{% if f.description %}
-				<a href="{{ f.url }}">{{ f.description }}</a>
+			{% if f.description and f.description.strip %}
+				<a href="{% url 'mpowering_resource_view_file' f.id %}">{{ f.description }}</a>
 			{% else %}
-				<a href="{{ u.url }}">{{ f.url }}</a>
+				<a href="{% url 'mpowering_resource_view_file' f.id %}">{{ f.filename }}</a>
 			{% endif %}
 		</li>
 	{% endfor %}
