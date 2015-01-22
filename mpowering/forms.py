@@ -53,6 +53,10 @@ class ResourceCreateForm(forms.Form):
                         widget=forms.RadioSelect,
                         required=True,
                         error_messages={'required': _('Please select at least one license')},)
+    other_tags = forms.CharField(
+                        help_text=_('Please enter any other relevant tags for this resource, comma separated if entering more than one tag'),               
+                        required=False,
+                        )
 
     
     def __init__(self, *args, **kwargs):
@@ -81,6 +85,8 @@ class ResourceCreateForm(forms.Form):
                 'device',
                 Row (HTML('<hr>')),
                 'license',
+                Row (HTML('<hr>')),
+                'other_tags',
                 Row (HTML('<hr>')),
                 Div(
                    Submit('submit', _(u'Save'), css_class='btn btn-default'),

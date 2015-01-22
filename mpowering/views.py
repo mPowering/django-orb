@@ -6,7 +6,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 from mpowering.forms import ResourceCreateForm
-from mpowering.models import Tag, Resource, Organisation, ResourceURL 
+from mpowering.models import Tag, Resource, Organisation, ResourceURL , Category
 from mpowering.models import ResourceFile, ResourceOrganisation, ResourceTag
 
 from mpowering.signals import resource_viewed, resource_url_viewed, resource_file_viewed
@@ -87,8 +87,19 @@ def resource_create_view(request):
             ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
                     
             # add misc_tags
-            
-            
+            other_tags = [x.strip() for x in form.cleaned_data.get("other_tags").split(',')]
+            print other_tags
+            for ot in other_tags:
+                print ot
+                if ot:
+                    try:
+                        tag = Tag.objects.get(name = ot)
+                    except Tag.DoesNotExist:
+                        category = Category.objects.get(slug='other')
+                        tag = Tag(name =ot, category= category, create_user=request.user, update_user=request.user)
+                        tag.save()
+                    ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
+                
             # redirect to info page
             
             
