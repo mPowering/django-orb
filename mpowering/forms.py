@@ -7,6 +7,8 @@ from crispy_forms.layout import Button, Layout, Fieldset, ButtonHolder, Submit, 
 
 from mpowering.models import Tag, Resource, Organisation, Category
 
+from tinymce.models import HTMLField
+
 class ResourceCreateForm(forms.Form):
     title = forms.CharField(
                 required=True,

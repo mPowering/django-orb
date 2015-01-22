@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% load i18n %} 
 {% load crispy_forms_tags %}
+{% load wysiwyg %}
+{% block extra_scripts %}
+{% wysiwyg_setup %}
+{% endblock extra_scripts %} 
 {% block content %}
 
 <h2 style="text-align:center">{% trans 'Add Resource' %}</h2>
 
 	
 {% crispy form %}
+{% wysiwyg_editor "id_description" %}
 <div id='form-errors'>{{ form_errors }}</div>
 
 {% endblock %}
+
