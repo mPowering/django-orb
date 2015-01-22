@@ -1,5 +1,6 @@
 
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render,render_to_response
 from django.template import RequestContext
@@ -101,7 +102,7 @@ def resource_create_view(request):
                     ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
                 
             # redirect to info page
-            
+            return HttpResponseRedirect(reverse('mpowering_resource_create_thanks', args=[resource.id])) # Redirect after POST
             
     else:
         form = ResourceCreateForm()
@@ -111,7 +112,14 @@ def resource_create_view(request):
                               {'form': form, 
                                },
                               context_instance=RequestContext(request))
-    
+ 
+def resource_create_thanks_view(request,id):
+    resource = Resource.objects.get(pk=id)
+    return render_to_response('mpowering/resource/create_thanks.html',
+                              {'resource': resource, 
+                               },
+                              context_instance=RequestContext(request))
+       
 def resource_link_view(request, id):
     # TODO check that resource is approved
     try:
