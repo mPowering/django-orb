@@ -100,21 +100,6 @@ class Resource (models.Model):
         tags = Tag.objects.filter(resourcetag__resource=self, category__slug='type')
         return tags
     
-    def can_view(self,user):
-        # 
-        if user.is_staff() or user == self.create_user or user == self.update_user:
-            return true
-        elif self.status == APPROVED:
-            return true
-        else:
-            return false
-     
-    def can_edit(self,user):
-        # 
-        if user.is_staff() or user == self.create_user or user == self.update_user:
-            return true
-        else:
-            return false       
 # ResourceURL
 class ResourceURL (models.Model):
     url = models.URLField(blank=False, null=False, max_length=500)

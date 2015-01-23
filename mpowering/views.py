@@ -33,9 +33,16 @@ def tag_view(request,tag_slug):
   
 def resource_view(request,resource_slug):
     try:
-        resource = Resource.objects.get(slug=resource_slug, status=Resource.APPROVED)
+        resource = Resource.objects.get(slug=resource_slug)
     except Resource.DoesNotExist:
         raise Http404()
+    
+    if not resource_can_view(resource,request.user):
+        raise Http404()
+    
+    if resource.status != Resource.APPROVED:
+        messages.error(request, _(u"This resource is not yet approved by the mPowering Content Review Team, so is not yet available for all users to view"))
+        
     resource_viewed.send(sender=resource, resource=resource, request=request)
     return render_to_response('mpowering/resource/view.html',
                               {'resource': resource, 
@@ -89,9 +96,7 @@ def resource_create_view(request):
                     
             # add misc_tags
             other_tags = [x.strip() for x in form.cleaned_data.get("other_tags").split(',')]
-            print other_tags
             for ot in other_tags:
-                print ot
                 if ot:
                     try:
                         tag = Tag.objects.get(name = ot)
@@ -124,6 +129,10 @@ def resource_link_view(request, id):
     # TODO check that resource is approved
     try:
         url = ResourceURL.objects.get(pk=id)
+        
+        if not resource_can_view(url.resource,request.user):
+            raise Http404() 
+        
         resource_url_viewed.send(sender=url, resource_url=url, request=request)
         return HttpResponseRedirect(url.url)
     except ResourceURL.DoesNotExist:
@@ -133,6 +142,10 @@ def resource_file_view(request, id):
     # TODO check that resource is approved
     try:
         file = ResourceFile.objects.get(pk=id)
+        
+        if not resource_can_view(file.resource,request.user):
+            raise Http404() 
+        
         resource_file_viewed.send(sender=file, resource_file=file, request=request)
         response = HttpResponse(file.file, content_type='application/vnd.ms-excel;charset=utf-8')
         response['Content-Disposition'] = "attachment; filename=" + file.filename()
@@ -152,3 +165,17 @@ def resource_form_set_choices(form):
     form.fields['device'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='device').order_by('order_by')]
     form.fields['license'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='license').order_by('order_by')]
     return form 
+
+def resource_can_view(resource, user):
+    if user.is_staff or user == resource.create_user or user == resource.update_user:
+        return True
+    elif resource.status == Resource.APPROVED:
+        return True
+    else:
+        return False
+
+def resource_can_edit(resource,user):
+    if user.is_staff or user == resource.create_user or user == resource.update_user:
+        return True
+    else:
+        return False
