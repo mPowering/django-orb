@@ -54,7 +54,7 @@ class ResourceForm(forms.Form):
     license = forms.ChoiceField(
                         widget=forms.RadioSelect,
                         required=True,
-                        error_messages={'required': _('Please select at least one license')},)
+                        error_messages={'required': _('Please select a license')},)
     other_tags = forms.CharField(
                         help_text=_('Please enter any other relevant tags for this resource, comma separated if entering more than one tag'),               
                         required=False,

@@ -164,6 +164,7 @@ def resource_edit_view(request,resource_id):
 
     if request.method == 'POST':
         form = ResourceForm(request.POST, request.FILES)
+        resource_form_set_choices(form)
     
     else:
         data = {}
@@ -171,6 +172,34 @@ def resource_edit_view(request,resource_id):
         organisations = Organisation.objects.filter(resourceorganisation__resource=resource).values_list('name', flat=True)
         data['organisations'] = ', '.join(organisations)
         data['description'] = resource.description
+        data['image'] = resource.image
+        
+        files = ResourceFile.objects.filter(resource=resource)[:1]
+        if files:
+            data['file'] = files[0].file
+        
+        urls = ResourceURL.objects.filter(resource=resource)[:1]
+        if urls:
+            data['url'] = urls[0].url
+            
+        health_topic = Tag.objects.filter(category__slug='health-topic', resourcetag__resource=resource). values_list('id',flat=True)
+        data['health_topic'] = health_topic
+        
+        resource_type = Tag.objects.filter(category__slug='type', resourcetag__resource=resource). values_list('id',flat=True)
+        data['resource_type'] = resource_type
+        
+        audience = Tag.objects.filter(category__slug='audience', resourcetag__resource=resource). values_list('id',flat=True)
+        data['audience'] = audience
+        
+        geography = Tag.objects.filter(category__slug='geography', resourcetag__resource=resource). values_list('id',flat=True)
+        data['geography'] = geography
+        
+        device = Tag.objects.filter(category__slug='device', resourcetag__resource=resource). values_list('id',flat=True)
+        data['device'] = device
+        
+        license = Tag.objects.filter(category__slug='license', resourcetag__resource=resource). values_list('id',flat=True)
+        data['license'] = license
+        
         form = ResourceForm(initial= data)
         resource_form_set_choices(form)
         
