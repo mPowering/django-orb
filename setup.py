@@ -41,5 +41,7 @@ setup(
         "django-crispy-forms >= 1.4.0",
         "django-tinymce",
         "django-wysiwyg",
+        "django-haystack",
+        "pysolr",
     ],
 )
