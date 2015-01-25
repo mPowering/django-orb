@@ -9,7 +9,7 @@ from mpowering.models import Tag, Resource, Organisation, Category
 
 from tinymce.models import HTMLField
 
-class ResourceCreateForm(forms.Form):
+class ResourceForm(forms.Form):
     title = forms.CharField(
                 required=True,
                 error_messages={'required': _('Please enter a title')},)
@@ -62,7 +62,7 @@ class ResourceCreateForm(forms.Form):
 
     
     def __init__(self, *args, **kwargs):
-        super(ResourceCreateForm, self).__init__(*args, **kwargs)
+        super(ResourceForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'

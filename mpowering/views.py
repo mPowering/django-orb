@@ -6,7 +6,7 @@ from django.shortcuts import render,render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
-from mpowering.forms import ResourceCreateForm
+from mpowering.forms import ResourceForm
 from mpowering.models import Tag, Resource, Organisation, ResourceURL , Category
 from mpowering.models import ResourceFile, ResourceOrganisation, ResourceTag
 
@@ -55,7 +55,7 @@ def resource_create_view(request):
                               {'message': _(u'You need to be logged in to add a resource.') },
                               context_instance=RequestContext(request))
     if request.method == 'POST':
-        form = ResourceCreateForm(request.POST, request.FILES)
+        form = ResourceForm(request.POST, request.FILES)
         resource_form_set_choices(form)
         if form.is_valid():
             # save resource
@@ -110,7 +110,7 @@ def resource_create_view(request):
             return HttpResponseRedirect(reverse('mpowering_resource_create_thanks', args=[resource.id])) # Redirect after POST
             
     else:
-        form = ResourceCreateForm()
+        form = ResourceForm()
         resource_form_set_choices(form)
         
     return render_to_response('mpowering/resource/create.html',
@@ -147,7 +147,7 @@ def resource_file_view(request, id):
             raise Http404() 
         
         resource_file_viewed.send(sender=file, resource_file=file, request=request)
-        response = HttpResponse(file.file, content_type='application/vnd.ms-excel;charset=utf-8')
+        response = HttpResponse(file.file, content_type='application/unknown;charset=utf-8')
         response['Content-Disposition'] = "attachment; filename=" + file.filename()
         return response
     except ResourceFile.DoesNotExist:
@@ -158,7 +158,26 @@ def resource_file_view(request, id):
                               context_instance=RequestContext(request))
 
 def resource_edit_view(request,resource_id):
-    pass
+    resource = Resource.objects.get(pk=resource_id)
+    if not resource_can_edit(resource, request.user):
+        raise Http404() 
+
+    if request.method == 'POST':
+        form = ResourceForm(request.POST, request.FILES)
+    
+    else:
+        data = {}
+        data['title'] = resource.title
+        organisations = Organisation.objects.filter(resourceorganisation__resource=resource).values_list('name', flat=True)
+        data['organisations'] = ', '.join(organisations)
+        data['description'] = resource.description
+        form = ResourceForm(initial= data)
+        resource_form_set_choices(form)
+        
+    return render_to_response('mpowering/resource/edit.html',
+                              {'form': form, 
+                               },
+                              context_instance=RequestContext(request))
 
 ''' 
 Helper functions
