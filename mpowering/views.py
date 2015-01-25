@@ -157,6 +157,12 @@ def resource_file_view(request, id):
     return render_to_response('mpowering/resource/file.html',
                               context_instance=RequestContext(request))
 
+def resource_edit_view(request,resource_id):
+    pass
+
+''' 
+Helper functions
+'''
 def resource_form_set_choices(form):
     form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='health-topic').order_by('order_by')]
     form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').order_by('order_by')]
@@ -179,3 +185,4 @@ def resource_can_edit(resource,user):
         return True
     else:
         return False
+    
