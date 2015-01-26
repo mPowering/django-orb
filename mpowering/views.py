@@ -67,13 +67,7 @@ def resource_create_view(request):
             resource.save()
             
             # add organisation(s)
-            organisations = [x.strip() for x in form.cleaned_data.get("organisations").split(',')]
-            for o in organisations:
-                try:
-                    organisation = Organisation.objects.get(name = o)
-                except Organisation.DoesNotExist:
-                    organisation = Organisation(name =o, create_user=request.user, update_user=request.user).save()
-                ResourceOrganisation(resource=resource, organisation=organisation,create_user=request.user).save()
+            resource_add_organisations(request, form, resource)
                 
             # add file and url
             if request.FILES.has_key('file'):
@@ -82,29 +76,7 @@ def resource_create_view(request):
                 rf.save()
                 
             # add tags
-            tag_categories = ["health_topic", "resource_type", "audience", "geography", "device"]
-            for tc in tag_categories:
-                tag_category = form.cleaned_data.get(tc)
-                for ht in tag_category:
-                    tag = Tag.objects.get(pk=ht)
-                    ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
-                    
-            # add license
-            license = form.cleaned_data.get("license")
-            tag = Tag.objects.get(pk=license)
-            ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
-                    
-            # add misc_tags
-            other_tags = [x.strip() for x in form.cleaned_data.get("other_tags").split(',')]
-            for ot in other_tags:
-                if ot:
-                    try:
-                        tag = Tag.objects.get(name = ot)
-                    except Tag.DoesNotExist:
-                        category = Category.objects.get(slug='other')
-                        tag = Tag(name =ot, category= category, create_user=request.user, update_user=request.user)
-                        tag.save()
-                    ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
+            resource_add_tags(request, form, resource)
                 
             # redirect to info page
             return HttpResponseRedirect(reverse('mpowering_resource_create_thanks', args=[resource.id])) # Redirect after POST
@@ -165,7 +137,28 @@ def resource_edit_view(request,resource_id):
     if request.method == 'POST':
         form = ResourceForm(request.POST, request.FILES)
         resource_form_set_choices(form)
-    
+        if form.is_valid():
+            resource.update_user = request.user
+            resource.title = form.cleaned_data.get("title")
+            resource.description = form.cleaned_data.get("description")
+            resource.save()
+            
+            # update organisations
+            ResourceOrganisation.objects.filter(resource=resource).delete()
+            resource_add_organisations(request, form, resource)
+                
+            # update image
+            
+            # update file
+            
+            # update url
+            
+            # update tags - remove all current tags first
+            ResourceTag.objects.filter(resource=resource).delete()
+            resource_add_tags(request, form, resource)
+                    
+            
+            
     else:
         data = {}
         data['title'] = resource.title
@@ -236,4 +229,37 @@ def resource_can_edit(resource,user):
         return True
     else:
         return False
-    
+
+def resource_add_organisations(request, form, resource):
+    organisations = [x.strip() for x in form.cleaned_data.get("organisations").split(',')]
+    for o in organisations:
+        try:
+            organisation = Organisation.objects.get(name = o)
+        except Organisation.DoesNotExist:
+            organisation = Organisation(name=o, create_user=request.user, update_user=request.user)
+            organisation.save()
+        ResourceOrganisation(resource=resource, organisation=organisation,create_user=request.user).save()
+                  
+def resource_add_tags(request, form, resource):
+    tag_categories = ["health_topic", "resource_type", "audience", "geography", "device"]
+    for tc in tag_categories:
+        tag_category = form.cleaned_data.get(tc)
+        for ht in tag_category:
+            tag = Tag.objects.get(pk=ht)
+            ResourceTag(tag=tag, resource=resource, create_user=request.user).save()
+    # add license
+    license = form.cleaned_data.get("license")
+    tag = Tag.objects.get(pk=license)
+    ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
+            
+    # add misc_tags
+    other_tags = [x.strip() for x in form.cleaned_data.get("other_tags").split(',')]
+    for ot in other_tags:
+        if ot:
+            try:
+                tag = Tag.objects.get(name = ot)
+            except Tag.DoesNotExist:
+                category = Category.objects.get(slug='other')
+                tag = Tag(name =ot, category= category, create_user=request.user, update_user=request.user)
+                tag.save()
+            ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
