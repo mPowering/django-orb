@@ -182,23 +182,26 @@ def resource_edit_view(request,resource_id):
         if urls:
             data['url'] = urls[0].url
             
-        health_topic = Tag.objects.filter(category__slug='health-topic', resourcetag__resource=resource). values_list('id',flat=True)
+        health_topic = Tag.objects.filter(category__slug='health-topic', resourcetag__resource=resource).values_list('id',flat=True)
         data['health_topic'] = health_topic
         
-        resource_type = Tag.objects.filter(category__slug='type', resourcetag__resource=resource). values_list('id',flat=True)
+        resource_type = Tag.objects.filter(category__slug='type', resourcetag__resource=resource).values_list('id',flat=True)
         data['resource_type'] = resource_type
         
-        audience = Tag.objects.filter(category__slug='audience', resourcetag__resource=resource). values_list('id',flat=True)
+        audience = Tag.objects.filter(category__slug='audience', resourcetag__resource=resource).values_list('id',flat=True)
         data['audience'] = audience
         
-        geography = Tag.objects.filter(category__slug='geography', resourcetag__resource=resource). values_list('id',flat=True)
+        geography = Tag.objects.filter(category__slug='geography', resourcetag__resource=resource).values_list('id',flat=True)
         data['geography'] = geography
         
-        device = Tag.objects.filter(category__slug='device', resourcetag__resource=resource). values_list('id',flat=True)
+        device = Tag.objects.filter(category__slug='device', resourcetag__resource=resource).values_list('id',flat=True)
         data['device'] = device
         
-        license = Tag.objects.filter(category__slug='license', resourcetag__resource=resource). values_list('id',flat=True)
-        data['license'] = license
+        license = Tag.objects.filter(category__slug='license', resourcetag__resource=resource).values_list('id',flat=True)
+        data['license'] = license[0]
+        
+        other_tags = Tag.objects.filter(resourcetag__resource=resource, category__slug='other').values_list('name', flat=True)
+        data['other_tags'] = ', '.join(other_tags)
         
         form = ResourceForm(initial= data)
         resource_form_set_choices(form)
