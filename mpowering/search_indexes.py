@@ -6,7 +6,7 @@ from mpowering.models import Resource
 class ResourceIndex(indexes.SearchIndex, indexes.Indexable):
     text = indexes.CharField(document=True, use_template=True)
     author = indexes.CharField(model_attr='create_user')
-    create_date = indexes.DateTimeField(model_attr='create_date')
+    #create_date = indexes.DateTimeField(model_attr='create_date')
 
     def get_model(self):
         return Resource
