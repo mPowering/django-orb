@@ -13,9 +13,27 @@
       <h3>Results</h3>
 
       {% for result in search_results %}
-          <p>
-              <a href="{{ result.object.get_absolute_url }}">{{ result.object.title }}</a>
-          </p>
+	      <div class="row"> 
+			<div class="col-xs-8">
+				<a href="{% url 'mpowering_resource' result.object.slug %}"><h4>{{ result.object.title }}</h4></a>
+				
+				<h4>
+				{% for t in result.object.get_type_tags %}
+					{{ t.name }}{% if not forloop.last %}, {% endif %}
+				{% endfor %}
+				</h4>
+				
+				{% for o in result.object.get_organisations %}
+					{{ o.name }}{% if not forloop.last %}, {% endif %}
+				{% endfor %}
+			</div>
+			<div class="col-xs-2">
+	            {% if result.object.image %}
+					<img src="{{ MEDIA_URL }}{{ result.object.image }}" style="max-width:100%" class="thumbnail"/>
+				{% endif %}
+			</div>
+		</div>
+ 		<hr/>
       {% empty %}
           <p>No results found.</p>
       {% endfor %}

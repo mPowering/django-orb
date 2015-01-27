@@ -7,21 +7,27 @@
 
 
 {% for r in resources %}
-	<div style="clear:both;">
-		<img src="{{ MEDIA_URL }}{{ r.image }}" style="float:left; max-width: 20%; margin-right: 20px;" class="thumbnail"/>
-		<a href="{% url 'mpowering_resource' r.slug %}"><h3>{{ r.title }}</h3></a>
-		
-		<h4>
-		{% for t in r.get_type_tags %}
-			{{ t.name }}{% if not forloop.last %}, {% endif %}
-		{% endfor %}
-		</h4>
-		
-		{% for o in r.get_organisations %}
-			{{ o.name }}{% if not forloop.last %}, {% endif %}
-		{% endfor %}
-	
-	</div>
+	 <div class="row"> 
+			<div class="col-xs-8">
+				<a href="{% url 'mpowering_resource' r.slug %}"><h4>{{ r.title }}</h4></a>
+				
+				<h4>
+				{% for t in r.get_type_tags %}
+					{{ t.name }}{% if not forloop.last %}, {% endif %}
+				{% endfor %}
+				</h4>
+				
+				{% for o in r.get_organisations %}
+					{{ o.name }}{% if not forloop.last %}, {% endif %}
+				{% endfor %}
+			</div>
+			<div class="col-xs-2">
+	            {% if r.image %}
+					<img src="{{ MEDIA_URL }}{{ r.image }}" style="max-width:100%" class="thumbnail"/>
+				{% endif %}
+			</div>
+		</div>
+ 		<hr/>
 {% endfor %}
 
 
