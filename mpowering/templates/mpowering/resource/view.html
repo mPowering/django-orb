@@ -18,7 +18,7 @@ From:
 {% endfor %}
 </p>
 {% if resource.image %}
-	<img style="display:block; margin: 20px auto; max-width:90%" src="{{ MEDIA_URL }}{{ resource.image }}"/>
+	<img src="{% url 'mpowering_resource_image' resource.id 250 %}" style="display:block; margin: 20px auto; max-width: 250px" class="thumbnail"/>
 {% endif %}
 <p>
 {{ resource.description|safe }}

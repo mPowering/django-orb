@@ -14,7 +14,7 @@
 
       {% for result in search_results %}
 	      <div class="row"> 
-			<div class="col-xs-8">
+			<div class="col-md-8">
 				<a href="{% url 'mpowering_resource' result.object.slug %}"><h4>{{ result.object.title }}</h4></a>
 				
 				<h4>
@@ -27,9 +27,9 @@
 					{{ o.name }}{% if not forloop.last %}, {% endif %}
 				{% endfor %}
 			</div>
-			<div class="col-xs-2">
+			<div class="col-md-2">
 	            {% if result.object.image %}
-					<img src="{{ MEDIA_URL }}{{ result.object.image }}" style="max-width:100%" class="thumbnail"/>
+					<img src="{% url 'mpowering_resource_image' result.object.id 200 %}" style="max-width:200px" class="thumbnail"/>
 				{% endif %}
 			</div>
 		</div>

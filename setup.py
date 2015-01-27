@@ -43,5 +43,6 @@ setup(
         "django-wysiwyg",
         "django-haystack",
         "pysolr",
+        "pillow",
     ],
 )

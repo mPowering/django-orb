@@ -8,7 +8,7 @@
 
 {% for r in resources %}
 	 <div class="row"> 
-			<div class="col-xs-8">
+			<div class="col-md-8">
 				<a href="{% url 'mpowering_resource' r.slug %}"><h4>{{ r.title }}</h4></a>
 				
 				<h4>
@@ -21,9 +21,9 @@
 					{{ o.name }}{% if not forloop.last %}, {% endif %}
 				{% endfor %}
 			</div>
-			<div class="col-xs-2">
+			<div class="col-md-2">
 	            {% if r.image %}
-					<img src="{{ MEDIA_URL }}{{ r.image }}" style="max-width:100%" class="thumbnail"/>
+					<img src="{% url 'mpowering_resource_image' r.id 200 %}" style="max-width:200px" class="thumbnail"/>
 				{% endif %}
 			</div>
 		</div>

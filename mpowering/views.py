@@ -13,6 +13,10 @@ from mpowering.models import Tag, Resource, Organisation, ResourceURL , Category
 from mpowering.models import ResourceFile, ResourceOrganisation, ResourceTag
 
 from mpowering.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search
+
+from PIL import Image
+
+
 # Create your views here.
 
 
@@ -236,6 +240,16 @@ def search_view(request):
                                'query': search_query,
                                'search_results': search_results},
                               context_instance=RequestContext(request))
+    
+    
+def resource_thumbnail_view(request, resource_id, size):
+    resource= Resource.objects.get(pk=resource_id)
+    im = Image.open(resource.image)
+    im.thumbnail(size=(size,size))
+    response = HttpResponse(content_type="image/jpg")
+    im.save(response, "JPEG")
+    return response
+
 ''' 
 Helper functions
 '''
