@@ -8,3 +8,6 @@
 {% for org in object.get_organisations.all %}
 	{{ org.name }}
 {% endfor %}
+
+{{ object.create_user.get_full_name }}
+{{ object.update_user.get_full_name }}
