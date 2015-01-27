@@ -60,6 +60,19 @@ a:hover, a:focus {
     background-color: #033f62;
 }
 
+.navbar-inverse .control-label {
+    color: #fff;
+    font-weight: normal;
+}
+
+.navbar-inverse .form-horizontal {
+    text-align: right;
+    padding-top:10px;
+    padding-bottom:0;
+    margin:0;
+}
+
+
 /*
  * Sidebar
  */

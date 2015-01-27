@@ -142,3 +142,21 @@ class SearchForm(forms.Form):
         self.helper.layout = Layout(
                 FieldWithButtons('q',Submit('submit', _(u'Go'), css_class='btn btn-default')),
             )
+        
+class HeaderSearchForm(forms.Form): 
+    q = forms.CharField(label="Search:",
+                required=False,
+                error_messages={'required': _('Please enter something to search for')},)
+    
+    def __init__(self, *args, **kwargs):
+        super(HeaderSearchForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_show_labels = False
+        self.helper.form_method = "GET"
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2 '
+        self.helper.field_class = 'col-lg-10 navbar-right'
+        self.helper.form_action = 'mpowering_search'
+        self.helper.layout = Layout(
+                FieldWithButtons('q',Submit('submit', _(u'Go'), css_class='btn btn-default')),
+            )
