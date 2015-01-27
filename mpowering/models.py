@@ -231,18 +231,16 @@ class ResourceOrganisation (models.Model):
     create_date = models.DateTimeField(default=timezone.now)
     create_user = models.ForeignKey(User)  
     
-class Tracker(models.Model):
+class ResourceTracker(models.Model):
     VIEW = 'view'
     EDIT = 'edit'
     DOWNLOAD = 'download'
     CREATE = 'create'
-    SEARCH = 'search'
     TRACKER_TYPES = (
         (VIEW, _(u'View')),
         (EDIT, _(u'Edit')),
         (DOWNLOAD, _(u'Download')),
         (CREATE, _(u'Create')),
-        (SEARCH, _(u'Search')),
     )
     user = models.ForeignKey(User, blank=True, null=True, default=None)
     type = models.CharField(max_length=50,choices=TRACKER_TYPES)
@@ -253,4 +251,12 @@ class Tracker(models.Model):
     ip = models.IPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
     extra_data = models.TextField(blank=True, null=True, default=None)
+    
+class SearchTracker(models.Model):
+    user = models.ForeignKey(User, blank=True, null=True, default=None)
+    query = models.TextField(blank=True, null=True, default=None)
+    no_results = models.IntegerField(blank=True, null=True, default=0)
+    access_date = models.DateTimeField(default=timezone.now)
+    ip = models.IPAddressField(blank=True, null=True, default=None)
+    user_agent = models.TextField(blank=True, null=True, default=None)
     
