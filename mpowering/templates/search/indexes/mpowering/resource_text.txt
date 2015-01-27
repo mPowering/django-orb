@@ -1,2 +1,10 @@
 {{ object.title }}
 {{ object.description }}
+
+{% for tag in object.tags.all %}
+	{{ tag.name }}
+{% endfor %}
+
+{% for org in object.get_organisations.all %}
+	{{ org.name }}
+{% endfor %}

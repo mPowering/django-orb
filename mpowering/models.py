@@ -1,6 +1,7 @@
 import os
 
 from django.contrib.auth.models import User
+from django.core import urlresolvers
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -99,6 +100,12 @@ class Resource (models.Model):
     def get_type_tags(self):
         tags = Tag.objects.filter(resourcetag__resource=self, category__slug='type')
         return tags
+    
+    def get_absolute_url(self):
+        return urlresolvers.reverse('mpowering_resource', args=[self.slug])
+    
+    def tags(self):
+        return Tag.objects.filter(resourcetag__resource = self)
     
 # ResourceURL
 class ResourceURL (models.Model):
@@ -226,11 +233,13 @@ class Tracker(models.Model):
     EDIT = 'edit'
     DOWNLOAD = 'download'
     CREATE = 'create'
+    SEARCH = 'search'
     TRACKER_TYPES = (
         (VIEW, _(u'View')),
         (EDIT, _(u'Edit')),
         (DOWNLOAD, _(u'Download')),
         (CREATE, _(u'Create')),
+        (SEARCH, _(u'Search')),
     )
     user = models.ForeignKey(User, blank=True, null=True, default=None)
     type = models.CharField(max_length=50,choices=TRACKER_TYPES)

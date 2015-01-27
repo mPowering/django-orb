@@ -6,11 +6,13 @@ from django.shortcuts import render,render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
+from haystack.query import SearchQuerySet
+
 from mpowering.forms import ResourceForm, SearchForm
 from mpowering.models import Tag, Resource, Organisation, ResourceURL , Category
 from mpowering.models import ResourceFile, ResourceOrganisation, ResourceTag
 
-from mpowering.signals import resource_viewed, resource_url_viewed, resource_file_viewed
+from mpowering.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search
 # Create your views here.
 
 
@@ -205,12 +207,26 @@ def resource_edit_view(request,resource_id):
                               context_instance=RequestContext(request))
 
 def search_view(request):
-       
-    form = SearchForm()
+     
+    search_query = request.GET.get('q', '')
+    
+    print search_query
+    
+    if search_query:
+        search_results = SearchQuerySet().filter(content=search_query)
+        print search_results
+        search.send(sender=search_results, query=search_query, no_results=search_results.count(), request=request)
+    else:
+        search_results = None
+        
+    data = {}
+    data['q'] = search_query
+    form = SearchForm(initial=data)
         
     return render_to_response('mpowering/search.html',
                               {'form': form, 
-                               },
+                               'query': search_query,
+                               'search_results': search_results},
                               context_instance=RequestContext(request))
 ''' 
 Helper functions
