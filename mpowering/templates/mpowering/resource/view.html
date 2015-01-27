@@ -75,4 +75,11 @@ From:
 <small>Resource uploaded by {{ resource.create_user.first_name }} {{ resource.create_user.last_name }} at {{ resource.create_date }} 
 and last updated by {{ resource.update_user.first_name }} {{ resource.update_user.last_name }} at {{ resource.update_date }}</small>
 
+
+{% if options_menu %}
+<hr/>
+	{% for om in options_menu %}
+		<a class="btn btn-primary btn btn-default" href="{{ om.url }}">{{ om.title }}</a>
+	{% endfor %}
+{% endif %}
 {% endblock %}

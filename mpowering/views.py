@@ -44,11 +44,18 @@ def resource_view(request,resource_slug):
     
     if resource.status != Resource.APPROVED:
         messages.error(request, _(u"This resource is not yet approved by the mPowering Content Review Team, so is not yet available for all users to view"))
+    
+    options_menu = []
+    if resource_can_edit(resource,request.user):
+        om = {}
+        om['title'] = _(u'Edit')   
+        om['url'] = resource.get_edit_url()
+        options_menu.append(om)
         
     resource_viewed.send(sender=resource, resource=resource, request=request)
     return render_to_response('mpowering/resource/view.html',
                               {'resource': resource, 
-                               },
+                               'options_menu': options_menu, },
                               context_instance=RequestContext(request))  
     
 def resource_create_view(request):
@@ -193,7 +200,8 @@ def resource_edit_view(request,resource_id):
         data['device'] = device
         
         license = Tag.objects.filter(category__slug='license', resourcetag__resource=resource).values_list('id',flat=True)
-        data['license'] = license[0]
+        if license:
+            data['license'] = license[0]
         
         other_tags = Tag.objects.filter(resourcetag__resource=resource, category__slug='other').values_list('name', flat=True)
         data['other_tags'] = ', '.join(other_tags)
