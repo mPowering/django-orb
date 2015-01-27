@@ -17,6 +17,6 @@ urlpatterns = patterns('',
     
     
     url(r'^tinymce/', include('tinymce.urls')),
-    url(r'^search/', include('haystack.urls')),
+    url(r'^search/$', 'mpowering.views.search_view', name="mpowering_search"),
     
 )

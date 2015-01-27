@@ -6,7 +6,7 @@ from django.shortcuts import render,render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
-from mpowering.forms import ResourceForm
+from mpowering.forms import ResourceForm, SearchForm
 from mpowering.models import Tag, Resource, Organisation, ResourceURL , Category
 from mpowering.models import ResourceFile, ResourceOrganisation, ResourceTag
 
@@ -204,6 +204,14 @@ def resource_edit_view(request,resource_id):
                                },
                               context_instance=RequestContext(request))
 
+def search_view(request):
+       
+    form = SearchForm()
+        
+    return render_to_response('mpowering/search.html',
+                              {'form': form, 
+                               },
+                              context_instance=RequestContext(request))
 ''' 
 Helper functions
 '''
