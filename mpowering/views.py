@@ -1,5 +1,6 @@
 
 from django.contrib import messages
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render,render_to_response
@@ -87,6 +88,12 @@ def resource_create_view(request):
                 rf = ResourceFile(resource=resource, create_user=request.user, update_user=request.user)
                 rf.file=request.FILES["file"]
                 rf.save()
+            
+            url = form.cleaned_data.get("url")
+            if url:
+                ru = ResourceURL(resource=resource, create_user=request.user, update_user=request.user) 
+                ru.url = url
+                ru.save()
                 
             # add tags
             resource_add_tags(request, form, resource)
@@ -148,8 +155,9 @@ def resource_edit_view(request,resource_id):
         raise Http404() 
 
     if request.method == 'POST':
-        form = ResourceForm(request.POST, request.FILES)
+        form = ResourceForm(data = request.POST, files = request.FILES)
         resource_form_set_choices(form)
+            
         if form.is_valid():
             resource.update_user = request.user
             resource.title = form.cleaned_data.get("title")
@@ -161,15 +169,45 @@ def resource_edit_view(request,resource_id):
             resource_add_organisations(request, form, resource)
                 
             # update image
+            image_clear = form.cleaned_data.get("image-clear")
+        
+            if image_clear:
+                resource.image = None
+                resource.save()
+            
+            if request.FILES.has_key('image'):
+                resource.image = request.FILES["image"]
+                resource.save()
             
             # update file
             
             # update url
+            url = form.cleaned_data.get("url")
+            # check if resource already had a url or not
+            resource_url = ResourceURL.objects.filter(resource=resource)
+            if url:
+                if resource_url:
+                    ru1 = resource_url[0]
+                    ru1.url = url
+                    ru1.update_user = request.user
+                    ru1.save()
+                else:
+                    ru = ResourceURL(resource=resource, create_user=request.user, update_user=request.user) 
+                    ru.url = url
+                    ru.save()
+            else:
+                if resource_url:
+                    resource_url.delete()
+            
             
             # update tags - remove all current tags first
             ResourceTag.objects.filter(resource=resource).delete()
             resource_add_tags(request, form, resource)
-                    
+        else:
+            initial = request.POST
+            initial['image'] = resource.image
+            form = ResourceForm(initial = initial, data = request.POST, files = request.FILES)
+            resource_form_set_choices(form)       
             
             
     else:
@@ -211,7 +249,7 @@ def resource_edit_view(request,resource_id):
         data['other_tags'] = ', '.join(other_tags)
         
         form = ResourceForm(initial= data)
-        resource_form_set_choices(form)
+        resource_form_set_choices(form )
         
     return render_to_response('mpowering/resource/edit.html',
                               {'form': form, 
