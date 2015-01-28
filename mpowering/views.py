@@ -184,20 +184,20 @@ def resource_edit_view(request,resource_id):
             # update url
             url = form.cleaned_data.get("url")
             # check if resource already had a url or not
-            resource_url = ResourceURL.objects.filter(resource=resource)
+            urls = ResourceURL.objects.filter(resource=resource)
             if url:
-                if resource_url:
-                    ru1 = resource_url[0]
-                    ru1.url = url
-                    ru1.update_user = request.user
-                    ru1.save()
+                if urls:
+                    resource_url = urls[0]
+                    resource_url.url = url
+                    resource_url.update_user = request.user
+                    resource_url.save()
                 else:
-                    ru = ResourceURL(resource=resource, create_user=request.user, update_user=request.user) 
-                    ru.url = url
-                    ru.save()
+                    resource_url = ResourceURL(resource=resource, create_user=request.user, update_user=request.user) 
+                    resource_url.url = url
+                    resource_url.save()
             else:
-                if resource_url:
-                    resource_url.delete()
+                if urls:
+                    urls.delete()
             
             
             # update tags - remove all current tags first
