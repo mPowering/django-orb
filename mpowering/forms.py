@@ -1,4 +1,6 @@
 from django import forms
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper
@@ -99,10 +101,12 @@ class ResourceForm(forms.Form):
     def clean(self):
         cleaned_data = self.cleaned_data
         file = cleaned_data.get("file")
-        url = cleaned_data.get("url").strip()
+        url = cleaned_data.get("url")
+        print url
         if self._errors:
             raise forms.ValidationError( _(u"Please correct the errors below and resubmit the form."))
-        if file is None and (url is None or url == ''):
+        if file is None and not url:
+            print url
             raise forms.ValidationError( _(u"Please submit a file and/or a url for this resource"))
         
         return self.cleaned_data
@@ -127,6 +131,17 @@ class ResourceForm(forms.Form):
 
         return file
     
+    def clean_url(self):
+        url = self.cleaned_data['url']
+        validate = URLValidator()
+        if url:
+            print "checking url" 
+            try:
+                validate(url)
+            except ValidationError:
+                raise forms.ValidationError( _(u"This does not appear to be a valid Url"))
+        return url
+        
 class SearchForm(forms.Form): 
     q = forms.CharField(
                 required=True,
