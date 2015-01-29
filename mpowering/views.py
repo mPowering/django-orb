@@ -111,7 +111,12 @@ def resource_create_view(request):
                               context_instance=RequestContext(request))
  
 def resource_create_thanks_view(request,id):
-    resource = Resource.objects.get(pk=id)
+    try:
+        resource = Resource.objects.get(pk=id)
+    except Resource.DoesNotExist:
+        raise Http404()
+    if not resource_can_edit(resource, request.user):
+        raise Http404()
     return render_to_response('mpowering/resource/create_thanks.html',
                               {'resource': resource, 
                                },
@@ -180,6 +185,17 @@ def resource_edit_view(request,resource_id):
                 resource.save()
             
             # update file
+            print form.cleaned_data
+            file_clear = form.cleaned_data.get("file-clear")
+            print file_clear
+            if file_clear:
+                ResourceFile.objects.filter(resource=resource).delete()
+                
+            if request.FILES.has_key('file'):
+                rf = ResourceFile(resource=resource, create_user=request.user, update_user=request.user)
+                rf.file=request.FILES["file"]
+                rf.save()   
+            
             
             # update url
             url = form.cleaned_data.get("url")
@@ -203,9 +219,15 @@ def resource_edit_view(request,resource_id):
             # update tags - remove all current tags first
             ResourceTag.objects.filter(resource=resource).delete()
             resource_add_tags(request, form, resource)
+            
+            # All successful - now redirect
+            return HttpResponseRedirect(reverse('mpowering_resource_edit_thanks', args=[resource.id]))
         else:
             initial = request.POST
             initial['image'] = resource.image
+            files = ResourceFile.objects.filter(resource=resource)[:1]
+            if files:
+                initial['file'] = files[0].file
             form = ResourceForm(initial = initial, data = request.POST, files = request.FILES)
             resource_form_set_choices(form)       
             
@@ -253,6 +275,18 @@ def resource_edit_view(request,resource_id):
         
     return render_to_response('mpowering/resource/edit.html',
                               {'form': form, 
+                               },
+                              context_instance=RequestContext(request))
+    
+def resource_edit_thanks_view(request,id):
+    try:
+        resource = Resource.objects.get(pk=id)
+    except Resource.DoesNotExist:
+        raise Http404()
+    if not resource_can_edit(resource, request.user):
+        raise Http404()
+    return render_to_response('mpowering/resource/edit_thanks.html',
+                              {'resource': resource, 
                                },
                               context_instance=RequestContext(request))
 

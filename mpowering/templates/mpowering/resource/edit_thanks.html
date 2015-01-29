@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %} 
+
+{% block content %}
+
+<h2 style="text-align:center">{% trans 'Resource Edited' %}</h2>
+<p>{% blocktrans with resource.title as r_title%} Your resource
+'{{ r_title }}' has been updated {% endblocktrans %}</p>	
+
+{% url 'mpowering_resource' resource.slug as preview %}
+{% url 'mpowering_resource_edit'  resource.id as edit %}
+<p>{% blocktrans %}You can <a href="{{ preview }}">view your updates</a> or <a href="{{ edit }}">go back and edit your resource again</a>.{% endblocktrans %}</p>	
+
+{% endblock %}
