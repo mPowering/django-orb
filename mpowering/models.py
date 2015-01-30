@@ -2,6 +2,7 @@ import os
 
 from django.contrib.auth.models import User
 from django.core import urlresolvers
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
@@ -245,4 +246,13 @@ class SearchTracker(models.Model):
     access_date = models.DateTimeField(auto_now_add=True)
     ip = models.IPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
+    
+class ResourceRating(models.Model):
+    user = models.ForeignKey(User, blank=False, null=False)
+    resource = models.ForeignKey(Resource, blank=False, null=False)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True) 
+    rating = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
+    comments = models.TextField(blank=True, null=True, default=None)
+    
     
