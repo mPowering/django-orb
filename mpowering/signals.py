@@ -34,6 +34,7 @@ def resource_url_viewed_callback(sender, **kwargs):
     if not request.user.is_anonymous():
         tracker.user = request.user
     tracker.resource_url = resource_url
+    tracker.resource = resource_url.resource
     tracker.ip = request.META.get('REMOTE_ADDR','0.0.0.0')
     tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
     tracker.type = ResourceTracker.VIEW
@@ -48,6 +49,7 @@ def resource_file_viewed_callback(sender, **kwargs):
     if not request.user.is_anonymous():
         tracker.user = request.user
     tracker.resource_file = resource_file
+    tracker.resource = resource_file.resource
     tracker.ip = request.META.get('REMOTE_ADDR','0.0.0.0')
     tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
     tracker.type = ResourceTracker.VIEW

@@ -106,7 +106,7 @@ class ResourceForm(forms.Form):
         if self._errors:
             raise forms.ValidationError( _(u"Please correct the errors below and resubmit the form."))
         if file is None and not url:
-            print url
+            print "no file or url"
             raise forms.ValidationError( _(u"Please submit a file and/or a url for this resource"))
         
         return self.cleaned_data
