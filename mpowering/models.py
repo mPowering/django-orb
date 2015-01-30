@@ -101,6 +101,13 @@ class Resource (models.Model):
     def tags(self):
         return Tag.objects.filter(resourcetag__resource = self)
     
+    def get_no_hits(self):
+        anon = ResourceTracker.objects.filter(resource=self, user=None).values_list('ip', 
+                                      flat=True).distinct().count()
+        identified = ResourceTracker.objects.filter(resource=self).exclude(user=None).values_list('user', 
+                                      flat=True).distinct().count()                              
+        return anon + identified
+        
 # ResourceURL
 class ResourceURL (models.Model):
     url = models.URLField(blank=False, null=False, max_length=500)

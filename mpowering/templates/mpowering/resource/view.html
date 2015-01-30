@@ -75,6 +75,9 @@ From:
 <small>Resource uploaded by {{ resource.create_user.first_name }} {{ resource.create_user.last_name }} ({{ resource.create_date }})
 and last updated by {{ resource.update_user.first_name }} {{ resource.update_user.last_name }} ({{ resource.update_date }})</small>
 
+<hr/>
+<p>Resource viewed {{ resource.get_no_hits }} times </p>
+
 
 {% if options_menu %}
 <hr/>
