@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^resource/edit/(?P<resource_id>\d+)/$', 'mpowering.views.resource_edit_view', name="mpowering_resource_edit"),
     url(r'^resource/edit/(?P<id>\d+)/thanks/$', 'mpowering.views.resource_edit_thanks_view', name="mpowering_resource_edit_thanks"),
     url(r'^resource/image/(?P<resource_id>\d+)/(?P<size>\d+)/$', 'mpowering.views.resource_thumbnail_view', name="mpowering_resource_image"),
-    
+    url(r'^resource/rate/$', 'mpowering.views.resource_rate_view', name="mpowering_resource_rate"),
     
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^search/$', 'mpowering.views.search_view', name="mpowering_search"),

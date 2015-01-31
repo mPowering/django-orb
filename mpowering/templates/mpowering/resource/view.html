@@ -1,5 +1,21 @@
 {% extends "base.html" %}
 {% load i18n %} 
+
+{% block extra_scripts %}
+<script>
+
+$.ajaxSetup({
+	  data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+	});
+	
+$.post("/resource/rate/", { rating: 3, resource_id: {{ resource.id }} },
+    function(data) {
+       // success! so now set the UI star to 3
+});
+</script>
+{% endblock extra_scripts %}
+
+
 {% block content %}
 
 <h2 style="text-align:center">{{ resource.title }}</h2>

@@ -290,6 +290,21 @@ def resource_edit_thanks_view(request,id):
                                },
                               context_instance=RequestContext(request))
 
+def resource_rate_view(request):
+    if request.user.is_anonymous():
+        raise Http404()
+    if request.method == 'POST':
+        resource_id = request.POST.get('resource_id')
+        print resource_id
+        rating = request.POST.get('rating')
+        comment = request.POST.get('comment')
+        
+        print request.user
+        return HttpResponse()
+    else:
+        raise Http404()   
+    
+
 def search_view(request):
      
     search_query = request.GET.get('q', '')
