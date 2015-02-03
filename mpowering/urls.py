@@ -2,6 +2,12 @@
 from django.conf import settings
 from django.conf.urls import patterns, include, url
 
+from mpowering.api.resources import ResourceResource
+
+from tastypie.api import Api
+
+v1_api = Api(api_name='v1')
+v1_api.register(ResourceResource())
 
 urlpatterns = patterns('',
 
@@ -20,5 +26,7 @@ urlpatterns = patterns('',
     
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^search/$', 'mpowering.views.search_view', name="mpowering_search"),
+    
+    url(r'^api/', include(v1_api.urls)),
     
 )

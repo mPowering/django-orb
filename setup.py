@@ -10,6 +10,7 @@ setup(
     name='django-mpowering',
     version='0.0.2',
     packages=['mpowering',
+              'mpowering.api',
               'mpowering.migrations', 
               'mpowering.fixtures',
               'mpowering.utils',
