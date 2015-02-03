@@ -7,7 +7,7 @@ from django.dispatch import Signal
 
 from mpowering.models import ResourceTracker, SearchTracker
 
-resource_viewed = Signal(providing_args=["resource", "request"])
+resource_viewed = Signal(providing_args=["resource", "request", "type"])
 resource_url_viewed = Signal(providing_args=["resource_url", "request"])
 resource_file_viewed = Signal(providing_args=["resource_file", "request"])
 search = Signal(providing_args=["query", "no_results", "request"])
@@ -15,14 +15,18 @@ search = Signal(providing_args=["query", "no_results", "request"])
 def resource_viewed_callback(sender, **kwargs):
     request = kwargs.get('request')
     resource = kwargs.get('resource')
+    type = kwargs.get('type')
     
+    if type is None:
+        type = ResourceTracker.VIEW
+        
     tracker = ResourceTracker()
     if not request.user.is_anonymous():
         tracker.user = request.user
     tracker.resource = resource
     tracker.ip = request.META.get('REMOTE_ADDR','0.0.0.0')
     tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
-    tracker.type = ResourceTracker.VIEW
+    tracker.type = type
     tracker.save()
     return
 

@@ -220,11 +220,13 @@ class ResourceOrganisation (models.Model):
     
 class ResourceTracker(models.Model):
     VIEW = 'view'
+    VIEW_API = 'view-api'
     EDIT = 'edit'
     DOWNLOAD = 'download'
     CREATE = 'create'
     TRACKER_TYPES = (
         (VIEW, _(u'View')),
+        (VIEW_API, _(u'View-api')),
         (EDIT, _(u'Edit')),
         (DOWNLOAD, _(u'Download')),
         (CREATE, _(u'Create')),

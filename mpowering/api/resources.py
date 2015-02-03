@@ -7,9 +7,11 @@ from tastypie.authentication import Authentication,ApiKeyAuthentication
 from tastypie.authorization import ReadOnlyAuthorization
 from tastypie.models import ApiKey
 from tastypie.resources import ModelResource
+from tastypie.throttle import CacheDBThrottle
 
 from mpowering.api.serializers import PrettyJSONSerializer, ResourceSerializer
-from mpowering.models import Resource, ResourceOrganisation, Organisation, ResourceFile, ResourceURL, ResourceTag, Tag, Category
+from mpowering.models import Resource, ResourceOrganisation, Organisation, ResourceFile, ResourceURL, ResourceTag, Tag, Category, ResourceTracker
+from mpowering.signals import resource_viewed
 
 class ResourceResource(ModelResource):
     organisations = fields.ToManyField('mpowering.api.resources.ResourceOrganisationResource', 'resourceorganisation_set', related_name='resource', full=True)
@@ -25,9 +27,14 @@ class ResourceResource(ModelResource):
         serializer = ResourceSerializer()
         always_return_data = True 
         include_resource_uri = True
+        throttle = CacheDBThrottle(throttle_at=150, timeframe=3600)
 
     def dehydrate_image(self,bundle):
         return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
+    
+    def authorized_read_detail(self, object_list, bundle):
+        # add to ResourceTracker
+        resource_viewed.send(sender=bundle.obj, resource=bundle.obj, request=bundle.request, type=ResourceTracker.VIEW_API)
     
 class ResourceOrganisationResource(ModelResource):
     organisation = fields.ToOneField('mpowering.api.resources.OrganisationResource', 'organisation', full=True)
