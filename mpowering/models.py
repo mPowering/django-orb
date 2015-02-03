@@ -232,7 +232,7 @@ class ResourceTracker(models.Model):
         (CREATE, _(u'Create')),
     )
     user = models.ForeignKey(User, blank=True, null=True, default=None)
-    type = models.CharField(max_length=50,choices=TRACKER_TYPES)
+    type = models.CharField(max_length=50,choices=TRACKER_TYPES, default=VIEW)
     resource = models.ForeignKey(Resource, blank=True, null=True, default=None)
     resource_file = models.ForeignKey(ResourceFile, blank=True, null=True, default=None)
     resource_url = models.ForeignKey(ResourceURL, blank=True, null=True, default=None)
@@ -242,12 +242,19 @@ class ResourceTracker(models.Model):
     extra_data = models.TextField(blank=True, null=True, default=None)
     
 class SearchTracker(models.Model):
+    SEARCH = 'search'
+    SEARCH_API = 'search-api'
+    SEARCH_TYPES = (
+        (SEARCH, _(u'search')),
+        (SEARCH_API, _(u'search-api')),
+    )
     user = models.ForeignKey(User, blank=True, null=True, default=None)
     query = models.TextField(blank=True, null=True, default=None)
     no_results = models.IntegerField(blank=True, null=True, default=0)
     access_date = models.DateTimeField(auto_now_add=True)
     ip = models.IPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
+    type = models.CharField(max_length=50,choices=SEARCH_TYPES, default=SEARCH)
     
 class ResourceRating(models.Model):
     user = models.ForeignKey(User, blank=False, null=False)
