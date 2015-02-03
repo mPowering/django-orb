@@ -110,15 +110,24 @@ class TagResource(ModelResource):
     def dehydrate_url(self,bundle):
         url = get_full_url_prefix(bundle) + reverse('mpowering_tags', args=[bundle.obj.slug])
         return url
-    
+ 
+    def dehydrate_image(self,bundle):
+        if bundle.obj.image != '':
+            return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
+        else:
+            return None
+ 
+ 
+ 
+# Helper methods.   
 def get_full_url_prefix(bundle):
     if bundle.request.is_secure():
         prefix = 'https://'
     else:
         prefix = 'http://'
-    if bundle.request.META['SERVER_PORT'] != 80 and bundle.request.META['SERVER_PORT'] != 443:
-        port =  ":" + bundle.request.META['SERVER_PORT']
-    else:
+    if bundle.request.META['SERVER_PORT'] == 80 or bundle.request.META['SERVER_PORT'] == 443:
         port = ""
+    else:
+        port =  ":" + bundle.request.META['SERVER_PORT']
     return prefix + bundle.request.META['SERVER_NAME'] + port
     
