@@ -2,6 +2,7 @@
 from django.contrib import messages
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
+from django.db.models import Count
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render,render_to_response
 from django.template import RequestContext
@@ -22,7 +23,14 @@ from PIL import Image
 
 
 def home_view(request):
-    topics = Tag.objects.filter(category__slug='health-topic').order_by('order_by')
+    topics = []
+    tags = Tag.objects.filter(category__slug='health-topic').order_by('order_by')
+    for t in tags:
+       resource_count = Resource.objects.filter(status=Resource.APPROVED, resourcetag__tag=t).count()
+       data = {}
+       data['resource_count']= resource_count
+       data['tag'] = t
+       topics.append(data)
     return render_to_response('mpowering/home.html',
                               {'topics': topics,},
                               context_instance=RequestContext(request))

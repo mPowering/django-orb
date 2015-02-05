@@ -8,9 +8,10 @@
 <div style="text-align:center; margin: 20px auto;">
 {% for t in topics %}
 	<div style="display:block; min-width:300px; float:left; min-height:300px;">
-		<a href="{% url 'mpowering_tags' t.slug %}">
-			<img src="{{ MEDIA_URL }}{{ t.image }}"/>
-			<h3 style="text-align:center">{{ t.name }}</h3>
+		<a href="{% url 'mpowering_tags' t.tag.slug %}">
+			<img src="{{ MEDIA_URL }}{{ t.tag.image }}"/>
+			<h3 style="text-align:center">{{ t.tag.name }}</h3>
+			{{ t.resource_count }} resource{{ t.resource_count|pluralize }}
 		</a> 
 	</div>
 {% endfor %}
