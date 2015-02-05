@@ -5,8 +5,9 @@
 
 <h2 style="text-align:center">{{ tag.name }}</h2>
 
+{% include "mpowering/includes/page_navigator.html" %}
 
-{% for r in resources %}
+{% for r in page.object_list %}
 	 <div class="row"> 
 			<div class="col-md-8">
 				<a href="{% url 'mpowering_resource' r.slug %}"><h4>{{ r.title }}</h4></a>
@@ -30,5 +31,6 @@
  		<hr/>
 {% endfor %}
 
+{% include "mpowering/includes/page_navigator.html" %}
 
 {% endblock %}

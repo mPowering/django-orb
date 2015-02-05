@@ -1,6 +1,7 @@
 
 from django.contrib import messages
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.db.models import Count
 from django.http import HttpResponseRedirect, Http404, HttpResponse
@@ -13,7 +14,6 @@ from haystack.query import SearchQuerySet
 from mpowering.forms import ResourceForm, SearchForm
 from mpowering.models import Tag, Resource, Organisation, ResourceURL , Category
 from mpowering.models import ResourceFile, ResourceOrganisation, ResourceTag
-
 from mpowering.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search
 
 from PIL import Image
@@ -40,10 +40,24 @@ def tag_view(request,tag_slug):
         tag = Tag.objects.get(slug=tag_slug)
     except Tag.DoesNotExist:
         raise Http404()
-    resources = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED)
+    data = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED)
+    
+    paginator = Paginator(data, 20)
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+    
+    try:
+        resources = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        resources = paginator.page(paginator.num_pages)
+    
     return render_to_response('mpowering/tag.html',
-                              {'resources': resources,
-                               'tag': tag, },
+                              {
+                               'tag': tag, 
+                               'page':resources,},
                               context_instance=RequestContext(request))
   
 def resource_view(request,resource_slug):
