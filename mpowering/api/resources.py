@@ -182,12 +182,12 @@ class TagResource(ModelResource):
             return None
  
 class TagsResource(ModelResource):
-    url = fields.CharField(readonly=True)
+    url = fields.CharField(readonly=True)   
     class Meta:
         queryset = Tag.objects.all()
         resource_name = 'tags'
         allowed_methods = ['get']
-        fields = ['id', 'name', 'image']
+        fields = [ 'name', 'image']
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization() 
         serializer = PrettyJSONSerializer()
@@ -204,6 +204,17 @@ class TagsResource(ModelResource):
         else:
             return None
     
+    def alter_detail_data_to_serialize(self, request, data):
+        # add the resources for this tag
+        data.data['resources'] = []
+        resources = Resource.objects.filter(status=Resource.APPROVED,resourcetag__tag=data.obj)
+        rr = ResourceResource()
+        for r in resources:
+            bundle = rr.build_bundle(obj=r,request=request)
+            d = rr.full_dehydrate(bundle)
+            data.data['resources'].append(bundle.data)
+        return data
+        
 # Helper methods.   
 def get_full_url_prefix(bundle):
     if bundle.request.is_secure():
