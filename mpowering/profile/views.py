@@ -102,7 +102,7 @@ def reset(request):
             send_mail('mPowering: Password reset', 'Here is your new password for mPowering: '+newpass 
                       + '\n\nWhen you next log in you can update your password to something more memorable.' 
                       + '\n\n' + prefix + request.META['SERVER_NAME'] , 
-                      settings.SERVER_EMAIL, [user.email], fail_silently=False)
+                      settings.MPOWERING_ADMIN_EMAIL, [user.email], fail_silently=False)
             return HttpResponseRedirect('sent')
     else:
         form = ResetForm() # An unbound form
