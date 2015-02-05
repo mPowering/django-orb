@@ -119,13 +119,13 @@ class ResourceForm(forms.Form):
                 print file_type
 
                 if len(file.name.split('.')) == 1:
-                    raise forms.ValidationError(_('File type is not supported'))
+                    raise forms.ValidationError(_(u'File type is not supported'))
 
                 if file_type in settings.TASK_UPLOAD_FILE_TYPES:
                     if file._size > settings.TASK_UPLOAD_FILE_MAX_SIZE:
-                        raise forms.ValidationError(_('Please keep filesize under %s. Current filesize %s') % (filesizeformat(settings.TASK_UPLOAD_FILE_MAX_SIZE), filesizeformat(file._size)))
+                        raise forms.ValidationError(_(u'Please keep filesize under %(max_size)s. Current filesize %(actual_size)s') % {'max_size':filesizeformat(settings.TASK_UPLOAD_FILE_MAX_SIZE), 'actual_size': filesizeformat(file._size)})
                 else:
-                    raise forms.ValidationError(_('File type is not supported'))
+                    raise forms.ValidationError(_(u'File type is not supported'))
         except:
             pass
 
