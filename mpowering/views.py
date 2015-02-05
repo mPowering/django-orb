@@ -331,23 +331,33 @@ def search_view(request):
      
     search_query = request.GET.get('q', '')
     
-    print search_query
-    
     if search_query:
         search_results = SearchQuerySet().filter(content=search_query)
-        print search_results
         search.send(sender=search_results, query=search_query, no_results=search_results.count(), request=request)
     else:
-        search_results = None
+        search_results = []
         
     data = {}
     data['q'] = search_query
     form = SearchForm(initial=data)
-        
+     
+     
+    paginator = Paginator(search_results, 20)
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+    
+    try:
+        results = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        results = paginator.page(paginator.num_pages)
+           
     return render_to_response('mpowering/search.html',
                               {'form': form, 
                                'query': search_query,
-                               'search_results': search_results},
+                               'page': results},
                               context_instance=RequestContext(request))
     
     

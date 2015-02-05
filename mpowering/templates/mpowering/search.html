@@ -12,7 +12,8 @@
 {% if query %}
       <h3>Results</h3>
 
-      {% for result in search_results %}
+	  {% include "mpowering/includes/page_navigator.html" %}
+      {% for result in page.object_list %}
 	      <div class="row"> 
 			<div class="col-md-8">
 				<a href="{% url 'mpowering_resource' result.object.slug %}"><h4>{{ result.object.title }}</h4></a>
@@ -37,5 +38,6 @@
       {% empty %}
           <p>No results found.</p>
       {% endfor %}
+      {% include "mpowering/includes/page_navigator.html" %}
 {% endif %}
 {% endblock %}
