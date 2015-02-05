@@ -15,8 +15,8 @@ from tastypie.throttle import CacheDBThrottle
 from tastypie.utils import trailing_slash
 
 from mpowering.api.serializers import PrettyJSONSerializer, ResourceSerializer
-from mpowering.models import Resource, ResourceOrganisation, Organisation, ResourceFile, ResourceURL, ResourceTag, Tag, Category, ResourceTracker
-from mpowering.signals import resource_viewed
+from mpowering.models import Resource, ResourceOrganisation, Organisation, ResourceFile, ResourceURL, ResourceTag, Tag, Category, ResourceTracker, SearchTracker
+from mpowering.signals import resource_viewed, search
 
 class ResourceResource(ModelResource):
     organisations = fields.ToManyField('mpowering.api.resources.ResourceOrganisationResource', 'resourceorganisation_set', related_name='resource', full=True)
@@ -60,6 +60,7 @@ class ResourceResource(ModelResource):
         sqs = SearchQuerySet().models(Resource).load_all().auto_query(request.GET.get('q', ''))
         paginator = Paginator(sqs, 20)
 
+        
         try:
             page = paginator.page(int(request.GET.get('page', 1)))
         except InvalidPage:
@@ -75,7 +76,20 @@ class ResourceResource(ModelResource):
         object_list = {
             'objects': objects,
         }
-
+        
+        tracker = SearchTracker()
+        if not request.user.is_anonymous():
+            tracker.user = request.user
+        tracker.query = request.GET.get('q', '')
+        tracker.no_results = sqs.count()
+        tracker.ip = request.META.get('REMOTE_ADDR','0.0.0.0')
+        tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
+        tracker.type = SearchTracker.SEARCH_API
+        tracker.save()
+    
+        # add to ResourceTracker
+        #search.send(sender=sqs, query=request.GET.get('q', ''), no_results=sqs.count(),  request=request, type=SearchTracker.VIEW_API)
+        
         self.log_throttled_access(request)
         return self.create_response(request, object_list)
     
