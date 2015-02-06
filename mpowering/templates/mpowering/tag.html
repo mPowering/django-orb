@@ -1,9 +1,36 @@
 {% extends "base.html" %}
 {% load i18n %} 
+{% load add_get_parameter %}
+
+
+
+{% block extra_scripts %}
+<script type="text/javascript">
+function OnOrderChange(dropdown) {
+		    var myindex  = dropdown.selectedIndex;
+		    var selValue = dropdown.options[myindex].value;
+		    top.location.href = selValue;
+		    return true;
+		}
+		</script>
+{% endblock extra_scripts %}
 
 {% block content %}
 
 <h2 style="text-align:center">{{ tag.name }}</h2>
+
+<form method="get">
+{% trans 'Order by: ' %}
+<select name="order" onchange="OnOrderChange(this.form.order);">
+		{% for k,v in ordering %}
+		 		<option value="{% add_get order=k %}">
+		 			{{ v }}
+		 		</option>
+		{% endfor %}
+	</select>
+</form>
+
+
 
 {% include "mpowering/includes/page_navigator.html" %}
 

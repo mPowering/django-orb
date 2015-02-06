@@ -40,9 +40,21 @@ def tag_view(request,tag_slug):
         tag = Tag.objects.get(slug=tag_slug)
     except Tag.DoesNotExist:
         raise Http404()
-    data = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED)
     
-    paginator = Paginator(data, 20)
+    CREATED = u'-create_date'
+    TITLE = u'title'
+    ORGANISATION = u'resourceorganisation__organisation__name'
+    ORDER_OPTIONS = (
+        (CREATED, _(u'Create date')),
+        (TITLE, _(u'Title')),
+        (ORGANISATION, _(u'Organisation')),
+    )
+    
+    order_by = request.GET.get('order', CREATED)
+    
+    data = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).order_by(order_by)
+    
+    paginator = Paginator(data, 3)
     # Make sure page request is an int. If not, deliver first page.
     try:
         page = int(request.GET.get('page', '1'))
@@ -57,7 +69,9 @@ def tag_view(request,tag_slug):
     return render_to_response('mpowering/tag.html',
                               {
                                'tag': tag, 
-                               'page':resources,},
+                               'page':resources,
+                               'ordering': ORDER_OPTIONS, 
+                               'current_order': order_by},
                               context_instance=RequestContext(request))
   
 def resource_view(request,resource_slug):

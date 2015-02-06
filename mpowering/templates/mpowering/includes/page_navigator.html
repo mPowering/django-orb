@@ -1,8 +1,10 @@
 {% load i18n %}
+{% load add_get_parameter %}
+
 {% if page.has_previous or page.has_next %}
 	<div class="page_navigator">
 		{% if page.has_previous %}
-	        <a href="?page={{ page.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">&lt;&lt; {% trans 'previous' %}</a>
+			<a href="{% add_get page=page.previous_page_number %}">&lt;&lt; {% trans 'previous' %}</a>
 	    {% endif %}
 	
 	    <span class="current">
@@ -10,7 +12,7 @@
 	    </span>
 	
 	    {% if page.has_next %}
-	        <a href="?page={{ page.next_page_number }}{% if query %}&q={{ query }}{% endif %}">{% trans 'next' %} &gt;&gt;</a>
+	    	<a href="{% add_get page=page.next_page_number %}">{% trans 'next' %} &gt;&gt</a>
 	    {% endif %}
 	</div>
 {% endif %}
