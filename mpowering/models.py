@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from tastypie.models import create_api_key
-from utils.unique_slugify import unique_slugify
+from lib.unique_slugify import unique_slugify
 
 models.signals.post_save.connect(create_api_key, sender=User)
 
