@@ -54,7 +54,7 @@ def tag_view(request,tag_slug):
     
     data = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).order_by(order_by)
     
-    paginator = Paginator(data, 3)
+    paginator = Paginator(data, 20)
     # Make sure page request is an int. If not, deliver first page.
     try:
         page = int(request.GET.get('page', '1'))
