@@ -2,17 +2,15 @@
 {% load i18n %} 
 {% load add_get_parameter %}
 
-
-
 {% block extra_scripts %}
-<script type="text/javascript">
-function OnOrderChange(dropdown) {
+	<script type="text/javascript">
+		function OnOrderChange(dropdown) {
 		    var myindex  = dropdown.selectedIndex;
 		    var selValue = dropdown.options[myindex].value;
 		    top.location.href = selValue;
 		    return true;
 		}
-		</script>
+	</script>
 {% endblock extra_scripts %}
 
 {% block content %}
@@ -23,14 +21,12 @@ function OnOrderChange(dropdown) {
 {% trans 'Order by: ' %}
 <select name="order" onchange="OnOrderChange(this.form.order);">
 		{% for k,v in ordering %}
-		 		<option value="{% add_get order=k %}">
+		 		<option value="{% add_get order=k %}" {% if k == current_order %}selected="selected" {% endif %}>
 		 			{{ v }}
 		 		</option>
 		{% endfor %}
 	</select>
 </form>
-
-
 
 {% include "mpowering/includes/page_navigator.html" %}
 
