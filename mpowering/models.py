@@ -173,10 +173,8 @@ class Category (models.Model):
     def save(self, *args, **kwargs):
         # If there is not already a slug in place...
         if not self.slug:
-            # Import django's builtin slug function
-            from django.template.defaultfilters import slugify
             # Call this slug function on the field you want the slug to be made of
-            self.slug = slugify(self.name)
+            unique_slugify(self.name)
         # Call the rest of the old save() method
         super(Category, self).save(*args, **kwargs)
         
@@ -192,6 +190,8 @@ class Tag (models.Model):
     image = models.ImageField(upload_to='tag', null=True, blank=True)
     slug = models.CharField(blank=True, null=True, max_length=100)
     order_by = models.IntegerField(default=0)
+    external_url =  models.URLField(blank=True, null=True, default=None, max_length=500)
+    descripition = models.TextField(blank=True, null=True, default=None)
     
     class Meta:
         verbose_name = _('Tag')
@@ -201,7 +201,8 @@ class Tag (models.Model):
         return self.name
     
     def save(self, *args, **kwargs):
-        unique_slugify(self, self.name)
+        if not self.slug:
+            unique_slugify(self, self.name)
         super(Tag, self).save(*args, **kwargs)
         
 # ResourceTag
