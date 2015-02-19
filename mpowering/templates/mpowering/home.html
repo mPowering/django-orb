@@ -5,16 +5,17 @@
 
 <h2 style="text-align:center">Connecting Frontline Health Workers to resources and each other to expand their knowledge, organize content into courses, and share their learning with the community. </h2>
 
-<div style="text-align:center; margin: 20px auto;">
+<div style="position: relative; margin: 20px auto; overflow: hidden; text-align: center;">
 {% for t in topics %}
-	<div style="display:block; min-width:300px; float:left; min-height:300px;">
+	<div style="display:inline-block; min-width:270px; min-height:270px; text-align:center; margin: auto;">
 		<a href="{% url 'mpowering_tags' t.tag.slug %}">
-			<img src="{{ MEDIA_URL }}{{ t.tag.image }}"/>
+			<img src="{{ MEDIA_URL }}{{ t.tag.image }}" width="220px" height="150px"/>
 			<h3 style="text-align:center">{{ t.tag.name }}</h3>
 			{{ t.resource_count }} resource{{ t.resource_count|pluralize }}
 		</a> 
 	</div>
 {% endfor %}
+	<div style="clear:both"></div>
 </div>
 
 {% endblock %}
