@@ -73,6 +73,15 @@ def tag_view(request,tag_slug):
                                'ordering': ORDER_OPTIONS, 
                                'current_order': order_by},
                               context_instance=RequestContext(request))
+
+
+def resource_permalink_view(request,id):
+    try:
+        resource = Resource.objects.get(pk=id)
+    except Resource.DoesNotExist:
+        raise Http404()
+    
+    return resource_view(request, resource.slug)
   
 def resource_view(request,resource_slug):
     try:
