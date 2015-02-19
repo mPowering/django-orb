@@ -1,18 +1,17 @@
-
+{% load i18n %} 
 <div class="row"> 
 	<div class="col-md-8">
-		<a href="{% url 'mpowering_resource' resource.slug %}"><h4>{{ resource.slug.title }}</h4></a>
+		<a href="{% url 'mpowering_resource' resource.slug %}"><h4>{{ resource.title }}</h4></a>
 		
 		<h4>
 		{% for t in resource.get_type_tags %}
 			{{ t.name }}{% if not forloop.last %}, {% endif %}
 		{% endfor %}
-		</h4>
-		
+		{% trans 'from ' %}
 		{% for o in resource.get_organisations %}
 			{{ o.name }}{% if not forloop.last %}, {% endif %}
 		{% endfor %}
-		
+		</h4>
 		<p>{{ resource.description|safe|truncatewords:30 }}</p>
 	</div>
 	<div class="col-md-2">
