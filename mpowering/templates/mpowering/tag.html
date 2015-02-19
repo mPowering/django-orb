@@ -30,28 +30,8 @@
 
 {% include "mpowering/includes/page_navigator.html" %}
 
-{% for r in page.object_list %}
-	 <div class="row"> 
-			<div class="col-md-8">
-				<a href="{% url 'mpowering_resource' r.slug %}"><h4>{{ r.title }}</h4></a>
-				
-				<h4>
-				{% for t in r.get_type_tags %}
-					{{ t.name }}{% if not forloop.last %}, {% endif %}
-				{% endfor %}
-				</h4>
-				
-				{% for o in r.get_organisations %}
-					{{ o.name }}{% if not forloop.last %}, {% endif %}
-				{% endfor %}
-			</div>
-			<div class="col-md-2">
-	            {% if r.image %}
-					<img src="{% url 'mpowering_resource_image' r.id 200 %}" style="max-width:200px" class="thumbnail"/>
-				{% endif %}
-			</div>
-		</div>
- 		<hr/>
+{% for resource in page.object_list %}
+	{% include "mpowering/includes/resource_row.html" %}
 {% endfor %}
 
 {% include "mpowering/includes/page_navigator.html" %}

@@ -8,35 +8,16 @@
 
 {% crispy form %}
 
-
 {% if query %}
-      <h3>Results</h3>
+      <h3>{% trans 'Results' %}</h3>
 
 	  {% include "mpowering/includes/page_navigator.html" %}
-      {% for result in page.object_list %}
-	      <div class="row"> 
-			<div class="col-md-8">
-				<a href="{% url 'mpowering_resource' result.object.slug %}"><h4>{{ result.object.title }}</h4></a>
-				
-				<h4>
-				{% for t in result.object.get_type_tags %}
-					{{ t.name }}{% if not forloop.last %}, {% endif %}
-				{% endfor %}
-				</h4>
-				
-				{% for o in result.object.get_organisations %}
-					{{ o.name }}{% if not forloop.last %}, {% endif %}
-				{% endfor %}
-			</div>
-			<div class="col-md-2">
-	            {% if result.object.image %}
-					<img src="{% url 'mpowering_resource_image' result.object.id 200 %}" style="max-width:200px" class="thumbnail"/>
-				{% endif %}
-			</div>
-		</div>
- 		<hr/>
+      {% for resource in page.object_list %}
+      	  {% with resource.object as resource %}
+	      	{% include "mpowering/includes/resource_row.html" %}
+	      {% endwith %}
       {% empty %}
-          <p>No results found.</p>
+          <p>{% trans 'No results found.' %}</p>
       {% endfor %}
       {% include "mpowering/includes/page_navigator.html" %}
 {% endif %}
