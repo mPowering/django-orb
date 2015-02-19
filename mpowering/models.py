@@ -174,7 +174,7 @@ class Category (models.Model):
         # If there is not already a slug in place...
         if not self.slug:
             # Call this slug function on the field you want the slug to be made of
-            unique_slugify(self.name)
+            unique_slugify(self, self.name)
         # Call the rest of the old save() method
         super(Category, self).save(*args, **kwargs)
         

@@ -1,6 +1,5 @@
 
-
-from mpowering.models import ResourceURL
+import mpowering.models
 
 
 def run(): 
