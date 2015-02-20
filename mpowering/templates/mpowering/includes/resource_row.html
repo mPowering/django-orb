@@ -1,4 +1,5 @@
 {% load i18n %} 
+{% load thumbnail %}
 <div class="row"> 
 	<div class="col-md-8">
 		<a href="{% url 'mpowering_resource' resource.slug %}"><h4>{{ resource.title }}</h4></a>
@@ -16,7 +17,11 @@
 	</div>
 	<div class="col-md-2">
            {% if resource.image %}
-			<img src="{% url 'mpowering_resource_image' resource.id 200 %}" style="max-width:200px" class="thumbnail"/>
+           	{% thumbnail resource.image "200x150" as im %}
+				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="display:block;" class="thumbnail">
+			{% empty %}
+		  		<p>No image</p>
+			{% endthumbnail %}	
 		{% endif %}
 	</div>
 </div>

@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %} 
+{% load thumbnail %}
+
 {% block content %}
 
 
@@ -9,7 +11,11 @@
 {% for t in topics %}
 	<div style="display:inline-block; min-width:270px; min-height:270px; text-align:center; margin: auto;">
 		<a href="{% url 'mpowering_tags' t.tag.slug %}">
-			<img src="{{ MEDIA_URL }}{{ t.tag.image }}" width="220px" height="150px"/>
+			{% thumbnail t.tag.image "220x150" crop="center" as im %}
+				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+			{% empty %}
+    			<p>No image</p>
+			{% endthumbnail %}
 			<h3 style="text-align:center">{{ t.tag.name }}</h3>
 			{{ t.resource_count }} resource{{ t.resource_count|pluralize }}
 		</a> 

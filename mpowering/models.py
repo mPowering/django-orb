@@ -204,7 +204,10 @@ class Tag (models.Model):
         if not self.slug:
             unique_slugify(self, self.name)
         super(Tag, self).save(*args, **kwargs)
-        
+     
+    def image_filename(self):
+        return os.path.basename(self.image.name)
+       
 # ResourceTag
 class ResourceTag (models.Model):
     resource = models.ForeignKey(Resource)

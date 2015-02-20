@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %} 
-
+{% load thumbnail %}
 {% block extra_scripts %}
 <script>
 
@@ -34,7 +34,11 @@ From:
 {% endfor %}
 </p>
 {% if resource.image %}
-	<img src="{% url 'mpowering_resource_image' resource.id 250 %}" style="display:block; margin: 20px auto; max-width: 250px" class="thumbnail"/>
+	{% thumbnail resource.image "250x180" padding=True as im %}
+		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="display:block; margin: 20px auto; max-width: 250px" class="thumbnail">
+	{% empty %}
+  		<p>No image</p>
+	{% endthumbnail %}		
 {% endif %}
 <p>
 {{ resource.description|safe }}
@@ -81,7 +85,17 @@ From:
 		<h4>{{ c.name }}</h4>
 		<ul>
 			{% for t in c.tags %}
-				<li><a href="{% url 'mpowering_tags' t.slug %}">{{ t.name }}</a></li>
+				<li><!--  
+				 {% if t.image %}
+				 	{% thumbnail t.image "150x100" padding=True upscale=False as im %}
+						<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="display:block; margin: 20px auto; class="thumbnail">
+					{% empty %}
+				  		<p>No image</p>
+				  	{% endthumbnail %}
+				 {% endif %}-->
+					<a href="{% url 'mpowering_tags' t.slug %}">{{ t.name }}</a>
+				
+				</li>
 			{% endfor %}
 		</ul>
 	{% endfor %}

@@ -1,4 +1,7 @@
 
+import os 
+
+from django.conf import settings
 from django.contrib import messages
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -383,14 +386,7 @@ def search_view(request):
                                'page': results},
                               context_instance=RequestContext(request))
     
-    
-def resource_thumbnail_view(request, resource_id, size):
-    resource= Resource.objects.get(pk=resource_id)
-    im = Image.open(resource.image)
-    im.thumbnail(size=(size,size))
-    response = HttpResponse(content_type="image/jpg")
-    im.save(response, "JPEG")
-    return response
+
 
 ''' 
 Helper functions

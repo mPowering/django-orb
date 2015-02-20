@@ -13,7 +13,7 @@ v1_api.register(TagsResource())
 urlpatterns = patterns('',
 
     url(r'^$', 'mpowering.views.home_view', name="mpowering_home"),
-    url(r'^tag/(?P<tag_slug>\w[\w/-]*)$', 'mpowering.views.tag_view', name="mpowering_tags"),
+    url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', 'mpowering.views.tag_view', name="mpowering_tags"),
     url(r'^profile/', include('mpowering.profile.urls')),
     url(r'^resource/create/$', 'mpowering.views.resource_create_view', name="mpowering_resource_create"),
     url(r'^resource/create/(?P<id>\d+)/thanks/$', 'mpowering.views.resource_create_thanks_view', name="mpowering_resource_create_thanks"),
@@ -23,7 +23,7 @@ urlpatterns = patterns('',
     url(r'^resource/file/(?P<id>\d+)/$', 'mpowering.views.resource_file_view', name="mpowering_resource_view_file"),
     url(r'^resource/edit/(?P<resource_id>\d+)/$', 'mpowering.views.resource_edit_view', name="mpowering_resource_edit"),
     url(r'^resource/edit/(?P<id>\d+)/thanks/$', 'mpowering.views.resource_edit_thanks_view', name="mpowering_resource_edit_thanks"),
-    url(r'^resource/image/(?P<resource_id>\d+)/(?P<size>\d+)/$', 'mpowering.views.resource_thumbnail_view', name="mpowering_resource_image"),
+   
     url(r'^resource/rate/$', 'mpowering.views.resource_rate_view', name="mpowering_resource_rate"),
     
     

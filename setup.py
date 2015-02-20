@@ -45,5 +45,6 @@ setup(
         "django-haystack",
         "pysolr",
         "pillow",
+        "sorl-thumbnail",
     ],
 )
