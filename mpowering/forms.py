@@ -169,9 +169,9 @@ class HeaderSearchForm(forms.Form):
         self.helper.form_show_labels = False
         self.helper.form_method = "GET"
         self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-2 '
-        self.helper.field_class = 'col-lg-10 navbar-right'
+        self.helper.label_class = 'col-lg-1'
+        self.helper.field_class = 'col-lg-4 navbar-right'
         self.helper.form_action = 'mpowering_search'
         self.helper.layout = Layout(
-                FieldWithButtons('q',Submit('submit', _(u'Go'), css_class='btn btn-default')),
+                FieldWithButtons('q',Submit('submit', _(u'Search'), css_class='btn btn-default')),
             )
