@@ -1,1 +1,0 @@
-Search.setIndex({envversion:46,terms:{content:0,api:0,rest:0},objtypes:{},objnames:{},filenames:["index","changelog","restapi"],titles:["Welcome to mPowering&#8217;s documentation!","Change log","REST API"],objects:{},titleterms:{log:1,mpower:0,api:2,rest:2,chang:1,document:0,welcom:0}})
