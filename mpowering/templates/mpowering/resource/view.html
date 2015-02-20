@@ -83,21 +83,24 @@ From:
 		<hr/>
 		
 		<h4>{{ c.name }}</h4>
-		<ul>
 			{% for t in c.tags %}
-				<li><!--  
-				 {% if t.image %}
-				 	{% thumbnail t.image "150x100" padding=True upscale=False as im %}
-						<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="display:block; margin: 20px auto; class="thumbnail">
-					{% empty %}
-				  		<p>No image</p>
-				  	{% endthumbnail %}
-				 {% endif %}-->
-					<a href="{% url 'mpowering_tags' t.slug %}">{{ t.name }}</a>
+				<div class="row vertical-align"> 
+					<div class="col-xs-4 col-md-1 col-lg-1">
+						<a href="{% url 'mpowering_tags' t.slug %}">
+						 {% if t.image %}
+						 	{% thumbnail t.image "70x70" padding=True upscale=False as im %}
+								<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+							{% empty %}
+						  		<p>No image</p>
+						  	{% endthumbnail %}
+						 {% endif %}</a>
+					</div><!-- 
+					 --><div class="col-xs-8 col-md-5 col-lg-5">
+						<a href="{% url 'mpowering_tags' t.slug %}">{{ t.name }}</a>
+					</div>
+				</div>
 				
-				</li>
 			{% endfor %}
-		</ul>
 	{% endfor %}
 {% endif %}
 
