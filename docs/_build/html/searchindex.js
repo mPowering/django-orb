@@ -1,1 +1,1 @@
-Search.setIndex({envversion:46,terms:{content:0,index:0,modul:0,search:0,page:0},objtypes:{},objnames:{},filenames:["index","restapi"],titles:["Welcome to mPowering&#8217;s documentation!","REST API"],objects:{},titleterms:{welcom:0,mpower:0,api:1,rest:1,indic:0,tabl:0,document:0}})
+Search.setIndex({envversion:46,terms:{content:0,api:0,rest:0},objtypes:{},objnames:{},filenames:["index","changelog","restapi"],titles:["Welcome to mPowering&#8217;s documentation!","Change log","REST API"],objects:{},titleterms:{log:1,mpower:0,api:2,rest:2,chang:1,document:0,welcom:0}})
