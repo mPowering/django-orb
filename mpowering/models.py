@@ -41,11 +41,13 @@ class UserProfile (models.Model):
 # Resource
 class Resource (models.Model):
     REJECTED = 'rejected'
-    PENDING = 'pending'
+    PENDING_CRT = 'pending_crt'
+    PENDING_MRT = 'pending_mrt'
     APPROVED = 'approved'
     STATUS_TYPES = (
         (REJECTED, _('Rejected')),
-        (PENDING, _('Pending')),
+        (PENDING_CRT, _('Pending CRT')),
+        (PENDING_MRT, _('Pending MRT')),
         (APPROVED, _('Approved')),
     )
     
@@ -187,7 +189,7 @@ class Tag (models.Model):
     create_user = models.ForeignKey(User, related_name='tag_create_user')
     update_date = models.DateTimeField(auto_now=True) 
     update_user = models.ForeignKey(User, related_name='tag_update_user')
-    image = models.ImageField(upload_to='tag', null=True, blank=True)
+    image = models.ImageField(upload_to='tag/%Y/%m/%d', null=True, blank=True)
     slug = models.CharField(blank=True, null=True, max_length=100)
     order_by = models.IntegerField(default=0)
     external_url =  models.URLField(blank=True, null=True, default=None, max_length=500)
