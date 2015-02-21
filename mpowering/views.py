@@ -121,7 +121,7 @@ def resource_create_view(request):
         resource_form_set_choices(form)
         if form.is_valid():
             # save resource
-            resource = Resource(status = Resource.PENDING, create_user = request.user, update_user = request.user)
+            resource = Resource(status = Resource.PENDING_CRT, create_user = request.user, update_user = request.user)
             resource.title = form.cleaned_data.get("title")
             resource.description = form.cleaned_data.get("description")
             if request.FILES.has_key('image'):
