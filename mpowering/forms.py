@@ -61,6 +61,10 @@ class ResourceForm(forms.Form):
                         help_text=_('Please enter any other relevant tags for this resource, comma separated if entering more than one tag'),               
                         required=False,
                         )
+    terms = forms.BooleanField(
+                        label=_(u"I have read the <a href='http://www.google.com'>guidelines</a> about submitting resources to mPowering"),            
+                        required=True,
+                        error_messages={'required': _('Please check the box that you have read the guidelines for submitting resources to mPowering')})
 
     
     def __init__(self, *args, **kwargs):
@@ -91,6 +95,8 @@ class ResourceForm(forms.Form):
                 'license',
                 Row (HTML('<hr>')),
                 'other_tags',
+                Row (HTML('<hr>')),
+                'terms',
                 Row (HTML('<hr>')),
                 Div(
                    Submit('submit', _(u'Save'), css_class='btn btn-default'),
