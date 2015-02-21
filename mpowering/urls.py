@@ -1,6 +1,7 @@
 # mpowering/urls.py
 from django.conf import settings
 from django.conf.urls import patterns, include, url
+from django.views.generic import TemplateView
 
 from mpowering.api.resources import ResourceResource, TagsResource
 
@@ -25,7 +26,7 @@ urlpatterns = patterns('',
     url(r'^resource/edit/(?P<id>\d+)/thanks/$', 'mpowering.views.resource_edit_thanks_view', name="mpowering_resource_edit_thanks"),
    
     url(r'^resource/rate/$', 'mpowering.views.resource_rate_view', name="mpowering_resource_rate"),
-    
+    url(r'^resource/guidelines/$',TemplateView.as_view(template_name="mpowering/resource/guidelines.html"), name="mpowering_guidelines"),
     
     url(r'^manage/urls/$', 'mpowering.manage.check_urls_view', name="mpowering_check_urls"),
     

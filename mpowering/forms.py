@@ -62,9 +62,9 @@ class ResourceForm(forms.Form):
                         required=False,
                         )
     terms = forms.BooleanField(
-                        label=_(u"I have read the <a href='http://www.google.com'>guidelines</a> about submitting resources to mPowering"),            
+                        label=_(u"Please tick the box to confirm that you have read the <a href='/resource/guidelines/' target='_blank'>guidelines</a> about submitting resources to mPowering"),            
                         required=True,
-                        error_messages={'required': _('Please check the box that you have read the guidelines for submitting resources to mPowering')})
+                        error_messages={'required': _('Please tick the box to confirm that you have read the guidelines for submitting resources to mPowering')})
 
     
     def __init__(self, *args, **kwargs):
