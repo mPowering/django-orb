@@ -172,12 +172,13 @@ class HeaderSearchForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(HeaderSearchForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_show_labels = False
         self.helper.form_method = "GET"
+        self.helper.form_action = 'mpowering_search'
+        self.helper.form_show_labels = False
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-1'
         self.helper.field_class = 'col-lg-4 navbar-right'
-        self.helper.form_action = 'mpowering_search'
+        
         self.helper.layout = Layout(
                 FieldWithButtons('q',Submit('submit', _(u'Search'), css_class='btn btn-default')),
             )
@@ -205,6 +206,8 @@ class TagFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(TagFilterForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.form_method = "GET"
+        self.helper.form_action = 'mpowering_tags_filter_results'
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-8'
@@ -222,7 +225,7 @@ class TagFilterForm(forms.Form):
                 'license',
                 Row (HTML('<hr>')),
                 Div(
-                   Submit('submit', _(u'Search'), css_class='btn btn-default'),
+                   Submit('submit', _(u'Go'), css_class='btn btn-default'),
                    css_class='col-lg-offset-2 col-lg-8',
                 ),
             )

@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^$', 'mpowering.views.home_view', name="mpowering_home"),
     url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', 'mpowering.views.tag_view', name="mpowering_tags"),
     url(r'^tag/filter/$', 'mpowering.views.tag_filter_view', name="mpowering_tags_filter"),
+    url(r'^tag/filter/results$', 'mpowering.views.tag_filter_results_view', name="mpowering_tags_filter_results"),
     url(r'^profile/', include('mpowering.profile.urls')),
     url(r'^resource/create/$', 'mpowering.views.resource_create_view', name="mpowering_resource_create"),
     url(r'^resource/create/(?P<id>\d+)/thanks/$', 'mpowering.views.resource_create_thanks_view', name="mpowering_resource_create_thanks"),
@@ -29,7 +30,8 @@ urlpatterns = patterns('',
     url(r'^resource/rate/$', 'mpowering.views.resource_rate_view', name="mpowering_resource_rate"),
     url(r'^resource/guidelines/$',TemplateView.as_view(template_name="mpowering/resource/guidelines.html"), name="mpowering_guidelines"),
     
-    url(r'^manage/urls/$', 'mpowering.manage.check_urls_view', name="mpowering_check_urls"),
+    
+    url(r'^analytics/', include('analytics.urls')),
     
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^search/$', 'mpowering.views.search_view', name="mpowering_search"),

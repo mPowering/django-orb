@@ -86,6 +86,15 @@ def tag_filter_view(request):
                               {'form': form,
                                },
                               context_instance=RequestContext(request))
+
+def tag_filter_results_view(request):
+    
+    
+        
+    return render_to_response('mpowering/tag_filter_results.html',
+                              {
+                               },
+                              context_instance=RequestContext(request))
     
 def resource_permalink_view(request,id):
     try:

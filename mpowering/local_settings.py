@@ -1,6 +1,6 @@
 def modify(settings):
     
-    settings['INSTALLED_APPS'] += ('crispy_forms', 'tastypie', 'tinymce', 'django_wysiwyg', 'haystack', 'sorl.thumbnail')
+    settings['INSTALLED_APPS'] += ('crispy_forms', 'tastypie', 'tinymce', 'django_wysiwyg', 'haystack', 'sorl.thumbnail', 'mpowering.analytics')
     settings['MIDDLEWARE_CLASSES'] += ('mpowering.middleware.SearchFormMiddleware',)
     settings['TEMPLATE_CONTEXT_PROCESSORS'] += ('mpowering.context_processors.get_menu',)
     settings['CRISPY_TEMPLATE_PACK'] = 'bootstrap3'
