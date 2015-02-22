@@ -15,6 +15,7 @@ urlpatterns = patterns('',
 
     url(r'^$', 'mpowering.views.home_view', name="mpowering_home"),
     url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', 'mpowering.views.tag_view', name="mpowering_tags"),
+    url(r'^tag/filter/$', 'mpowering.views.tag_filter_view', name="mpowering_tags_filter"),
     url(r'^profile/', include('mpowering.profile.urls')),
     url(r'^resource/create/$', 'mpowering.views.resource_create_view', name="mpowering_resource_create"),
     url(r'^resource/create/(?P<id>\d+)/thanks/$', 'mpowering.views.resource_create_thanks_view', name="mpowering_resource_create_thanks"),

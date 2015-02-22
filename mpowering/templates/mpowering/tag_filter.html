@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load crispy_forms_tags %}
+{% load add_get_parameter %}
+
+{% block content %}
+{% include "mpowering/includes/search_bar.html" %}
+
+<h2 style="text-align:center">{% trans 'Advanced Filtering' %}</h2>
+
+{% crispy form %}
+
+{% include "mpowering/includes/page_navigator.html" %}
+
+{% for resource in page.object_list %}
+	{% include "mpowering/includes/resource_row.html" %}
+{% endfor %}
+
+{% include "mpowering/includes/page_navigator.html" %}
+
+{% endblock %}

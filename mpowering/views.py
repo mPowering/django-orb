@@ -14,7 +14,7 @@ from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
 
-from mpowering.forms import ResourceForm, SearchForm
+from mpowering.forms import ResourceForm, SearchForm, TagFilterForm
 from mpowering.models import Tag, Resource, Organisation, ResourceURL , Category
 from mpowering.models import ResourceFile, ResourceOrganisation, ResourceTag
 from mpowering.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search
@@ -77,7 +77,16 @@ def tag_view(request,tag_slug):
                                'current_order': order_by},
                               context_instance=RequestContext(request))
 
-
+def tag_filter_view(request):
+    
+    form = TagFilterForm()
+    resource_form_set_choices(form)
+        
+    return render_to_response('mpowering/tag_filter.html',
+                              {'form': form,
+                               },
+                              context_instance=RequestContext(request))
+    
 def resource_permalink_view(request,id):
     try:
         resource = Resource.objects.get(pk=id)

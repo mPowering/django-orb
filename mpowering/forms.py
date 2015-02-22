@@ -181,3 +181,48 @@ class HeaderSearchForm(forms.Form):
         self.helper.layout = Layout(
                 FieldWithButtons('q',Submit('submit', _(u'Search'), css_class='btn btn-default')),
             )
+        
+class TagFilterForm(forms.Form):
+    health_topic = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    resource_type = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    audience = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    geography = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    device = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    license = forms.ChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    
+    def __init__(self, *args, **kwargs):
+        super(TagFilterForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+                'health_topic',
+                Row (HTML('<hr>')),
+                'resource_type',
+                Row (HTML('<hr>')),
+                'audience',
+                Row (HTML('<hr>')),
+                'geography',
+                Row (HTML('<hr>')),
+                'device',
+                Row (HTML('<hr>')),
+                'license',
+                Row (HTML('<hr>')),
+                Div(
+                   Submit('submit', _(u'Search'), css_class='btn btn-default'),
+                   css_class='col-lg-offset-2 col-lg-8',
+                ),
+            )
