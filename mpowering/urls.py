@@ -31,7 +31,7 @@ urlpatterns = patterns('',
     url(r'^resource/guidelines/$',TemplateView.as_view(template_name="mpowering/resource/guidelines.html"), name="mpowering_guidelines"),
     
     
-    url(r'^analytics/', include('analytics.urls')),
+    url(r'^analytics/', include('mpowering.analytics.urls')),
     
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^search/$', 'mpowering.views.search_view', name="mpowering_search"),
