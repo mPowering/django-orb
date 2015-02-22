@@ -13,7 +13,7 @@
 			{{ o.name }}{% if not forloop.last %}, {% endif %}
 		{% endfor %}
 		</h4>
-		<p>{{ resource.description|safe|truncatewords:30 }}</p>
+		<p>{{ resource.description|striptags|truncatewords:30 }}</p>
 	</div>
 	<div class="col-md-2">
            {% if resource.image %}
