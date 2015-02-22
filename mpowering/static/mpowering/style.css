@@ -225,3 +225,7 @@ div.date-picker-row-fluid {
     display: flex;
     align-items: center;
 }
+
+.page_navigator, .orderby {
+	padding:10px 0;
+}

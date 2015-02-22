@@ -18,16 +18,18 @@
 
 <h2 style="text-align:center">{{ tag.name }}</h2>
 
-<form method="get">
-{% trans 'Order by: ' %}
-<select name="order" onchange="OnOrderChange(this.form.order);">
-		{% for k,v in ordering %}
-		 		<option value="{% add_get order=k %}" {% if k == current_order %}selected="selected" {% endif %}>
-		 			{{ v }}
-		 		</option>
-		{% endfor %}
-	</select>
-</form>
+<div class="orderby">
+	<form method="get">
+	{% trans 'Order by: ' %}
+	<select name="order" onchange="OnOrderChange(this.form.order);">
+			{% for k,v in ordering %}
+			 		<option value="{% add_get order=k %}" {% if k == current_order %}selected="selected" {% endif %}>
+			 			{{ v }}
+			 		</option>
+			{% endfor %}
+		</select>
+	</form>
+</div>
 
 {% include "mpowering/includes/page_navigator.html" %}
 
