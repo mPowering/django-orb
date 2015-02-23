@@ -14,6 +14,12 @@ def home_view(request):
     return render_to_response('mpowering/analytics/home.html',
                               {},
                               context_instance=RequestContext(request))
+    
+def map_view(request):
+    
+    return render_to_response('mpowering/analytics/map.html',
+                              {},
+                              context_instance=RequestContext(request))
 
 # scan url
 
