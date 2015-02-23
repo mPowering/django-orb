@@ -18,7 +18,7 @@ from mpowering.analytics.models import UserLocationVisualization
 
 def run(cartodb_account, cartodb_key, source_site): 
     
-    cartodb_table = "oppiamobile_users" 
+    cartodb_table = "mpowering_users" 
     
     # check can connect to cartodb API
     sql =  "SELECT * FROM %s WHERE source_site='%s'" % (cartodb_table, source_site)
