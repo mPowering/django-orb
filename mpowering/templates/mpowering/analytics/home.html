@@ -2,5 +2,23 @@
 {% load i18n %} 
 {% block content %}
 
+<h2>{% trans 'Analytics' %}</h2>
 
+
+<h3>{% trans 'Popular Searches (last month)' %}</h3>
+<ul>
+{% for ps in popular_searches %}
+	<li><a href="{% url 'mpowering_search' %}?q={{ ps.query }}">{{ ps.query }}</a></li>
+{% endfor %}
+</ul>
+<h3>{% trans 'Popular Resources (last month)' %}</h3>
+
+<h3>{% trans 'Activity Graph' %}</h3>
+
+<h3>{% trans 'Activity Map' %}</h3>
+
+<iframe width='100%' height='600' frameborder='0'
+	src='http://digital-campus.cartodb.com/viz/1b3045c4-bb59-11e4-b0a7-0e4fddd5de28/embed_map?title=false&#038;description=false&#038;search=false&#038;shareable=true&#038;cartodb_logo=true&#038;layer_selector=false&#038;legends=false&#038;scrollwheel=true&#038;fullscreen=true&#038;sublayer_options=1&#038;sql='
+	allowfullscreen webkitallowfullscreen mozallowfullscreen
+	oallowfullscreen msallowfullscreen></iframe>
 {% endblock %}
