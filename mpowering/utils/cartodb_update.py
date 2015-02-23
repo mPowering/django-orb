@@ -64,6 +64,8 @@ def run(cartodb_account, cartodb_key, source_site):
             time.sleep(1)
 
 if __name__ == "__main__":
+    import django
+    django.setup()
     parser = argparse.ArgumentParser()
     parser.add_argument("cartodb_account", help="CartoDB Account Name")
     parser.add_argument("cartodb_key", help="CartoDB API Key")
