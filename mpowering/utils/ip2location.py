@@ -15,9 +15,8 @@ from mpowering.models import ResourceTracker
 from mpowering.analytics.models import UserLocationVisualization
 
 def run():
-  
-    tracker_ip_hits = ResourceTracker.objects.filter(user__is_staff=False).values('ip').annotate(count_hits=Count('ip'))
-    
+    tracker_ip_hits = ResourceTracker.objects.all().values('ip').annotate(count_hits=Count('ip'))
+
     for t in tracker_ip_hits:
         # lookup whether already cached in db
         try:
@@ -57,6 +56,8 @@ def update_via_freegeoip(t):
                                          
 
 if __name__ == "__main__":
+    import django
+    django.setup()
     run()  
     
     
