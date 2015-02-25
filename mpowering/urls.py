@@ -3,13 +3,13 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
-from mpowering.api.resources import ResourceResource, TagsResource
+from mpowering.api.resources import ResourceResource
 
 from tastypie.api import Api
 
 v1_api = Api(api_name='v1')
 v1_api.register(ResourceResource())
-v1_api.register(TagsResource())
+
 
 urlpatterns = patterns('',
 

@@ -32,6 +32,7 @@ class ResourceSerializer(Serializer):
     def format_resource(self, data):
         # refactor tags
         
+        '''
         for tag in data['tags']:
             del tag['id']
             del tag['create_date']
@@ -39,7 +40,7 @@ class ResourceSerializer(Serializer):
                 if qvalue is not None:
                     tag[qkey] = qvalue
             del tag['tag']
-            
+          
         # refactor organisations
         for org in data['organisations']:
             del org['id']
@@ -48,4 +49,5 @@ class ResourceSerializer(Serializer):
                 if qvalue is not None:
                     org[qkey] = qvalue
             del org['organisation']
+         '''
         return data  

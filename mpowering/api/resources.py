@@ -15,11 +15,10 @@ from tastypie.throttle import CacheDBThrottle
 from tastypie.utils import trailing_slash
 
 from mpowering.api.serializers import PrettyJSONSerializer, ResourceSerializer
-from mpowering.models import Resource, ResourceOrganisation, Organisation, ResourceFile, ResourceURL, ResourceTag, Tag, Category, ResourceTracker, SearchTracker
+from mpowering.models import Resource, ResourceFile, ResourceURL, ResourceTag, Tag, Category, ResourceTracker, SearchTracker
 from mpowering.signals import resource_viewed, search
 
 class ResourceResource(ModelResource):
-    organisations = fields.ToManyField('mpowering.api.resources.ResourceOrganisationResource', 'resourceorganisation_set', related_name='resource', full=True)
     files = fields.ToManyField('mpowering.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True)
     urls = fields.ToManyField('mpowering.api.resources.ResourceURLResource', 'resourceurl_set', related_name='resource', full=True)
     tags = fields.ToManyField('mpowering.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True)
@@ -91,31 +90,7 @@ class ResourceResource(ModelResource):
         #search.send(sender=sqs, query=request.GET.get('q', ''), no_results=sqs.count(),  request=request, type=SearchTracker.VIEW_API)
         
         self.log_throttled_access(request)
-        return self.create_response(request, object_list)
-    
-class ResourceOrganisationResource(ModelResource):
-    organisation = fields.ToOneField('mpowering.api.resources.OrganisationResource', 'organisation', full=True)
-    class Meta:
-        queryset = ResourceOrganisation.objects.all()
-        allowed_methods = ['get']
-        include_resource_uri = False
-        authentication = ApiKeyAuthentication()
-        authorization = ReadOnlyAuthorization()
-        serializer = PrettyJSONSerializer()
-        always_return_data = True  
-        include_resource_uri = False      
-        
-class OrganisationResource(ModelResource):
-    class Meta:
-        queryset = Organisation.objects.all()
-        resource_name = 'organisation'
-        allowed_methods = ['get']
-        fields = ['name', 'url', 'location']
-        authentication = ApiKeyAuthentication()
-        authorization = ReadOnlyAuthorization() 
-        serializer = PrettyJSONSerializer()
-        always_return_data = True 
-        include_resource_uri = False
+        return self.create_response(request, object_list)    
         
 class ResourceFileResource(ModelResource):
     class Meta:
@@ -180,7 +155,7 @@ class TagResource(ModelResource):
             return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
         else:
             return None
- 
+'''
 class TagsResource(ModelResource):
     url = fields.CharField(readonly=True)   
     class Meta:
@@ -214,7 +189,7 @@ class TagsResource(ModelResource):
             d = rr.full_dehydrate(bundle)
             data.data['resources'].append(bundle.data)
         return data
-        
+'''       
 # Helper methods.   
 def get_full_url_prefix(bundle):
     if bundle.request.is_secure():

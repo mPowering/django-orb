@@ -15,8 +15,8 @@ from django.utils.translation import ugettext as _
 from haystack.query import SearchQuerySet
 
 from mpowering.forms import ResourceForm, SearchForm, TagFilterForm
-from mpowering.models import Tag, Resource, Organisation, ResourceURL , Category
-from mpowering.models import ResourceFile, ResourceOrganisation, ResourceTag
+from mpowering.models import Tag, Resource, ResourceURL , Category
+from mpowering.models import ResourceFile, ResourceTag
 from mpowering.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search
 
 from PIL import Image
@@ -46,11 +46,9 @@ def tag_view(request,tag_slug):
     
     CREATED = u'-create_date'
     TITLE = u'title'
-    ORGANISATION = u'resourceorganisation__organisation__name'
     ORDER_OPTIONS = (
         (CREATED, _(u'Create date')),
         (TITLE, _(u'Title')),
-        (ORGANISATION, _(u'Organisation')),
     )
     
     order_by = request.GET.get('order', CREATED)
@@ -234,10 +232,6 @@ def resource_edit_view(request,resource_id):
             resource.title = form.cleaned_data.get("title")
             resource.description = form.cleaned_data.get("description")
             resource.save()
-            
-            # update organisations
-            ResourceOrganisation.objects.filter(resource=resource).delete()
-            resource_add_organisations(request, form, resource)
                 
             # update image
             image_clear = form.cleaned_data.get("image-clear")
@@ -285,6 +279,7 @@ def resource_edit_view(request,resource_id):
             # update tags - remove all current tags first
             ResourceTag.objects.filter(resource=resource).delete()
             resource_add_tags(request, form, resource)
+            resource_add_organisations(request, form, resource)
             
             # All successful - now redirect
             return HttpResponseRedirect(reverse('mpowering_resource_edit_thanks', args=[resource.id]))
@@ -301,7 +296,7 @@ def resource_edit_view(request,resource_id):
     else:
         data = {}
         data['title'] = resource.title
-        organisations = Organisation.objects.filter(resourceorganisation__resource=resource).values_list('name', flat=True)
+        organisations = Tag.objects.filter(category__slug='organisation',resourcetag__resource=resource).values_list('name', flat=True)
         data['organisations'] = ', '.join(organisations)
         data['description'] = resource.description
         data['image'] = resource.image
@@ -436,11 +431,12 @@ def resource_add_organisations(request, form, resource):
     organisations = [x.strip() for x in form.cleaned_data.get("organisations").split(',')]
     for o in organisations:
         try:
-            organisation = Organisation.objects.get(name = o)
-        except Organisation.DoesNotExist:
-            organisation = Organisation(name=o, create_user=request.user, update_user=request.user)
+            organisation = Tag.objects.get(name = o, category__slug='organisation')
+        except Tag.DoesNotExist:
+            category = Category.objects.get(slug='organisation')
+            organisation = Tag(name=o, category= category, create_user=request.user, update_user=request.user)
             organisation.save()
-        ResourceOrganisation(resource=resource, organisation=organisation,create_user=request.user).save()
+        ResourceTag(tag=organisation, resource= resource, create_user= request.user).save()
                   
 def resource_add_tags(request, form, resource):
     tag_categories = ["health_topic", "resource_type", "audience", "geography", "device"]

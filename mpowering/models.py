@@ -73,7 +73,7 @@ class Resource (models.Model):
         super(Resource, self).save(*args, **kwargs)
     
     def get_organisations(self):
-        return Organisation.objects.filter(resourceorganisation__resource=self)
+        return Tag.objects.filter(resourcetag__resource=self,category__slug='organisation')
     
     def get_files(self):
         return ResourceFile.objects.filter(resource=self)
