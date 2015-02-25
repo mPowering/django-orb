@@ -7,7 +7,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import FieldWithButtons, InlineCheckboxes
 from crispy_forms.layout import Button, Layout, Fieldset, ButtonHolder, Submit, Div, HTML, Row
 
-from mpowering.models import Tag, Resource, Organisation, Category
+from mpowering.models import Tag, Resource, Category
 
 from tinymce.models import HTMLField
 

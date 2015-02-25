@@ -14,29 +14,8 @@ models.signals.post_save.connect(create_api_key, sender=User)
 
 
 # Create your models here.
-
-# Organisation
-class Organisation (models.Model):
-    name = models.TextField(blank=False, null=False)
-    location = models.TextField(blank=True, null=True, default=None)
-    url = models.URLField(blank=True, null=True, default=None)
-    create_date = models.DateTimeField(auto_now_add=True)
-    create_user = models.ForeignKey(User, related_name='organisation_create_user')
-    update_date = models.DateTimeField(auto_now=True) 
-    update_user = models.ForeignKey(User, related_name='organisation_update_user')
-     
-    def __unicode__(self):
-        return self.name
         
-# UserProfile
-class UserProfile (models.Model):
-    user = models.OneToOneField(User)
-    about = models.TextField(blank=True, null=True, default=None)
-    job_title = models.TextField(blank=True, null=True, default=None)
-    organisation = models.ForeignKey(Organisation)
-    phone_number = models.TextField(blank=True, null=True, default=None)
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
+
         
 # Resource
 class Resource (models.Model):
@@ -215,15 +194,18 @@ class ResourceTag (models.Model):
     resource = models.ForeignKey(Resource)
     tag = models.ForeignKey(Tag)
     create_date = models.DateTimeField(auto_now_add=True)
-    create_user = models.ForeignKey(User, related_name='resourcetag_create_user')   
+    create_user = models.ForeignKey(User, related_name='resourcetag_create_user')    
 
-# ResourceOrganisation
-class ResourceOrganisation (models.Model):
-    resource = models.ForeignKey(Resource)
-    organisation = models.ForeignKey(Organisation)
+# UserProfile
+class UserProfile (models.Model):
+    user = models.OneToOneField(User)
+    about = models.TextField(blank=True, null=True, default=None)
+    job_title = models.TextField(blank=True, null=True, default=None)
+    organisation = models.ForeignKey(Tag)
+    phone_number = models.TextField(blank=True, null=True, default=None)
     create_date = models.DateTimeField(auto_now_add=True)
-    create_user = models.ForeignKey(User)  
-    
+    update_date = models.DateTimeField(auto_now=True)
+        
 class ResourceTracker(models.Model):
     VIEW = 'view'
     VIEW_API = 'view-api'

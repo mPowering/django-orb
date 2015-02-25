@@ -1,6 +1,6 @@
 import datetime
 from haystack import indexes
-from mpowering.models import Resource, Organisation
+from mpowering.models import Resource
 
 
 class ResourceIndex(indexes.SearchIndex, indexes.Indexable):

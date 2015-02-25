@@ -14,7 +14,7 @@ from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
-from mpowering.models import UserProfile, Organisation
+from mpowering.models import UserProfile, Tag, Category
 from mpowering.profile.forms import LoginForm, RegisterForm, ResetForm, ProfileForm
 from tastypie.models import ApiKey
 
@@ -61,11 +61,13 @@ def register(request):
             user_profile = UserProfile()
             user_profile.user = user
             user_profile.job_title = form.cleaned_data.get("job_title")
+            category = Category.objects.get(slug='organisation')
             try:
-                organisation = Organisation.objects.get(name=form.cleaned_data.get("organisation"))
-            except Organisation.DoesNotExist:
+                organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
+            except Tag.DoesNotExist:
                 organisation = Organisation()
                 organisation.name = form.cleaned_data.get("organisation")
+                organisation.category = category
                 organisation.create_user = user
                 organisation.update_user = user
                 organisation.save()
@@ -123,11 +125,13 @@ def edit(request):
             request.user.last_name = last_name
             request.user.save()
             
+            category = Category.objects.get(slug='organisation')
             try:
-                organisation = Organisation.objects.get(name=form.cleaned_data.get("organisation"))
-            except Organisation.DoesNotExist:
+                organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
+            except Tag.DoesNotExist:
                 organisation = Organisation()
                 organisation.name = form.cleaned_data.get("organisation")
+                organisation.category = category
                 organisation.create_user = request.user
                 organisation.update_user = request.user
                 organisation.save()
