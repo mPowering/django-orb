@@ -61,7 +61,7 @@ a:hover, a:focus {
 }
 
 .navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
-    color: #fff;
+    color: #555;
 }
 
 .navbar-inverse .control-label {

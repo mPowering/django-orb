@@ -19,6 +19,9 @@
 {% include "mpowering/includes/search_bar.html" %}
 
 <h2 style="text-align:center">{{ tag.name }}</h2>
+{% if tag.description %}
+	<p style="text-align:center">{{ tag.description }}</p>
+{% endif %}
 
 <div class="orderby">
 	<form method="get">
