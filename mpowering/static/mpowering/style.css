@@ -211,7 +211,7 @@ a:hover, a:focus {
 #footer {
 	border-top: 1px solid #ff0054;
 	margin-top:50px;
-	padding-top: 20px;
+	padding: 20px 0;
 	text-align:right;
 	padding-right:20px;
 }

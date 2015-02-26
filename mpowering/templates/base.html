@@ -1,72 +1,94 @@
-{% load i18n %}
-{% load crispy_forms_tags %}
+{% load i18n %} {% load crispy_forms_tags %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% trans 'mPowering' %} - {% block extra_head_title %}{% endblock extra_head_title %}</title>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <META name="description" content="mPowering Platform: {% block extra_head_desc %}{% endblock extra_head_desc %}"/> 
-	<META name="keywords" content="mPowering, platform, MNCH, maternal, care, post natal, postnatal, ante natal, antenatal, child, children, health
-				 quiz, assessment, mobile, android, learning, video, media {% block extra_head_keywords %}{% endblock extra_head_keywords %}"/> 
-	<meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% trans 'mPowering' %} - {% block extra_head_title %}{% endblock extra_head_title %}</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<META name="description"
+	content="mPowering Platform: {% block extra_head_desc %}{% endblock extra_head_desc %}" />
+<META name="keywords"
+	content="mPowering, platform, MNCH, maternal, care, post natal, postnatal, ante natal, antenatal, child, children, health
+				 quiz, assessment, mobile, android, learning, video, media {% block extra_head_keywords %}{% endblock extra_head_keywords %}" />
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap -->
-    <link href="{{ STATIC_URL }}mpowering/bootstrap-3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
-    
-    <link href="{{ STATIC_URL }}mpowering/style.css" rel="stylesheet"/>
-    <link href="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.min.css" rel="stylesheet"/>
-    <link href="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.structure.min.css" rel="stylesheet"/>
-    <link href="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.theme.min.css" rel="stylesheet"/>
-    <link rel="shortcut icon" href="{{ STATIC_URL }}mpowering/images/favicon.ico"/>	
-    <script src="{{ STATIC_URL }}mpowering/js/jquery-1.11.0.min.js"></script>
-    <script src="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.min.js"></script>
-    {% block extra_styles %}
-    {% endblock extra_styles %}
-	
-    {% block extra_scripts %}
-    {% endblock extra_scripts %}  
+<!-- Bootstrap -->
+<link
+	href="{{ STATIC_URL }}mpowering/bootstrap-3.1.1/css/bootstrap.min.css"
+	rel="stylesheet" />
+
+<link href="{{ STATIC_URL }}mpowering/style.css" rel="stylesheet" />
+<link href="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.min.css"
+	rel="stylesheet" />
+<link
+	href="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.structure.min.css"
+	rel="stylesheet" />
+<link
+	href="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.theme.min.css"
+	rel="stylesheet" />
+<link rel="shortcut icon"
+	href="{{ STATIC_URL }}mpowering/images/favicon.ico" />
+<script src="{{ STATIC_URL }}mpowering/js/jquery-1.11.0.min.js"></script>
+<script src="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.min.js"></script>
+{% block extra_styles %} {% endblock extra_styles %} {% block extra_scripts %} {% endblock extra_scripts %}
 </head>
 
 <body {% block extra_body %}{% endblock extra_body %}>
 
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-	{% include "includes/header.html" %}
-</div>
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		{% include "includes/header.html" %}</div>
 
-<div class="container-fluid">
+	<div class="container-fluid">
 
-    <div class="main" style="max-width:1000px; margin:20px auto;">
-       
-        
-    
-      
-{% block content %}
+		<div class="main" style="max-width: 1000px; margin: 20px auto;">
 
-{% endblock content %}
-	</div> <!--  end main -->
-</div> <!--  end container -->
 
-<div id="footer">
-    <p class="text-muted">
-    	<a href="http://mpoweringhealth.org/">{% trans 'About' %}</a> |
-    	{{ version }} &copy; {% now "Y" %} <a href="http://mpoweringhealth.org/">mPowering</a>
-    </p>
-</div>
-    
-<script src="{{ STATIC_URL }}mpowering/bootstrap-3.1.1/js/bootstrap.min.js"></script>
 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', '{{ MPOWERING_GOOGLE_ANALYTICS_CODE }}', 'auto');
-  ga('send', 'pageview');
+			{% block content %} {% endblock content %}</div>
+		<!--  end main -->
+	</div>
+	<!--  end container -->
 
-</script>
+	<div id="footer">
+		<div class="row">
+			<div class="col-md-4 text-muted">
+				<h4>Contact Us</h4>
+				<a href="mailto:alex@digital-campus.org">alex@digital-campus.org</a>
+			</div>
+			<div class="col-md-4 text-muted">
+				<h4>About Us</h4>
+				<a href="#">About</a><br/>
+				<a href="#">Content Review Team</a><br/>
+			    <a href="#">Medical Export Panel</a><br/>
+			    <a href="#">Partner Organisations</a><br/>
+			    <a href="#">Privacy policy</a><br/>
+			</div>
+			<div class="col-md-4 text-muted">
+				 {{ version }} &copy; {% now "Y" %} <a href="http://mpoweringhealth.org/">mPowering</a>
+			</div>
+		</div>
+
+		<script
+			src="{{ STATIC_URL }}mpowering/bootstrap-3.1.1/js/bootstrap.min.js"></script>
+
+		<script>
+			(function(i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r;
+				i[r] = i[r] || function() {
+					(i[r].q = i[r].q || []).push(arguments)
+				}, i[r].l = 1 * new Date();
+				a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+				a.async = 1;
+				a.src = g;
+				m.parentNode.insertBefore(a, m)
+			})(window, document, 'script',
+					'//www.google-analytics.com/analytics.js', 'ga');
+
+			ga('create', '{{ MPOWERING_GOOGLE_ANALYTICS_CODE }}', 'auto');
+			ga('send', 'pageview');
+		</script>
 </body>
 </html>
 
