@@ -19,4 +19,10 @@ class LatestEntries(Feed):
         return "Resources recently tagged with  %s" % obj.name
 
     def items(self, obj):
-        return Resource.objects.all()[:20]
+        return Resource.objects.filter(status=Resource.APPROVED, resourcetag__tag=obj).order_by('-create_date')[:20]
+    
+    def item_pubdate(self, item):
+        return item.create_date
+    
+    def item_updateddate(self, item):
+        return item.update_date
