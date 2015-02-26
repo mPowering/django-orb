@@ -1,5 +1,6 @@
 import os
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import urlresolvers
 from django.core.validators import MinValueValidator, MaxValueValidator
@@ -119,6 +120,9 @@ class ResourceFile (models.Model):
     
     def filename(self):
         return os.path.basename(self.file.name)
+    
+    def filesize(self):
+        return os.path.getsize(settings.MEDIA_ROOT + self.file.name)
         
 # ResourceRelationship
 class ResourceRelationship (models.Model):

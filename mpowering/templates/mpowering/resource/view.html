@@ -63,6 +63,7 @@ From:
 			{% else %}
 				<a href="{% url 'mpowering_resource_view_file' f.id %}">{{ f.filename }}</a>
 			{% endif %}
+			({{ f.filesize|filesizeformat }})
 		</li>
 	{% endfor %}
 	</ul>
