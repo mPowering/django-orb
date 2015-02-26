@@ -1,0 +1,3 @@
+<p>{{ obj.description|striptags|truncatewords:40 }}</p>
+
+<p>Tagged with: {% for c in obj.get_categories %}{% for t in c.tags %}{{ t.name }}, {% endfor %}{% endfor %}</p>

@@ -4,6 +4,7 @@ from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
 from mpowering.api.resources import ResourceResource
+from mpowering.feeds import LatestEntries
 
 from tastypie.api import Api
 
@@ -11,11 +12,11 @@ from tastypie.api import Api
 v1_api = Api(api_name='v1')
 v1_api.register(ResourceResource())
 
-
 urlpatterns = patterns('',
 
     url(r'^$', 'mpowering.views.home_view', name="mpowering_home"),
     url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', 'mpowering.views.tag_view', name="mpowering_tags"),
+    url(r'^tag/feed/(?P<tag_slug>\w[\w/-]*)$', LatestEntries() , name="mpowering_tag_feed"),
     url(r'^tag/filter/$', 'mpowering.views.tag_filter_view', name="mpowering_tags_filter"),
     url(r'^tag/filter/results$', 'mpowering.views.tag_filter_results_view', name="mpowering_tags_filter_results"),
     url(r'^profile/', include('mpowering.profile.urls')),
