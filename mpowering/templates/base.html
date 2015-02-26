@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{% trans 'mPowering' %}</title>
+    <title>{% trans 'mPowering' %} - {% block extra_head_title %}{% endblock extra_head_title %}</title>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <META name="description" content="mPowering Platform"/> 
+    <META name="description" content="mPowering Platform: {% block extra_head_desc %}{% endblock extra_head_desc %}"/> 
 	<META name="keywords" content="mPowering, platform, MNCH, maternal, care, post natal, postnatal, ante natal, antenatal, child, children, health
-				 quiz, assessment, mobile, android, learning, video, media"/> 
+				 quiz, assessment, mobile, android, learning, video, media {% block extra_head_keywords %}{% endblock extra_head_keywords %}"/> 
 	<meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">

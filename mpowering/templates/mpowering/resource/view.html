@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 {% load i18n %} 
 {% load thumbnail %}
+
+{% block extra_head_title %}{{ resource.title }}{% endblock extra_head_title %}
+
+{% block extra_head_desc %}{{ resource.title }}{% endblock extra_head_desc %}
+{% block extra_head_keywords %}{% for c in resource.get_categories %}{% for t in c.tags %}{{ t.name }},{% endfor %}{% endfor %}{% endblock extra_head_keywords %}
+
 {% block extra_scripts %}
 <script>
 
