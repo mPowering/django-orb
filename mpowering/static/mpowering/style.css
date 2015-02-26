@@ -60,6 +60,10 @@ a:hover, a:focus {
     background-color: #033f62;
 }
 
+.navbar-inverse .navbar-nav .open .dropdown-menu > li > a {
+    color: #fff;
+}
+
 .navbar-inverse .control-label {
     color: #fff;
     font-weight: normal;
