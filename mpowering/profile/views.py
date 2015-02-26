@@ -65,7 +65,7 @@ def register(request):
             try:
                 organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
             except Tag.DoesNotExist:
-                organisation = Organisation()
+                organisation = Tag()
                 organisation.name = form.cleaned_data.get("organisation")
                 organisation.category = category
                 organisation.create_user = user
