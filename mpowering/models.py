@@ -173,6 +173,7 @@ class Tag (models.Model):
     order_by = models.IntegerField(default=0)
     external_url =  models.URLField(blank=True, null=True, default=None, max_length=500)
     descripition = models.TextField(blank=True, null=True, default=None)
+    summary = models.CharField(blank=True, null=True, max_length=100)
     
     class Meta:
         verbose_name = _('Tag')
