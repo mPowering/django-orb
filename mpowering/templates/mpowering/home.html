@@ -4,6 +4,11 @@
 
 {% block extra_head_title %}{% trans 'Home' %}{% endblock extra_head_title %}
 
+{% block extra_head_feed %}
+<link rel="alternate" type="application/rss+xml" title="RSS"
+      href="{% url 'mpowering_feed' %}">
+{% endblock extra_head_feed %}
+
 {% block content %}
 {% include "mpowering/includes/search_bar.html" %}
 

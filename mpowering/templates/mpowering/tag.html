@@ -4,7 +4,8 @@
 
 {% block extra_head_title %}{{ tag.name }}{% endblock extra_head_title %}
 {% block extra_head_feed %}
-
+<link rel="alternate" type="application/rss+xml" title="RSS"
+      href="{% url 'mpowering_tag_feed' tag.slug %}">
 {% endblock extra_head_feed %}
 
 {% block extra_scripts %}

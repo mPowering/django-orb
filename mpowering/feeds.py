@@ -3,14 +3,14 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404
 from mpowering.models import Resource, Tag
 
-class LatestEntries(Feed):
+class LatestTagEntries(Feed):
     description_template = 'feeds/resource.html'
     
     def get_object(self, request, tag_slug):
         return get_object_or_404(Tag, slug=tag_slug)
 
     def title(self, obj):
-        return "mPowering resources tagged with %s" % obj.name
+        return "'%s' mPowering resources" % obj.name
 
     def link(self, obj):
         return ""
@@ -26,3 +26,18 @@ class LatestEntries(Feed):
     
     def item_updateddate(self, item):
         return item.update_date
+    
+class LatestEntries(Feed):
+    description_template = 'feeds/resource.html'
+    title = "mPowering latest resources"
+    link = "/"
+    description = "Latest resources added to mPowering."
+
+    def items(self):
+        return Resource.objects.filter(status=Resource.APPROVED).order_by('-create_date')[:20]
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.description
