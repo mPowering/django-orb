@@ -11,3 +11,4 @@ class UserLocationVisualization (models.Model):
     country_code = models.CharField(max_length=100, blank=True, null=True, default=None)
     country_name = models.TextField(blank=True, null=True, default=None)
     geonames_data = models.TextField(blank=True, null=True, default=None)
+    source = models.CharField(max_length=100, blank=True, null=True, default=None)

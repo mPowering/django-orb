@@ -11,23 +11,34 @@ import urllib2
 import json 
 import argparse, hashlib, subprocess
 from django.db.models import Count
-from mpowering.models import ResourceTracker
+from mpowering.models import ResourceTracker, SearchTracker
 from mpowering.analytics.models import UserLocationVisualization
 
 def run():
-    tracker_ip_hits = ResourceTracker.objects.all().values('ip').annotate(count_hits=Count('ip'))
+    tracker_ip_hits = ResourceTracker.objects.all().values('ip').annotate(count_hits=Count('ip')) 
 
     for t in tracker_ip_hits:
         # lookup whether already cached in db
         try:
-            cached = UserLocationVisualization.objects.get(ip=t['ip'])
+            cached = UserLocationVisualization.objects.get(ip=t['ip'], source='resource')
             cached.hits = t['count_hits']
             cached.save()
-            print "hits updated"
+            print "resource hits updated"
         except UserLocationVisualization.DoesNotExist:
-            update_via_freegeoip(t)
+            update_via_freegeoip(t, 'resource')
 
-def update_via_freegeoip(t):
+    search_ip_hits = SearchTracker.objects.all().values('ip').annotate(count_hits=Count('ip'))
+    for s in search_ip_hits:
+        # lookup whether already cached in db
+        try:
+            cached = UserLocationVisualization.objects.get(ip=s['ip'], source='search')
+            cached.hits = s['count_hits']
+            cached.save()
+            print "search hits updated"
+        except UserLocationVisualization.DoesNotExist:
+            update_via_freegeoip(s, 'search')  
+    
+def update_via_freegeoip(t, source):
     url = 'https://freegeoip.net/json/%s' % (t['ip'])
     print t['ip'] + " : "+ url
     try:
@@ -49,6 +60,7 @@ def update_via_freegeoip(t):
             viz.country_code = dataJSON['country_code']
             viz.country_name = dataJSON['country_name']
             viz.geonames_data = dataJSON
+            viz.source = source
             viz.save()
     except:
         pass
