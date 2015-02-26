@@ -14,6 +14,7 @@
 	<div class="navbar-collapse collapse">
 		<ul class="nav navbar-nav navbar-right">
 			
+			<li><a href="{% url 'mpowering_home' %}">{% trans 'Home' %}</a></li>
 			{% for m in header_menu_categories %}
 				<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">{{ m.name }} <b class="caret"></b></a>
 					<ul class="dropdown-menu">
