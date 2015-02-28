@@ -95,6 +95,7 @@ class Resource (models.Model):
 class ResourceURL (models.Model):
     url = models.URLField(blank=False, null=False, max_length=500)
     resource = models.ForeignKey(Resource)
+    title = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True) 
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User, related_name='resource_url_create_user')
@@ -112,6 +113,7 @@ class ResourceURL (models.Model):
 class ResourceFile (models.Model):
     file = models.FileField(upload_to='resource/%Y/%m/%d', max_length=200)
     resource = models.ForeignKey(Resource)
+    title = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True) 
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User, related_name='resource_file_create_user')
