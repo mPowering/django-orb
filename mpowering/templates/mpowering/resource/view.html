@@ -14,10 +14,10 @@ $.ajaxSetup({
 	  data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 	});
 	
-$.post("/resource/rate/", { rating: 3, resource_id: {{ resource.id }} },
-    function(data) {
+//$.post("/resource/rate/", { rating: 3, resource_id: {{ resource.id }} },
+//    function(data) {
        // success! so now set the UI star to 3
-});
+//});
 </script>
 {% endblock extra_scripts %}
 
@@ -58,12 +58,15 @@ From:
 	<ul>
 	{% for f in resource.get_files %}
 		<li>
-			{% if f.description and f.description.strip %}
-				<a href="{% url 'mpowering_resource_view_file' f.id %}">{{ f.description }}</a>
+			{% if f.title and f.title.strip %}
+				<a href="{% url 'mpowering_resource_view_file' f.id %}">{{ f.title }}</a>
 			{% else %}
 				<a href="{% url 'mpowering_resource_view_file' f.id %}">{{ f.filename }}</a>
 			{% endif %}
 			({{ f.filesize|filesizeformat }})
+			{% if f.description and f.description.strip %}
+				<p>{{ f.description }}</p>
+			{% endif %}
 		</li>
 	{% endfor %}
 	</ul>
@@ -75,10 +78,13 @@ From:
 	<ul>
 	{% for u in resource.get_urls %}
 		<li>
-			{% if u.description %}
-				<a href="{% url 'mpowering_resource_view_link' u.id %}">{{ u.description }}</a>
+			{% if u.title and f.title.strip %}
+				<a href="{% url 'mpowering_resource_view_link' u.id %}">{{ u.title }}</a>
 			{% else %}
 				<a href="{% url 'mpowering_resource_view_link' u.id %}">{{ u.url }}</a>
+			{% endif %}
+			{% if u.description and u.description.strip %}
+				<p>{{ u.description }}</p>
 			{% endif %}
 		</li>
 	{% endfor %}
