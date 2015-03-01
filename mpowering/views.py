@@ -80,10 +80,12 @@ def tag_cloud_view(request):
     tags = Tag.objects.filter(resourcetag__resource__status=Resource.APPROVED).annotate(dcount=Count('resourcetag__resource')).order_by('name')
     max = tags.aggregate(max=Max('dcount'))
     min = tags.aggregate(min=Min('dcount'))
+    print max
+    print min
     diff = max['max']-min['min']
     return render_to_response('mpowering/tag_cloud.html',
                               { 'tags': tags,
-                               'diff': diff,
+                               'diff': diff
                                },
                               context_instance=RequestContext(request))
 
