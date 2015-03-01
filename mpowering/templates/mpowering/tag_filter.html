@@ -2,10 +2,10 @@
 {% load i18n %} 
 {% load crispy_forms_tags %}
 {% load add_get_parameter %}
-
+{% block extra_head_title %}{% trans 'Filter by Tag' %}{% endblock extra_head_title %}
 {% block content %}
 
-<h2 style="text-align:center">{% trans 'Filter' %}</h2>
+<h2 style="text-align:center">{% trans 'Filter by Tag' %}</h2>
 
 {% crispy form %}
 
