@@ -199,7 +199,7 @@ class TagFilterForm(forms.Form):
     device = forms.MultipleChoiceField(
                         widget=forms.CheckboxSelectMultiple,
                         required=False,)
-    license = forms.ChoiceField(
+    license = forms.MultipleChoiceField(
                         widget=forms.CheckboxSelectMultiple,
                         required=False,)
     
@@ -229,3 +229,5 @@ class TagFilterForm(forms.Form):
                    css_class='col-lg-offset-2 col-lg-8',
                 ),
             )
+    def clean(self):
+        return self.cleaned_data

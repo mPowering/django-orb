@@ -76,7 +76,7 @@ def tag_view(request,tag_slug):
                               context_instance=RequestContext(request))
 
 def tag_filter_view(request):
-    
+
     form = TagFilterForm()
     resource_form_set_choices(form)
         
@@ -84,9 +84,18 @@ def tag_filter_view(request):
                               {'form': form,
                                },
                               context_instance=RequestContext(request))
-
-def tag_filter_results_view(request):
-    
+   
+def tag_filter_results_view(request): 
+    form = TagFilterForm(request.GET)
+    resource_form_set_choices(form)
+    print "hello"
+    if form.is_valid():
+        tag_names = {'health_topic','resource_type', 'audience', 'geography', 'device', 'license'}
+        tag_ids = {}
+        for tn in tag_names:
+            print tn 
+            print form.cleaned_data.get(tn)
+            #tag_ids.join(form.cleaned_data.get(tn))
     
         
     return render_to_response('mpowering/tag_filter_results.html',
