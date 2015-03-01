@@ -88,19 +88,32 @@ def tag_filter_view(request):
 def tag_filter_results_view(request): 
     form = TagFilterForm(request.GET)
     resource_form_set_choices(form)
-    print "hello"
     if form.is_valid():
-        tag_names = {'health_topic','resource_type', 'audience', 'geography', 'device', 'license'}
-        tag_ids = {}
+        tag_names = ['health_topic','resource_type', 'audience', 'geography', 'device', 'license']
+        tag_ids = []
         for tn in tag_names:
-            print tn 
-            print form.cleaned_data.get(tn)
-            #tag_ids.join(form.cleaned_data.get(tn))
-    
+            for i in form.cleaned_data.get(tn):
+                tag_ids.append(i)
+        resource_tags = ResourceTag.objects.filter(tag__pk__in=tag_ids).values('resource').annotate(dcount=Count('resource')).filter(dcount=len(tag_ids)).values('resource')
         
+        data = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED)
+        
+        paginator = Paginator(data, 20)
+        # Make sure page request is an int. If not, deliver first page.
+        try:
+            page = int(request.GET.get('page', '1'))
+        except ValueError:
+            page = 1
+        
+        try:
+            resources = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            resources = paginator.page(paginator.num_pages)
+        
+        filter_tags = Tag.objects.filter(pk__in=tag_ids)
     return render_to_response('mpowering/tag_filter_results.html',
-                              {
-                               },
+                              { 'filter_tags': filter_tags,
+                               'page':resources,},
                               context_instance=RequestContext(request))
     
 def resource_permalink_view(request,id):

@@ -5,7 +5,10 @@
 {% block content %}
 {% include "mpowering/includes/search_bar.html" %}
 
-<h2 style="text-align:center">{% trans 'Filter' %}</h2>
+<h2 style="text-align:center">{% trans 'Resources tagged with: ' %}
+{% for tf in filter_tags %}
+	{{ tf.name }}, 
+{% endfor %}</h2>
 
 {% include "mpowering/includes/page_navigator.html" %}
 
