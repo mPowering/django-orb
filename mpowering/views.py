@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
-from django.db.models import Count
+from django.db.models import Count, Max, Min
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render,render_to_response
 from django.template import RequestContext
@@ -76,10 +76,13 @@ def tag_view(request,tag_slug):
                               context_instance=RequestContext(request))
 
 def tag_cloud_view(request):
-
-        
+    
+    tags = Tag.objects.filter(resourcetag__resource__status=Resource.APPROVED).annotate(dcount=Count('resourcetag__resource')).order_by('name')
+    max = tags.aggregate(max=Max('dcount'))
+    min = tags.aggregate(min=Min('dcount'))
     return render_to_response('mpowering/tag_cloud.html',
-                              {
+                              { 'tags': tags,
+                               'diff': max['max']-min['min'],
                                },
                               context_instance=RequestContext(request))
 
