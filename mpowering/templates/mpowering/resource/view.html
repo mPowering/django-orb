@@ -110,6 +110,9 @@ From:
 					</div><!-- 
 					 --><div class="col-xs-8 col-md-5 col-lg-5">
 						<a href="{% url 'mpowering_tags' t.slug %}">{{ t.name }}</a>
+						{% if t.summary %}
+							- {{ t.summary }}
+						{% endif %}
 					</div>
 				</div>
 				

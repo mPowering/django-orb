@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %} 
 {% load add_get_parameter %}
+{% load thumbnail %}
 
 {% block extra_head_title %}{{ tag.name }}{% endblock extra_head_title %}
 {% block extra_head_feed %}
@@ -21,9 +22,11 @@
 
 {% block content %}
 
-<h2 style="text-align:center">{{ tag.name }}</h2>
+<h2 style="text-align:center">{% thumbnail tag.image "70x70" padding=True as im %}
+		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+	{% endthumbnail %}{{ tag.name }}</h2>
 {% if tag.description %}
-	<p style="text-align:center">{{ tag.description }}</p>
+	<p>{{ tag.description }}</p>
 {% endif %}
 
 <div class="orderby">
