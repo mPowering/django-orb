@@ -9,7 +9,6 @@
 
 <p style="text-align:center">
 {% for t in tags %}
-
 	<span style="font-size:{{ t.dcount|cloud_text_size:diff }}px"><a href="{% url 'mpowering_tags' t.slug %}" title="{{ t.dcount }} resources">{{ t.name }}</a></span>
 {% endfor %}
 </p>
