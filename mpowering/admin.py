@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from mpowering.models import Category, Tag, Resource, ResourceURL
-from mpowering.models import ResourceFile, ResourceTag, UserProfile
+from mpowering.models import ResourceFile, ResourceTag, UserProfile, ResourceTracker, SearchTracker
 # Register your models here.
 
     
@@ -19,7 +19,13 @@ class ResourceFileAdmin(admin.ModelAdmin):
   
 class ResourceTagAdmin(admin.ModelAdmin):
     list_display = ('resource', 'tag')
-    
+
+class ResourceTrackerAdmin(admin.ModelAdmin):
+    list_display = ('resource','user','access_date','ip', 'type')
+  
+class SearchTrackerAdmin(admin.ModelAdmin):
+    list_display = ('query','user','access_date','no_results','ip', 'type')
+        
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name','category', 'slug','order_by')
 
@@ -32,4 +38,6 @@ admin.site.register(Resource, ResourceAdmin)
 admin.site.register(ResourceURL, ResourceURLAdmin)
 admin.site.register(ResourceFile, ResourceFileAdmin)
 admin.site.register(ResourceTag, ResourceTagAdmin)
+admin.site.register(ResourceTracker, ResourceTrackerAdmin)
+admin.site.register(SearchTracker, SearchTrackerAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
