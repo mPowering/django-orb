@@ -12,22 +12,22 @@ class ResourceAdmin(admin.ModelAdmin):
     list_display = ('title','status', 'create_user', 'create_date', 'slug')
     
 class ResourceURLAdmin(admin.ModelAdmin):
-    list_display = ('resource', 'url','description')
+    list_display = ('resource', 'url', 'description')
 
 class ResourceFileAdmin(admin.ModelAdmin):
-    list_display = ('resource', 'file','description')
+    list_display = ('resource', 'file', 'description')
   
 class ResourceTagAdmin(admin.ModelAdmin):
     list_display = ('resource', 'tag')
 
 class ResourceTrackerAdmin(admin.ModelAdmin):
-    list_display = ('resource','user','access_date','ip', 'type')
+    list_display = ('resource', 'user', 'access_date', 'ip', 'type')
   
 class SearchTrackerAdmin(admin.ModelAdmin):
-    list_display = ('query','user','access_date','no_results','ip', 'type')
+    list_display = ('query', 'user', 'access_date', 'no_results', 'ip', 'type')
         
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name','category', 'slug','order_by')
+    list_display = ('name','category', 'slug', 'order_by')
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'about', 'job_title', 'organisation')

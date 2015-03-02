@@ -169,6 +169,7 @@ class Category (models.Model):
 # Tag
 class Tag (models.Model):
     category = models.ForeignKey(Category)
+    parent_tag = models.ForeignKey('self', blank=True, null=True, default=None)
     name = models.CharField(blank=False, null=False, max_length=100)
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User, related_name='tag_create_user')
