@@ -22,7 +22,7 @@
 
 {% block content %}
 
-<h2 style="text-align:center">{% thumbnail tag.image "70x70" padding=True as im %}
+<h2 style="text-align:center">{% thumbnail tag.image "70x70" format="PNG" padding=True as im %}
 		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
 	{% endthumbnail %}{{ tag.name }}</h2>
 {% if tag.description %}

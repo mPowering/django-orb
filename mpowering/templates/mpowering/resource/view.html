@@ -31,16 +31,15 @@ $.ajaxSetup({
 <p style="text-align:center">
 From:
 {% for o in resource.get_organisations %}
-	{% if o.url %}
-		<a href="{{ o.url }}" target="_blank">{{ o.name }} </a>
+	{% if o.external_url %}
+		<a href="{{ o.external_url }}" target="_blank">{{ o.name }} </a>
 	{% else %}
 		{{ o.name }}
 	{% endif %}
-
 {% endfor %}
 </p>
 {% if resource.image %}
-	{% thumbnail resource.image "250x180" padding=True as im %}
+	{% thumbnail resource.image "250x180" format="PNG" padding=True as im %}
 		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="display:block; margin: 20px auto; max-width: 250px" class="thumbnail">
 	{% empty %}
   		<p>No image</p>
@@ -101,7 +100,7 @@ From:
 					<div class="col-xs-4 col-md-1 col-lg-1">
 						<a href="{% url 'mpowering_tags' t.slug %}">
 						 {% if t.image %}
-						 	{% thumbnail t.image "70x70" padding=True upscale=False as im %}
+						 	{% thumbnail t.image "70x70" padding=True format="PNG" upscale=False as im %}
 								<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
 							{% empty %}
 						  		<p>No image</p>
