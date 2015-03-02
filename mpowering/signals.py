@@ -6,6 +6,7 @@ from django.db import models
 from django.dispatch import Signal
 
 from mpowering.models import ResourceTracker, SearchTracker
+from mpowering.lib.search_crawler import is_search_crawler
 
 resource_viewed = Signal(providing_args=["resource", "request", "type"])
 resource_url_viewed = Signal(providing_args=["resource_url", "request"])
@@ -16,6 +17,8 @@ def resource_viewed_callback(sender, **kwargs):
     request = kwargs.get('request')
     resource = kwargs.get('resource')
     type = kwargs.get('type')
+    if is_search_crawler(request.META.get('HTTP_USER_AGENT','unknown')):
+        return 
     
     if type is None:
         type = ResourceTracker.VIEW
@@ -33,6 +36,8 @@ def resource_viewed_callback(sender, **kwargs):
 def resource_url_viewed_callback(sender, **kwargs):
     request = kwargs.get('request')
     resource_url = kwargs.get('resource_url')
+    if is_search_crawler(request.META.get('HTTP_USER_AGENT','unknown')):
+        return 
     
     tracker = ResourceTracker()
     if not request.user.is_anonymous():
@@ -49,6 +54,9 @@ def resource_file_viewed_callback(sender, **kwargs):
     request = kwargs.get('request')
     resource_file = kwargs.get('resource_file')
     
+    if is_search_crawler(request.META.get('HTTP_USER_AGENT','unknown')):
+        return 
+    
     tracker = ResourceTracker()
     if not request.user.is_anonymous():
         tracker.user = request.user
@@ -64,6 +72,9 @@ def search_callback(sender, **kwargs):
     request = kwargs.get('request')
     query = kwargs.get('query')
     no_results = kwargs.get('no_results')
+    
+    if is_search_crawler(request.META.get('HTTP_USER_AGENT','unknown')):
+        return 
     
     tracker = SearchTracker()
     if not request.user.is_anonymous():
