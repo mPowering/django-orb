@@ -47,5 +47,6 @@ setup(
         "pysolr",
         "pillow",
         "sorl-thumbnail",
+        "textract >= 1.2.0",
     ],
 )

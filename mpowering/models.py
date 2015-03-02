@@ -15,9 +15,7 @@ models.signals.post_save.connect(create_api_key, sender=User)
 
 
 # Create your models here.
-        
-
-        
+      
 # Resource
 class Resource (models.Model):
     REJECTED = 'rejected'
@@ -119,6 +117,7 @@ class ResourceFile (models.Model):
     create_user = models.ForeignKey(User, related_name='resource_file_create_user')
     update_date = models.DateTimeField(auto_now=True) 
     update_user = models.ForeignKey(User, related_name='resource_file_update_user')
+    file_full_text = models.TextField(blank=True, null=True, default=None)
     
     def filename(self):
         return os.path.basename(self.file.name)

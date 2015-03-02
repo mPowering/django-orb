@@ -9,5 +9,18 @@
 	{{ org.name }}
 {% endfor %}
 
+{% for file in object.get_files.all %}
+	{{ file.title }}
+	{{ file.description }}
+	{{ file.file_full_text }}
+{% endfor %}
+
+
+{% for url in object.get_urls.all %}
+	{{ url.title }}
+	{{ url.description }}
+{% endfor %}
+
+
 {{ object.create_user.get_full_name }}
 {{ object.update_user.get_full_name }}
