@@ -4,6 +4,8 @@
 {% block extra_head_title %}{% trans 'Tag filter' %}{% endblock extra_head_title %}
 {% block content %}
 
+{% include 'mpowering/includes/search_bar.html' %}
+
 <h2 style="text-align:center">{% trans 'Resources tagged with: ' %}
 {% for tf in filter_tags %}
 	{{ tf.name }}, 
