@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% load i18n %} 
+
+{% block extra_head_title %}{% trans 'Analytics' %}{% endblock extra_head_title %}
+
 {% block content %}
 
 <h2>{% trans 'Analytics' %}</h2>
@@ -11,7 +14,13 @@
 	<li><a href="{% url 'mpowering_search' %}?q={{ ps.query }}">{{ ps.query }}</a></li>
 {% endfor %}
 </ul>
+
 <h3>{% trans 'Popular Resources (last month)' %}</h3>
+<ul>
+{% for pr in popular_resources %}
+	<li><a href="{% url 'mpowering_resource' pr.resource__slug %}">{{ pr.resource__title }}</a></li>
+{% endfor %}
+</ul>
 
 <h3>{% trans 'Activity Graph' %}</h3>
 
