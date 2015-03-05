@@ -24,6 +24,15 @@
 
 <h3>{% trans 'Activity Graph' %}</h3>
 
+
+<h3>{% trans 'Organisations' %}</h3>
+<ul>
+{% for o in organisations %}
+	<li><a href="{% url 'mpowering_analytics_org' o.id %}">{{ o.name }}</a></li>
+{% endfor %}
+</ul>
+
+
 <h3>{% trans 'Activity Map' %}</h3>
 
 <iframe width='100%' height='600' frameborder='0'
