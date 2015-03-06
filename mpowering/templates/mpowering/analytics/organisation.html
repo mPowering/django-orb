@@ -1,11 +1,30 @@
 {% extends "base.html" %} {% load i18n %}
 
-{% block extra_head_title %}{% trans 'Activity Map' %}{% endblock extra_head_title %}
+{% block extra_head_title %}{% trans 'Activity' %}{% endblock extra_head_title %}
 
 
 {% block content %}
 
 <h2>{{ organisation.name }}</h2>
 
+{% include "mpowering/includes/page_navigator.html" %}
+<table class="table table-condensed">
+    <thead>
+        <tr>
+			<th>{% trans 'Date' %}</th>
+            <th>{% trans 'Resource' %}</th>
+            <th>{% trans 'User' %}</th>
+            <th>{% trans 'Location' %}</th>
+            <th>{% trans 'Resource File/URL' %}</th>
+        </tr>
+    </thead>
+    <tbody>
+		{% for tracker in page.object_list %}
+			{% include "mpowering/includes/resourcetracker_row.html" %}
+		{% endfor %}
+	</tbody>
+</table>
+
+{% include "mpowering/includes/page_navigator.html" %}
 
 {% endblock %}

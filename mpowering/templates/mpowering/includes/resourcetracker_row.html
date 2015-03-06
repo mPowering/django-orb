@@ -1,0 +1,14 @@
+{% load i18n %} 
+<tr>
+	<td>{{ tracker.access_date }}</td>
+	<td>{{ tracker.resource.title }}</td>
+	<td>
+		{% if tracker.user %}
+			{{ tracker.user.get_full_name }}
+		{% else %}
+			<span class="text-muted">anonymous</span>
+		{% endif %}
+	</td>
+	<td></td>
+	<td></td>
+</tr>
