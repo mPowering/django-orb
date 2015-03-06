@@ -10,6 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from tastypie.models import create_api_key
 from lib.unique_slugify import unique_slugify
+from mpowering.analytics.models import UserLocationVisualization
 
 models.signals.post_save.connect(create_api_key, sender=User)
 
@@ -236,6 +237,11 @@ class ResourceTracker(models.Model):
     user_agent = models.TextField(blank=True, null=True, default=None)
     extra_data = models.TextField(blank=True, null=True, default=None)
     
+    def get_location(self):
+        try:
+            return UserLocationVisualization.objects.filter(ip=self.ip).first()
+        except UserLocationVisualization.DoesNotExist:
+            return None
 class SearchTracker(models.Model):
     SEARCH = 'search'
     SEARCH_API = 'search-api'

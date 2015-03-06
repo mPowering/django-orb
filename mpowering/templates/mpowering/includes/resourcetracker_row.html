@@ -9,6 +9,13 @@
 			<span class="text-muted">anonymous</span>
 		{% endif %}
 	</td>
-	<td></td>
+	<td>
+		{% if tracker.get_location %}
+			{{ tracker.get_location.lat }}, {{ tracker.get_location.lng }}<br/>
+			{{ tracker.get_location.region }} {{ tracker.get_location.country }}
+		{% else %}
+			<span class="text-muted">unknown</span>
+		{% endif %}
+	</td>
 	<td></td>
 </tr>
