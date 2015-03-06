@@ -12,7 +12,7 @@
 	<td>
 		{% if tracker.get_location %}
 			{{ tracker.get_location.lat }}, {{ tracker.get_location.lng }}<br/>
-			{{ tracker.get_location.region }} {{ tracker.get_location.country }}
+			{{ tracker.get_location.region }} {{ tracker.get_location.country_name }}
 		{% else %}
 			<span class="text-muted">unknown</span>
 		{% endif %}
