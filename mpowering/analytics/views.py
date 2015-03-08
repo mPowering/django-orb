@@ -22,7 +22,7 @@ def home_view(request):
     start_date = timezone.now() - datetime.timedelta(days=31)
     popular_searches = SearchTracker.objects.filter(access_date__gte=start_date).values('query').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
     popular_resources = ResourceTracker.objects.filter(access_date__gte=start_date).values('resource','resource__slug','resource__title').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
-    organisations = Tag.objects.filter(category__slug='organisation',resourcetag__isnull=False).distinct().order_by('name')
+    organisations = Tag.objects.filter(category__slug='organisation',resourcetag__isnull=False).annotate(total_resources=Count('resourcetag__id')).order_by('name')
     
     return render_to_response('mpowering/analytics/home.html',
                               {'popular_searches': popular_searches,
