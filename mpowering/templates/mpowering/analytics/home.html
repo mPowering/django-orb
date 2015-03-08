@@ -11,14 +11,14 @@
 <h3>{% trans 'Popular Searches (last month)' %}</h3>
 <ul>
 {% for ps in popular_searches %}
-	<li><a href="{% url 'mpowering_search' %}?q={{ ps.query }}">{{ ps.query }}</a></li>
+	<li><a href="{% url 'mpowering_search' %}?q={{ ps.query }}">{{ ps.query }} ({{ ps.total_hits }})</a></li>
 {% endfor %}
 </ul>
 
 <h3>{% trans 'Popular Resources (last month)' %}</h3>
 <ul>
 {% for pr in popular_resources %}
-	<li><a href="{% url 'mpowering_resource' pr.resource__slug %}">{{ pr.resource__title }}</a></li>
+	<li><a href="{% url 'mpowering_resource' pr.resource__slug %}">{{ pr.resource__title }} ({{ pr.total_hits }})</a></li>
 {% endfor %}
 </ul>
 
