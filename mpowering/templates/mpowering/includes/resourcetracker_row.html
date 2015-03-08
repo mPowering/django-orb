@@ -3,13 +3,6 @@
 	<td>{{ tracker.access_date }}</td>
 	<td>{{ tracker.resource.title }}</td>
 	<td>
-		{% if tracker.user %}
-			{{ tracker.user.get_full_name }}
-		{% else %}
-			<span class="text-muted">anonymous</span>
-		{% endif %}
-	</td>
-	<td>
 		{% if tracker.get_location %}
 			{{ tracker.get_location.lat }}, {{ tracker.get_location.lng }}<br/>
 			{{ tracker.get_location.region }} {{ tracker.get_location.country_name }}
