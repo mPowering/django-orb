@@ -17,7 +17,7 @@ def run():
             f.resource.save()
         except textract.exceptions.ExtensionNotSupported:
             # do nothing
-            pass
+            print "File type not supported... yet!"
 
 
 
