@@ -80,6 +80,10 @@ class RegisterForm(forms.Form):
                                 required=True)
     job_title = forms.CharField(max_length=100,required=False)
     organisation = forms.CharField(max_length=100,required=True)
+    terms = forms.BooleanField(
+                        label=_(u"Please tick the box to confirm that you have read the <a href='/terms/' target='_blank'>terms</a> about registering with mPowering"),            
+                        required=True,
+                        error_messages={'required': _('Please tick the box to confirm that you have read the terms')})
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
@@ -97,6 +101,7 @@ class RegisterForm(forms.Form):
                                     'last_name',
                                     'organisation',
                                     'job_title',
+                                    'terms',
                                 Div(
                                    Submit('submit', _(u'Register'), css_class='btn btn-default'),
                                    css_class='col-lg-offset-2 col-lg-4',
