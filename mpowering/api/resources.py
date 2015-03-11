@@ -8,7 +8,7 @@ from haystack.query import SearchQuerySet
 
 from tastypie import fields
 from tastypie.authentication import Authentication,ApiKeyAuthentication
-from tastypie.authorization import ReadOnlyAuthorization
+from tastypie.authorization import ReadOnlyAuthorization, Authorization
 from tastypie.models import ApiKey
 from tastypie.resources import ModelResource
 from tastypie.throttle import CacheDBThrottle
@@ -26,9 +26,9 @@ class ResourceResource(ModelResource):
     class Meta:
         queryset = Resource.objects.filter(status=Resource.APPROVED)
         resource_name = 'resource'
-        allowed_methods = ['get']
+        allowed_methods = ['get','post']
         authentication = ApiKeyAuthentication()
-        authorization = ReadOnlyAuthorization() 
+        authorization = Authorization() 
         serializer = ResourceSerializer()
         always_return_data = True 
         include_resource_uri = True
@@ -91,7 +91,11 @@ class ResourceResource(ModelResource):
         
         self.log_throttled_access(request)
         return self.create_response(request, object_list)    
-        
+       
+        def hydrate(self, bundle, request=None):
+            
+            return bundle
+         
 class ResourceFileResource(ModelResource):
     class Meta:
         queryset = ResourceFile.objects.all()

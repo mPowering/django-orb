@@ -31,12 +31,13 @@ class ResourceSerializer(Serializer):
 
     def format_resource(self, data):
         # refactor tags
-        for tag in data['tags']:
-            del tag['id']
-            del tag['create_date']
-            for qkey, qvalue in tag['tag'].items():
-                if qvalue is not None:
-                    tag[qkey] = qvalue
-            del tag['tag']
+        if 'tags' in data:
+            for tag in data['tags']:
+                del tag['id']
+                del tag['create_date']
+                for qkey, qvalue in tag['tag'].items():
+                    if qvalue is not None:
+                        tag[qkey] = qvalue
+                del tag['tag']
 
         return data  
