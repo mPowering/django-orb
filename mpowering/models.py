@@ -33,7 +33,7 @@ class Resource (models.Model):
     title = models.TextField(blank=False, null=False)
     description = models.TextField(blank=False, null=False) 
     image = models.ImageField(upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
-    status = models.CharField(max_length=50,choices=STATUS_TYPES)
+    status = models.CharField(max_length=50,choices=STATUS_TYPES, default=PENDING_CRT)
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User, related_name='resource_create_user')
     update_date = models.DateTimeField(auto_now=True) 

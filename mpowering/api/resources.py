@@ -3,26 +3,30 @@ from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
 from django.core.urlresolvers import reverse
 from django.conf.urls import url
+from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
-
-from tastypie import fields
-from tastypie.authentication import Authentication,ApiKeyAuthentication
-from tastypie.authorization import ReadOnlyAuthorization, Authorization
-from tastypie.models import ApiKey
-from tastypie.resources import ModelResource
-from tastypie.throttle import CacheDBThrottle
-from tastypie.utils import trailing_slash
 
 from mpowering.api.serializers import PrettyJSONSerializer, ResourceSerializer
 from mpowering.models import Resource, ResourceFile, ResourceURL, ResourceTag
 from mpowering.models import User, Tag, Category, ResourceTracker, SearchTracker
 from mpowering.signals import resource_viewed, search
 
+from tastypie import fields
+from tastypie.authentication import Authentication,ApiKeyAuthentication
+from tastypie.authorization import ReadOnlyAuthorization, Authorization
+from tastypie.exceptions import BadRequest
+from tastypie.models import ApiKey
+from tastypie.resources import ModelResource
+from tastypie.throttle import CacheDBThrottle
+from tastypie.utils import trailing_slash
+
+
+
 class ResourceResource(ModelResource):
-    files = fields.ToManyField('mpowering.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True)
-    urls = fields.ToManyField('mpowering.api.resources.ResourceURLResource', 'resourceurl_set', related_name='resource', full=True)
-    tags = fields.ToManyField('mpowering.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True)
+    files = fields.ToManyField('mpowering.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True, null = True)
+    urls = fields.ToManyField('mpowering.api.resources.ResourceURLResource', 'resourceurl_set', related_name='resource', full=True, null = True)
+    tags = fields.ToManyField('mpowering.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True, null = True)
     url = fields.CharField(readonly=True)
     
     class Meta:
@@ -37,7 +41,10 @@ class ResourceResource(ModelResource):
         throttle = CacheDBThrottle(throttle_at=150, timeframe=3600)
 
     def dehydrate_image(self,bundle):
-        return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
+        if bundle.obj.image:
+            return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
+        else:
+            return None
     
     def dehydrate_url(self,bundle):
         url = get_full_url_prefix(bundle) + reverse('mpowering_resource', args=[bundle.obj.slug])
@@ -70,9 +77,10 @@ class ResourceResource(ModelResource):
         objects = []
 
         for result in page.object_list:
-            bundle = self.build_bundle(obj=result.object, request=request)
-            bundle = self.full_dehydrate(bundle)
-            objects.append(bundle)
+            if result:
+                bundle = self.build_bundle(obj=result.object, request=request)
+                bundle = self.full_dehydrate(bundle)
+                objects.append(bundle)
 
         object_list = {
             'objects': objects,
@@ -95,10 +103,22 @@ class ResourceResource(ModelResource):
         return self.create_response(request, object_list)    
        
     def hydrate(self, bundle, request=None):
-        print "hello"
         bundle.obj.create_user_id = bundle.request.user.id
         bundle.obj.update_user_id = bundle.request.user.id
-        print bundle.obj.create_user_id
+        # check required fields
+        if 'title' not in bundle.data:
+            raise BadRequest(_(u'No title provided'))
+        
+        if 'description' not in bundle.data:
+            raise BadRequest(_(u'No description provided'))
+        
+        # check that resource doesn't already exist for this user
+        try:
+            Resource.objects.get(create_user=bundle.request.user,title =bundle.data['title'] )
+            raise BadRequest(_(u'You have already uploaded a resource with this title'))
+        except Resource.DoesNotExist:
+            pass
+        
         return bundle
          
 class ResourceFileResource(ModelResource):
@@ -114,7 +134,10 @@ class ResourceFileResource(ModelResource):
         include_resource_uri = False
      
     def dehydrate_file(self,bundle):
-        return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.file.name
+        if bundle.obj.file:
+            return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.file.name
+        else:
+            return None
         
 class ResourceURLResource(ModelResource):
     class Meta:
@@ -160,45 +183,15 @@ class TagResource(ModelResource):
         return url
  
     def dehydrate_image(self,bundle):
-        if bundle.obj.image != '':
+        if bundle.obj.image:
             return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
         else:
             return None
-'''
-class TagsResource(ModelResource):
-    url = fields.CharField(readonly=True)   
-    class Meta:
-        queryset = Tag.objects.all()
-        resource_name = 'tags'
-        allowed_methods = ['get']
-        fields = [ 'name', 'image']
-        authentication = ApiKeyAuthentication()
-        authorization = ReadOnlyAuthorization() 
-        serializer = PrettyJSONSerializer()
-        always_return_data = True 
-        include_resource_uri = True
+     
+    def hydrate(self, bundle, request=None):
         
-    def dehydrate_url(self,bundle):
-        url = get_full_url_prefix(bundle) + reverse('mpowering_tags', args=[bundle.obj.slug])
-        return url
- 
-    def dehydrate_image(self,bundle):
-        if bundle.obj.image != '':
-            return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
-        else:
-            return None
+        return bundle
     
-    def alter_detail_data_to_serialize(self, request, data):
-        # add the resources for this tag
-        data.data['resources'] = []
-        resources = Resource.objects.filter(status=Resource.APPROVED,resourcetag__tag=data.obj)
-        rr = ResourceResource()
-        for r in resources:
-            bundle = rr.build_bundle(obj=r,request=request)
-            d = rr.full_dehydrate(bundle)
-            data.data['resources'].append(bundle.data)
-        return data
-'''       
 # Helper methods.   
 def get_full_url_prefix(bundle):
     if bundle.request.is_secure():
