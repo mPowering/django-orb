@@ -15,7 +15,8 @@ from tastypie.throttle import CacheDBThrottle
 from tastypie.utils import trailing_slash
 
 from mpowering.api.serializers import PrettyJSONSerializer, ResourceSerializer
-from mpowering.models import Resource, ResourceFile, ResourceURL, ResourceTag, Tag, Category, ResourceTracker, SearchTracker
+from mpowering.models import Resource, ResourceFile, ResourceURL, ResourceTag
+from mpowering.models import User, Tag, Category, ResourceTracker, SearchTracker
 from mpowering.signals import resource_viewed, search
 
 class ResourceResource(ModelResource):
@@ -23,6 +24,7 @@ class ResourceResource(ModelResource):
     urls = fields.ToManyField('mpowering.api.resources.ResourceURLResource', 'resourceurl_set', related_name='resource', full=True)
     tags = fields.ToManyField('mpowering.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True)
     url = fields.CharField(readonly=True)
+    
     class Meta:
         queryset = Resource.objects.filter(status=Resource.APPROVED)
         resource_name = 'resource'
@@ -92,9 +94,12 @@ class ResourceResource(ModelResource):
         self.log_throttled_access(request)
         return self.create_response(request, object_list)    
        
-        def hydrate(self, bundle, request=None):
-            
-            return bundle
+    def hydrate(self, bundle, request=None):
+        print "hello"
+        bundle.obj.create_user_id = bundle.request.user.id
+        bundle.obj.update_user_id = bundle.request.user.id
+        print bundle.obj.create_user_id
+        return bundle
          
 class ResourceFileResource(ModelResource):
     class Meta:
