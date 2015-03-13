@@ -20,6 +20,7 @@ from tastypie.models import ApiKey
 from tastypie.resources import ModelResource
 from tastypie.throttle import CacheDBThrottle
 from tastypie.utils import trailing_slash
+from django.http.response import Http404
 
 
 
@@ -176,8 +177,26 @@ class TagResource(ModelResource):
         authorization = ReadOnlyAuthorization() 
         serializer = PrettyJSONSerializer()
         always_return_data = True 
-        include_resource_uri = False
-        
+        include_resource_uri = True
+    
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/search%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_tag'), name="api_get_tag"),
+        ]
+     
+    def get_tag(self, request, **kwargs):
+        self.method_check(request, allowed=['get'])
+        self.is_authenticated(request)
+        self.throttle_check(request)
+        tag_name = request.GET.get('name', '')
+        try:
+            tag = Tag.objects.get(name=tag_name)
+        except Tag.DoesNotExist:
+            raise Http404("Tag not found")
+        object = self.build_bundle(obj=tag, request=request)
+        bundle = self.full_dehydrate(object)
+        return self.create_response(request, object) 
+    
     def dehydrate_url(self,bundle):
         url = get_full_url_prefix(bundle) + reverse('mpowering_tags', args=[bundle.obj.slug])
         return url
@@ -187,10 +206,6 @@ class TagResource(ModelResource):
             return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
         else:
             return None
-     
-    def hydrate(self, bundle, request=None):
-        
-        return bundle
     
 # Helper methods.   
 def get_full_url_prefix(bundle):
