@@ -11,8 +11,8 @@ class ResourceOwnerValidation(Validation):
         if not bundle.data:
             return {'__all__': 'no data.'}
         errors = {}
-        #resource = bundle.obj.resource
-        #if resource.create_user.id != bundle.request.user.id:
-        #        errors['error_message'] = _(u"You are not the owner of this resource")
+        resource = bundle.obj.resource
+        if resource.create_user.id != bundle.request.user.id:
+                errors['error_message'] = _(u"You are not the owner of this resource")
         return errors
     

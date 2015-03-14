@@ -28,7 +28,7 @@ from django.http.response import Http404
 class ResourceResource(ModelResource):
     files = fields.ToManyField('mpowering.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True, null = True)
     urls = fields.ToManyField('mpowering.api.resources.ResourceURLResource', 'resourceurl_set', related_name='resource', full=True, null = True)
-    tags = fields.ToManyField('mpowering.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True, null = True)
+    #tags = fields.ToManyField('mpowering.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True, null = True)
     url = fields.CharField(readonly=True)
     
     class Meta:
@@ -145,17 +145,22 @@ class ResourceURLResource(ModelResource):
     class Meta:
         queryset = ResourceURL.objects.all()
         resource_name = 'resourceurl'
-        allowed_methods = ['get']
-        fields = ['url', 'description']
+        allowed_methods = ['get','post']
+        fields = ['url', 'title', 'description']
         authentication = ApiKeyAuthentication()
-        authorization = ReadOnlyAuthorization() 
+        authorization = Authorization() 
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = False
-        
+     
+    def hydrate(self, bundle, request=None):
+        bundle.obj.create_user_id = bundle.request.user.id  
+        bundle.obj.update_user_id = bundle.request.user.id 
+        bundle.obj.resource_id = bundle.data['resource_id']
+        return bundle   
         
 class ResourceTagResource(ModelResource):
-    tag = fields.ToOneField('mpowering.api.resources.TagResource', 'tag', full=True)
+    #tag = fields.ToOneField('mpowering.api.resources.TagResource', 'tag', full=True)
     class Meta:
         queryset = ResourceTag.objects.all()
         resource_name = 'resourcetag'
@@ -167,7 +172,12 @@ class ResourceTagResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True  
         include_resource_uri = False 
-        
+    
+    def hydrate(self, bundle, request=None):
+        bundle.obj.create_user_id = bundle.request.user.id  
+        bundle.obj.resource_id = bundle.data['resource_id']
+        bundle.obj.tag_id = bundle.data['tag_id']
+        return bundle  
         
 class TagResource(ModelResource):
     url = fields.CharField(readonly=True)
