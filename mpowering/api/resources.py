@@ -8,6 +8,7 @@ from django.utils.translation import ugettext as _
 from haystack.query import SearchQuerySet
 
 from mpowering.api.serializers import PrettyJSONSerializer, ResourceSerializer
+from mpowering.api.validation import ResourceOwnerValidation
 from mpowering.models import Resource, ResourceFile, ResourceURL, ResourceTag
 from mpowering.models import User, Tag, Category, ResourceTracker, SearchTracker
 from mpowering.signals import resource_viewed, search
@@ -157,10 +158,12 @@ class ResourceTagResource(ModelResource):
     tag = fields.ToOneField('mpowering.api.resources.TagResource', 'tag', full=True)
     class Meta:
         queryset = ResourceTag.objects.all()
-        allowed_methods = ['get']
+        resource_name = 'resourcetag'
+        allowed_methods = ['get','post']
         include_resource_uri = False
         authentication = ApiKeyAuthentication()
-        authorization = ReadOnlyAuthorization()
+        authorization = Authorization()
+        validation = ResourceOwnerValidation()
         serializer = PrettyJSONSerializer()
         always_return_data = True  
         include_resource_uri = False 
@@ -172,31 +175,14 @@ class TagResource(ModelResource):
         queryset = Tag.objects.all()
         resource_name = 'tag'
         allowed_methods = ['get']
-        fields = ['name', 'image']
+        fields = ['id','name', 'image']
+        filtering = {"name": [ "exact" ]}
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization() 
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
-    
-    def prepend_urls(self):
-        return [
-            url(r"^(?P<resource_name>%s)/search%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_tag'), name="api_get_tag"),
-        ]
-     
-    def get_tag(self, request, **kwargs):
-        self.method_check(request, allowed=['get'])
-        self.is_authenticated(request)
-        self.throttle_check(request)
-        tag_name = request.GET.get('name', '')
-        try:
-            tag = Tag.objects.get(name=tag_name)
-        except Tag.DoesNotExist:
-            raise Http404("Tag not found")
-        object = self.build_bundle(obj=tag, request=request)
-        bundle = self.full_dehydrate(object)
-        return self.create_response(request, object) 
-    
+   
     def dehydrate_url(self,bundle):
         url = get_full_url_prefix(bundle) + reverse('mpowering_tags', args=[bundle.obj.slug])
         return url
