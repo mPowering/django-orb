@@ -186,7 +186,6 @@ class TagResource(ModelResource):
         filtering = {"name": [ "exact" ]}
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization() 
-        #validation = APIValidation()
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True

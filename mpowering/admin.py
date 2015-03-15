@@ -30,7 +30,7 @@ class TagAdmin(admin.ModelAdmin):
     list_display = ('name','category', 'slug', 'order_by')
 
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'about', 'job_title', 'organisation')
+    list_display = ('user', 'api_access', 'about', 'job_title', 'organisation')
                  
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Tag, TagAdmin) 
