@@ -45,5 +45,7 @@ urlpatterns = patterns('',
     url(r'^opensearch/$', TemplateView.as_view(template_name="search/opensearch.html"), name="mpowering_opensearch"),
     
     url(r'^api/', include(v1_api.urls)),
+    url(r'^api/upload/image/$', 'mpowering.api.upload.image_view', name="mpowering_image_upload"),
+    url(r'^api/upload/file/$', 'mpowering.api.upload.file_view', name="mpowering_file_upload"),
     
 )
