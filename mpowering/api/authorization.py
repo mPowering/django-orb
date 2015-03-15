@@ -8,6 +8,8 @@ class UserObjectsOnlyAuthorization(Authorization):
         return object_list
 
     def create_detail(self, object_list, bundle):
+        if bundle.request.user.userprofile.api_access == False:
+            raise Unauthorized("You do not have API access")
         return bundle.obj.create_user == bundle.request.user
 
     def delete_list(self, object_list, bundle):

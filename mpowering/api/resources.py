@@ -165,8 +165,7 @@ class ResourceTagResource(ModelResource):
         allowed_methods = ['get','post']
         include_resource_uri = False
         authentication = ApiKeyAuthentication()
-        authorization = Authorization()
-        validation = APIValidation()
+        authorization = UserObjectsOnlyAuthorization()
         serializer = PrettyJSONSerializer()
         always_return_data = True  
         include_resource_uri = False 
@@ -187,7 +186,7 @@ class TagResource(ModelResource):
         filtering = {"name": [ "exact" ]}
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization() 
-        validation = APIValidation()
+        #validation = APIValidation()
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
