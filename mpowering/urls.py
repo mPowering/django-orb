@@ -34,6 +34,9 @@ urlpatterns = patterns('',
     url(r'^resource/edit/(?P<resource_id>\d+)/$', 'mpowering.views.resource_edit_view', name="mpowering_resource_edit"),
     url(r'^resource/edit/(?P<id>\d+)/thanks/$', 'mpowering.views.resource_edit_thanks_view', name="mpowering_resource_edit_thanks"),
    
+    url(r'^resource/approve/(?P<id>\d+)/$', 'mpowering.views.resource_approve_view', name="mpowering_resource_approve"),
+    url(r'^resource/reject/(?P<id>\d+)/$', 'mpowering.views.resource_reject_view', name="mpowering_resource_reject"),
+    
     url(r'^resource/rate/$', 'mpowering.views.resource_rate_view', name="mpowering_resource_rate"),
     url(r'^resource/guidelines/$',TemplateView.as_view(template_name="mpowering/resource/guidelines.html"), name="mpowering_guidelines"),
     

@@ -21,10 +21,6 @@ from mpowering.signals import resource_viewed, resource_url_viewed, resource_fil
 
 from PIL import Image
 
-
-# Create your views here.
-
-
 def home_view(request):
     topics = []
     tags = Tag.objects.filter(category__slug='health-topic').order_by('order_by')
@@ -221,9 +217,14 @@ def resource_create_thanks_view(request,id):
                               {'resource': resource, 
                                },
                               context_instance=RequestContext(request))
-       
+ 
+def resource_approve_view(request, id):
+    raise Http404()
+    
+def resource_reject_view(request, id):
+    raise Http404()
+   
 def resource_link_view(request, id):
-    # TODO check that resource is approved
     try:
         url = ResourceURL.objects.get(pk=id)
         
@@ -236,7 +237,6 @@ def resource_link_view(request, id):
         raise Http404()
     
 def resource_file_view(request, id):
-    # TODO check that resource is approved
     try:
         file = ResourceFile.objects.get(pk=id)
         
