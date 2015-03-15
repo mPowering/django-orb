@@ -211,6 +211,7 @@ class UserProfile (models.Model):
     job_title = models.TextField(blank=True, null=True, default=None)
     organisation = models.ForeignKey(Tag)
     phone_number = models.TextField(blank=True, null=True, default=None)
+    api_access = models.BooleanField(default=False, blank=False)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
         
@@ -242,6 +243,7 @@ class ResourceTracker(models.Model):
             return UserLocationVisualization.objects.filter(ip=self.ip).first()
         except UserLocationVisualization.DoesNotExist:
             return None
+        
 class SearchTracker(models.Model):
     SEARCH = 'search'
     SEARCH_API = 'search-api'

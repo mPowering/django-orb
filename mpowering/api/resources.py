@@ -3,12 +3,13 @@ from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
 from django.core.urlresolvers import reverse
 from django.conf.urls import url
+from django.http.response import Http404
 from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
 
 from mpowering.api.serializers import PrettyJSONSerializer, ResourceSerializer
-from mpowering.api.validation import ResourceOwnerValidation
+from mpowering.api.authorization import UserObjectsOnlyAuthorization
 from mpowering.models import Resource, ResourceFile, ResourceURL, ResourceTag
 from mpowering.models import User, Tag, Category, ResourceTracker, SearchTracker
 from mpowering.signals import resource_viewed, search
@@ -21,9 +22,6 @@ from tastypie.models import ApiKey
 from tastypie.resources import ModelResource
 from tastypie.throttle import CacheDBThrottle
 from tastypie.utils import trailing_slash
-from django.http.response import Http404
-
-
 
 class ResourceResource(ModelResource):
     files = fields.ToManyField('mpowering.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True, null = True)
@@ -36,7 +34,7 @@ class ResourceResource(ModelResource):
         resource_name = 'resource'
         allowed_methods = ['get','post']
         authentication = ApiKeyAuthentication()
-        authorization = Authorization() 
+        authorization = UserObjectsOnlyAuthorization() 
         serializer = ResourceSerializer()
         always_return_data = True 
         include_resource_uri = True
@@ -130,7 +128,7 @@ class ResourceFileResource(ModelResource):
         allowed_methods = ['get']
         fields = ['file', 'description']
         authentication = ApiKeyAuthentication()
-        authorization = ReadOnlyAuthorization() 
+        authorization = UserObjectsOnlyAuthorization() 
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = False
@@ -148,7 +146,7 @@ class ResourceURLResource(ModelResource):
         allowed_methods = ['get','post']
         fields = ['url', 'title', 'description']
         authentication = ApiKeyAuthentication()
-        authorization = Authorization() 
+        authorization = UserObjectsOnlyAuthorization() 
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = False
@@ -168,7 +166,7 @@ class ResourceTagResource(ModelResource):
         include_resource_uri = False
         authentication = ApiKeyAuthentication()
         authorization = Authorization()
-        validation = ResourceOwnerValidation()
+        validation = APIValidation()
         serializer = PrettyJSONSerializer()
         always_return_data = True  
         include_resource_uri = False 
@@ -189,6 +187,7 @@ class TagResource(ModelResource):
         filtering = {"name": [ "exact" ]}
         authentication = ApiKeyAuthentication()
         authorization = ReadOnlyAuthorization() 
+        validation = APIValidation()
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
