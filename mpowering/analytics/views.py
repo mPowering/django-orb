@@ -26,6 +26,9 @@ def home_view(request):
     popular_resources = ResourceTracker.objects.filter(access_date__gte=start_date).values('resource','resource__slug','resource__title').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
     organisations = Tag.objects.filter(category__slug='organisation',resourcetag__isnull=False).annotate(total_resources=Count('resourcetag__id')).order_by('name')
     
+    snor = timezone.now() - datetime.timedelta(days=90)
+    searches_no_results = SearchTracker.objects.filter(access_date__gte=snor, no_results=0).values('query').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
+    
     recent_activity = []
     no_days = (end_date-start_date).days + 1
     for i in range(0,no_days,+1):
@@ -56,7 +59,8 @@ def home_view(request):
                                'popular_searches': popular_searches,
                                'popular_resources': popular_resources,
                                'organisations': organisations,
-                               'recent_activity': recent_activity },
+                               'recent_activity': recent_activity,
+                               'searches_no_results': searches_no_results},
                               context_instance=RequestContext(request))
     
 def map_view(request):
