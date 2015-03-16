@@ -25,6 +25,10 @@
 			{% endfor %}
 			
 			<li><a href="{% url 'mpowering_resource_create' %}">{% trans 'Add Resource' %}</a></li>
+			{% if user.is_staff %}
+				<li><a href="{% url 'mpowering_analytics_home' %}">{% trans 'Analytics' %}</a></li>
+			{% endif %}
+			
 			{% if user.is_authenticated %}
 				<li><a href="{% url 'profile_edit' %}">{% trans 'Profile' %}</a></li>
 				<li><a href="{% url 'django.contrib.auth.views.logout' %}">{% trans 'Logout' %}</a></li>
