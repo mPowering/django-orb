@@ -243,10 +243,13 @@ def resource_file_view(request, id):
         if not resource_can_view(file.resource,request.user):
             raise Http404() 
         
-        resource_file_viewed.send(sender=file, resource_file=file, request=request)
-        response = HttpResponse(file.file, content_type='application/unknown;charset=utf-8')
-        response['Content-Disposition'] = "attachment; filename=" + file.filename()
-        return response
+        if os.path.isfile(settings.MEDIA_ROOT + file.filename()):
+            resource_file_viewed.send(sender=file, resource_file=file, request=request)
+            response = HttpResponse(file.file, content_type='application/unknown;charset=utf-8')
+            response['Content-Disposition'] = "attachment; filename=" + file.filename()
+            return response
+        else:
+           raise Http404() 
     except ResourceFile.DoesNotExist:
         raise Http404()
     

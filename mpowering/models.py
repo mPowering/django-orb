@@ -124,7 +124,10 @@ class ResourceFile (models.Model):
         return os.path.basename(self.file.name)
     
     def filesize(self):
-        return os.path.getsize(settings.MEDIA_ROOT + self.file.name)
+        if os.path.isfile(settings.MEDIA_ROOT + self.file.name):
+            return os.path.getsize(settings.MEDIA_ROOT + self.file.name)
+        else:
+            return 0
         
 # ResourceRelationship
 class ResourceRelationship (models.Model):
