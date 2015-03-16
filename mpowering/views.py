@@ -23,7 +23,7 @@ from PIL import Image
 
 def home_view(request):
     topics = []
-    tags = Tag.objects.filter(category__slug='health-topic').order_by('order_by')
+    tags = Tag.objects.filter(category__slug='health-topic',parent_tag=None).order_by('order_by')
     for t in tags:
        resource_count = Resource.objects.filter(status=Resource.APPROVED, resourcetag__tag=t).count()
        data = {}
