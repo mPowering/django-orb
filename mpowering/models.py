@@ -52,6 +52,7 @@ class Resource (models.Model):
     slug = models.CharField(blank=True, null=True, max_length=100)
     study_time_number = models.IntegerField(null=True, blank=True)
     study_time_unit = models.CharField(max_length=10,choices=STUDY_TIME_UNITS, blank=True, null=True)
+    born_on = models.DateTimeField(blank=True, null=True, default=None)
     
     class Meta:
         verbose_name = _('Resource')
