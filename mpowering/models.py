@@ -30,6 +30,17 @@ class Resource (models.Model):
         (APPROVED, _('Approved')),
     )
     
+    MINS = 'mins'
+    HOURS = 'hours'
+    DAYS = 'days'
+    WEEKS = 'weeks'
+    STUDY_TIME_UNITS = (
+        (MINS, _('Mins')),
+        (HOURS, _('Hours')),
+        (DAYS, _('Days')),
+        (WEEKS, _('Weeks')),
+    )
+    
     title = models.TextField(blank=False, null=False)
     description = models.TextField(blank=False, null=False) 
     image = models.ImageField(upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
@@ -39,6 +50,8 @@ class Resource (models.Model):
     update_date = models.DateTimeField(auto_now=True) 
     update_user = models.ForeignKey(User, related_name='resource_update_user')
     slug = models.CharField(blank=True, null=True, max_length=100)
+    study_time_number = models.IntegerField(null=True, blank=True)
+    study_time_unit = models.CharField(max_length=10,choices=STUDY_TIME_UNITS, blank=True, null=True)
     
     class Meta:
         verbose_name = _('Resource')
