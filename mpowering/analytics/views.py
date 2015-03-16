@@ -96,13 +96,3 @@ def org_view(request, id):
                                'organisation': organisation,
                                'page':trackers,},
                               context_instance=RequestContext(request))
-    
-# scan url
-
-# pending CRT
-
-# pending MEP
-
-# map
-
-# 

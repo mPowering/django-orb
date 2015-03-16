@@ -71,6 +71,8 @@
 		| {% trans 'Pending MEP' %}
 		| {% trans 'Approve' %}
 		| {% trans 'Reject' %} </li>
+{% empty %}
+	<li>{% trans 'No resources pending CRT review' %}</li>
 {% endfor %}
 </ul>
 
@@ -82,6 +84,8 @@
 		<a target="_blank" href="{% url 'mpowering_resource' pr.slug %}">{% trans 'Preview' %}</a>
 		| {% trans 'Approve' %}
 		| {% trans 'Reject' %} </li>
+{% empty %}
+	<li>{% trans 'No resources pending MEP review' %}</li>
 {% endfor %}
 </ul>
 
