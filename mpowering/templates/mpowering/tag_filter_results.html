@@ -8,7 +8,7 @@
 
 <h2 style="text-align:center">{% trans 'Resources tagged with: ' %}
 {% for tf in filter_tags %}
-	{{ tf.name }}, 
+	{{ tf.name }}{% if not forloop.last %}, {% endif %} 
 {% endfor %}</h2>
 
 {% include "mpowering/includes/page_navigator.html" %}

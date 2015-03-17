@@ -23,7 +23,19 @@ from PIL import Image
 
 def home_view(request):
     topics = []
-    topics = Tag.objects.filter(category__slug='health-topic', parent_tag=None, resourcetag__resource__status=Resource.APPROVED).annotate(resource_count=Count('resourcetag__resource')).order_by('order_by')
+    tags = Tag.objects.filter(category__slug='health-topic', parent_tag=None).order_by('order_by')
+    for t in tags:
+       # get child tags
+       child_tags = Tag.objects.filter(parent_tag=t).values_list('id')
+       
+       print child_tags
+       #child_tags.append(t.id)
+       resource_count = Resource.objects.filter(status=Resource.APPROVED, resourcetag__tag__pk__in=child_tags).distinct().count()
+       data = {}
+       data['resource_count']= resource_count
+       data['tag'] = t
+       topics.append(data)
+    
     return render_to_response('mpowering/home.html',
                               {'topics': topics,},
                               context_instance=RequestContext(request))
@@ -148,9 +160,26 @@ def resource_view(request,resource_slug):
     if resource_can_edit(resource,request.user):
         om = {}
         om['title'] = _(u'Edit')   
-        om['url'] = resource.get_edit_url()
+        om['url'] = reverse('mpowering_resource_edit', args=[resource.id])
+        options_menu.append(om)
+    
+    if request.user.is_staff:
+        om = {}
+        om['title'] = _(u'Reject')   
+        om['url'] = reverse('mpowering_resource_reject', args=[resource.id])
         options_menu.append(om)
         
+        om = {}
+        om['title'] = _(u'Approve')   
+        om['url'] = reverse('mpowering_resource_approve', args=[resource.id])
+        options_menu.append(om)
+        
+        if resource.status==Resource.PENDING_CRT:
+            om = {}
+            om['title'] = _(u'Send to MEP')   
+            om['url'] = reverse('mpowering_resource_pending_mep', args=[resource.id])
+            options_menu.append(om)
+          
     resource_viewed.send(sender=resource, resource=resource, request=request)
     return render_to_response('mpowering/resource/view.html',
                               {'resource': resource, 
@@ -220,6 +249,9 @@ def resource_approve_view(request, id):
     raise Http404()
     
 def resource_reject_view(request, id):
+    raise Http404()
+
+def resource_pending_mep_view(request, id):
     raise Http404()
    
 def resource_link_view(request, id):

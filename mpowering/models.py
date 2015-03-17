@@ -91,9 +91,6 @@ class Resource (models.Model):
     def get_absolute_url(self):
         return urlresolvers.reverse('mpowering_resource', args=[self.slug])
     
-    def get_edit_url(self):
-        return urlresolvers.reverse('mpowering_resource_edit', args=[self.id])
-    
     def tags(self):
         return Tag.objects.filter(resourcetag__resource = self)
     

@@ -39,6 +39,7 @@
 {% if child_tags %}
 	{% for tag in child_tags %}
 		<a href="{% url 'mpowering_tags' tag.slug %}">{{ tag.name}} ({{ tag.resource_count }})</a>
+		{% if not forloop.last %} | {% endif %}
 	{% endfor %}
 {% endif %}
 
