@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Max, Min
+from django.db.models import Count, Max, Min, Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render,render_to_response
 from django.template import RequestContext
@@ -29,8 +29,7 @@ def home_view(request):
        child_tags = Tag.objects.filter(parent_tag=t).values_list('id')
        
        print child_tags
-       #child_tags.append(t.id)
-       resource_count = Resource.objects.filter(status=Resource.APPROVED, resourcetag__tag__pk__in=child_tags).distinct().count()
+       resource_count = Resource.objects.filter(status=Resource.APPROVED).filter(Q(resourcetag__tag__pk__in=child_tags) | Q(resourcetag__tag=t)).distinct().count()
        data = {}
        data['resource_count']= resource_count
        data['tag'] = t
