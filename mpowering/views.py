@@ -23,13 +23,7 @@ from PIL import Image
 
 def home_view(request):
     topics = []
-    tags = Tag.objects.filter(category__slug='health-topic',parent_tag=None).order_by('order_by')
-    for t in tags:
-       resource_count = Resource.objects.filter(status=Resource.APPROVED, resourcetag__tag=t).count()
-       data = {}
-       data['resource_count']= resource_count
-       data['tag'] = t
-       topics.append(data)
+    topics = Tag.objects.filter(category__slug='health-topic', parent_tag=None, resourcetag__resource__status=Resource.APPROVED).annotate(resource_count=Count('resourcetag__resource')).order_by('order_by')
     return render_to_response('mpowering/home.html',
                               {'topics': topics,},
                               context_instance=RequestContext(request))
@@ -39,6 +33,9 @@ def tag_view(request,tag_slug):
         tag = Tag.objects.get(slug=tag_slug)
     except Tag.DoesNotExist:
         raise Http404()
+    
+    child_tags = []
+    
     
     CREATED = u'-create_date'
     TITLE = u'title'
