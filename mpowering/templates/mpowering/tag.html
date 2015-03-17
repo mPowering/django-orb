@@ -36,6 +36,13 @@
 	<p>{{ tag.description }}</p>
 {% endif %}
 
+{% if child_tags %}
+	{% for tag in child_tags %}
+		<a href="{% url 'mpowering_tags' tag.slug %}">{{ tag.name}} ({{ tag.resource_count }})</a>
+	{% endfor %}
+{% endif %}
+
+
 <div class="orderby">
 	<form method="get">
 	{% trans 'Order by: ' %}

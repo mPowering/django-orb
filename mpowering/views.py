@@ -34,7 +34,7 @@ def tag_view(request,tag_slug):
     except Tag.DoesNotExist:
         raise Http404()
     
-    child_tags = []
+    child_tags = Tag.objects.filter(parent_tag=tag, resourcetag__resource__status=Resource.APPROVED).annotate(resource_count=Count('resourcetag__resource')).order_by('order_by')
     
     
     CREATED = u'-create_date'
@@ -62,7 +62,8 @@ def tag_view(request,tag_slug):
     
     return render_to_response('mpowering/tag.html',
                               {
-                               'tag': tag, 
+                               'tag': tag,
+                               'child_tags': child_tags, 
                                'page':resources,
                                'ordering': ORDER_OPTIONS, 
                                'current_order': order_by},
