@@ -69,6 +69,9 @@ class ResourceForm(forms.Form):
                         label=_(u"Please tick the box to confirm that you have read the <a href='/resource/guidelines/' target='_blank'>guidelines</a> about submitting resources to mPowering"),            
                         required=True,
                         error_messages={'required': _('Please tick the box to confirm that you have read the guidelines for submitting resources to mPowering')})
+    study_time_number = forms.IntegerField(
+                            required=False
+                                           )
 
     
     def __init__(self, *args, **kwargs):
@@ -89,6 +92,8 @@ class ResourceForm(forms.Form):
                 'health_topic',
                 Row (HTML('<hr>')),
                 'resource_type',
+                Row (HTML('<hr>')),
+                'study_time_number',
                 Row (HTML('<hr>')),
                 'audience',
                 Row (HTML('<hr>')),
