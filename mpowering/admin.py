@@ -1,7 +1,8 @@
 from django.contrib import admin
 
 from mpowering.models import Category, Tag, Resource, ResourceURL
-from mpowering.models import ResourceFile, ResourceTag, UserProfile, ResourceTracker, SearchTracker
+from mpowering.models import ResourceFile, ResourceTag, UserProfile
+from mpowering.models import ResourceTracker, SearchTracker, TagOwner
 # Register your models here.
 
     
@@ -31,9 +32,13 @@ class TagAdmin(admin.ModelAdmin):
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'api_access', 'about', 'job_title', 'organisation')
+
+class TagOwnerAdmin(admin.ModelAdmin):
+    list_display = ('user', 'tag')
                  
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Tag, TagAdmin) 
+admin.site.register(TagOwner, TagOwnerAdmin) 
 admin.site.register(Resource, ResourceAdmin) 
 admin.site.register(ResourceURL, ResourceURLAdmin)
 admin.site.register(ResourceFile, ResourceFileAdmin)

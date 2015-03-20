@@ -211,6 +211,11 @@ class Tag (models.Model):
     def image_filename(self):
         return os.path.basename(self.image.name)
        
+# Tag Owner
+class TagOwner(models.Model):
+    user = models.ForeignKey(User)
+    tag = models.ForeignKey(Tag)
+    
 # ResourceTag
 class ResourceTag (models.Model):
     resource = models.ForeignKey(Resource)
