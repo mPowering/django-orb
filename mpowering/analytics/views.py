@@ -88,7 +88,7 @@ def tag_view(request,id):
         day = temp.strftime("%d")
         month = temp.strftime("%m")
         year = temp.strftime("%Y")
-        r_trackers = ResourceTracker.objects.filter(access_date__day=day,access_date__month=month,access_date__year=year)
+        r_trackers = ResourceTracker.objects.filter(access_date__day=day,access_date__month=month,access_date__year=year, resource__resourcetag__tag=tag,resource__status=Resource.APPROVED)
         count_activity = {'resource':0, 'resource_file':0, 'resource_url':0, 'total':0}
         for r in r_trackers:
             count_activity['total']+=1
@@ -103,7 +103,6 @@ def tag_view(request,id):
     
     
     # Activity detail
-    start_date = timezone.now() - datetime.timedelta(days=31)
     trackers = ResourceTracker.objects.filter(access_date__gte=start_date,resource__resourcetag__tag=tag,resource__status=Resource.APPROVED).order_by('-access_date')
     
     paginator = Paginator(trackers, 20)
