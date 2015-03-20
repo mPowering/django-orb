@@ -76,6 +76,33 @@ def tag_view(request,id):
         return HttpResponse(status=401,content="Not Authorized")
     
     tag = Tag.objects.get(pk=id) 
+    
+    start_date = timezone.now() - datetime.timedelta(days=31)
+    end_date = timezone.now()
+    
+    # Activity Graph
+    recent_activity = []
+    no_days = (end_date-start_date).days + 1
+    for i in range(0,no_days,+1):
+        temp = start_date + datetime.timedelta(days=i)
+        day = temp.strftime("%d")
+        month = temp.strftime("%m")
+        year = temp.strftime("%Y")
+        r_trackers = ResourceTracker.objects.filter(access_date__day=day,access_date__month=month,access_date__year=year)
+        count_activity = {'resource':0, 'resource_file':0, 'resource_url':0, 'total':0}
+        for r in r_trackers:
+            count_activity['total']+=1
+            if r.resource_file:
+                count_activity['resource_file']+=1
+            elif r.resource_url:
+                count_activity['resource_url']+=1
+            else:
+                count_activity['resource']+=1
+            
+        recent_activity.append([temp.strftime("%d %b %y"),count_activity])
+    
+    
+    # Activity detail
     start_date = timezone.now() - datetime.timedelta(days=31)
     trackers = ResourceTracker.objects.filter(access_date__gte=start_date,resource__resourcetag__tag=tag,resource__status=Resource.APPROVED).order_by('-access_date')
     
@@ -93,6 +120,7 @@ def tag_view(request,id):
     
     return render_to_response('mpowering/analytics/tag.html',
                               { 'tag': tag,
+                               'recent_activity': recent_activity,
                                'page':trackers,},
                               context_instance=RequestContext(request))
 
