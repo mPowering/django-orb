@@ -202,8 +202,10 @@ def resource_create_view(request):
                 resource.image = request.FILES["image"]
             resource.save()
             
-            # add organisation(s)
-            resource_add_organisations(request, form, resource)
+            # add organisation(s)/geography and other tags
+            resource_add_free_text_tags(request, form, resource, 'organisations','organisation')
+            resource_add_free_text_tags(request, form, resource, 'geography','geography')
+            resource_add_free_text_tags(request, form, resource,'other_tags','other')
                 
             # add file and url
             if request.FILES.has_key('file'):
@@ -347,7 +349,9 @@ def resource_edit_view(request,resource_id):
             # update tags - remove all current tags first
             ResourceTag.objects.filter(resource=resource).delete()
             resource_add_tags(request, form, resource)
-            resource_add_organisations(request, form, resource)
+            resource_add_free_text_tags(request, form, resource,'organisations','organisation')
+            resource_add_free_text_tags(request, form, resource,'geography','geography')
+            resource_add_free_text_tags(request, form, resource,'other_tags','other')
             
             # All successful - now redirect
             return HttpResponseRedirect(reverse('mpowering_resource_edit_thanks', args=[resource.id]))
@@ -386,8 +390,8 @@ def resource_edit_view(request,resource_id):
         audience = Tag.objects.filter(category__slug='audience', resourcetag__resource=resource).values_list('id',flat=True)
         data['audience'] = audience
         
-        geography = Tag.objects.filter(category__slug='geography', resourcetag__resource=resource).values_list('id',flat=True)
-        data['geography'] = geography
+        geography = Tag.objects.filter(category__slug='geography', resourcetag__resource=resource).values_list('name',flat=True)
+        data['geography'] = ', '.join(geography)
         
         device = Tag.objects.filter(category__slug='device', resourcetag__resource=resource).values_list('id',flat=True)
         data['device'] = device
@@ -476,7 +480,7 @@ def resource_form_set_choices(form):
     form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='health-topic').order_by('order_by','name')]
     form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').order_by('order_by','name')]
     form.fields['audience'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name')]
-    form.fields['geography'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='geography').order_by('order_by','name')]
+    #form.fields['geography'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='geography').order_by('order_by','name')]
     form.fields['device'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='device').order_by('order_by','name')]
     form.fields['license'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='license').order_by('order_by','name')]
     return form 
@@ -495,19 +499,19 @@ def resource_can_edit(resource,user):
     else:
         return False
 
-def resource_add_organisations(request, form, resource):
-    organisations = [x.strip() for x in form.cleaned_data.get("organisations").split(',')]
-    for o in organisations:
+def resource_add_free_text_tags(request, form, resource, field, slug):
+    free_text_tags = [x.strip() for x in form.cleaned_data.get(field).split(',')]
+    for ftt in free_text_tags:
         try:
-            organisation = Tag.objects.get(name = o, category__slug='organisation')
+            tag = Tag.objects.get(name = ftt, category__slug=slug)
         except Tag.DoesNotExist:
-            category = Category.objects.get(slug='organisation')
-            organisation = Tag(name=o, category= category, create_user=request.user, update_user=request.user)
-            organisation.save()
-        ResourceTag(tag=organisation, resource= resource, create_user= request.user).save()
+            category = Category.objects.get(slug=slug)
+            tag = Tag(name=ftt, category= category, create_user=request.user, update_user=request.user)
+            tag.save()
+        ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
                   
 def resource_add_tags(request, form, resource):
-    tag_categories = ["health_topic", "resource_type", "audience", "geography", "device"]
+    tag_categories = ["health_topic", "resource_type", "audience", "device"]
     for tc in tag_categories:
         tag_category = form.cleaned_data.get(tc)
         for ht in tag_category:
@@ -517,15 +521,3 @@ def resource_add_tags(request, form, resource):
     license = form.cleaned_data.get("license")
     tag = Tag.objects.get(pk=license)
     ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
-            
-    # add misc_tags
-    other_tags = [x.strip() for x in form.cleaned_data.get("other_tags").split(',')]
-    for ot in other_tags:
-        if ot:
-            try:
-                tag = Tag.objects.get(name = ot)
-            except Tag.DoesNotExist:
-                category = Category.objects.get(slug='other')
-                tag = Tag(name =ot, category= category, create_user=request.user, update_user=request.user)
-                tag.save()
-            ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
