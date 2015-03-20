@@ -71,13 +71,13 @@ def map_view(request):
                               context_instance=RequestContext(request))
 
 
-def org_view(request, id):
-    if not request.user.is_staff:
-        return HttpResponse(status=401,content="Not Authorized") 
+def tag_view(request,id):
+    if not is_tag_owner(request, id):
+        return HttpResponse(status=401,content="Not Authorized")
     
-    organisation = Tag.objects.get(pk=id, category__slug='organisation')
+    tag = Tag.objects.get(pk=id) 
     start_date = timezone.now() - datetime.timedelta(days=31)
-    trackers = ResourceTracker.objects.filter(access_date__gte=start_date,resource__resourcetag__tag=organisation,resource__status=Resource.APPROVED).order_by('-access_date')
+    trackers = ResourceTracker.objects.filter(access_date__gte=start_date,resource__resourcetag__tag=tag,resource__status=Resource.APPROVED).order_by('-access_date')
     
     paginator = Paginator(trackers, 20)
     # Make sure page request is an int. If not, deliver first page.
@@ -91,8 +91,20 @@ def org_view(request, id):
     except (EmptyPage, InvalidPage):
         trackers = paginator.page(paginator.num_pages)
     
-    return render_to_response('mpowering/analytics/organisation.html',
-                              {
-                               'organisation': organisation,
+    return render_to_response('mpowering/analytics/tag.html',
+                              { 'tag': tag,
                                'page':trackers,},
                               context_instance=RequestContext(request))
+
+# Helper functions
+def is_tag_owner(request,id):
+    if not request.user.is_authenticated:
+        return False
+    
+    if request.user.is_staff:
+        return True
+    try:
+        tag_owner = TagOwner.objects.get(tag__pk=id,user=request.user)
+        return True
+    except TagOwner.DoesNotExist:
+        return False

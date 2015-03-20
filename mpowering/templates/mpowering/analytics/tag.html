@@ -1,11 +1,16 @@
 {% extends "base.html" %} {% load i18n %}
 
-{% block extra_head_title %}{% trans 'Activity' %}{% endblock extra_head_title %}
-
+{% block extra_head_title %}{{ tag.name }} - {% trans 'Analytics' %}{% endblock extra_head_title %}
 
 {% block content %}
 
-<h2>{{ organisation.name }}</h2>
+<h2>{% trans 'Analytics for:' %} {{ tag.name }}</h2>
+
+<h3>{% trans 'Activity Graph' %}</h3>
+
+<h3>{% trans 'Resources' %}</h3>
+
+<h3>{% trans 'Activity Detail' %}</h3>
 
 {% include "mpowering/includes/page_navigator.html" %}
 <table class="table table-condensed">
@@ -25,5 +30,4 @@
 </table>
 
 {% include "mpowering/includes/page_navigator.html" %}
-
 {% endblock %}

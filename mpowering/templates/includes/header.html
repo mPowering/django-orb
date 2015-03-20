@@ -30,7 +30,7 @@
 				<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">{% trans 'Analytics' %} <b class="caret"></b></a>
 				<ul class="dropdown-menu">
 				{% for h in header_owns_tags %}
-					<li><a href="{% url 'mpowering_analytics_home' %}">{{ h.tag.name}}</a></li>
+					<li><a href="{% url 'mpowering_analytics_tag' h.tag.id %}">{{ h.tag.name}}</a></li>
 				{% endfor %}
 				{% if user.is_staff %}
 						<li><a href="{% url 'mpowering_analytics_home' %}">{% trans 'Site analytics' %}</a></li>

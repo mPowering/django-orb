@@ -117,7 +117,7 @@
 <h3>{% trans 'Organisations' %}</h3>
 <ul>
 {% for o in organisations %}
-	<li><a href="{% url 'mpowering_analytics_org' o.id %}">{{ o.name }} ({{ o.total_resources}})</a></li>
+	<li><a href="{% url 'mpowering_analytics_tag' o.id %}">{{ o.name }} ({{ o.total_resources}})</a></li>
 {% endfor %}
 </ul>
 
