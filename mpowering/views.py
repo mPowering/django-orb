@@ -205,7 +205,8 @@ def resource_create_view(request):
             # add organisation(s)/geography and other tags
             resource_add_free_text_tags(request, form, resource, 'organisations','organisation')
             resource_add_free_text_tags(request, form, resource, 'geography','geography')
-            resource_add_free_text_tags(request, form, resource,'other_tags','other')
+            resource_add_free_text_tags(request, form, resource, 'languages','language')
+            resource_add_free_text_tags(request, form, resource, 'other_tags','other')
                 
             # add file and url
             if request.FILES.has_key('file'):
@@ -351,6 +352,7 @@ def resource_edit_view(request,resource_id):
             resource_add_tags(request, form, resource)
             resource_add_free_text_tags(request, form, resource,'organisations','organisation')
             resource_add_free_text_tags(request, form, resource,'geography','geography')
+            resource_add_free_text_tags(request, form, resource, 'languages','language')
             resource_add_free_text_tags(request, form, resource,'other_tags','other')
             
             # All successful - now redirect
@@ -392,6 +394,9 @@ def resource_edit_view(request,resource_id):
         
         geography = Tag.objects.filter(category__slug='geography', resourcetag__resource=resource).values_list('name',flat=True)
         data['geography'] = ', '.join(geography)
+        
+        languages = Tag.objects.filter(category__slug='language', resourcetag__resource=resource).values_list('name',flat=True)
+        data['languages'] = ', '.join(languages)
         
         device = Tag.objects.filter(category__slug='device', resourcetag__resource=resource).values_list('id',flat=True)
         data['device'] = device

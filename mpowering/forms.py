@@ -49,6 +49,10 @@ class ResourceForm(forms.Form):
                         required=True,
                         help_text=_('The geographic area the resource is designed for, may be region e.g. ("Africa", "East Africa") or country (e.g. "Ethiopia", "Mali"). Comma separated if entering more than one geography'), 
                         error_messages={'required': _('Please enter at least one geographical area')},)
+    languages = forms.CharField(
+                        required=True,
+                        help_text=_('The languages the resource uses. Comma separated if entering more than one language'), 
+                        error_messages={'required': _('Please enter at least one language')},)
     device = forms.MultipleChoiceField(
                         widget=forms.CheckboxSelectMultiple,
                         required=True,
@@ -89,6 +93,8 @@ class ResourceForm(forms.Form):
                 'audience',
                 Row (HTML('<hr>')),
                 'geography',
+                Row (HTML('<hr>')),
+                'languages',
                 Row (HTML('<hr>')),
                 'device',
                 Row (HTML('<hr>')),
