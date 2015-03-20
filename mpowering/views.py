@@ -134,6 +134,11 @@ def tag_filter_results_view(request):
                               { 'filter_tags': filter_tags,
                                'page':resources,},
                               context_instance=RequestContext(request))
+
+def taxonomy_view(request):
+    return render_to_response('mpowering/taxonomy.html',
+                              { },
+                              context_instance=RequestContext(request))
     
 def resource_permalink_view(request,id):
     try:
