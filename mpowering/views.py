@@ -538,17 +538,19 @@ def resource_can_edit(resource,user):
 
 def resource_add_free_text_tags(request, form, resource, field, slug):
     free_text_tags = [x.strip() for x in form.cleaned_data.get(field).split(',')]
+    print free_text_tags
     for ftt in free_text_tags:
-        try:
-            tag = Tag.objects.get(name = ftt, category__slug=slug)
-        except Tag.DoesNotExist:
-            category = Category.objects.get(slug=slug)
-            tag = Tag(name=ftt, category= category, create_user=request.user, update_user=request.user)
-            tag.save()
-        try:
-            ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
-        except IntegrityError:
-            pass
+        if ftt != '':
+            try:
+                tag = Tag.objects.get(name = ftt, category__slug=slug)
+            except Tag.DoesNotExist:
+                category = Category.objects.get(slug=slug)
+                tag = Tag(name=ftt, category= category, create_user=request.user, update_user=request.user)
+                tag.save()
+            try:
+                ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
+            except IntegrityError:
+                pass
                   
 def resource_add_tags(request, form, resource):
     tag_categories = ["health_topic", "resource_type", "audience", "device"]
