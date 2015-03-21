@@ -70,8 +70,12 @@ class ResourceForm(forms.Form):
                         required=True,
                         error_messages={'required': _('Please tick the box to confirm that you have read the guidelines for submitting resources to mPowering')})
     study_time_number = forms.IntegerField(
-                            required=False
-                                           )
+                            required=False,
+                            label=_(u"Study Time"),)
+    study_time_unit = forms.CharField(
+                                        label="",
+                                        widget=forms.Select(choices=Resource.STUDY_TIME_UNITS),
+                                        required=False,)
 
     
     def __init__(self, *args, **kwargs):
@@ -94,6 +98,7 @@ class ResourceForm(forms.Form):
                 'resource_type',
                 Row (HTML('<hr>')),
                 'study_time_number',
+                'study_time_unit',
                 Row (HTML('<hr>')),
                 'audience',
                 Row (HTML('<hr>')),
@@ -119,12 +124,14 @@ class ResourceForm(forms.Form):
         cleaned_data = self.cleaned_data
         file = cleaned_data.get("file")
         url = cleaned_data.get("url")
-        print url
+        
         if self._errors:
             raise forms.ValidationError( _(u"Please correct the errors below and resubmit the form."))
         if file is None and not url:
-            print "no file or url"
             raise forms.ValidationError( _(u"Please submit a file and/or a url for this resource"))
+        if cleaned_data.get("study_time_number") is not None and cleaned_data.get("study_time_number") != 0 and cleaned_data.get("study_time_unit") is None:
+            raise forms.ValidationError( _(u"You have entered a study time, but not selected a unit."))
+            
         
         return self.cleaned_data
     

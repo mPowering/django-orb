@@ -50,7 +50,7 @@ class Resource (models.Model):
     update_date = models.DateTimeField(auto_now=True) 
     update_user = models.ForeignKey(User, related_name='resource_update_user')
     slug = models.CharField(blank=True, null=True, max_length=100)
-    study_time_number = models.IntegerField(null=True, blank=True)
+    study_time_number = models.IntegerField(default=0, null=True, blank=True)
     study_time_unit = models.CharField(max_length=10,choices=STUDY_TIME_UNITS, blank=True, null=True)
     born_on = models.DateTimeField(blank=True, null=True, default=None)
     
