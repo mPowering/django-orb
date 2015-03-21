@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% block extra_head_title %}{% trans 'Status Updated' %}{% endblock extra_head_title %}
+{% block content %}
+
+<h3>{% trans 'Status Updated' %}</h3>
+
+'{{ resource.title }}' has been updated to be '{{ resource.status }}'
+{% endblock %}

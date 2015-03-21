@@ -251,16 +251,40 @@ def resource_create_thanks_view(request,id):
                               {'resource': resource, 
                                },
                               context_instance=RequestContext(request))
+    
  
 def resource_approve_view(request, id):
-    raise Http404()
+    if not request.user.is_staff:
+        return HttpResponse(status=401,content="Not Authorized") 
+    resource = Resource.objects.get(pk=id)
+    resource.status = Resource.APPROVED
+    resource.save()
+    return render_to_response('mpowering/resource/status_updated.html',
+                              { 'resource':resource,},
+                              context_instance=RequestContext(request))
     
 def resource_reject_view(request, id):
-    raise Http404()
-
+    if not request.user.is_staff:
+        return HttpResponse(status=401,content="Not Authorized")
+    resource = Resource.objects.get(pk=id)
+    resource.status = Resource.REJECTED
+    resource.save()
+    return render_to_response('mpowering/resource/status_updated.html',
+                              { 'resource':resource,},
+                              context_instance=RequestContext(request))
+    
 def resource_pending_mep_view(request, id):
-    raise Http404()
+    if not request.user.is_staff:
+        return HttpResponse(status=401,content="Not Authorized")
    
+    resource = Resource.objects.get(pk=id)
+    resource.status = Resource.PENDING_MRT
+    resource.save()
+    return render_to_response('mpowering/resource/status_updated.html',
+                              { 'resource':resource,},
+                              context_instance=RequestContext(request))
+    
+    
 def resource_link_view(request, id):
     try:
         url = ResourceURL.objects.get(pk=id)
