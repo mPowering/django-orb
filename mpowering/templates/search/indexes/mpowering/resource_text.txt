@@ -3,6 +3,9 @@
 
 {% for tag in object.tags.all %}
 	{{ tag.name }}
+	{% if tag.parent_tag %}
+		{{ tag.parent_tag.name }}
+	{% endif %}
 {% endfor %}
 
 {% for org in object.get_organisations.all %}
