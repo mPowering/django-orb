@@ -132,7 +132,7 @@ and last updated by {{ resource.update_user.first_name }} {{ resource.update_use
 {% if options_menu %}
 <hr/>
 	{% for om in options_menu %}
-		<a class="btn btn-primary btn btn-default" href="{{ om.url }}">{{ om.title }}</a>
+		<a class="btn {% if forloop.first %}btn-primary{% endif %} btn-default" href="{{ om.url }}">{{ om.title }}</a>
 	{% endfor %}
 {% endif %}
 {% endblock %}

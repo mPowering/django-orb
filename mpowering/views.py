@@ -168,21 +168,23 @@ def resource_view(request,resource_slug):
         options_menu.append(om)
     
     if request.user.is_staff:
-        om = {}
-        om['title'] = _(u'Reject')   
-        om['url'] = reverse('mpowering_resource_reject', args=[resource.id])
-        options_menu.append(om)
-        
-        om = {}
-        om['title'] = _(u'Approve')   
-        om['url'] = reverse('mpowering_resource_approve', args=[resource.id])
-        options_menu.append(om)
-        
         if resource.status==Resource.PENDING_CRT:
             om = {}
             om['title'] = _(u'Send to MEP')   
             om['url'] = reverse('mpowering_resource_pending_mep', args=[resource.id])
             options_menu.append(om)
+        if resource.status == Resource.PENDING_CRT or resource.status == Resource.PENDING_MRT:   
+            om = {}
+            om['title'] = _(u'Reject')   
+            om['url'] = reverse('mpowering_resource_reject', args=[resource.id])
+            options_menu.append(om)
+            
+            om = {}
+            om['title'] = _(u'Approve')   
+            om['url'] = reverse('mpowering_resource_approve', args=[resource.id])
+            options_menu.append(om)
+        
+        
           
     resource_viewed.send(sender=resource, resource=resource, request=request)
     return render_to_response('mpowering/resource/view.html',
