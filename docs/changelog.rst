@@ -1,6 +1,8 @@
 Change log
 =====================================
 
+* 121: Prevent the same resourcetag being added twice - http://github.com/mPowering/django-mpowering/issues/issue/121
+* 138: Add option for staff to change status of a resource - http://github.com/mPowering/django-mpowering/issues/issue/138
 * 125: Add language as field on resource pages - http://github.com/mPowering/django-mpowering/issues/issue/125
 * 124: Change geography to be a text input field - http://github.com/mPowering/django-mpowering/issues/issue/124
 * 113: Provide analytics for content provider organisations - http://github.com/mPowering/django-mpowering/issues/issue/113

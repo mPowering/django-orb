@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
+from django.db import IntegrityError
 from django.db.models import Count, Max, Min, Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render,render_to_response
@@ -544,7 +545,10 @@ def resource_add_free_text_tags(request, form, resource, field, slug):
             category = Category.objects.get(slug=slug)
             tag = Tag(name=ftt, category= category, create_user=request.user, update_user=request.user)
             tag.save()
-        ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
+        try:
+            ResourceTag(tag=tag, resource= resource, create_user= request.user).save()
+        except IntegrityError:
+            pass
                   
 def resource_add_tags(request, form, resource):
     tag_categories = ["health_topic", "resource_type", "audience", "device"]

@@ -223,6 +223,9 @@ class ResourceTag (models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User, related_name='resourcetag_create_user')    
 
+    class Meta:
+        unique_together = ("resource", "tag")
+        
 # UserProfile
 class UserProfile (models.Model):
     user = models.OneToOneField(User)
