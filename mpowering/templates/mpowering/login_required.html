@@ -5,11 +5,13 @@
 
 <h2>{% trans 'Login required' %}</h2>
 
+<div class="alert alert-info">
+
 <p>{{ message }}</p>
 
 {% url 'profile_login' as login %}
 {% url 'profile_register' as register %}
-<p>{% blocktrans %}Please <a href="{{ login }}">login</a> or <a href="{{ register }}">register</a>{% endblocktrans %}</p>
+<p>{% blocktrans %}Please <a href="{{ login }}" class="alert-link">login</a> or <a href="{{ register }}" class="alert-link">register</a>{% endblocktrans %}</div>
 
 
 {% endblock %}

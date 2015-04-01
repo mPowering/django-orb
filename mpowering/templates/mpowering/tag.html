@@ -26,7 +26,7 @@
 
 <h3 style="text-align:center">
 	{% if tag.parent_tag %}
-		{{ tag.parent_tag.name}}: 
+		<a href="{% url 'mpowering_tags' tag.parent_tag.slug %}">{{ tag.parent_tag.name}}</a>: 
 	{% endif %}
     {% thumbnail tag.image "70x70" format="PNG" padding=True as im %}
 		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
@@ -37,10 +37,12 @@
 {% endif %}
 
 {% if child_tags %}
+	<div style="text-align:center">
 	{% for tag in child_tags %}
 		<a href="{% url 'mpowering_tags' tag.slug %}">{{ tag.name}} ({{ tag.resource_count }})</a>
 		{% if not forloop.last %} | {% endif %}
 	{% endfor %}
+	</div>
 {% endif %}
 
 
