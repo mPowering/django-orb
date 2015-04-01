@@ -1,6 +1,7 @@
 Change log
 =====================================
 
+* 112: Add field to comply with terms/conditions/privacy on registration form - http://github.com/mPowering/django-mpowering/issues/issue/112
 * 130: Add info about uploading vs linking - http://github.com/mPowering/django-mpowering/issues/issue/130
 * 140: Add option for organisation owners to download their stats - http://github.com/mPowering/django-mpowering/issues/issue/140
 * 122: Add Study time to resources - http://github.com/mPowering/django-mpowering/issues/issue/122
