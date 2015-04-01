@@ -4,5 +4,5 @@
 {% block content %}
 <h2>{% trans 'Logged Out' %}</h2>
 {% url 'profile_login' as url_login %}
-<p>{% blocktrans %}<a href="{{ url_login }}">Log in again</a>{% endblocktrans %}</p>
+<div class="alert alert-success">{% blocktrans %}You are now logged out. <a href="{{ url_login }}" class="alert-link">Log in again</a>{% endblocktrans %}</div>
 {% endblock %}
