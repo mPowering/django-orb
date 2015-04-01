@@ -24,13 +24,13 @@
 
 {% include 'mpowering/includes/search_bar.html' %}
 
-<h2 style="text-align:center">
+<h3 style="text-align:center">
 	{% if tag.parent_tag %}
 		{{ tag.parent_tag.name}}: 
 	{% endif %}
     {% thumbnail tag.image "70x70" format="PNG" padding=True as im %}
 		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-	{% endthumbnail %}{{ tag.name }}</h2>
+	{% endthumbnail %}{{ tag.name }}</h3>
 	
 {% if tag.description %}
 	<p>{{ tag.description }}</p>

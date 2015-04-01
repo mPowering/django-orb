@@ -28,7 +28,7 @@ class SearchTrackerAdmin(admin.ModelAdmin):
     list_display = ('query', 'user', 'access_date', 'no_results', 'ip', 'type')
         
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name','category', 'slug', 'order_by')
+    list_display = ('name','category', 'parent_tag', 'slug', 'order_by')
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'api_access', 'about', 'job_title', 'organisation')

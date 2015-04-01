@@ -216,6 +216,9 @@ class TagOwner(models.Model):
     user = models.ForeignKey(User)
     tag = models.ForeignKey(Tag)
     
+    class Meta:
+        unique_together = ("user", "tag")
+        
 # ResourceTag
 class ResourceTag (models.Model):
     resource = models.ForeignKey(Resource)
