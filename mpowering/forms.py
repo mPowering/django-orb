@@ -5,12 +5,13 @@ from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import FieldWithButtons, InlineCheckboxes
-from crispy_forms.layout import Button, Layout, Fieldset, ButtonHolder, Submit, Div, HTML, Row
+from crispy_forms.layout import Button, Layout, Fieldset, ButtonHolder, Submit, Div, HTML, Row, Field, Column
 
 from mpowering.models import Tag, Resource, Category
 
 from tinymce.models import HTMLField
 
+    
 class ResourceForm(forms.Form):
     title = forms.CharField(
                 required=True,
@@ -71,7 +72,7 @@ class ResourceForm(forms.Form):
                         error_messages={'required': _('Please tick the box to confirm that you have read the guidelines for submitting resources to mPowering')})
     study_time_number = forms.IntegerField(
                             required=False,
-                            label=_(u"Study Time"),)
+                            label="",)
     study_time_unit = forms.CharField(
                                         label="",
                                         widget=forms.Select(choices=Resource.STUDY_TIME_UNITS),
@@ -97,7 +98,21 @@ class ResourceForm(forms.Form):
                 Row (HTML('<hr>')),
                 'resource_type',
                 Row (HTML('<hr>')),
-                Div('study_time_number', 'study_time_unit'),
+                Div( 
+                    Div( 
+                        HTML('<label class="control-label" style="float:right; padding-right:10px;">Study Time</label>'), 
+                        css_class='col-lg-2 ' 
+                    ), 
+                    Div( 
+                        Field('study_time_number'), 
+                        css_class='col-lg-2' 
+                    ), 
+                    Div( 
+                        Field('study_time_unit'), 
+                        css_class='col-lg-2'
+                    ), 
+                    css_class='row', 
+                ),
                 Row (HTML('<hr>')),
                 'audience',
                 Row (HTML('<hr>')),

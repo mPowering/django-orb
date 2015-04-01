@@ -206,6 +206,9 @@ def resource_create_view(request):
             resource = Resource(status = Resource.PENDING_CRT, create_user = request.user, update_user = request.user)
             resource.title = form.cleaned_data.get("title")
             resource.description = form.cleaned_data.get("description")
+            if form.cleaned_data.get("study_time_number") and form.cleaned_data.get("study_time_unit"):
+                resource.study_time_number = form.cleaned_data.get("study_time_number")
+                resource.study_time_unit = form.cleaned_data.get("study_time_unit")
             if request.FILES.has_key('image'):
                 resource.image = request.FILES["image"]
             resource.save()
@@ -334,6 +337,9 @@ def resource_edit_view(request,resource_id):
             resource.update_user = request.user
             resource.title = form.cleaned_data.get("title")
             resource.description = form.cleaned_data.get("description")
+            if form.cleaned_data.get("study_time_number") and form.cleaned_data.get("study_time_unit"):
+                resource.study_time_number = form.cleaned_data.get("study_time_number")
+                resource.study_time_unit = form.cleaned_data.get("study_time_unit")
             resource.save()
                 
             # update image
@@ -406,6 +412,8 @@ def resource_edit_view(request,resource_id):
         data['organisations'] = ', '.join(organisations)
         data['description'] = resource.description
         data['image'] = resource.image
+        data['study_time_number'] = resource.study_time_number
+        data['study_time_unit'] = resource.study_time_unit
         
         files = ResourceFile.objects.filter(resource=resource)[:1]
         if files:

@@ -51,8 +51,6 @@ From:
 {{ resource.description|safe }}
 </p>
 
-
-
 {% if resource.get_files %}
 	<hr/>
 	<h4>{% trans 'Files' %}</h4>
@@ -90,6 +88,12 @@ From:
 		</li>
 	{% endfor %}
 	</ul>
+{% endif %}
+
+{% if resource.study_time_number %}
+	<hr/>
+	<h4>{% trans 'Study Time' %}</h4>
+	{{ resource.study_time_number }} {{ resource.study_time_unit}}
 {% endif %}
 
 {% if resource.get_categories %}
