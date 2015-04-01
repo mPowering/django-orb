@@ -1,6 +1,7 @@
 Change log
 =====================================
 
+* 140: Add option for organisation owners to download their stats - http://github.com/mPowering/django-mpowering/issues/issue/140
 * 122: Add Study time to resources - http://github.com/mPowering/django-mpowering/issues/issue/122
 * 128: Make sure parent tags are included in search indexing - http://github.com/mPowering/django-mpowering/issues/issue/128
 * 121: Prevent the same resourcetag being added twice - http://github.com/mPowering/django-mpowering/issues/issue/121

@@ -70,4 +70,6 @@
 </table>
 
 {% include "mpowering/includes/page_navigator.html" %}
+
+<a href="{% url 'mpowering_analytics_download' tag.id %} ">{% trans 'Export to Excel' %}</a>
 {% endblock %}
