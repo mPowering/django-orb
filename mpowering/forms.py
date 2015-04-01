@@ -29,8 +29,7 @@ class ResourceForm(forms.Form):
                 error_messages={},)
     file = forms.FileField(
                 required=False,
-                error_messages={},
-                help_text=_('Either a file or a url is required'), )
+                error_messages={},)
     url = forms.CharField(
                 required=False,
                 error_messages={},)
@@ -91,6 +90,7 @@ class ResourceForm(forms.Form):
                 'description',
                 'image',
                 Row (HTML('<hr>')),
+                Row (HTML(_(u'<p class="col-lg-offset-2">Please either upload a file and/or submit a url. Our preference is that the actual resource file is uploaded, but if you submit a url, please ensure this is a direct download for the resource.</p>'))),
                 'file',
                 'url',
                 Row (HTML('<hr>')),
