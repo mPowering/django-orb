@@ -29,7 +29,6 @@ def home_view(request):
        # get child tags
        child_tags = Tag.objects.filter(parent_tag=t).values_list('id')
        
-       print child_tags
        resource_count = Resource.objects.filter(status=Resource.APPROVED).filter(Q(resourcetag__tag__pk__in=child_tags) | Q(resourcetag__tag=t)).distinct().count()
        data = {}
        data['resource_count']= resource_count
@@ -86,8 +85,6 @@ def tag_cloud_view(request):
     tags = Tag.objects.filter(resourcetag__resource__status=Resource.APPROVED).annotate(dcount=Count('resourcetag__resource')).order_by('name')
     max = tags.aggregate(max=Max('dcount'))
     min = tags.aggregate(min=Min('dcount'))
-    print max
-    print min
     diff = max['max']-min['min']
     return render_to_response('mpowering/tag_cloud.html',
                               { 'tags': tags,
@@ -354,9 +351,7 @@ def resource_edit_view(request,resource_id):
                 resource.save()
             
             # update file
-            print form.cleaned_data
             file_clear = form.cleaned_data.get("file-clear")
-            print file_clear
             if file_clear:
                 ResourceFile.objects.filter(resource=resource).delete()
                 
@@ -473,11 +468,9 @@ def resource_rate_view(request):
         raise Http404()
     if request.method == 'POST':
         resource_id = request.POST.get('resource_id')
-        print resource_id
         rating = request.POST.get('rating')
         comment = request.POST.get('comment')
         
-        print request.user
         return HttpResponse()
     else:
         raise Http404()   
@@ -546,7 +539,6 @@ def resource_can_edit(resource,user):
 
 def resource_add_free_text_tags(request, form, resource, field, slug):
     free_text_tags = [x.strip() for x in form.cleaned_data.get(field).split(',')]
-    print free_text_tags
     for ftt in free_text_tags:
         if ftt != '':
             try:

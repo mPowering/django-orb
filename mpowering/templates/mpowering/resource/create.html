@@ -12,7 +12,7 @@
 
 <div class="alert alert-info  alert-dismissable">
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-    {% blocktrans %}<strong>Lot of resources to add?</strong> Please contact us about using our API to make it easier for you to upload and maintain your recourses on ORB.{% endblocktrans %}
+    {% blocktrans with settings.MPOWERING_ADMIN_EMAIL as email %}<strong>Lots of resources to add?</strong> Please <a href="mailto:{{ email }}" class="alert-link">contact us</a> about using our API to make it easier for you to upload and maintain your resources on ORB.{% endblocktrans %}
 </div>
 	
 {% crispy form %}

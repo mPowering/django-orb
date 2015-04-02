@@ -154,7 +154,6 @@ class ResourceForm(forms.Form):
         try:
             if file:
                 file_type = file.content_type.split('/')[0]
-                print file_type
 
                 if len(file.name.split('.')) == 1:
                     raise forms.ValidationError(_(u'File type is not supported'))

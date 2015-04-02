@@ -13,4 +13,5 @@ def get_menu(request):
         tags = None   
         
     return {'header_menu_categories': categories, 
-            'header_owns_tags': tags,}
+            'header_owns_tags': tags,
+            'settings': settings,}
