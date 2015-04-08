@@ -34,9 +34,10 @@ class ResourceForm(forms.Form):
                 required=False,
                 error_messages={},)
     health_topic = forms.MultipleChoiceField(
+                        label=_(u'Health domain'),
                         widget=forms.CheckboxSelectMultiple,
                         required=True,
-                        error_messages={'required': _('Please select at least one health topic')},)
+                        error_messages={'required': _('Please select at least one health domain')},)
     resource_type = forms.MultipleChoiceField(
                         widget=forms.CheckboxSelectMultiple,
                         required=True,
