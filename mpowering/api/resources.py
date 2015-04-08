@@ -1,8 +1,11 @@
 
+import json
+
 from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
 from django.core.urlresolvers import reverse
 from django.conf.urls import url
+from django.http import HttpRequest, HttpResponse
 from django.http.response import Http404
 from django.utils.translation import ugettext as _
 
@@ -114,7 +117,12 @@ class ResourceResource(ModelResource):
         
         # check that resource doesn't already exist for this user
         try:
-            Resource.objects.get(create_user=bundle.request.user,title =bundle.data['title'] )
+            resource = Resource.objects.get(create_user=bundle.request.user,title =bundle.data['title'])
+            rr = ResourceResource()
+            bundle = rr.build_bundle(obj=resource,request=request)
+            print bundle
+            #return HttpResponse(#content=json.dumps({'object':'hello'}),
+            #                    content_type="application/json; charset=utf-8")
             raise BadRequest(_(u'You have already uploaded a resource with this title'))
         except Resource.DoesNotExist:
             pass

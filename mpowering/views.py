@@ -24,7 +24,7 @@ from PIL import Image
 
 def home_view(request):
     topics = []
-    tags = Tag.objects.filter(category__slug='health-topic', parent_tag=None).order_by('order_by')
+    tags = Tag.objects.filter(category__top_level=True, parent_tag=None).order_by('order_by')
     for t in tags:
        # get child tags
        child_tags = Tag.objects.filter(parent_tag=t).values_list('id')
@@ -418,7 +418,7 @@ def resource_edit_view(request,resource_id):
         if urls:
             data['url'] = urls[0].url
             
-        health_topic = Tag.objects.filter(category__slug='health-topic', resourcetag__resource=resource).values_list('id',flat=True)
+        health_topic = Tag.objects.filter(category__top_level=True, resourcetag__resource=resource).values_list('id',flat=True)
         data['health_topic'] = health_topic
         
         resource_type = Tag.objects.filter(category__slug='type', resourcetag__resource=resource).values_list('id',flat=True)
@@ -515,7 +515,7 @@ def search_view(request):
 Helper functions
 '''
 def resource_form_set_choices(form):
-    form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='health-topic').order_by('order_by','name')]
+    form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__top_level=True).order_by('order_by','name')]
     form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').order_by('order_by','name')]
     form.fields['audience'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name')]
     #form.fields['geography'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='geography').order_by('order_by','name')]
