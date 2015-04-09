@@ -18,9 +18,12 @@ v1_api.register(ResourceURLResource())
 urlpatterns = patterns('',
 
     url(r'^$', 'mpowering.views.home_view', name="mpowering_home"),
+    
+    url(r'^about/$',TemplateView.as_view(template_name="mpowering/about.html"), name="mpowering_about"),
     url(r'^feed/$', LatestEntries() , name="mpowering_feed"),
-    url(r'^terms/$',TemplateView.as_view(template_name="mpowering/terms.html"), name="mpowering_terms"),
+    url(r'^partners/$', TemplateView.as_view(template_name="mpowering/partners.html"), name="mpowering_partners"),
     url(r'^taxonomy/$', 'mpowering.views.taxonomy_view', name="mpowering_taxonomy"),
+    url(r'^terms/$',TemplateView.as_view(template_name="mpowering/terms.html"), name="mpowering_terms"),
     
     
     url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', 'mpowering.views.tag_view', name="mpowering_tags"),

@@ -36,7 +36,8 @@
 	href="{{ STATIC_URL }}mpowering/images/favicon.ico" />
 <script src="{{ STATIC_URL }}mpowering/js/jquery-1.11.0.min.js"></script>
 <script src="{{ STATIC_URL }}mpowering/ui-lightness/jquery-ui.min.js"></script>
-{% block extra_styles %} {% endblock extra_styles %} {% block extra_scripts %} {% endblock extra_scripts %}
+{% block extra_styles %}{% endblock extra_styles %} 
+{% block extra_scripts %}{% endblock extra_scripts %}
 </head>
 
 <body {% block extra_body %}{% endblock extra_body %}>
@@ -63,10 +64,10 @@
 			</div>
 			<div class="col-md-3 text-muted">
 				<h4>About Us</h4>
-				<a href="#">About</a><br/>
-				<a href="#">Content Review Team</a><br/>
-			    <a href="#">Medical Expert Panel</a><br/>
-			    <a href="#">Partner Organisations</a><br/>
+				<a href="{% url 'mpowering_about' %}">About</a><br/>
+				<a href="{% url 'mpowering_about' %}#crt">Content Review Team</a><br/>
+			    <a href="{% url 'mpowering_about' %}#mep">Medical Expert Panel</a><br/>
+			    <a href="{% url 'mpowering_partners' %}">Content Partners</a><br/>
 			    <a href="{% url 'mpowering_terms' %}">Terms and Privacy Policy</a><br/>
 			    <a href="http://mpowering.readthedocs.org/">Developers Area</a><br/>
 			</div>

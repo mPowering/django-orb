@@ -1,0 +1,26 @@
+{% extends "base.html" %} 
+{% load i18n %} 
+{% block extra_head_title %}
+	{% trans 'About' %}
+{% endblock extra_head_title %} 
+
+{% block content %}
+
+<h2>{% trans 'About ORB' %}</h2>
+{% blocktrans %}
+
+{% endblocktrans %}
+
+
+<h3><a name="crt"></a>{% trans 'Content Review Team' %}</h3>
+{% blocktrans %}
+
+{% endblocktrans %} 
+
+
+<h3><a name="mep"></a>{% trans 'Medical Expert Panel' %}</h3>
+{% blocktrans %}
+
+{% endblocktrans %} 
+
+{% endblock content %}
