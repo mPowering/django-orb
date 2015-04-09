@@ -45,26 +45,28 @@
 	</div>
 {% endif %}
 
+{% if page.object_list %}
 
-<div class="orderby">
-	<form method="get">
-	{% trans 'Order by: ' %}
-	<select name="order" onchange="OnOrderChange(this.form.order);">
-			{% for k,v in ordering %}
-			 		<option value="{% add_get order=k %}" {% if k == current_order %}selected="selected" {% endif %}>
-			 			{{ v }}
-			 		</option>
-			{% endfor %}
-		</select>
-	</form>
-</div>
+	<div class="orderby">
+		<form method="get">
+		{% trans 'Order by: ' %}
+		<select name="order" onchange="OnOrderChange(this.form.order);">
+				{% for k,v in ordering %}
+				 		<option value="{% add_get order=k %}" {% if k == current_order %}selected="selected" {% endif %}>
+				 			{{ v }}
+				 		</option>
+				{% endfor %}
+			</select>
+		</form>
+	</div>
+	{% include "mpowering/includes/page_navigator.html" %}
+	
+	{% for resource in page.object_list %}
+		{% include "mpowering/includes/resource_row.html" %}
+	{% endfor %}
+	
+	{% include "mpowering/includes/page_navigator.html" %}
 
-{% include "mpowering/includes/page_navigator.html" %}
-
-{% for resource in page.object_list %}
-	{% include "mpowering/includes/resource_row.html" %}
-{% endfor %}
-
-{% include "mpowering/includes/page_navigator.html" %}
+{% endif %}
 
 {% endblock %}
