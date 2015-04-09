@@ -19,7 +19,10 @@ urlpatterns = patterns('',
 
     url(r'^$', 'mpowering.views.home_view', name="mpowering_home"),
     url(r'^feed/$', LatestEntries() , name="mpowering_feed"),
+    url(r'^terms/$',TemplateView.as_view(template_name="mpowering/terms.html"), name="mpowering_terms"),
     url(r'^taxonomy/$', 'mpowering.views.taxonomy_view', name="mpowering_taxonomy"),
+    
+    
     url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', 'mpowering.views.tag_view', name="mpowering_tags"),
     url(r'^tag/cloud/$', 'mpowering.views.tag_cloud_view', name="mpowering_tag_cloud"),
     url(r'^tag/feed/(?P<tag_slug>\w[\w/-]*)$', LatestTagEntries() , name="mpowering_tag_feed"),

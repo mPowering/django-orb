@@ -1,0 +1,50 @@
+{% extends "base.html" %} 
+{% load i18n %} 
+{% block extra_head_title %}
+	{% trans 'Terms and Privacy Policy' %}
+{% endblock extra_head_title %} 
+
+{% block content %}
+
+<h2>{% trans 'Terms of Use' %}</h2>
+{% blocktrans %}
+<p>The checklists for clinical procedures are provided for
+	information purposes only. They are intended for use as part of a
+	mastery learning, competency-based training course and are not intended
+	for individuals who have not been trained in the procedure.</p>
+<p>The checklists are tools designed for use in Jhpiego training
+	courses. The checklists focus only on the key steps in the entire
+	procedure. As part of a training course, they are used to guide
+	practice after a participant has become familiar with the procedure
+	using a more detailed learning guide. Finally, they are the assessment
+	tool used by the trainer to determine whether or not the participant
+	has achieved competency in performing the procedure.</p>
+<p>Neither Jhpiego nor any of their employees, makes any warranty,
+	express or implied, including warranties of merchantability and fitness
+	for a particular purpose, or assumes any responsibility for the
+	accuracy, completeness or usefulness of any information from this
+	website or from any websites referenced by this website.</p>
+{% endblocktrans %}
+
+
+<h2>{% trans 'Privacy Policy' %}</h2>
+{% blocktrans %}
+<p>We are committed to protecting your privacy online. When you
+	visit our site, we may collect personal information from you such as
+	your name and e-mail address. Our third party hosting company will
+	collect additional information such as the URL you came from, your IP
+	address, your domain name, your browser type, the country and state
+	where your server is located, and the pages that were viewed during
+	your visit to our site. All this information is kept on a secure server
+	to protect it from outside parties.</p>
+
+<p>We do not sell or rent personal information to others. The
+	funders and partners of the Initiative will not have access to the
+	emails and personal information collected on sharedvalue.org. We use
+	your information only for the limited purposes of sending you updates
+	about our programs, content, and community activity, enhancing the site
+	operation, for statistical purposes, and for overall systems
+	administration. You may opt-out of receiving e-mail updates at any time
+	by contacting info@sharedvalue.org.</p>
+
+{% endblocktrans %} {% endblock content %}
