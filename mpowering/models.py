@@ -231,12 +231,30 @@ class ResourceTag (models.Model):
         
 # UserProfile
 class UserProfile (models.Model):
+    AGE_RANGE = (
+        ('under_18', _('under 18')),
+        ('18_25', _('18-25')),
+        ('25_35', _('25-35')),
+        ('35_50', _('35-50')),
+        ('over_50', _('over 50')),
+        ('none', _('Prefer not to say')),
+    )
+    GENDER = (
+        ('male', _('Male')),
+        ('female', _('Female')),
+        ('none', _('Prefer not to say')),
+    )
+    
     user = models.OneToOneField(User)
     about = models.TextField(blank=True, null=True, default=None)
     job_title = models.TextField(blank=True, null=True, default=None)
-    organisation = models.ForeignKey(Tag)
+    organisation = models.ForeignKey(Tag, related_name='organisation')
+    role = models.ForeignKey(Tag, related_name='role', blank=True, null=True, default=None)
     phone_number = models.TextField(blank=True, null=True, default=None)
     api_access = models.BooleanField(default=False, blank=False)
+    gender = models.CharField(max_length=50,choices=GENDER, default='none')
+    age_range = models.CharField(max_length=50,choices=AGE_RANGE, default='none')
+    mailing = models.BooleanField(default=False, blank=False)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
         
