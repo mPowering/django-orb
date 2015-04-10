@@ -2,10 +2,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{% trans 'ORB' %} - {% block extra_head_title %}{% endblock extra_head_title %}</title>
+<title>{% block extra_head_title %}{% endblock extra_head_title %} - {% trans 'ORB' %}</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <META name="description"
-	content="ORB by mPowering Platform: {% block extra_head_desc %}{% endblock extra_head_desc %}" />
+	content="ORB by mPowering: {% block extra_head_desc %}{% endblock extra_head_desc %}" />
 <META name="keywords"
 	content="mPowering, frontline health workers, orb, open resource bank, 
 			online resource bank, platform, MNCH, maternal, care, post natal, 
@@ -69,7 +69,7 @@
 			    <a href="{% url 'mpowering_about' %}#mep">Medical Expert Panel</a><br/>
 			    <a href="{% url 'mpowering_partners' %}">Content Partners</a><br/>
 			    <a href="{% url 'mpowering_terms' %}">Terms and Privacy Policy</a><br/>
-			    <a href="http://mpowering.readthedocs.org/">Developers Area</a><br/>
+			    <a href="{% url 'mpowering_developers' %}">Developers Area</a><br/>
 			</div>
 			<div class="col-md-3 text-muted">
 				 {{ version }} &copy; {% now "Y" %} <a href="http://mpoweringhealth.org/">mPowering</a>

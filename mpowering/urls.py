@@ -20,6 +20,7 @@ urlpatterns = patterns('',
     url(r'^$', 'mpowering.views.home_view', name="mpowering_home"),
     
     url(r'^about/$',TemplateView.as_view(template_name="mpowering/about.html"), name="mpowering_about"),
+    url(r'^developers/$',TemplateView.as_view(template_name="mpowering/developers.html"), name="mpowering_developers"),
     url(r'^feed/$', LatestEntries() , name="mpowering_feed"),
     url(r'^partners/$', TemplateView.as_view(template_name="mpowering/partners.html"), name="mpowering_partners"),
     url(r'^taxonomy/$', 'mpowering.views.taxonomy_view', name="mpowering_taxonomy"),
