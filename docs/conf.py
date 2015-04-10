@@ -43,7 +43,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'mPowering'
+project = u'ORB'
 copyright = u'2015, mPowering Frontline Health Workers'
 
 # The version info for the project you're documenting, acts as replacement for
