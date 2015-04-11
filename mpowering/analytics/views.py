@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from mpowering.analytics.models import UserLocationVisualization
-from mpowering.models import Resource, SearchTracker, ResourceTracker, Tag
+from mpowering.models import Resource, SearchTracker, ResourceTracker, Tag, TagOwner
 
 # Create your views here.
 
@@ -169,8 +169,9 @@ def is_tag_owner(request,id):
     
     if request.user.is_staff:
         return True
+    
     try:
-        tag_owner = TagOwner.objects.get(tag__pk=id,user=request.user)
+        TagOwner.objects.get(tag__pk=id,user__id=request.user.id)
         return True
     except TagOwner.DoesNotExist:
         return False
