@@ -47,6 +47,9 @@ def register(request):
     
     if request.method == 'POST': # if form submitted...
         form = RegisterForm(request.POST)
+        form.fields['role'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name')]
+        form.fields['gender'].choices = UserProfile.GENDER
+        form.fields['age_range'].choices = UserProfile.AGE_RANGE
         if form.is_valid(): # All validation rules pass
             # Create new user
             username = form.cleaned_data.get("username")
@@ -61,6 +64,10 @@ def register(request):
             user_profile = UserProfile()
             user_profile.user = user
             user_profile.job_title = form.cleaned_data.get("job_title")
+            user_profile.gender = form.cleaned_data.get("gender")
+            user_profile.age_range = form.cleaned_data.get("age_range")
+            role = Tag.objects.get(pk=form.cleaned_data.get("role"))
+            user_profile.role = role
             category = Category.objects.get(slug='organisation')
             try:
                 organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
@@ -81,7 +88,9 @@ def register(request):
             return HttpResponseRedirect('thanks/') # Redirect after POST
     else:
         form = RegisterForm(initial={'next':request.GET.get('next'),})
-
+        form.fields['role'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name')]
+        form.fields['gender'].choices = UserProfile.GENDER
+        form.fields['age_range'].choices = UserProfile.AGE_RANGE
     return render(request, 'mpowering/form.html', {'form': form, 'title': _(u'Register')})
 
 def reset(request):

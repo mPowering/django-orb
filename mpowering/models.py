@@ -233,8 +233,8 @@ class ResourceTag (models.Model):
 class UserProfile (models.Model):
     AGE_RANGE = (
         ('under_18', _('under 18')),
-        ('18_25', _('18-25')),
-        ('25_35', _('25-35')),
+        ('18_25', _('18-24')),
+        ('25_35', _('25-34')),
         ('35_50', _('35-50')),
         ('over_50', _('over 50')),
         ('none', _('Prefer not to say')),
@@ -250,6 +250,7 @@ class UserProfile (models.Model):
     job_title = models.TextField(blank=True, null=True, default=None)
     organisation = models.ForeignKey(Tag, related_name='organisation')
     role = models.ForeignKey(Tag, related_name='role', blank=True, null=True, default=None)
+    role_other = models.TextField(blank=True, null=True, default=None)
     phone_number = models.TextField(blank=True, null=True, default=None)
     api_access = models.BooleanField(default=False, blank=False)
     gender = models.CharField(max_length=50,choices=GENDER, default='none')

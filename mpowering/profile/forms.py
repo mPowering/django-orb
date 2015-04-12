@@ -78,16 +78,30 @@ class RegisterForm(forms.Form):
                                                 'min_length': _(u'Your last name should be at least 2 characters long.')},
                                 min_length=2,
                                 required=True)
+    role = forms.ChoiceField(
+                        widget=forms.RadioSelect,
+                        required=True,
+                        error_messages={'required': _('Please select a role')},)
+    role_other = forms.CharField(max_length=100,required=False)
     job_title = forms.CharField(max_length=100,required=False)
-    organisation = forms.CharField(max_length=100,required=True)
+    organisation = forms.CharField(max_length=100,required=False)
+    age_range = forms.ChoiceField(
+                        widget=forms.RadioSelect,
+                        required=True,
+                        error_messages={'required': _('Please select an age range')},)
+    gender = forms.ChoiceField(
+                        widget=forms.RadioSelect,
+                        required=True,
+                        error_messages={'required': _('Please select a gender')},)
+     
     terms = forms.BooleanField(
                         label=_(u"Please tick the box to confirm that you have read the <a href='/terms/' target='_blank'>terms</a> about registering with mPowering"),            
                         required=True,
                         error_messages={'required': _('Please tick the box to confirm that you have read the terms')})
     mailing = forms.BooleanField(
-                        label=_(u""),            
-                        required=False,
-                        error_messages={'required': _('')})
+                        label=_(u"Please tick the box to subscribe to mPowering update emails"),            
+                        required=False)
+    
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
@@ -104,7 +118,12 @@ class RegisterForm(forms.Form):
                                     'first_name',
                                     'last_name',
                                     'job_title',
+                                    'role',
+                                    'role_other',
                                     'organisation',
+                                    'age_range',
+                                    'gender',
+                                    'mailing',
                                     'terms',
                                 Div(
                                    Submit('submit', _(u'Register'), css_class='btn btn-default'),
