@@ -39,6 +39,13 @@ def home_view(request):
                               {'topics': topics,},
                               context_instance=RequestContext(request))
 
+
+def partner_view(request):
+    partners = Tag.objects.filter(category__slug='organisation').exclude(description=None).exclude(description="").order_by('name')
+    return render_to_response('mpowering/partners.html',
+                              {'partners': partners,},
+                              context_instance=RequestContext(request))
+    
 def tag_view(request,tag_slug):
     try:
         tag = Tag.objects.get(slug=tag_slug)

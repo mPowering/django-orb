@@ -13,12 +13,23 @@
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-  padding-top: 50px;
+  padding-top: 70px;
+}
+.navbar-fixed-top {
+    min-height: 70px; 
+}
+.container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
+    padding-top: 10px;
 }
 
+h3.homepage {
+    margin-bottom: 5px;
+    margin-top: 10px;
+    style: text-align:center;
+}
 
 a {
-    color: #2596b4;
+    color: #033f62;
     text-decoration: none;
 }
 

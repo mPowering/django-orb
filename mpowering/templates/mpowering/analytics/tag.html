@@ -47,10 +47,10 @@
 
 <h2>{% trans 'Analytics for:' %} {{ tag.name }}</h2>
 
-<h3>{% trans 'Activity Graph' %}</h3>
+<h3>{% trans 'Activity Graph (last month)' %}</h3>
 <div id="activity_chart_div" class="graph">{% trans 'graph_generating'%}</div>
 
-<h3>{% trans 'Activity Detail' %}</h3>
+<h3>{% trans 'Activity Detail (last month)' %}</h3>
 
 {% include "mpowering/includes/page_navigator.html" %}
 <table class="table table-condensed">
@@ -71,5 +71,9 @@
 
 {% include "mpowering/includes/page_navigator.html" %}
 
+<h3>{% trans 'Export Analytics' %}</h3>
+
 <a href="{% url 'mpowering_analytics_download' tag.id %} ">{% trans 'Export to Excel' %}</a>
+
+
 {% endblock %}

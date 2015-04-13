@@ -17,14 +17,14 @@
 
 <div style="position: relative; margin: 20px auto; overflow: hidden; text-align: center;">
 {% for t in topics %}
-	<div style="display:inline-block; min-width:270px; min-height:270px; text-align:center; margin: auto;">
+	<div style="display:inline-block; min-width:270px; min-height:240px; text-align:center; margin: auto;">
 		<a href="{% url 'mpowering_tags' t.tag.slug %}">
 			{% thumbnail t.tag.image "220x150" crop="center" as im %}
 				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
 			{% empty %}
     			<p>No image</p>
 			{% endthumbnail %}
-			<h3 style="text-align:center">{{ t.tag.name }}</h3>
+			<h3 class="homepage">{{ t.tag.name }}</h3>
 			{{ t.resource_count }} resource{{ t.resource_count|pluralize }}
 		</a> 
 	</div>

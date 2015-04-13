@@ -8,8 +8,27 @@
 
 <h2>{% trans 'Content Partners' %}</h2>
 {% blocktrans %}
+<p>If you’re interested in being an ORB Content Partner, we would
+	like to hear from you!</p>
 
+<p>As a Content Partner, we will create an ORB partner page with
+	your logo, a short description of your organisation and a link back to
+	your home page. We will also help connect with you other partners who
+	may want to use your content or commission new content from you.</p>
+<p>In return, you will commit to sharing your digital health
+	resources with us using an open content license, including your updated
+	or new resources, and to being an ambassador for ORB (promoting its use
+	by implementers, health workers and others).</p>
+
+<p>To apply to become an ORB Content Partner, please <a href="mailto:info@mpoweringhealth.org">contact us</a>.</p>
 {% endblocktrans %}
 
+<h3>Our content partners include:</h3>
 
+<ul>
+{% for p in partners %}
+	<li>{{ p.name }}</li>
+
+{% endfor %}
+</ul>
 {% endblock content %}
