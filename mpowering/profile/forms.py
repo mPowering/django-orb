@@ -119,7 +119,7 @@ class RegisterForm(forms.Form):
                                     'last_name',
                                     'job_title',
                                     'role',
-                                    'role_other',
+                                    #'role_other',
                                     'organisation',
                                     'age_range',
                                     'gender',

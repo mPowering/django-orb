@@ -307,7 +307,7 @@ def resource_file_view(request, id):
         if not resource_can_view(file.resource,request.user):
             raise Http404() 
         
-        if os.path.isfile(settings.MEDIA_ROOT + file.filename()):
+        if os.path.isfile(os.path.join(settings.MEDIA_ROOT, file.file.name)):
             resource_file_viewed.send(sender=file, resource_file=file, request=request)
             response = HttpResponse(file.file, content_type='application/unknown;charset=utf-8')
             response['Content-Disposition'] = "attachment; filename=" + file.filename()
@@ -524,11 +524,16 @@ def resource_form_set_choices(form):
     return form 
 
 def resource_can_view(resource, user):
+    print "hello"
     if user.is_staff or user == resource.create_user or user == resource.update_user:
+        print "staff or owner"
         return True
     elif resource.status == Resource.APPROVED:
+        print "approved"
         return True
     else:
+        print resource
+        print user
         return False
 
 def resource_can_edit(resource,user):
