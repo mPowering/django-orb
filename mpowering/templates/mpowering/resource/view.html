@@ -38,9 +38,6 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 {% block content %}
 <div id="fb-root"></div>
 
-
-
-
 {% include 'mpowering/includes/search_bar.html' %}
 
 <h3 style="text-align:center">{{ resource.title }}</h3>
@@ -56,16 +53,9 @@ From:
 		{{ o.name }}
 	{% endif %}
 {% endfor %}
-
-<div class="fb-share-button" data-href="http://health-orb.org{% url 'mpowering_resource' resource.slug %}" data-layout="button_count"></div>
-<a class="twitter-share-button"
-  href="https://twitter.com/share"
-  data-url="http://health-orb.org{% url 'mpowering_resource' resource.slug %}"
-  data-via="mpoweringhealth">
-Tweet
-</a>
-
 </p>
+
+
 {% if resource.image %}
 	{% thumbnail resource.image "250x180" format="PNG" padding=True as im %}
 		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="display:block; margin: 20px auto; max-width: 250px" class="thumbnail">
@@ -76,6 +66,22 @@ Tweet
 <p>
 {{ resource.description|safe }}
 </p>
+
+<div class="share-button">
+	<div class="fb-share-button"
+		data-href="http://health-orb.org{% url 'mpowering_resource' resource.slug %}"
+		data-layout="button_count"></div>
+</div>
+<div class="share-button">
+	<a class="twitter-share-button" href="https://twitter.com/share"
+		data-url="http://health-orb.org{% url 'mpowering_resource' resource.slug %}"
+		data-via="mpoweringhealth"> Tweet </a>
+</div>
+<div class="share-button">
+	<script type="text/javascript" src="http://platform.linkedin.com/in.js"></script>
+	<script type="in/share" data-counter="right"></script>
+</div>
+<div style="clear: both"></div>
 
 
 

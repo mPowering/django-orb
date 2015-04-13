@@ -172,6 +172,16 @@ a:hover, a:focus {
 }
 
 /*
+ * Share buttons
+ */
+ 
+.share-button {
+	margin-top:20px;
+	float: left; 
+	width: 100px;
+}
+ 
+/*
  * Forms
  */
  

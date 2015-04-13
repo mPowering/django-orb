@@ -4,6 +4,7 @@ Change log
 13 Apr 2015
 -----------
 * 147: Automatically prepopulate the organisation with the users organisation - http://github.com/mpowering/django-orb/issues/issue/147
+* 75: Links for sharing resources - http://github.com/mpowering/django-orb/issues/issue/75
 
 pre 12 Apr 2015
 ---------------
