@@ -235,7 +235,8 @@ def resource_create_view(request):
             return HttpResponseRedirect(reverse('mpowering_resource_create_thanks', args=[resource.id])) # Redirect after POST
             
     else:
-        form = ResourceForm()
+        user_org = request.user.userprofile.organisation.name
+        form = ResourceForm(initial={'organisations':user_org,})
         resource_form_set_choices(form)
         
     return render_to_response('mpowering/resource/create.html',

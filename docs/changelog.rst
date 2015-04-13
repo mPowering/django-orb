@@ -1,6 +1,12 @@
 Change log
 =====================================
 
+13 Apr 2015
+-----------
+* 147: Automatically prepopulate the organisation with the users organisation - http://github.com/mpowering/django-orb/issues/issue/147
+
+pre 12 Apr 2015
+---------------
 * 133: Added license (GPL) - http://github.com/mPowering/django-mpowering/issues/issue/133
 * 129: If on child tag page - show link back to parent tag - http://github.com/mPowering/django-mpowering/issues/issue/129
 * 126: On tag pages show the child tags (with no resources) - http://github.com/mPowering/django-mpowering/issues/issue/126
