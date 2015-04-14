@@ -240,8 +240,8 @@ class UserProfile (models.Model):
         ('none', _('Prefer not to say')),
     )
     GENDER = (
-        ('male', _('Male')),
         ('female', _('Female')),
+        ('male', _('Male')),
         ('none', _('Prefer not to say')),
     )
     

@@ -1,6 +1,13 @@
 Change log
 =====================================
 
+
+14 Apr 2015
+-----------
+* 111: On registration form use the target user as field - http://github.com/mpowering/django-orb/issues/issue/111
+* 145: For audience allow adding other type on registration page only - http://github.com/mpowering/django-orb/issues/issue/145
+* 146: On user profile add option to opt in/out of getting updates from mpowering - http://github.com/mpowering/django-orb/issues/issue/146
+
 13 Apr 2015
 -----------
 * 147: Automatically prepopulate the organisation with the users organisation - http://github.com/mpowering/django-orb/issues/issue/147

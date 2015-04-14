@@ -47,9 +47,8 @@ def register(request):
     
     if request.method == 'POST': # if form submitted...
         form = RegisterForm(request.POST)
-        form.fields['role'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name')]
-        form.fields['gender'].choices = UserProfile.GENDER
-        form.fields['age_range'].choices = UserProfile.AGE_RANGE
+        build_form_options(form)
+
         if form.is_valid(): # All validation rules pass
             # Create new user
             username = form.cleaned_data.get("username")
@@ -63,11 +62,14 @@ def register(request):
             user.save()
             user_profile = UserProfile()
             user_profile.user = user
-            user_profile.job_title = form.cleaned_data.get("job_title")
-            user_profile.gender = form.cleaned_data.get("gender")
-            user_profile.age_range = form.cleaned_data.get("age_range")
-            role = Tag.objects.get(pk=form.cleaned_data.get("role"))
-            user_profile.role = role
+            if form.cleaned_data.get("gender") != '0':
+                user_profile.gender = form.cleaned_data.get("gender")
+            if form.cleaned_data.get("age_range") != '0':
+                user_profile.age_range = form.cleaned_data.get("age_range")
+            if form.cleaned_data.get("role") != '0':
+                role = Tag.objects.get(pk=form.cleaned_data.get("role"))
+                user_profile.role = role
+            user_profile.role_other = form.cleaned_data.get("role_other")
             category = Category.objects.get(slug='organisation')
             try:
                 organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
@@ -88,9 +90,8 @@ def register(request):
             return HttpResponseRedirect('thanks/') # Redirect after POST
     else:
         form = RegisterForm(initial={'next':request.GET.get('next'),})
-        form.fields['role'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name')]
-        form.fields['gender'].choices = UserProfile.GENDER
-        form.fields['age_range'].choices = UserProfile.AGE_RANGE
+        build_form_options(form)
+
     return render(request, 'mpowering/form.html', {'form': form, 'title': _(u'Register')})
 
 def reset(request):
@@ -147,13 +148,11 @@ def edit(request):
                 
             try:
                 user_profile = UserProfile.objects.get(user=request.user)
-                user_profile.job_title = form.cleaned_data.get("job_title")
                 user_profile.organisation = organisation
                 user_profile.save()
             except UserProfile.DoesNotExist:
                 user_profile = UserProfile()
                 user_profile.user = request.user
-                user_profile.job_title = form.cleaned_data.get("job_title")
                 user_profile.organisation = organisation
                 user_profile.save()
             messages.success(request, _(u"Profile updated"))
@@ -174,7 +173,23 @@ def edit(request):
                                     'first_name':request.user.first_name,
                                     'last_name':request.user.last_name,
                                     'api_key': key.key,
-                                    'job_title': user_profile.job_title,
                                     'organisation': user_profile.organisation,})
         
     return render(request, 'mpowering/profile/profile.html', {'form': form,})
+
+def build_form_options(form):
+    # roles
+    form.fields['role'].choices = [('0','--')]
+    for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name'):
+        form.fields['role'].choices.append((t.id, t.name))
+        
+    # age range
+    form.fields['age_range'].choices = [('0','--')]
+    for x,y in UserProfile.AGE_RANGE:
+        form.fields['age_range'].choices.append((x, y))
+
+    # gender
+    form.fields['gender'].choices = [('0','--')]
+    for x,y in UserProfile.GENDER:
+        form.fields['gender'].choices.append((x, y))
+    return 

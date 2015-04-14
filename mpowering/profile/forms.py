@@ -79,18 +79,19 @@ class RegisterForm(forms.Form):
                                 min_length=2,
                                 required=True)
     role = forms.ChoiceField(
-                        widget=forms.RadioSelect,
-                        required=True,
-                        error_messages={'required': _('Please select a role')},)
-    role_other = forms.CharField(max_length=100,required=False)
-    job_title = forms.CharField(max_length=100,required=False)
+                        widget=forms.Select,
+                        required=False,
+                        help_text=_('Please select from the options above, or enter in the field below:'), )
+    role_other = forms.CharField(label='&nbsp;',
+                                 max_length=100,
+                                 required=False)
     organisation = forms.CharField(max_length=100,required=False)
     age_range = forms.ChoiceField(
-                        widget=forms.RadioSelect,
+                        widget=forms.Select,
                         required=True,
                         error_messages={'required': _('Please select an age range')},)
     gender = forms.ChoiceField(
-                        widget=forms.RadioSelect,
+                        widget=forms.Select,
                         required=True,
                         error_messages={'required': _('Please select a gender')},)
      
@@ -117,9 +118,8 @@ class RegisterForm(forms.Form):
                                     'password_again',
                                     'first_name',
                                     'last_name',
-                                    'job_title',
                                     'role',
-                                    #'role_other',
+                                    'role_other',
                                     'organisation',
                                     'age_range',
                                     'gender',
@@ -153,6 +153,20 @@ class RegisterForm(forms.Form):
             if password != password_again:
                 raise forms.ValidationError( _(u"Passwords do not match."))
 
+        # Check either a role is selected or other is entered
+        role = cleaned_data.get("role")
+        role_other = cleaned_data.get("role_other")
+        if role == '0' and role_other == '':
+            raise forms.ValidationError( _(u"Please select or enter a role"))
+        
+        age_range = cleaned_data.get("age_range")
+        if age_range == '0':
+            raise forms.ValidationError( _(u"Please select an age range"))
+        
+        gender = cleaned_data.get("gender")
+        if gender == '0':
+            raise forms.ValidationError( _(u"Please select a gender"))
+        
         # Always return the full collection of cleaned data.
         return cleaned_data
 
