@@ -1,13 +1,11 @@
 /*
  * Base structure
- #495525 - DC dark green r73,g85,b37
- #77A240 - DC mid green r119,g162, b64
- #a5c727 - DC light green r165,g199,b39
  
  #2596b4 - light blue - r37 g150 b180
  #2a6083 - mid blue - r42 g96 b131
  #033f62 - dark blue - r3 g63 b98
  #ff0054 - pink/red - r255 g0 b84
+ #EF485B
  
  */
 
@@ -34,7 +32,7 @@ a {
 }
 
 a:hover, a:focus {
-    color: #ff0054;
+    color: #EF485B;
     text-decoration: underline;
 }
 
@@ -52,7 +50,7 @@ a:hover, a:focus {
 
 .navbar-inverse {
     background-color: #033f62;
-    border-color: #ff0054;
+    border-color: #EF485B;
 }
 
 .navbar-inverse .navbar-brand {
@@ -230,7 +228,7 @@ a:hover, a:focus {
  */
  
 #footer {
-	border-top: 1px solid #ff0054;
+	border-top: 1px solid #EF485B;
 	margin-top:50px;
 	padding: 20px 0;
 	text-align:right;
