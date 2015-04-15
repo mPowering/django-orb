@@ -102,7 +102,7 @@ def tag_cloud_view(request):
 def tag_filter_view(request):
 
     form = TagFilterForm()
-    resource_form_set_choices(form)
+    tag_filter_form_set_choices(form)
         
     return render_to_response('mpowering/tag_filter.html',
                               {'form': form,
@@ -111,9 +111,9 @@ def tag_filter_view(request):
    
 def tag_filter_results_view(request): 
     form = TagFilterForm(request.GET)
-    resource_form_set_choices(form)
+    tag_filter_form_set_choices(form)
     if form.is_valid():
-        tag_names = ['health_topic','resource_type', 'audience', 'geography', 'device', 'license']
+        tag_names = ['health_topic','resource_type', 'audience', 'geography', 'language', 'device', 'license']
         tag_ids = []
         for tn in tag_names:
             for i in form.cleaned_data.get(tn):
@@ -428,7 +428,8 @@ def resource_edit_view(request,resource_id):
             
         health_topic = Tag.objects.filter(category__top_level=True, resourcetag__resource=resource).values_list('id',flat=True)
         data['health_topic'] = health_topic
-        
+       
+         
         resource_type = Tag.objects.filter(category__slug='type', resourcetag__resource=resource).values_list('id',flat=True)
         data['resource_type'] = resource_type
         
@@ -526,7 +527,16 @@ def resource_form_set_choices(form):
     form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__top_level=True).order_by('order_by','name')]
     form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').order_by('order_by','name')]
     form.fields['audience'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name')]
-    #form.fields['geography'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='geography').order_by('order_by','name')]
+    form.fields['device'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='device').order_by('order_by','name')]
+    form.fields['license'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='license').order_by('order_by','name')]
+    return form 
+
+def tag_filter_form_set_choices(form):
+    form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__top_level=True).order_by('order_by','name')]
+    form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').order_by('order_by','name')]
+    form.fields['audience'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name')]
+    form.fields['geography'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='geography').order_by('order_by','name')]
+    form.fields['language'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='language').order_by('order_by','name')]
     form.fields['device'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='device').order_by('order_by','name')]
     form.fields['license'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='license').order_by('order_by','name')]
     return form 

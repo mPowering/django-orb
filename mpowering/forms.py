@@ -227,6 +227,9 @@ class TagFilterForm(forms.Form):
     geography = forms.MultipleChoiceField(
                         widget=forms.CheckboxSelectMultiple,
                         required=False,)
+    language = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
     device = forms.MultipleChoiceField(
                         widget=forms.CheckboxSelectMultiple,
                         required=False,)
@@ -250,6 +253,8 @@ class TagFilterForm(forms.Form):
                 'audience',
                 Row (HTML('<hr>')),
                 'geography',
+                Row (HTML('<hr>')),
+                'language',
                 Row (HTML('<hr>')),
                 'device',
                 Row (HTML('<hr>')),
