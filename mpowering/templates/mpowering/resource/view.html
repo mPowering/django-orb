@@ -47,11 +47,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 <p style="text-align:center">
 From:
 {% for o in resource.get_organisations %}
-	{% if o.external_url %}
-		<a href="{{ o.external_url }}" target="_blank">{{ o.name }} </a>
-	{% else %}
-		{{ o.name }}
-	{% endif %}
+	<a href="{% url 'mpowering_tags' o.slug %}">{{ o.name }} </a>
 {% endfor %}
 </p>
 
