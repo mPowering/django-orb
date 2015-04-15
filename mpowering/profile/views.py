@@ -70,6 +70,7 @@ def register(request):
                 role = Tag.objects.get(pk=form.cleaned_data.get("role"))
                 user_profile.role = role
             user_profile.role_other = form.cleaned_data.get("role_other")
+            
             category = Category.objects.get(slug='organisation')
             try:
                 organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
@@ -81,6 +82,9 @@ def register(request):
                 organisation.update_user = user
                 organisation.save()
             user_profile.organisation = organisation
+            
+            user_profile.mailing= form.cleaned_data.get("mailing")
+            
             user_profile.save()
             u = authenticate(username=username, password=password)
             if u is not None:
@@ -125,6 +129,7 @@ def edit(request):
     key = ApiKey.objects.get(user = request.user)
     if request.method == 'POST':
         form = ProfileForm(request.POST)
+        build_form_options(form, blank_options=False)
         if form.is_valid():
             # update basic data
             email = form.cleaned_data.get("email")
@@ -148,13 +153,21 @@ def edit(request):
                 
             try:
                 user_profile = UserProfile.objects.get(user=request.user)
-                user_profile.organisation = organisation
-                user_profile.save()
             except UserProfile.DoesNotExist:
                 user_profile = UserProfile()
                 user_profile.user = request.user
-                user_profile.organisation = organisation
-                user_profile.save()
+                
+            user_profile.organisation = organisation
+            if form.cleaned_data.get("role") != '0':
+                role = Tag.objects.get(pk=form.cleaned_data.get("role"))
+                user_profile.role = role
+            else: 
+                user_profile.role = None
+            user_profile.role_other = form.cleaned_data.get("role_other")
+            user_profile.gender = form.cleaned_data.get("gender")
+            user_profile.age_range = form.cleaned_data.get("age_range")
+            user_profile.mailing= form.cleaned_data.get("mailing")
+            user_profile.save()
             messages.success(request, _(u"Profile updated"))
             
             # if password should be changed
@@ -168,28 +181,44 @@ def edit(request):
             user_profile = UserProfile.objects.get(user=request.user)
         except UserProfile.DoesNotExist:
             user_profile = UserProfile()
+        
+        if user_profile.role is not None:
+            role = user_profile.role.id
+        else:
+            role = 0
         form = ProfileForm(initial={'username':request.user.username,
                                     'email':request.user.email,
                                     'first_name':request.user.first_name,
                                     'last_name':request.user.last_name,
                                     'api_key': key.key,
-                                    'organisation': user_profile.organisation,})
+                                    'organisation': user_profile.organisation,
+                                    'role': role,
+                                    'role_other': user_profile.role_other,
+                                    'age_range': user_profile.age_range,
+                                    'gender': user_profile.gender,
+                                    'mailing': user_profile.mailing })
+        build_form_options(form, blank_options=False)
         
     return render(request, 'mpowering/profile/profile.html', {'form': form,})
 
-def build_form_options(form):
+def build_form_options(form, blank_options=True):
     # roles
-    form.fields['role'].choices = [('0','--')]
+    form.fields['role'].choices = [('0','--')]    
     for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name'):
         form.fields['role'].choices.append((t.id, t.name))
-        
+     
+    if blank_options == True: 
+        form.fields['age_range'].choices = [('0','--')]
+        form.fields['gender'].choices = [('0','--')]
+    else: 
+        form.fields['age_range'].choices = []
+        form.fields['gender'].choices = []
+           
     # age range
-    form.fields['age_range'].choices = [('0','--')]
     for x,y in UserProfile.AGE_RANGE:
         form.fields['age_range'].choices.append((x, y))
 
     # gender
-    form.fields['gender'].choices = [('0','--')]
     for x,y in UserProfile.GENDER:
         form.fields['gender'].choices.append((x, y))
     return 

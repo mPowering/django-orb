@@ -224,8 +224,25 @@ class ProfileForm(forms.Form):
     last_name = forms.CharField(max_length=100,
                                 min_length=2,
                                 required=True)
-    job_title = forms.CharField(max_length=100,required=False)
+    role = forms.ChoiceField(
+                        widget=forms.Select,
+                        required=False,
+                        help_text=_('Please select from the options above, or enter in the field below:'), )
+    role_other = forms.CharField(label='&nbsp;',
+                                 max_length=100,
+                                 required=False)
     organisation = forms.CharField(max_length=100,required=False)
+    age_range = forms.ChoiceField(
+                        widget=forms.Select,
+                        required=True,
+                        error_messages={'required': _('Please select an age range')},)
+    gender = forms.ChoiceField(
+                        widget=forms.Select,
+                        required=True,
+                        error_messages={'required': _('Please select a gender')},)
+    mailing = forms.BooleanField(
+                        label=_(u"Please tick the box to subscribe to mPowering update emails"),            
+                        required=False)
     
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
@@ -263,8 +280,12 @@ class ProfileForm(forms.Form):
                     'email',
                     'first_name',
                     'last_name',
-                    'job_title',
+                    'role',
+                    'role_other',
                     'organisation',
+                    'age_range',
+                    'gender',
+                    'mailing',
                     Div(
                         HTML("""<h3>"""+_(u'Change password') + """</h3>"""),
                         ),
