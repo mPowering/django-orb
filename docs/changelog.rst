@@ -1,6 +1,10 @@
 Change log
 =====================================
 
+15 Apr 2015
+-----------
+* 152: Add extra registration info to the profile page - http://github.com/mpowering/django-orb/issues/issue/152
+* 153: Finish up tag/organisation/country page - http://github.com/mpowering/django-orb/issues/issue/153
 
 14 Apr 2015
 -----------

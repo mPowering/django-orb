@@ -195,6 +195,7 @@ class Tag (models.Model):
     external_url =  models.URLField(blank=True, null=True, default=None, max_length=500)
     description = models.TextField(blank=True, null=True, default=None)
     summary = models.CharField(blank=True, null=True, max_length=100)
+    contact_email = models.CharField(blank=True, null=True, max_length=100)
     
     class Meta:
         verbose_name = _('Tag')
