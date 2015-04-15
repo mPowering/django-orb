@@ -5,6 +5,7 @@ Change log
 -----------
 * 152: Add extra registration info to the profile page - http://github.com/mpowering/django-orb/issues/issue/152
 * 153: Finish up tag/organisation/country page - http://github.com/mpowering/django-orb/issues/issue/153
+* 148: On org analytics page allow download by month - http://github.com/mpowering/django-orb/issues/issue/148
 
 14 Apr 2015
 -----------

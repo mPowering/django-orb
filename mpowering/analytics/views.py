@@ -119,14 +119,18 @@ def tag_view(request,id):
     except (EmptyPage, InvalidPage):
         trackers = paginator.page(paginator.num_pages)
     
+    # get the monthly trackers
+    export = ResourceTracker.objects.filter(resource__resourcetag__tag=tag,resource__status=Resource.APPROVED).datetimes('access_date','month','DESC')
+    
     return render_to_response('mpowering/analytics/tag.html',
                               { 'tag': tag,
                                'recent_activity': recent_activity,
-                               'page':trackers,},
+                               'page': trackers,
+                               'export': export },
                               context_instance=RequestContext(request))
 
 
-def tag_download(request,id):
+def tag_download(request,id, year, month):
     if not is_tag_owner(request, id):
         return HttpResponse(status=401,content="Not Authorized")
     
@@ -135,7 +139,7 @@ def tag_download(request,id):
     headers = ('Date', 'Resource', 'Resource File/URL', 'IP Address', 'User Agent', 'Country', 'Lat', 'Lng', 'Location')
     data = []
     data = tablib.Dataset(*data, headers=headers)
-    trackers = ResourceTracker.objects.filter(resource__resourcetag__tag=tag,resource__status=Resource.APPROVED).order_by('-access_date')
+    trackers = ResourceTracker.objects.filter(resource__resourcetag__tag=tag,resource__status=Resource.APPROVED,access_date__month=month, access_date__year=year).order_by('access_date')
     for t in trackers:
         if t.resource_file:
             object = t.resource_file.filename

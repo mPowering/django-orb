@@ -73,7 +73,11 @@
 
 <h3>{% trans 'Export Analytics' %}</h3>
 
-<a href="{% url 'mpowering_analytics_download' tag.id %} ">{% trans 'Export to Excel' %}</a>
+<ul>
+{% for e in export %}
+	<li><a href="{% url 'mpowering_analytics_download' tag.id e|date:"Y" e|date:"n" %} ">{{ e|date:"M Y" }}</a></li>
+{% endfor %}
+</ul>
 
 
 {% endblock %}
