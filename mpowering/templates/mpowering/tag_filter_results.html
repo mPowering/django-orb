@@ -6,15 +6,18 @@
 
 {% include 'mpowering/includes/search_bar.html' %}
 
-<h2 style="text-align:center">{% trans 'Resources tagged with: ' %}
+<h3>{% trans 'Resources tagged with: ' %}
 {% for tf in filter_tags %}
 	{{ tf.name }}{% if not forloop.last %}, {% endif %} 
-{% endfor %}</h2>
+{% endfor %}</h3>
 
 {% include "mpowering/includes/page_navigator.html" %}
 
 {% for resource in page.object_list %}
 	{% include "mpowering/includes/resource_row.html" %}
+{% empty %}
+	{% trans 'Sorry, no resources were found matching your criteria.' %}
+	
 {% endfor %}
 
 {% include "mpowering/includes/page_navigator.html" %}
