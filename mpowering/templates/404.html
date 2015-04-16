@@ -2,8 +2,11 @@
 {% load i18n %} 
 {% block content %}
 <h2>{% trans 'Page not found' %}</h2>
+
+{% url 'mpowering_home' as home %}
+{% url 'mpowering_search' as search %}
 {% blocktrans %}
 <p>The page you were looking for was not found.</p>
-<p>Return to the <a href="{% url 'mpowering_home' %}">homepage</a> or try a <a href="{% url 'mpowering_search' %}">search</a></p>
+<p>Return to the <a href="{{ home }}">homepage</a> or try a <a href="{{ search }}">search</a></p>
 {% endblocktrans %}
 {% endblock content %}

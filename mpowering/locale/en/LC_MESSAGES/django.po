@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-05 12:44+0100\n"
+"POT-Creation-Date: 2015-04-15 20:59-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,174 +17,279 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: forms.py:17
+#: api/resources.py:113
+msgid "No title provided"
+msgstr ""
+
+#: api/resources.py:116
+msgid "No description provided"
+msgstr ""
+
+#: api/resources.py:126
+msgid "You have already uploaded a resource with this title"
+msgstr ""
+
+#: api/validation.py:13
+msgid "You do not have API access"
+msgstr ""
+
+#: forms.py:18
 msgid "Please enter a title"
 msgstr ""
 
-#: forms.py:19
+#: forms.py:20
 msgid "Comma separated if entering more than one organisation"
 msgstr ""
 
-#: forms.py:21
+#: forms.py:22
 msgid "Please enter at least one organisation"
 msgstr ""
 
-#: forms.py:25
+#: forms.py:26
 msgid "Please enter a description"
 msgstr ""
 
-#: forms.py:32
-msgid "Either a file or a url is required"
+#: forms.py:37
+msgid "Health domain"
 msgstr ""
 
-#: forms.py:39
-msgid "Please select at least one health topic"
+#: forms.py:40
+msgid "Please select at least one health domain"
 msgstr ""
 
-#: forms.py:43
+#: forms.py:44
 msgid "Please select at least one resource type"
 msgstr ""
 
-#: forms.py:47
+#: forms.py:48
 msgid "Please select at least one audience"
 msgstr ""
 
 #: forms.py:51
-msgid "Please select at least one geographical area"
+msgid ""
+"The geographic area the resource is designed for, may be region e.g. "
+"(\"Africa\", \"East Africa\") or country (e.g. \"Ethiopia\", \"Mali\"). "
+"Comma separated if entering more than one geography"
+msgstr ""
+
+#: forms.py:52
+msgid "Please enter at least one geographical area"
 msgstr ""
 
 #: forms.py:55
+msgid ""
+"The languages the resource uses. Comma separated if entering more than one "
+"language"
+msgstr ""
+
+#: forms.py:56
+msgid "Please enter at least one language"
+msgstr ""
+
+#: forms.py:60
 msgid "Please select at least one device"
 msgstr ""
 
-#: forms.py:59
+#: forms.py:64
 msgid "Please select a license"
 msgstr ""
 
-#: forms.py:61
+#: forms.py:66
 msgid ""
 "Please enter any other relevant tags for this resource, comma separated if "
 "entering more than one tag"
 msgstr ""
 
-#: forms.py:96 profile/forms.py:232 profile/forms.py:249
+#: forms.py:70
+msgid ""
+"Please tick the box to confirm that you have read the <a href='/resource/"
+"guidelines/' target='_blank'>guidelines</a> about submitting resources to "
+"mPowering"
+msgstr ""
+
+#: forms.py:72
+msgid ""
+"Please tick the box to confirm that you have read the guidelines for "
+"submitting resources to mPowering"
+msgstr ""
+
+#: forms.py:94
+msgid ""
+"<p class=\"col-lg-offset-2\">Please either upload a file and/or submit a "
+"url. Our preference is that the actual resource file is uploaded, but if you "
+"submit a url, please ensure this is a direct download for the resource.</p>"
+msgstr ""
+
+#: forms.py:133 profile/forms.py:299 profile/forms.py:316
 msgid "Save"
 msgstr ""
 
-#: forms.py:107
+#: forms.py:144
 msgid "Please correct the errors below and resubmit the form."
 msgstr ""
 
-#: forms.py:110
+#: forms.py:146
 msgid "Please submit a file and/or a url for this resource"
 msgstr ""
 
-#: forms.py:122 forms.py:128
+#: forms.py:148
+msgid "You have entered a study time, but not selected a unit."
+msgstr ""
+
+#: forms.py:160 forms.py:166
 msgid "File type is not supported"
 msgstr ""
 
-#: forms.py:126
+#: forms.py:164
 #, python-format
 msgid ""
 "Please keep filesize under %(max_size)s. Current filesize %(actual_size)s"
 msgstr ""
 
-#: forms.py:142
+#: forms.py:180
 msgid "This does not appear to be a valid Url"
 msgstr ""
 
-#: forms.py:148 forms.py:164
+#: forms.py:186 forms.py:202
 msgid "Please enter something to search for"
 msgstr ""
 
-#: forms.py:158 forms.py:176
+#: forms.py:196 forms.py:264
 msgid "Go"
 msgstr ""
 
-#: models.py:47
+#: forms.py:214 templates/mpowering/search.html:5
+#: templates/mpowering/search.html.py:9
+msgid "Search"
+msgstr ""
+
+#: models.py:27
 msgid "Rejected"
 msgstr ""
 
-#: models.py:48
-msgid "Pending"
+#: models.py:28 templates/mpowering/analytics/home.html:54
+#: templates/mpowering/analytics/home.html:66
+msgid "Pending CRT"
 msgstr ""
 
-#: models.py:49
+#: models.py:29
+msgid "Pending MRT"
+msgstr ""
+
+#: models.py:30
 msgid "Approved"
 msgstr ""
 
-#: models.py:63
+#: models.py:38
+msgid "Mins"
+msgstr ""
+
+#: models.py:39
+msgid "Hours"
+msgstr ""
+
+#: models.py:40
+msgid "Days"
+msgstr ""
+
+#: models.py:41
+msgid "Weeks"
+msgstr ""
+
+#: models.py:58 templates/mpowering/analytics/tag.html:60
 msgid "Resource"
 msgstr ""
 
-#: models.py:64
+#: models.py:59
 msgid "Resources"
 msgstr ""
 
-#: models.py:145
+#: models.py:146
 msgid "is translation of"
 msgstr ""
 
-#: models.py:146
+#: models.py:147
 msgid "is derivative of"
 msgstr ""
 
-#: models.py:147
+#: models.py:148
 msgid "is contained in"
 msgstr ""
 
-#: models.py:167
+#: models.py:168
 msgid "Category"
 msgstr ""
 
-#: models.py:168
+#: models.py:169
 msgid "Categories"
 msgstr ""
 
-#: models.py:197
+#: models.py:201
 msgid "Tag"
 msgstr ""
 
-#: models.py:198
+#: models.py:202
 msgid "Tags"
 msgstr ""
 
-#: models.py:228
+#: models.py:236
+msgid "under 18"
+msgstr ""
+
+#: models.py:237
+msgid "18-24"
+msgstr ""
+
+#: models.py:238
+msgid "25-34"
+msgstr ""
+
+#: models.py:239
+msgid "35-50"
+msgstr ""
+
+#: models.py:240
+msgid "over 50"
+msgstr ""
+
+#: models.py:241 models.py:246
+msgid "Prefer not to say"
+msgstr ""
+
+#: models.py:244
+msgid "Female"
+msgstr ""
+
+#: models.py:245
+msgid "Male"
+msgstr ""
+
+#: models.py:270
 msgid "View"
 msgstr ""
 
-#: models.py:229
+#: models.py:271
 msgid "View-api"
 msgstr ""
 
-#: models.py:230 views.py:56
+#: models.py:272 views.py:171
 msgid "Edit"
 msgstr ""
 
-#: models.py:231
+#: models.py:273
 msgid "Download"
 msgstr ""
 
-#: models.py:232
+#: models.py:274
 msgid "Create"
 msgstr ""
 
-#: models.py:248
+#: models.py:296
 msgid "search"
 msgstr ""
 
-#: models.py:249
+#: models.py:297
 msgid "search-api"
-msgstr ""
-
-#: views.py:51
-msgid ""
-"This resource is not yet approved by the mPowering Content Review Team, so "
-"is not yet available for all users to view"
-msgstr ""
-
-#: views.py:69
-msgid "You need to be logged in to add a resource."
 msgstr ""
 
 #: profile/forms.py:19 profile/forms.py:56
@@ -195,7 +300,7 @@ msgstr ""
 msgid "Please enter a password."
 msgstr ""
 
-#: profile/forms.py:37 profile/views.py:44 templates/includes/header.html:32
+#: profile/forms.py:37 profile/views.py:44 templates/includes/header.html:46
 msgid "Login"
 msgstr ""
 
@@ -207,7 +312,7 @@ msgstr ""
 msgid "Invalid username or password. Please try again."
 msgstr ""
 
-#: profile/forms.py:58 profile/forms.py:170
+#: profile/forms.py:58 profile/forms.py:212
 msgid "Please enter a valid e-mail address."
 msgstr ""
 
@@ -243,67 +348,101 @@ msgstr ""
 msgid "Your last name should be at least 2 characters long."
 msgstr ""
 
-#: profile/forms.py:101 profile/views.py:83 templates/includes/header.html:33
+#: profile/forms.py:84 profile/forms.py:230
+msgid "Please select from the options above, or enter in the field below:"
+msgstr ""
+
+#: profile/forms.py:92 profile/forms.py:164 profile/forms.py:238
+msgid "Please select an age range"
+msgstr ""
+
+#: profile/forms.py:96 profile/forms.py:168 profile/forms.py:242
+msgid "Please select a gender"
+msgstr ""
+
+#: profile/forms.py:99
+msgid ""
+"Please tick the box to confirm that you have read the <a href='/terms/' "
+"target='_blank'>terms</a> about registering with mPowering"
+msgstr ""
+
+#: profile/forms.py:101
+msgid "Please tick the box to confirm that you have read the terms"
+msgstr ""
+
+#: profile/forms.py:103 profile/forms.py:244
+msgid "Please tick the box to subscribe to mPowering update emails"
+msgstr ""
+
+#: profile/forms.py:129 profile/views.py:99 templates/includes/header.html:47
 msgid "Register"
 msgstr ""
 
-#: profile/forms.py:116
+#: profile/forms.py:144
 msgid "Username has already been registered, please select another."
 msgstr ""
 
-#: profile/forms.py:121
+#: profile/forms.py:149
 msgid "Email has already been registered"
 msgstr ""
 
-#: profile/forms.py:126 profile/forms.py:269
+#: profile/forms.py:154 profile/forms.py:336
 msgid "Passwords do not match."
 msgstr ""
 
-#: profile/forms.py:133
-msgid "Please enter a username or email address."
-msgstr ""
-
-#: profile/forms.py:147 profile/views.py:110
-msgid "Reset password"
-msgstr ""
-
-#: profile/forms.py:161
-msgid "Username/email not found"
-msgstr ""
-
-#: profile/forms.py:166
-msgid "You cannot edit your API Key."
-msgstr ""
-
-#: profile/forms.py:168
-msgid "You cannot edit your username."
+#: profile/forms.py:160
+msgid "Please select or enter a role"
 msgstr ""
 
 #: profile/forms.py:175
-msgid "Your new password should be at least 6 characters long"
+msgid "Please enter a username or email address."
+msgstr ""
+
+#: profile/forms.py:189 profile/views.py:126
+msgid "Reset password"
+msgstr ""
+
+#: profile/forms.py:203
+msgid "Username/email not found"
+msgstr ""
+
+#: profile/forms.py:208
+msgid "You cannot edit your API Key."
 msgstr ""
 
 #: profile/forms.py:210
+msgid "You cannot edit your username."
+msgstr ""
+
+#: profile/forms.py:217
+msgid "Your new password should be at least 6 characters long"
+msgstr ""
+
+#: profile/forms.py:269
 msgid "Photo"
 msgstr ""
 
-#: profile/forms.py:214
+#: profile/forms.py:273
 msgid "Update your gravatar"
 msgstr ""
 
-#: profile/forms.py:227 profile/forms.py:244
+#: profile/forms.py:290 profile/forms.py:311
 msgid "Change password"
 msgstr ""
 
-#: profile/forms.py:262
+#: profile/forms.py:295
+msgid "API Key"
+msgstr ""
+
+#: profile/forms.py:329
 msgid "Email address already in use"
 msgstr ""
 
-#: profile/views.py:146
+#: profile/views.py:171
 msgid "Profile updated"
 msgstr ""
 
-#: profile/views.py:153
+#: profile/views.py:178
 msgid "Password updated"
 msgstr ""
 
@@ -311,10 +450,13 @@ msgstr ""
 msgid "Page not found"
 msgstr ""
 
-#: templates/404.html:5
+#: templates/404.html:8
+#, python-format
 msgid ""
 "\n"
 "<p>The page you were looking for was not found.</p>\n"
+"<p>Return to the <a href=\"%(home)s\">homepage</a> or try a <a href="
+"\"%(search)s\">search</a></p>\n"
 msgstr ""
 
 #: templates/500.html:4
@@ -328,66 +470,345 @@ msgid ""
 "administrator.</p>\n"
 msgstr ""
 
-#: templates/base.html:6 templates/includes/header.html:12
-msgid "mPowering"
+#: templates/base.html:5 templates/includes/header.html:11
+#: templates/search/opensearch.html:3
+msgid "ORB"
 msgstr ""
 
-#: templates/base.html:50
-msgid "About"
+#: templates/includes/header.html:16 templates/mpowering/home.html:5
+msgid "Home"
 msgstr ""
 
 #: templates/includes/header.html:27
-#: templates/mpowering/resource/create.html:10
+#: templates/mpowering/resource/create.html:8
+#: templates/mpowering/resource/create.html:11
 msgid "Add Resource"
 msgstr ""
 
-#: templates/includes/header.html:29
+#: templates/includes/header.html:30 templates/mpowering/analytics/home.html:4
+#: templates/mpowering/analytics/home.html:51
+#: templates/mpowering/analytics/tag.html:3
+msgid "Analytics"
+msgstr ""
+
+#: templates/includes/header.html:36
+msgid "Site analytics"
+msgstr ""
+
+#: templates/includes/header.html:37
+#: templates/mpowering/analytics/home.html:59
+#: templates/mpowering/analytics/home.html:125
+#: templates/mpowering/analytics/map.html:3
+#: templates/mpowering/analytics/map.html:7
+msgid "Activity Map"
+msgstr ""
+
+#: templates/includes/header.html:43
 msgid "Profile"
 msgstr ""
 
-#: templates/includes/header.html:30
+#: templates/includes/header.html:44
 msgid "Logout"
 msgstr ""
 
+#: templates/mpowering/about.html:4
+msgid "About"
+msgstr ""
+
+#: templates/mpowering/about.html:9
+msgid "About ORB"
+msgstr ""
+
+#: templates/mpowering/about.html:10
+msgid ""
+"\n"
+"\n"
+"<p>ORB offers frontline health workers and trainers access to\n"
+"\tquality assured open source content that can be used on mobile devices\n"
+"\tand shared virally amongst communities.</p>\n"
+"\n"
+"<p>ORB has three unique features:\n"
+"<ol>\n"
+"\t<li>Brings into one space quality-assured, multimedia materials\n"
+"\t\tfrom multiple content developers, with a focus on maternal and child\n"
+"\t\thealth.</li>\n"
+"\t<li>Adaptation of existing content ORB aims to reduce the practice\n"
+"\t\tof new content being developed unnecessarily.</li>\n"
+"\t<li>A global collaborative network of organizations to share and\n"
+"\t\treview content, integrate content into programs and share\n"
+"\t\tuser-experience.</li>\n"
+"</ol>\n"
+"</p>\n"
+"\n"
+"<p>By improving access to health content and mobile learning, ORB\n"
+"\thelps health workers access the vital content they need to do their\n"
+"\twork effectively and confidently.</p>\n"
+"\n"
+"<p>\n"
+"\tORB has been developed by the <a href=\"http://mpoweringhealth.org"
+"\">mPowering\n"
+"\t\tFrontline Health Workers</a> partnership.\n"
+"</p>\n"
+"\n"
+msgstr ""
+
+#: templates/mpowering/about.html:41
+msgid "Content Review Team"
+msgstr ""
+
+#: templates/mpowering/about.html:42 templates/mpowering/about.html.py:48
+msgid ""
+"\n"
+"\n"
+msgstr ""
+
+#: templates/mpowering/about.html:47
+msgid "Medical Expert Panel"
+msgstr ""
+
+#: templates/mpowering/about.html:52
+msgid "Photo Credits"
+msgstr ""
+
+#: templates/mpowering/about.html:53
+msgid ""
+"\n"
+"Credits for homepage photos:\n"
+"<ul>\n"
+"<li></li>\n"
+"<li></li>\n"
+"<li></li>\n"
+"<li></li>\n"
+"<li></li>\n"
+"<li></li>\n"
+"</ul>\n"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:18
+#: templates/mpowering/analytics/tag.html:17
+#: templates/mpowering/analytics/tag.html:59
+msgid "Date"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:19
+#: templates/mpowering/analytics/tag.html:18
+msgid "Total"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:20
+#: templates/mpowering/analytics/tag.html:19
+msgid "Resource Views"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:21
+#: templates/mpowering/analytics/tag.html:20
+msgid "Resource File Views"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:22
+#: templates/mpowering/analytics/tag.html:21
+msgid "Resource URL Views"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:23
+msgid "Searches"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:38
+#: templates/mpowering/analytics/tag.html:35
+msgid "Activity"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:53
+#: templates/mpowering/analytics/home.html:62
+msgid "Activity Graph"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:55
+#: templates/mpowering/analytics/home.html:71
+#: templates/mpowering/analytics/home.html:80
+msgid "Pending MEP"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:56
+msgid "Popular Searches"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:57
+msgid "Popular Resources"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:58
+#: templates/mpowering/analytics/home.html:117
+msgid "Organisations"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:63
+#: templates/mpowering/analytics/tag.html:51
+msgid "graph_generating"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:70
+#: templates/mpowering/analytics/home.html:84
+msgid "Preview"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:72
+#: templates/mpowering/analytics/home.html:85 views.py:188
+msgid "Approve"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:73
+#: templates/mpowering/analytics/home.html:86 views.py:183
+msgid "Reject"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:75
+msgid "No resources pending CRT review"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:88
+msgid "No resources pending MEP review"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:93
+msgid "Popular Searches (last month)"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:101
+msgid "Popular Resources (last month)"
+msgstr ""
+
+#: templates/mpowering/analytics/home.html:109
+msgid "Searches with no results (last 3 months)"
+msgstr ""
+
+#: templates/mpowering/analytics/tag.html:48
+msgid "Analytics for:"
+msgstr ""
+
+#: templates/mpowering/analytics/tag.html:50
+msgid "Activity Graph (last month)"
+msgstr ""
+
+#: templates/mpowering/analytics/tag.html:53
+msgid "Activity Detail (last month)"
+msgstr ""
+
+#: templates/mpowering/analytics/tag.html:61
+msgid "Location"
+msgstr ""
+
+#: templates/mpowering/analytics/tag.html:62
+msgid "Resource File/URL"
+msgstr ""
+
+#: templates/mpowering/analytics/tag.html:74
+msgid "Export Analytics"
+msgstr ""
+
+#: templates/mpowering/developers.html:4 templates/mpowering/developers.html:9
+msgid "Developers Area"
+msgstr ""
+
+#: templates/mpowering/developers.html:10
+msgid ""
+"\n"
+"<p>Here is a brief overview of the technologies behind the ORB platform.</"
+"p>\n"
+"<p>\n"
+"\tAll the core code is released under an GNU GPL v3 open source license and\n"
+"\tcan be found on <a href=\"https://github.com/mPowering/django-orb"
+"\">GitHub</a>.\n"
+"</p>\n"
+"\n"
+"<ul>\n"
+"\t<li>the core of the code is written in the <a\n"
+"\t\thref=\"https://www.djangoproject.com/\">Django framework</a></li>\n"
+"\t<li>the front-end interface uses the <a\n"
+"\t\thref=\"http://getbootstrap.com/\">Bootstrap 3 framework</a></li>\n"
+"\t<li>the REST API has been developed using the <a\n"
+"\t\thref=\"http://tastypieapi.org/\">Tastypie framework</a></li>\n"
+"\t<li>the search functionality is powered by <a\n"
+"\t\thref=\"https://lucene.apache.org/solr/\">Apache Solr</a></li>\n"
+"</ul>\n"
+"\n"
+"<p>\n"
+"\tInformation on how to use the ORB platform API can be found in our <a\n"
+"\t\thref=\"http://mpowering.readthedocs.org/\">documentation site</a>\n"
+"</p>\n"
+"\n"
+msgstr ""
+
+#: templates/mpowering/includes/page_navigator.html:7
+msgid "previous"
+msgstr ""
+
+#: templates/mpowering/includes/page_navigator.html:11
+#, python-format
+msgid "Page %(i)s of %(x)s"
+msgstr ""
+
+#: templates/mpowering/includes/page_navigator.html:15
+msgid "next"
+msgstr ""
+
+#: templates/mpowering/includes/resource_row.html:11
+msgid "from "
+msgstr ""
+
+#: templates/mpowering/login_required.html:3
 #: templates/mpowering/login_required.html:6
 msgid "Login required"
 msgstr ""
 
-#: templates/mpowering/login_required.html:12
+#: templates/mpowering/login_required.html:14
 #, python-format
 msgid ""
-"Please <a href=\"%(login)s\">login</a> or <a href=\"%(register)s\">register</"
-"a>"
+"Please <a href=\"%(login)s\" class=\"alert-link\">login</a> or <a href="
+"\"%(register)s\" class=\"alert-link\">register</a>"
 msgstr ""
 
-#: templates/mpowering/logout.html:4
+#: templates/mpowering/logout.html:3 templates/mpowering/logout.html.py:5
 msgid "Logged Out"
 msgstr ""
 
-#: templates/mpowering/logout.html:6
-#, python-format
-msgid "<a href=\"%(url_login)s\">Log in again</a>"
-msgstr ""
-
-#: templates/mpowering/search.html:7
-msgid "Search"
-msgstr ""
-
-#: templates/mpowering/thanks.html:4
-msgid "Registration complete"
-msgstr ""
-
-#: templates/mpowering/thanks.html:6
+#: templates/mpowering/logout.html:7
 #, python-format
 msgid ""
-"Thank you for registering. You are now logged in. <a href="
-"\"%(mpowering_home)s\">Return to the homepage</a>"
+"You are now logged out. <a href=\"%(url_login)s\" class=\"alert-link\">Log "
+"in again</a>"
 msgstr ""
 
-#: templates/mpowering/profile/profile.html:7
+#: templates/mpowering/partners.html:4 templates/mpowering/partners.html:9
+msgid "Content Partners"
+msgstr ""
+
+#: templates/mpowering/partners.html:10
+msgid ""
+"\n"
+"<p>If you’re interested in being an ORB Content Partner, we would\n"
+"\tlike to hear from you!</p>\n"
+"\n"
+"<p>As a Content Partner, we will create an ORB partner page with\n"
+"\tyour logo, a short description of your organisation and a link back to\n"
+"\tyour home page. We will also help connect with you other partners who\n"
+"\tmay want to use your content or commission new content from you.</p>\n"
+"<p>In return, you will commit to sharing your digital health\n"
+"\tresources with us using an open content license, including your updated\n"
+"\tor new resources, and to being an ambassador for ORB (promoting its use\n"
+"\tby implementers, health workers and others).</p>\n"
+"\n"
+"<p>To apply to become an ORB Content Partner, please <a href=\"mailto:"
+"info@mpoweringhealth.org\">contact us</a>.</p>\n"
+msgstr ""
+
+#: templates/mpowering/profile/profile.html:4
+#: templates/mpowering/profile/profile.html:8
 msgid "Your Profile"
 msgstr ""
 
+#: templates/mpowering/profile/reset-sent.html:3
 #: templates/mpowering/profile/reset-sent.html:6
 msgid "Password reset"
 msgstr ""
@@ -398,25 +819,35 @@ msgid ""
 "<p>A new password has been emailed to you</p>\n"
 msgstr ""
 
+#: templates/mpowering/resource/create.html:15
+#, python-format
+msgid ""
+"<strong>Lots of resources to add?</strong> Please <a href=\"mailto:%(email)s"
+"\" class=\"alert-link\">contact us</a> about using our API to make it easier "
+"for you to upload and maintain your resources on ORB."
+msgstr ""
+
+#: templates/mpowering/resource/create_thanks.html:3
 #: templates/mpowering/resource/create_thanks.html:6
 msgid "Resource Submitted"
 msgstr ""
 
-#: templates/mpowering/resource/create_thanks.html:7
+#: templates/mpowering/resource/create_thanks.html:8
 #, python-format
 msgid ""
 " Thank you for submitting \n"
 "'%(r_title)s' as a resource to the mPowering Content Platform"
 msgstr ""
 
-#: templates/mpowering/resource/create_thanks.html:10
+#: templates/mpowering/resource/create_thanks.html:11
 msgid ""
 "Your submission with be reviewed by the mPowering Content Review Team and "
-"our Medical Expert Panel before it will be made available publically on this "
+"our Medical Expert Panel before it will be made available publicly on this "
 "site."
 msgstr ""
 
-#: templates/mpowering/resource/edit.html:10
+#: templates/mpowering/resource/edit.html:8
+#: templates/mpowering/resource/edit.html:11
 msgid "Edit Resource"
 msgstr ""
 
@@ -434,14 +865,177 @@ msgstr ""
 #: templates/mpowering/resource/edit_thanks.html:12
 #, python-format
 msgid ""
-"You can <a href=\"%(preview)s\">view your updates</a> or <a href=\"%(edit)s"
-"\">go back and edit your resource again</a>."
+"You can <a href=\"%(preview)s\" class=\"alert-link\">view your updates</a> "
+"or <a href=\"%(edit)s\" class=\"alert-link\">go back and edit your resource "
+"again</a>."
 msgstr ""
 
-#: templates/mpowering/resource/view.html:47
+#: templates/mpowering/resource/guidelines.html:3
+#: templates/mpowering/resource/guidelines.html:6
+msgid "Guidelines"
+msgstr ""
+
+#: templates/mpowering/resource/status_updated.html:3
+#: templates/mpowering/resource/status_updated.html:6
+msgid "Status Updated"
+msgstr ""
+
+#: templates/mpowering/resource/view.html:86
 msgid "Files"
 msgstr ""
 
-#: templates/mpowering/resource/view.html:63
+#: templates/mpowering/resource/view.html:106
 msgid "Links"
+msgstr ""
+
+#: templates/mpowering/resource/view.html:125
+msgid "Study Time"
+msgstr ""
+
+#: templates/mpowering/search.html:14
+msgid "Results"
+msgstr ""
+
+#: templates/mpowering/search.html:22
+msgid "No results found."
+msgstr ""
+
+#: templates/mpowering/tag.html:40
+msgid "Website:"
+msgstr ""
+
+#: templates/mpowering/tag.html:44
+msgid "Email:"
+msgstr ""
+
+#: templates/mpowering/tag.html:60
+msgid "Order by: "
+msgstr ""
+
+#: templates/mpowering/tag_cloud.html:4 templates/mpowering/tag_cloud.html:10
+msgid "Tag cloud"
+msgstr ""
+
+#: templates/mpowering/tag_filter.html:5
+#: templates/mpowering/tag_filter.html:10
+msgid "Filter by Tag"
+msgstr ""
+
+#: templates/mpowering/tag_filter_results.html:4
+msgid "Tag filter"
+msgstr ""
+
+#: templates/mpowering/tag_filter_results.html:9
+msgid "Resources tagged with: "
+msgstr ""
+
+#: templates/mpowering/taxonomy.html:5 templates/mpowering/taxonomy.html:10
+msgid "Taxonomy"
+msgstr ""
+
+#: templates/mpowering/terms.html:4
+msgid "Terms and Privacy Policy"
+msgstr ""
+
+#: templates/mpowering/terms.html:9
+msgid "Terms of Use"
+msgstr ""
+
+#: templates/mpowering/terms.html:10
+msgid ""
+"\n"
+"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do\n"
+"\teiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad\n"
+"\tminim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip\n"
+"\tex ea commodo consequat. Duis aute irure dolor in reprehenderit in\n"
+"\tvoluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur\n"
+"\tsint occaecat cupidatat non proident, sunt in culpa qui officia\n"
+"\tdeserunt mollit anim id est laborum.</p>\n"
+"<!-- p>The checklists for clinical procedures are provided for\n"
+"\tinformation purposes only. They are intended for use as part of a\n"
+"\tmastery learning, competency-based training course and are not intended\n"
+"\tfor individuals who have not been trained in the procedure.</p>\n"
+"<p>The checklists are tools designed for use in Jhpiego training\n"
+"\tcourses. The checklists focus only on the key steps in the entire\n"
+"\tprocedure. As part of a training course, they are used to guide\n"
+"\tpractice after a participant has become familiar with the procedure\n"
+"\tusing a more detailed learning guide. Finally, they are the assessment\n"
+"\ttool used by the trainer to determine whether or not the participant\n"
+"\thas achieved competency in performing the procedure.</p>\n"
+"<p>Neither Jhpiego nor any of their employees, makes any warranty,\n"
+"\texpress or implied, including warranties of merchantability and fitness\n"
+"\tfor a particular purpose, or assumes any responsibility for the\n"
+"\taccuracy, completeness or usefulness of any information from this\n"
+"\twebsite or from any websites referenced by this website.</p -->\n"
+msgstr ""
+
+#: templates/mpowering/terms.html:37
+msgid "Privacy Policy"
+msgstr ""
+
+#: templates/mpowering/terms.html:38
+msgid ""
+"\n"
+"<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do\n"
+"\teiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad\n"
+"\tminim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip\n"
+"\tex ea commodo consequat. Duis aute irure dolor in reprehenderit in\n"
+"\tvoluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur\n"
+"\tsint occaecat cupidatat non proident, sunt in culpa qui officia\n"
+"\tdeserunt mollit anim id est laborum.</p>\n"
+"<!-- p>We are committed to protecting your privacy online. When you\n"
+"\tvisit our site, we may collect personal information from you such as\n"
+"\tyour name and e-mail address. Our third party hosting company will\n"
+"\tcollect additional information such as the URL you came from, your IP\n"
+"\taddress, your domain name, your browser type, the country and state\n"
+"\twhere your server is located, and the pages that were viewed during\n"
+"\tyour visit to our site. All this information is kept on a secure server\n"
+"\tto protect it from outside parties.</p>\n"
+"\n"
+"<p>We do not sell or rent personal information to others. The\n"
+"\tfunders and partners of the Initiative will not have access to the\n"
+"\temails and personal information collected on sharedvalue.org. We use\n"
+"\tyour information only for the limited purposes of sending you updates\n"
+"\tabout our programs, content, and community activity, enhancing the site\n"
+"\toperation, for statistical purposes, and for overall systems\n"
+"\tadministration. You may opt-out of receiving e-mail updates at any time\n"
+"\tby contacting info@sharedvalue.org.</p -->\n"
+"\n"
+msgstr ""
+
+#: templates/mpowering/thanks.html:4
+msgid "Registration complete"
+msgstr ""
+
+#: templates/mpowering/thanks.html:6
+#, python-format
+msgid ""
+"Thank you for registering. You are now logged in. <a href="
+"\"%(mpowering_home)s\" class=\"alert-link\">Return to the homepage</a>"
+msgstr ""
+
+#: templates/search/opensearch.html:4
+msgid "ORB by mPowering - Search"
+msgstr ""
+
+#: views.py:61
+msgid "Create date"
+msgstr ""
+
+#: views.py:62
+msgid "Title"
+msgstr ""
+
+#: views.py:166
+msgid ""
+"This resource is not yet approved by the mPowering Content Review Team, so "
+"is not yet available for all users to view"
+msgstr ""
+
+#: views.py:178
+msgid "Send to MEP"
+msgstr ""
+
+#: views.py:203
+msgid "You need to be logged in to add a resource."
 msgstr ""
