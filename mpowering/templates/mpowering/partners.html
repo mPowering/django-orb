@@ -28,7 +28,7 @@
 
 
 {% for p in partners %}
-<div class="row"> 
+<div class="row" style="padding-bottom:20px"> 
 	<div class="col-md-1">
 	{% thumbnail p.image "70x70" format="PNG" padding=True as im %}
 		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
