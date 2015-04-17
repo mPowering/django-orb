@@ -5,6 +5,7 @@ Change log
 17 Apr 2015
 -----------
 * 157: Get emailing working - http://github.com/mpowering/django-orb/issues/issue/157
+* 156: Add search function to tag django admin page - http://github.com/mpowering/django-orb/issues/issue/156
 
 15 Apr 2015
 -----------

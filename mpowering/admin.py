@@ -11,12 +11,15 @@ class CategoryAdmin(admin.ModelAdmin):
 
 class ResourceAdmin(admin.ModelAdmin):
     list_display = ('title','status', 'create_user', 'create_date', 'slug')
+    search_fields = ['title','description']
     
 class ResourceURLAdmin(admin.ModelAdmin):
-    list_display = ('resource', 'url', 'description')
+    list_display = ('resource', 'url', 'title', 'description')
+    search_fields = ['title','description']
 
 class ResourceFileAdmin(admin.ModelAdmin):
-    list_display = ('resource', 'file', 'description')
+    list_display = ('resource', 'file', 'title', 'description')
+    search_fields = ['title','description']
   
 class ResourceTagAdmin(admin.ModelAdmin):
     list_display = ('resource', 'tag')
@@ -29,6 +32,7 @@ class SearchTrackerAdmin(admin.ModelAdmin):
         
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name','category', 'parent_tag', 'slug', 'order_by')
+    search_fields = ['name','description']
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'api_access', 'about', 'job_title', 'organisation')
