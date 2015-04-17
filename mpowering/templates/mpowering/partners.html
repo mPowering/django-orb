@@ -1,5 +1,6 @@
 {% extends "base.html" %} 
 {% load i18n %} 
+{% load thumbnail %}
 {% block extra_head_title %}
 	{% trans 'Content Partners' %}
 {% endblock extra_head_title %} 
@@ -25,10 +26,19 @@
 
 <h3>Our content partners include:</h3>
 
-<ul>
-{% for p in partners %}
-	<li>{{ p.name }}</li>
 
+{% for p in partners %}
+<div class="row"> 
+	<div class="col-md-1">
+	{% thumbnail p.image "70x70" format="PNG" padding=True as im %}
+		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+	{% endthumbnail %}
+	</div>
+	<div class="col-md-8">
+		<h4>{{ p.name }}</h4>
+		<p>{{ p.description|safe }}</p>
+	</div>
+	
+</div>
 {% endfor %}
-</ul>
 {% endblock content %}
