@@ -87,7 +87,7 @@ From:
 	<ul>
 	{% for f in resource.get_files %}
 		<li>
-			{% if f.title and f.title.strip %}
+			{% if f.title  %}
 				<a href="{% url 'mpowering_resource_view_file' f.id %}">{{ f.title }}</a>
 			{% else %}
 				<a href="{% url 'mpowering_resource_view_file' f.id %}">{{ f.filename }}</a>
@@ -107,7 +107,7 @@ From:
 	<ul>
 	{% for u in resource.get_urls %}
 		<li>
-			{% if u.title and u.title.strip %}
+			{% if u.title %}
 				<a href="{% url 'mpowering_resource_view_link' u.id %}">{{ u.title }}</a>
 			{% else %}
 				<a href="{% url 'mpowering_resource_view_link' u.id %}">{{ u.url }}</a>
