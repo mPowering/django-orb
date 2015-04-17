@@ -1,6 +1,11 @@
 Change log
 =====================================
 
+
+17 Apr 2015
+-----------
+* 157: Get emailing working - http://github.com/mpowering/django-orb/issues/issue/157
+
 15 Apr 2015
 -----------
 * 152: Add extra registration info to the profile page - http://github.com/mpowering/django-orb/issues/issue/152
