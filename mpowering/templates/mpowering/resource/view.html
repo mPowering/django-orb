@@ -107,7 +107,7 @@ From:
 	<ul>
 	{% for u in resource.get_urls %}
 		<li>
-			{% if u.title and f.title.strip %}
+			{% if u.title and u.title.strip %}
 				<a href="{% url 'mpowering_resource_view_link' u.id %}">{{ u.title }}</a>
 			{% else %}
 				<a href="{% url 'mpowering_resource_view_link' u.id %}">{{ u.url }}</a>
