@@ -40,26 +40,38 @@
 
 <h3><a name="crt"></a>{% trans 'Content Review Team' %}</h3>
 {% blocktrans %}
-
-{% endblocktrans %} 
-
-
-<h3><a name="mep"></a>{% trans 'Medical Expert Panel' %}</h3>
-{% blocktrans %}
-
-{% endblocktrans %} 
-
-<h4>{% trans 'Photo Credits' %}</h4>
-{% blocktrans %}
-Credits for homepage photos:
-<ul>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-<li></li>
-</ul>
+<p>Our Content Review Team consists of staff from over 35
+	organsations, with backgrounds in global public health, training and
+	technology.</p>
+<p>When resources are submitted to ORB, the Content Review Team make
+	the initial decision on the suitability of the resource to be included
+	in ORB.Once a resource had been approved by the Content Review Team it
+	is then passed to our Medical Expert Panel.</p>
 {% endblocktrans %}
 
-{% endblock content %}
+
+<h3>
+	<a name="mep"></a>{% trans 'Medical Expert Panel' %}
+</h3>
+{% blocktrans %}
+<p>Our Medical Expert Panel consists of medical professionals from
+	WHO, Unicef, ...</p>
+<p>When a submitted resource has been approved by Content Review
+	Team, the Medical Expert Panel make the final decision on whether a
+	resource can be included in ORB, based on the most up to date medical
+	information and guidelines available.</p>
+
+{% endblocktrans %}
+
+<hr/>
+<h4>{% trans 'Homepage Photo Credits' %}</h4>
+{% blocktrans %}
+<ul>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+	<li></li>
+</ul>
+{% endblocktrans %} {% endblock content %}
