@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% block extra_head_title %}{% trans 'Edit Resource' %}{% endblock extra_head_title %}
+{% block content %}
+
+<h2>{% trans 'Resource Edited' %}</h2>
+<div class="alert alert-success">{% blocktrans with resource.title as r_title%} Your resource
+'{{ r_title }}' has been updated {% endblocktrans %}</div>	
+
+{% url 'orb_resource' resource.slug as preview %}
+{% url 'orb_resource_edit'  resource.id as edit %}
+<div class="alert alert-info">{% blocktrans %}You can <a href="{{ preview }}" class="alert-link">view your updates</a> or <a href="{{ edit }}" class="alert-link">go back and edit your resource again</a>.{% endblocktrans %}</div>	
+
+{% endblock %}

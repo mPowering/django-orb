@@ -1,0 +1,101 @@
+{% load i18n %} {% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>{% block extra_head_title %}{% endblock extra_head_title %} - {% trans 'ORB' %}</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<META name="description"
+	content="ORB by mPowering: {% block extra_head_desc %}{% endblock extra_head_desc %}" />
+<META name="keywords"
+	content="mPowering, frontline health workers, orb, open resource bank, 
+			online resource bank, platform, MNCH, maternal, care, post natal, 
+			postnatal, ante natal, antenatal, child, children, health,
+			quiz, assessment, mobile, android, learning, video, media, 
+		    {% block extra_head_keywords %}{% endblock extra_head_keywords %}" />
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="search" type="application/opensearchdescription+xml" href="{% url 'orb_opensearch' %}" title="Add ORB search">
+{% block extra_head_feed %}{% endblock extra_head_feed %}
+
+<!-- Bootstrap -->
+<link
+	href="{{ STATIC_URL }}orb/bootstrap-3.1.1/css/bootstrap.min.css"
+	rel="stylesheet" />
+
+<link href="{{ STATIC_URL }}orb/style.css" rel="stylesheet" />
+<link href="{{ STATIC_URL }}orb/ui-lightness/jquery-ui.min.css"
+	rel="stylesheet" />
+<link
+	href="{{ STATIC_URL }}orb/ui-lightness/jquery-ui.structure.min.css"
+	rel="stylesheet" />
+<link
+	href="{{ STATIC_URL }}orb/ui-lightness/jquery-ui.theme.min.css"
+	rel="stylesheet" />
+
+<link rel="shortcut icon" type="image/png"
+	href="{{ STATIC_URL }}orb/images/icon.png" />
+<script src="{{ STATIC_URL }}orb/js/jquery-1.11.0.min.js"></script>
+<script src="{{ STATIC_URL }}orb/ui-lightness/jquery-ui.min.js"></script>
+{% block extra_styles %}{% endblock extra_styles %} 
+{% block extra_scripts %}{% endblock extra_scripts %}
+</head>
+
+<body {% block extra_body %}{% endblock extra_body %}>
+
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		{% include "includes/header.html" %}
+	</div>
+	<div class="container-fluid">
+		<div class="main" style="max-width: 1000px; margin: 20px auto;">
+			{% block content %} {% endblock content %}
+		</div><!--  end main -->
+	</div><!--  end container -->
+
+	<div id="footer">
+		<div class="row">
+			<div class="col-md-3 text-muted">
+				<h4>Contact Us</h4>
+				<a href="mailto:{{ settings.ORB_INFO_EMAIL }}">{{ settings.ORB_INFO_EMAIL }}</a>
+			</div>
+			<div class="col-md-3 text-muted">
+				<h4>Follow Us</h4>
+				<a href="https://twitter.com/mpoweringhealth">Twitter</a><br/>
+				<a href="http://mpoweringhealth.org/blog/">Blog</a>
+			</div>
+			<div class="col-md-3 text-muted">
+				<h4>About Us</h4>
+				<a href="{% url 'orb_about' %}">About</a><br/>
+				<a href="{% url 'orb_about' %}#crt">Content Review Team</a><br/>
+			    <a href="{% url 'orb_about' %}#mep">Medical Expert Panel</a><br/>
+			    <a href="{% url 'orb_partners' %}">Content Partners</a><br/>
+			    <a href="{% url 'orb_terms' %}">Terms and Privacy Policy</a><br/>
+			    <a href="{% url 'orb_developers' %}">Developers Area</a><br/>
+			</div>
+			<div class="col-md-3 text-muted">
+				 {{ version }} &copy; {% now "Y" %} <a href="http://mpoweringhealth.org/">mPowering</a>
+			</div>
+		</div>
+
+		<script
+			src="{{ STATIC_URL }}orb/bootstrap-3.1.1/js/bootstrap.min.js"></script>
+
+		<script>
+			(function(i, s, o, g, r, a, m) {
+				i['GoogleAnalyticsObject'] = r;
+				i[r] = i[r] || function() {
+					(i[r].q = i[r].q || []).push(arguments)
+				}, i[r].l = 1 * new Date();
+				a = s.createElement(o), m = s.getElementsByTagName(o)[0];
+				a.async = 1;
+				a.src = g;
+				m.parentNode.insertBefore(a, m)
+			})(window, document, 'script',
+					'//www.google-analytics.com/analytics.js', 'ga');
+
+			ga('create', '{{ ORB_GOOGLE_ANALYTICS_CODE }}', 'auto');
+			ga('send', 'pageview');
+		</script>
+</body>
+</html>
+

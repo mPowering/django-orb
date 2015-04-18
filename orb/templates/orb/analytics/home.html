@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load i18n %} 
+
+{% block extra_head_title %}{% trans 'Analytics' %}{% endblock extra_head_title %}
+
+{% block extra_scripts %}
+	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+	<script type="text/javascript">
+	
+	// Load the Visualization API and the piechart package.
+	google.load('visualization', '1.0', {'packages':['corechart']});
+
+	// Set a callback to run when the Google Visualization API is loaded.
+	google.setOnLoadCallback(drawChart);
+	function drawChart() {
+
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', "{% trans 'Date' %}");
+		data.addColumn('number', "{% trans 'Total' %}");
+		data.addColumn('number', "{% trans 'Resource Views' %}");
+		data.addColumn('number', "{% trans 'Resource File Views' %}");
+		data.addColumn('number', "{% trans 'Resource URL Views' %}");
+		data.addColumn('number', "{% trans 'Searches' %}");
+		data.addRows( {{ recent_activity|length }} );
+		
+		{% for date,activity in recent_activity %}
+			data.setValue({{ forloop.counter0 }},0,'{{ date }}');
+			data.setValue({{ forloop.counter0 }},1,{{ activity.total }});
+			data.setValue({{ forloop.counter0 }},2,{{ activity.resource }});
+			data.setValue({{ forloop.counter0 }},3,{{ activity.resource_file }});
+			data.setValue({{ forloop.counter0 }},4,{{ activity.resource_url }});
+			data.setValue({{ forloop.counter0 }},5,{{ activity.search }});
+		{% endfor %}
+
+        var chart = new google.visualization.LineChart(document.getElementById('activity_chart_div'));
+        chart.draw(data, {	width: "100%", 
+                			height: 400,
+                			vAxis: {title: "{% trans 'Activity' %}"},
+                			pointSize:5,
+                			chartArea:{left:50,top:50,width:"70%",height:"70%"},
+                			backgroundColor: 'transparent',
+                			legend: {position:'right'}
+							});
+      }
+</script>
+{% endblock extra_scripts %}
+
+
+{% block content %}
+
+<h2>{% trans 'Analytics' %}</h2>
+
+<p><a href="#ag">{% trans 'Activity Graph' %}</a> 
+	| <a href="#pc">{% trans 'Pending CRT' %}</a>
+	| <a href="#pm">{% trans 'Pending MEP' %}</a>
+	| <a href="#ps">{% trans 'Popular Searches' %}</a>
+	| <a href="#pr">{% trans 'Popular Resources' %}</a>
+	| <a href="#o">{% trans 'Organisations' %}</a>
+	| <a href="#am">{% trans 'Activity Map' %}</a></p>
+
+<a name="ag"></a>
+<h3>{% trans 'Activity Graph' %}</h3>
+<div id="activity_chart_div" class="graph">{% trans 'graph_generating'%}</div>
+
+<a name="pc"></a>
+<h3>{% trans 'Pending CRT' %}</h3>
+<ul>
+{% for pr in pending_crt_resources %}
+	<li>{{ pr.title }} - <br/>
+		<a target="_blank" href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
+		| {% trans 'Pending MEP' %}
+		| {% trans 'Approve' %}
+		| {% trans 'Reject' %} </li>
+{% empty %}
+	<li>{% trans 'No resources pending CRT review' %}</li>
+{% endfor %}
+</ul>
+
+<a name="pm"></a>
+<h3>{% trans 'Pending MEP' %}</h3>
+<ul>
+{% for pr in pending_mep_resources %}
+	<li>{{ pr.title }} - <br/>
+		<a target="_blank" href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
+		| {% trans 'Approve' %}
+		| {% trans 'Reject' %} </li>
+{% empty %}
+	<li>{% trans 'No resources pending MEP review' %}</li>
+{% endfor %}
+</ul>
+
+<a name="ps"></a>
+<h3>{% trans 'Popular Searches (last month)' %}</h3>
+<ul>
+{% for ps in popular_searches %}
+	<li><a href="{% url 'orb_search' %}?q={{ ps.query }}">{{ ps.query }} ({{ ps.total_hits }})</a></li>
+{% endfor %}
+</ul>
+
+<a name="pr"></a>
+<h3>{% trans 'Popular Resources (last month)' %}</h3>
+<ul>
+{% for pr in popular_resources %}
+	<li><a href="{% url 'orb_resource' pr.resource__slug %}">{{ pr.resource__title }} ({{ pr.total_hits }})</a></li>
+{% endfor %}
+</ul>
+
+<a name="sno"></a>
+<h3>{% trans 'Searches with no results (last 3 months)' %}</h3>
+<ul>
+{% for ps in searches_no_results %}
+	<li><a href="{% url 'orb_search' %}?q={{ ps.query }}">{{ ps.query }} ({{ ps.total_hits }})</a></li>
+{% endfor %}
+</ul>
+
+<a name="o"></a>
+<h3>{% trans 'Organisations' %}</h3>
+<ul>
+{% for o in organisations %}
+	<li><a href="{% url 'orb_analytics_tag' o.id %}">{{ o.name }} ({{ o.total_resources}})</a></li>
+{% endfor %}
+</ul>
+
+<a name="am"></a>
+<h3>{% trans 'Activity Map' %}</h3>
+<iframe width='100%' height='600' frameborder='0'
+	src='http://digital-campus.cartodb.com/viz/1b3045c4-bb59-11e4-b0a7-0e4fddd5de28/embed_map?title=false&#038;description=false&#038;search=false&#038;shareable=true&#038;cartodb_logo=true&#038;layer_selector=false&#038;legends=false&#038;scrollwheel=true&#038;fullscreen=true&#038;sublayer_options=1&#038;sql='
+	allowfullscreen webkitallowfullscreen mozallowfullscreen
+	oallowfullscreen msallowfullscreen></iframe>
+{% endblock %}

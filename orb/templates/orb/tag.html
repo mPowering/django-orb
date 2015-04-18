@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load add_get_parameter %}
+{% load thumbnail %}
+
+{% block extra_head_title %}{{ tag.name }}{% endblock extra_head_title %}
+{% block extra_head_feed %}
+<link rel="alternate" type="application/rss+xml" title="RSS"
+      href="{% url 'orb_tag_feed' tag.slug %}">
+{% endblock extra_head_feed %}
+
+{% block extra_scripts %}
+	<script type="text/javascript">
+		function OnOrderChange(dropdown) {
+		    var myindex  = dropdown.selectedIndex;
+		    var selValue = dropdown.options[myindex].value;
+		    top.location.href = selValue;
+		    return true;
+		}
+	</script>
+{% endblock extra_scripts %}
+
+{% block content %}
+
+{% include 'orb/includes/search_bar.html' %}
+
+<h3 style="text-align:center">
+	{% if tag.parent_tag %}
+		<a href="{% url 'orb_tags' tag.parent_tag.slug %}">{{ tag.parent_tag.name}}</a>: 
+	{% endif %}
+    {% thumbnail tag.image "70x70" format="PNG" padding=True as im %}
+		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+	{% endthumbnail %}{{ tag.name }}</h3>
+	
+{% if tag.description %}
+	<p>{{ tag.description }}</p>
+{% endif %}
+
+{% if tag.external_url %}
+	<p>{% trans 'Website:' %} <a href="{{ tag.external_url }}">{{ tag.external_url }}</a></p>
+{% endif %}
+
+{% if tag.contact_email %}
+	<p>{% trans 'Email:' %} <a href="mailto:{{ tag.contact_email }}">{{ tag.contact_email }}</a></p>
+{% endif %}
+
+{% if child_tags %}
+	<div style="text-align:center">
+	{% for tag in child_tags %}
+		<a href="{% url 'orb_tags' tag.slug %}">{{ tag.name}} ({{ tag.resource_count }})</a>
+		{% if not forloop.last %} | {% endif %}
+	{% endfor %}
+	</div>
+{% endif %}
+
+{% if page.object_list %}
+
+	<div class="orderby">
+		<form method="get">
+		{% trans 'Order by: ' %}
+		<select name="order" onchange="OnOrderChange(this.form.order);">
+				{% for k,v in ordering %}
+				 		<option value="{% add_get order=k %}" {% if k == current_order %}selected="selected" {% endif %}>
+				 			{{ v }}
+				 		</option>
+				{% endfor %}
+			</select>
+		</form>
+	</div>
+	{% include "orb/includes/page_navigator.html" %}
+	
+	{% for resource in page.object_list %}
+		{% include "orb/includes/resource_row.html" %}
+	{% endfor %}
+	
+	{% include "orb/includes/page_navigator.html" %}
+
+{% endif %}
+
+{% endblock %}

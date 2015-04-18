@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# mPowering documentation build configuration file, created by
+# ORB documentation build configuration file, created by
 # sphinx-quickstart on Sat Jan 24 13:32:51 2015.
 #
 # This file is execfile()d with the current directory set to its
@@ -215,7 +215,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'mPowering.tex', u'mPowering Documentation',
+  ('index', 'mPowering.tex', u'ORB Documentation',
    u'Alex Little', 'manual'),
 ]
 
@@ -245,7 +245,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'mpowering', u'mPowering Documentation',
+    ('index', 'orb', u'ORB Documentation',
      [u'Alex Little'], 1)
 ]
 
@@ -259,8 +259,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'mPowering', u'mPowering Documentation',
-   u'Alex Little', 'mPowering', 'One line description of project.',
+  ('index', 'ORB', u'ORB Documentation',
+   u'Alex Little', 'ORB', 'One line description of project.',
    'Miscellaneous'),
 ]
 

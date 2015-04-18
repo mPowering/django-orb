@@ -7,15 +7,15 @@ README = open(os.path.join(os.path.dirname(__file__), 'README.txt')).read()
 os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
-    name='django-mpowering',
+    name='django-orb',
     version='0.0.2',
-    packages=['mpowering',
-              'mpowering.analytics',
-              'mpowering.api',
-              'mpowering.migrations', 
-              'mpowering.fixtures',
-              'mpowering.utils',
-              'mpowering.profile',],
+    packages=['orb',
+              'orb.analytics',
+              'orb.api',
+              'orb.migrations', 
+              'orb.fixtures',
+              'orb.utils',
+              'orb.profile',],
     include_package_data=True,
     license='GNU GPL v3 License',  # example license
     description='',

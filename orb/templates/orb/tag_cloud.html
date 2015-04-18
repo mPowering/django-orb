@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load display_functions %} 
+{% block extra_head_title %}{% trans 'Tag cloud' %}{% endblock extra_head_title %}
+
+{% block content %}
+
+{% include 'orb/includes/search_bar.html' %}
+
+<h3>{% trans 'Tag cloud' %}</h3>
+
+<p style="text-align:center">
+{% for t in tags %}
+	<span style="font-size:{{ t.dcount|cloud_text_size:diff }}px;"><a href="{% url 'orb_tags' t.slug %}" title="{{ t.dcount }} resources">{{ t.name }}</a></span>
+{% endfor %}
+</p>
+
+{% endblock %}

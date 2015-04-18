@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load thumbnail %}
+
+{% block extra_head_title %}{% trans 'Home' %}{% endblock extra_head_title %}
+
+{% block extra_head_feed %}
+<link rel="alternate" type="application/rss+xml" title="RSS"
+      href="{% url 'orb_feed' %}">
+{% endblock extra_head_feed %}
+
+{% block content %}
+
+{% include 'orb/includes/search_bar.html' %}
+
+<h3 style="text-align:center">Connecting Frontline Health Workers to resources and each other to expand their knowledge, organize content into courses, and share their learning with the community. </h3>
+
+<div style="position: relative; margin: 20px auto; overflow: hidden; text-align: center;">
+{% for t in topics %}
+	<div style="display:inline-block; min-width:270px; min-height:240px; text-align:center; margin: auto;">
+		<a href="{% url 'orb_tags' t.tag.slug %}">
+			{% thumbnail t.tag.image "220x150" crop="center" as im %}
+				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+			{% empty %}
+    			<p>No image</p>
+			{% endthumbnail %}
+			<h3 class="homepage">{{ t.tag.name }}</h3>
+			{{ t.resource_count }} resource{{ t.resource_count|pluralize }}
+		</a> 
+	</div>
+{% endfor %}
+	<div style="clear:both"></div>
+</div>
+
+{% endblock %}
