@@ -204,6 +204,9 @@ class Tag (models.Model):
     def __unicode__(self):
         return self.name
     
+    def get_absolute_url(self):
+        return urlresolvers.reverse('orb_tags', args=[self.slug])
+    
     def save(self, *args, **kwargs):
         if not self.slug:
             unique_slugify(self, self.name)

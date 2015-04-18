@@ -4,7 +4,7 @@
 	{% for c in obj.get_categories %}
 		{{ c.name }}:
 		{% for t in c.tags %}
-			<a href="{{ BASE_URL }} {% url 'orb_tags' t.slug %}">{{ t.name }}</a>{% if not forloop.last %}, {% endif %} 
+			<a href="{{ BASE_URL }}{% url 'orb_tags' t.slug %}">{{ t.name }}</a>{% if not forloop.last %}, {% endif %} 
 		{% endfor %}
 		{% if not forloop.last %}; {% endif %}
 	{% endfor %}</p>
