@@ -1,4 +1,4 @@
-
+# orb/views.py
 import os 
 
 from django.conf import settings
@@ -532,13 +532,13 @@ def resource_form_set_choices(form):
     return form 
 
 def tag_filter_form_set_choices(form):
-    form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__top_level=True).order_by('order_by','name')]
-    form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').order_by('order_by','name')]
-    form.fields['audience'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name')]
-    form.fields['geography'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='geography').order_by('order_by','name')]
-    form.fields['language'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='language').order_by('order_by','name')]
-    form.fields['device'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='device').order_by('order_by','name')]
-    form.fields['license'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='license').order_by('order_by','name')]
+    form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__top_level=True).exclude(resourcetag__isnull=True).order_by('order_by','name')]
+    form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').exclude(resourcetag__isnull=True).order_by('order_by','name')]
+    form.fields['audience'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').exclude(resourcetag__isnull=True).order_by('order_by','name')]
+    form.fields['geography'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='geography').exclude(resourcetag__isnull=True).order_by('order_by','name')]
+    form.fields['language'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='language').exclude(resourcetag__isnull=True).order_by('order_by','name')]
+    form.fields['device'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='device').exclude(resourcetag__isnull=True).order_by('order_by','name')]
+    form.fields['license'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='license').exclude(resourcetag__isnull=True).order_by('order_by','name')]
     return form 
 
 def resource_can_view(resource, user):

@@ -4,7 +4,7 @@ Change log
 18 Apr 2015
 -----------
 * 161: RSS feeds link to example.com - rather than the actual site - http://github.com/mpowering/django-orb/issues/issue/161
-
+* 160: On advanced filtering page - only show options for which there are resources available - http://github.com/mpowering/django-orb/issues/issue/160
 17 Apr 2015
 -----------
 * 157: Get emailing working - http://github.com/mpowering/django-orb/issues/issue/157
