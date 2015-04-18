@@ -10,10 +10,7 @@ class LatestTagEntries(Feed):
         return get_object_or_404(Tag, slug=tag_slug)
 
     def title(self, obj):
-        return "'%s' ORB resources" % obj.name
-
-    def link(self, obj):
-        return obj.get_absolute_url()
+        return "'%s' ORB resources" % obj.name  
 
     def description(self, obj):
         return "Resources recently tagged with  %s" % obj.name
@@ -30,7 +27,7 @@ class LatestTagEntries(Feed):
 class LatestEntries(Feed):
     description_template = 'feeds/resource.html'
     title = "ORB latest resources"
-    #link = return obj.get_absolute_url()
+    link = "/"
     description = "Latest resources added to ORB."
 
     def items(self):
