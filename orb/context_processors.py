@@ -15,3 +15,9 @@ def get_menu(request):
     return {'header_menu_categories': categories, 
             'header_owns_tags': tags,
             'settings': settings,}
+    
+
+def base_context_processor(request):
+    return {
+         'BASE_URL': request.build_absolute_uri("/").rstrip("/")
+     }

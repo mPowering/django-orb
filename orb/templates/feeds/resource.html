@@ -1,3 +1,10 @@
 <p>{{ obj.description|striptags|truncatewords:40 }}</p>
 
-<p>Tagged with: {% for c in obj.get_categories %}{% for t in c.tags %}{{ t.name }}, {% endfor %}{% endfor %}</p>
+<p>Tagged with: 
+	{% for c in obj.get_categories %}
+		{{ c.name }}:
+		{% for t in c.tags %}
+			<a href="{{ BASE_URL }} {% url 'orb_tags' t.slug %}">{{ t.name }}</a>{% if not forloop.last %}, {% endif %} 
+		{% endfor %}
+		{% if not forloop.last %}; {% endif %}
+	{% endfor %}</p>
