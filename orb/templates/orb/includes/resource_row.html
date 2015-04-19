@@ -14,6 +14,23 @@
 		{% endfor %}
 		</h4>
 		<p>{{ resource.description|striptags|truncatewords:40 }}</p>
+
+		<p>{% for c in resource.get_geographies %}
+					{% thumbnail c.image "20x20" format="PNG" padding=True as im %}
+						<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
+					{% endthumbnail %}	
+				{% endfor %}
+			{% for c in resource.get_languages %}
+					{% thumbnail c.image "20x20" format="PNG" padding=True as im %}
+						<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
+					{% endthumbnail %}	
+				{% endfor %}
+			{% for c in resource.get_devices %}
+					{% thumbnail c.image "20x20" format="PNG" padding=True as im %}
+						<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
+					{% endthumbnail %}	
+				{% endfor %}
+		</p>
 	</div>
 	<div class="col-md-2">
            {% if resource.image %}

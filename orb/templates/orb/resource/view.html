@@ -132,7 +132,7 @@ From:
 		
 		<h4>{{ c.name }}</h4>
 			{% for t in c.tags %}
-				<div class="row vertical-align"> 
+				<div class="row vertical-align" style="padding-bottom:10px;"> 
 					<div class="col-xs-4 col-md-1 col-lg-1">
 						<a href="{% url 'orb_tags' t.slug %}">
 						 {% if t.image %}
@@ -142,8 +142,8 @@ From:
 						  		<p>No image</p>
 						  	{% endthumbnail %}
 						 {% endif %}</a>
-					</div><!-- 
-					 --><div class="col-xs-8 col-md-5 col-lg-5">
+					</div>
+					<div class="col-xs-8 col-md-5 col-lg-5">
 						<a href="{% url 'orb_tags' t.slug %}">{{ t.name }}</a>
 						{% if t.summary %}
 							- {{ t.summary }}

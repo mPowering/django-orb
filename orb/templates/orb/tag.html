@@ -74,7 +74,8 @@
 	{% endfor %}
 	
 	{% include "orb/includes/page_navigator.html" %}
-
+{% else %}
+	<p>{% trans 'There are no resources tagged with this tag.' %}</p>
 {% endif %}
 
 {% endblock %}

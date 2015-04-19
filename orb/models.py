@@ -100,7 +100,19 @@ class Resource (models.Model):
         identified = ResourceTracker.objects.filter(resource=self).exclude(user=None).values_list('user', 
                                       flat=True).distinct().count()                              
         return anon + identified
-        
+     
+    def get_geographies(self):
+        tags = Tag.objects.filter(resourcetag__resource=self, category__slug='geography')
+        return tags
+    
+    def get_devices(self):
+        tags = Tag.objects.filter(resourcetag__resource=self, category__slug='device')
+        return tags
+    
+    def get_languages(self):
+        tags = Tag.objects.filter(resourcetag__resource=self, category__slug='language')
+        return tags
+           
 # ResourceURL
 class ResourceURL (models.Model):
     url = models.URLField(blank=False, null=False, max_length=500)
