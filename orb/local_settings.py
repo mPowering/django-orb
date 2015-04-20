@@ -23,5 +23,13 @@ def modify(settings):
     }                                  
     settings['HAYSTACK_SIGNAL_PROCESSOR'] = 'haystack.signals.RealtimeSignalProcessor'
     
+    settings['TAG_FILTER_CATEGORIES'] = [('health_topic','health-domain' ),
+                                         ('resource_type','type'), 
+                                         ('audience', 'audience'), 
+                                         ('geography', 'geography'), 
+                                         ('language', 'language'), 
+                                         ('device', 'device'), 
+                                         ('license', 'license')]
+    
 
 

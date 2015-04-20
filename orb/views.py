@@ -9,7 +9,8 @@ from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Max, Min, Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import render,render_to_response
+from django.shortcuts import render, render_to_response
+from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
@@ -21,18 +22,6 @@ from orb.models import ResourceFile, ResourceTag
 from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search
 
 from PIL import Image
-
-
-#TAG_FILTER_CATEGORIES = ['health_topic','resource_type', 'audience', 'geography', 'language', 'device', 'license']
-#TAG_FILTER_CATEGORY_SLUGS = ['health-domain','type', 'audience', 'geography', 'language', 'device', 'license']
-
-TAG_FILTER_CATEGORIES = [('health_topic','health-domain' ),
-                         ('resource_type','type'), 
-                         ('audience', 'audience'), 
-                         ('geography', 'geography'), 
-                         ('language', 'language'), 
-                         ('device', 'device'), 
-                         ('license', 'license')]
 
 def home_view(request):
     topics = []
@@ -91,7 +80,7 @@ def tag_view(request,tag_slug):
         resources = paginator.page(paginator.num_pages)
     
     show_filter_link = False
-    if tag.category.slug in [slug for name, slug in TAG_FILTER_CATEGORIES]:
+    if tag.category.slug in [slug for name, slug in settings.TAG_FILTER_CATEGORIES]:
         show_filter_link = True
         
     return render_to_response('orb/tag.html',
@@ -129,8 +118,14 @@ def tag_filter_view(request):
 
 def tag_filter_prefill_view(request,tag_id):
 
+    tag = get_object_or_404(Tag, pk=tag_id)
     
-    form = TagFilterForm()
+    data = {}
+    for name, slug in settings.TAG_FILTER_CATEGORIES:
+        if tag.category.slug == slug:
+            data[name] = int(tag.id)
+    
+    form = TagFilterForm(initial=data)
     tag_filter_form_set_choices(form)
         
     return render_to_response('orb/tag_filter.html',
@@ -144,7 +139,7 @@ def tag_filter_results_view(request):
     if form.is_valid():
         #tag_names = ['health_topic','resource_type', 'audience', 'geography', 'language', 'device', 'license']
         tag_ids = []
-        for name, slug  in TAG_FILTER_CATEGORIES:
+        for name, slug  in settings.TAG_FILTER_CATEGORIES:
             for i in form.cleaned_data.get(name):
                 tag_ids.append(i)
         resource_tags = ResourceTag.objects.filter(tag__pk__in=tag_ids).values('resource').annotate(dcount=Count('resource')).filter(dcount=len(tag_ids)).values('resource')
@@ -561,14 +556,8 @@ def resource_form_set_choices(form):
     return form 
 
 def tag_filter_form_set_choices(form):
-    
-    form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__top_level=True).exclude(resourcetag__isnull=True).order_by('order_by','name')]
-    form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').exclude(resourcetag__isnull=True).order_by('order_by','name')]
-    form.fields['audience'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').exclude(resourcetag__isnull=True).order_by('order_by','name')]
-    form.fields['geography'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='geography').exclude(resourcetag__isnull=True).order_by('order_by','name')]
-    form.fields['language'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='language').exclude(resourcetag__isnull=True).order_by('order_by','name')]
-    form.fields['device'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='device').exclude(resourcetag__isnull=True).order_by('order_by','name')]
-    form.fields['license'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='license').exclude(resourcetag__isnull=True).order_by('order_by','name')]
+    for name, slug in settings.TAG_FILTER_CATEGORIES:
+        form.fields[name].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug=slug).exclude(resourcetag__isnull=True).order_by('order_by','name')]
     return form 
 
 def resource_can_view(resource, user):

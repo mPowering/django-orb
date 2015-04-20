@@ -4,7 +4,7 @@ Change log
 
 20 Apr 2015
 -----------
-
+* 7: How to filter by multiple tags - http://github.com/mpowering/django-orb/issues/issue/7
 
 18 Apr 2015
 -----------
