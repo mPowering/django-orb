@@ -22,6 +22,18 @@ from orb.signals import resource_viewed, resource_url_viewed, resource_file_view
 
 from PIL import Image
 
+
+#TAG_FILTER_CATEGORIES = ['health_topic','resource_type', 'audience', 'geography', 'language', 'device', 'license']
+#TAG_FILTER_CATEGORY_SLUGS = ['health-domain','type', 'audience', 'geography', 'language', 'device', 'license']
+
+TAG_FILTER_CATEGORIES = [('health_topic','health-domain' ),
+                         ('resource_type','type'), 
+                         ('audience', 'audience'), 
+                         ('geography', 'geography'), 
+                         ('language', 'language'), 
+                         ('device', 'device'), 
+                         ('license', 'license')]
+
 def home_view(request):
     topics = []
     tags = Tag.objects.filter(category__top_level=True, parent_tag=None).order_by('order_by')
@@ -78,13 +90,19 @@ def tag_view(request,tag_slug):
     except (EmptyPage, InvalidPage):
         resources = paginator.page(paginator.num_pages)
     
+    show_filter_link = False
+    if tag.category.slug in [slug for name, slug in TAG_FILTER_CATEGORIES]:
+        show_filter_link = True
+        
     return render_to_response('orb/tag.html',
                               {
                                'tag': tag,
                                'child_tags': child_tags, 
                                'page':resources,
                                'ordering': ORDER_OPTIONS, 
-                               'current_order': order_by},
+                               'current_order': order_by,
+                               'show_filter_link': show_filter_link,
+                               },
                               context_instance=RequestContext(request))
 
 def tag_cloud_view(request):
@@ -111,6 +129,7 @@ def tag_filter_view(request):
 
 def tag_filter_prefill_view(request,tag_id):
 
+    
     form = TagFilterForm()
     tag_filter_form_set_choices(form)
         
@@ -123,10 +142,10 @@ def tag_filter_results_view(request):
     form = TagFilterForm(request.GET)
     tag_filter_form_set_choices(form)
     if form.is_valid():
-        tag_names = ['health_topic','resource_type', 'audience', 'geography', 'language', 'device', 'license']
+        #tag_names = ['health_topic','resource_type', 'audience', 'geography', 'language', 'device', 'license']
         tag_ids = []
-        for tn in tag_names:
-            for i in form.cleaned_data.get(tn):
+        for name, slug  in TAG_FILTER_CATEGORIES:
+            for i in form.cleaned_data.get(name):
                 tag_ids.append(i)
         resource_tags = ResourceTag.objects.filter(tag__pk__in=tag_ids).values('resource').annotate(dcount=Count('resource')).filter(dcount=len(tag_ids)).values('resource')
         
@@ -542,6 +561,7 @@ def resource_form_set_choices(form):
     return form 
 
 def tag_filter_form_set_choices(form):
+    
     form.fields['health_topic'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__top_level=True).exclude(resourcetag__isnull=True).order_by('order_by','name')]
     form.fields['resource_type'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='type').exclude(resourcetag__isnull=True).order_by('order_by','name')]
     form.fields['audience'].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug='audience').exclude(resourcetag__isnull=True).order_by('order_by','name')]
@@ -552,12 +572,9 @@ def tag_filter_form_set_choices(form):
     return form 
 
 def resource_can_view(resource, user):
-    print "hello"
     if user.is_staff or user == resource.create_user or user == resource.update_user:
-        print "staff or owner"
         return True
     elif resource.status == Resource.APPROVED:
-        print "approved"
         return True
     else:
         print resource

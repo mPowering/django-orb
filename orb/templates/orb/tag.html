@@ -58,13 +58,17 @@
 	<div class="orderby">
 		<form method="get">
 		{% trans 'Order by: ' %}
-		<select name="order" onchange="OnOrderChange(this.form.order);">
+			<select name="order" onchange="OnOrderChange(this.form.order);">
 				{% for k,v in ordering %}
 				 		<option value="{% add_get order=k %}" {% if k == current_order %}selected="selected" {% endif %}>
 				 			{{ v }}
 				 		</option>
 				{% endfor %}
 			</select>
+		
+		{% if show_filter_link == True %}
+			<a href="{% url 'orb_tags_filter_prefill' tag.id %}">{% trans 'Advanced Filter' %}</a>
+		{% endif %}
 		</form>
 	</div>
 	{% include "orb/includes/page_navigator.html" %}
