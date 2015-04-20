@@ -26,12 +26,15 @@ urlpatterns = patterns('',
     url(r'^taxonomy/$', 'orb.views.taxonomy_view', name="orb_taxonomy"),
     url(r'^terms/$',TemplateView.as_view(template_name="orb/terms.html"), name="orb_terms"),
     
+    url(r'^profile/', include('orb.profile.urls')),
+    
     url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', 'orb.views.tag_view', name="orb_tags"),
     url(r'^tag/cloud/$', 'orb.views.tag_cloud_view', name="orb_tag_cloud"),
     url(r'^tag/feed/(?P<tag_slug>\w[\w/-]*)$', LatestTagEntries() , name="orb_tag_feed"),
     url(r'^tag/filter/$', 'orb.views.tag_filter_view', name="orb_tags_filter"),
+    url(r'^tag/filter/(?P<tag_id>\d+)/$', 'orb.views.tag_filter_prefill_view', name="orb_tags_filter_prefill"),
     url(r'^tag/filter/results$', 'orb.views.tag_filter_results_view', name="orb_tags_filter_results"),
-    url(r'^profile/', include('orb.profile.urls')),
+    
     url(r'^resource/create/$', 'orb.views.resource_create_view', name="orb_resource_create"),
     url(r'^resource/create/(?P<id>\d+)/thanks/$', 'orb.views.resource_create_thanks_view', name="orb_resource_create_thanks"),
     url(r'^resource/view/(?P<resource_slug>\w[\w/-]*)$', 'orb.views.resource_view', name="orb_resource"),

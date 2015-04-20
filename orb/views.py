@@ -108,6 +108,16 @@ def tag_filter_view(request):
                               {'form': form,
                                },
                               context_instance=RequestContext(request))
+
+def tag_filter_prefill_view(request,tag_id):
+
+    form = TagFilterForm()
+    tag_filter_form_set_choices(form)
+        
+    return render_to_response('orb/tag_filter.html',
+                              {'form': form,
+                               },
+                              context_instance=RequestContext(request))
    
 def tag_filter_results_view(request): 
     form = TagFilterForm(request.GET)
