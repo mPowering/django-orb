@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import (authenticate, login, views)
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
+
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
@@ -16,6 +16,7 @@ from django.utils.translation import ugettext as _
 
 from orb.models import UserProfile, Tag, Category
 from orb.profile.forms import LoginForm, RegisterForm, ResetForm, ProfileForm
+from orb.emailer import password_reset
 from tastypie.models import ApiKey
 
 
@@ -110,15 +111,9 @@ def reset(request):
             newpass = User.objects.make_random_password(length=8)
             user.set_password(newpass)
             user.save()
-            if request.is_secure():
-                prefix = 'https://'
-            else:
-                prefix = 'http://'
-            # TODO - better way to manage email message content
-            send_mail('ORB by mPowering: Password reset', 'Here is your new password for ORB: '+newpass 
-                      + '\n\nWhen you next log in, visit your profile page where you can update your password to something more memorable.' 
-                      + '\n\n' + prefix + request.META['SERVER_NAME'] , 
-                      settings.ORB_INFO_EMAIL, [user.email], fail_silently=False)
+
+            password_reset(user,newpass)
+
             return HttpResponseRedirect('sent')
     else:
         form = ResetForm() # An unbound form

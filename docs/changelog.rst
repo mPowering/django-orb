@@ -7,6 +7,8 @@ Change log
 * 7: How to filter by multiple tags - http://github.com/mpowering/django-orb/issues/issue/7
 * 163: On filter tags, validate that something has been selected - http://github.com/mpowering/django-orb/issues/issue/163
 * 158: Fill in Photo credits - http://github.com/mpowering/django-orb/issues/issue/158
+* 82: Pages about CRT and MEP (& content providers?) - http://github.com/mpowering/django-orb/issues/issue/82
+* 167: Add better templating system for emails - http://github.com/mpowering/django-orb/issues/issue/167
 
 18 Apr 2015
 -----------
