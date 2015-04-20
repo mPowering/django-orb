@@ -12,6 +12,7 @@ from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, render_to_response
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
+from django.template.defaultfilters import urlencode
 from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
@@ -22,6 +23,7 @@ from orb.models import ResourceFile, ResourceTag
 from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search
 
 from PIL import Image
+
 
 def home_view(request):
     topics = []
@@ -48,13 +50,9 @@ def partner_view(request):
                               context_instance=RequestContext(request))
     
 def tag_view(request,tag_slug):
-    try:
-        tag = Tag.objects.get(slug=tag_slug)
-    except Tag.DoesNotExist:
-        raise Http404()
     
+    tag = get_object_or_404(Tag, slug=tag_slug)
     child_tags = Tag.objects.filter(parent_tag=tag, resourcetag__resource__status=Resource.APPROVED).annotate(resource_count=Count('resourcetag__resource')).order_by('order_by')
-    
     
     CREATED = u'-create_date'
     TITLE = u'title'
@@ -106,38 +104,36 @@ def tag_cloud_view(request):
                                },
                               context_instance=RequestContext(request))
 
-def tag_filter_view(request):
+def tag_filter_view(request, tag_id=None):
 
-    form = TagFilterForm()
-    tag_filter_form_set_choices(form)
-        
+    if request.method == 'POST':
+        form = TagFilterForm(request.POST)
+        tag_filter_form_set_choices(form)
+        if form.is_valid():
+            urlparams = request.POST.copy()
+            # delete these from params as not required
+            del urlparams['csrfmiddlewaretoken']
+            del urlparams['submit']
+            return HttpResponseRedirect(reverse('orb_tags_filter_results') + "?" + urlparams.urlencode())
+    else:
+        data = {}
+        if tag_id:
+            tag = get_object_or_404(Tag, pk=tag_id)
+            for name, slug in settings.TAG_FILTER_CATEGORIES:
+                if tag.category.slug == slug:
+                    data[name] = tag.id
+        form = TagFilterForm(initial=data)
+        tag_filter_form_set_choices(form)
+     
     return render_to_response('orb/tag_filter.html',
                               {'form': form,
                                },
                               context_instance=RequestContext(request))
-
-def tag_filter_prefill_view(request,tag_id):
-
-    tag = get_object_or_404(Tag, pk=tag_id)
-    
-    data = {}
-    for name, slug in settings.TAG_FILTER_CATEGORIES:
-        if tag.category.slug == slug:
-            data[name] = int(tag.id)
-    
-    form = TagFilterForm(initial=data)
-    tag_filter_form_set_choices(form)
-        
-    return render_to_response('orb/tag_filter.html',
-                              {'form': form,
-                               },
-                              context_instance=RequestContext(request))
-   
+       
 def tag_filter_results_view(request): 
     form = TagFilterForm(request.GET)
     tag_filter_form_set_choices(form)
     if form.is_valid():
-        #tag_names = ['health_topic','resource_type', 'audience', 'geography', 'language', 'device', 'license']
         tag_ids = []
         for name, slug  in settings.TAG_FILTER_CATEGORIES:
             for i in form.cleaned_data.get(name):

@@ -32,7 +32,7 @@ urlpatterns = patterns('',
     url(r'^tag/cloud/$', 'orb.views.tag_cloud_view', name="orb_tag_cloud"),
     url(r'^tag/feed/(?P<tag_slug>\w[\w/-]*)$', LatestTagEntries() , name="orb_tag_feed"),
     url(r'^tag/filter/$', 'orb.views.tag_filter_view', name="orb_tags_filter"),
-    url(r'^tag/filter/(?P<tag_id>\d+)/$', 'orb.views.tag_filter_prefill_view', name="orb_tags_filter_prefill"),
+    url(r'^tag/filter/(?P<tag_id>\d+)/$', 'orb.views.tag_filter_view', name="orb_tags_filter_prefill"),
     url(r'^tag/filter/results$', 'orb.views.tag_filter_results_view', name="orb_tags_filter_results"),
     
     url(r'^resource/create/$', 'orb.views.resource_create_view', name="orb_resource_create"),

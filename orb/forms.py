@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
@@ -240,8 +241,8 @@ class TagFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(TagFilterForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_method = "GET"
-        self.helper.form_action = 'orb_tags_filter_results'
+        #self.helper.form_method = "GET"
+        #self.helper.form_action = 'orb_tags_filter_results'
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-8'
@@ -266,4 +267,14 @@ class TagFilterForm(forms.Form):
                 ),
             )
     def clean(self):
+        empty = True
+        
+        for name,slug in settings.TAG_FILTER_CATEGORIES:
+            tag_ids = self.cleaned_data.get(name)
+            if tag_ids:
+                empty = False
+        
+        if empty:
+            raise forms.ValidationError( _(u"Please select at least one tag to filter on"))
+            
         return self.cleaned_data

@@ -5,6 +5,7 @@ Change log
 20 Apr 2015
 -----------
 * 7: How to filter by multiple tags - http://github.com/mpowering/django-orb/issues/issue/7
+* 163: On filter tags, validate that something has been selected - http://github.com/mpowering/django-orb/issues/issue/163
 
 18 Apr 2015
 -----------
