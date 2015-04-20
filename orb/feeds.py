@@ -5,6 +5,7 @@ from orb.models import Resource, Tag
 
 class LatestTagEntries(Feed):
     description_template = 'feeds/resource.html'
+    link = "/"
     
     def get_object(self, request, tag_slug):
         return get_object_or_404(Tag, slug=tag_slug)

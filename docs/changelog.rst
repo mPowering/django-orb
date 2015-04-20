@@ -9,6 +9,7 @@ Change log
 * 158: Fill in Photo credits - http://github.com/mpowering/django-orb/issues/issue/158
 * 82: Pages about CRT and MEP (& content providers?) - http://github.com/mpowering/django-orb/issues/issue/82
 * 167: Add better templating system for emails - http://github.com/mpowering/django-orb/issues/issue/167
+* 166: Feed errors - http://github.com/mpowering/django-orb/issues/issue/166
 
 18 Apr 2015
 -----------
