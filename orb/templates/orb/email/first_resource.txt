@@ -14,7 +14,4 @@ You can find more detailed information about the process here: http://health-orb
 
 The approvals process takes about 2 weeks. You will be notified via email of the outcome. If your resource is not approved for inclusion on ORB, we will provide you with the reasons for this decision. If you have any questions please contact us at {{ info_email }}
 
-Regards,
-
-
 {% include 'orb/email/footer.txt' %}

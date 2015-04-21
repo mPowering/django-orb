@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.dispatch import Signal
 
-from orb.emailer import first_resource
+from orb.emailer import first_resource, resource_approved, resource_rejected
 from orb.models import ResourceTracker, SearchTracker, ResourceWorkflowTracker
 from orb.lib.search_crawler import is_search_crawler
 
@@ -51,7 +51,8 @@ def resource_workflow_callback(sender, **kwargs):
     
     # if approved
     if status == ResourceWorkflowTracker.APPROVED:
-        pass
+        resource_approved(request, resource.create_user, resource)
+        email_sent = True
     
     # if passed to MEP
     if status == ResourceWorkflowTracker.PENDING_MEP:
@@ -59,6 +60,8 @@ def resource_workflow_callback(sender, **kwargs):
     
     # if rejected
     if status == ResourceWorkflowTracker.REJECTED:
+        resource_rejected(resource.create_user, resource, notes)
+        email_sent = True
         pass
             
     # add a record to workflow tracker
