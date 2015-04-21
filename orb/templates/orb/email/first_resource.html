@@ -1,19 +1,21 @@
-Dear {{ firstname }} {{ lastname }},
+<p>Dear {{ firstname }} {{ lastname }},</p>
 
-Thank you for submitting your first resource ('{{ title }}').
+<p>Thank you for submitting your first resource ('{{ title }}').</p>
 
-As this is the first resource you’ve submitted, here’s some information about our content approval process:
+<p>As this is the first resource you’ve submitted, here’s some information about our content approval process:</p>
 
-1. Our Content Review Team reviews all resources for general suitability for inclusion in ORB (health domain, licensing, quality etc).
+<ol>
+<li>Our Content Review Team reviews all resources for general suitability for inclusion in ORB (health domain, licensing, quality etc).</li>
+<li>Recommended resources are passed to our Medical Expert Panel, which checks the content meets current best medical practice and guidelines.</li>
+<li>The Medical Expert Panel makes the final decision and informs the ORB staff team whether the content is approved for inclusion in ORB.</li>
+</ol>
 
-2. Recommended resources are passed to our Medical Expert Panel, which checks the content meets current best medical practice and guidelines.
+<p>You can find more detailed information about the process here: <a href="http://health-orb.org/about/">http://health-orb.org/about/</a>.</p>
 
-3. The Medical Expert Panel makes the final decision and informs the ORB staff team whether the content is approved for inclusion in ORB.
+<p>The approvals process takes about 2 weeks. You will be notified via email of the outcome. 
+If your resource is not approved for inclusion on ORB, we will provide you with the reasons for this decision. 
+If you have any questions please contact us at <a href="mailto:{{ info_email }}">{{ info_email }}</a></p>
 
-You can find more detailed information about the process here: http://health-orb.org/about/ .
-
-The approvals process takes about 2 weeks. You will be notified via email of the outcome. If your resource is not approved for inclusion on ORB, we will provide you with the reasons for this decision. If you have any questions please contact us at info@mpoweringhealth.org
-
-Regards,
+<p>Regards,</p>
 
 {% include 'orb/email/footer.html' %}

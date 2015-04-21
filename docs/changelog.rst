@@ -1,6 +1,10 @@
 Change log
 =====================================
 
+21 Apr 2015
+-----------
+* 154: When submitting first resource, send welcome email about the process - http://github.com/mpowering/django-orb/issues/issue/154
+
 
 20 Apr 2015
 -----------

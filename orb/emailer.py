@@ -30,8 +30,13 @@ def first_resource(to_user, resource):
     from_email = settings.SERVER_EMAIL
     subject = settings.EMAIL_SUBJECT_PREFIX + _(u"Resource Submitted")
     
-    text_content = render_to_string(template_text, {"resource_title": resource.title})
-    html_content = render_to_string(template_html, {"resource_title": resource.title})
+    data = {"title": resource.title,
+            "firstname": to_user.first_name,
+            "lastname": to_user.last_name,
+            "info_email": settings.ORB_INFO_EMAIL }
+    
+    text_content = render_to_string(template_text, data)
+    html_content = render_to_string(template_html, data)
 
     send_mail(subject, 
               text_content, 
