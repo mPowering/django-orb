@@ -171,7 +171,7 @@ class RegisterForm(forms.Form):
         return cleaned_data
 
 class ResetForm(forms.Form):
-    username = forms.CharField(max_length=30,
+    username = forms.CharField(max_length=100,
         error_messages={'invalid': _(u'Please enter a username or email address.')},
         required=True)
     
