@@ -17,10 +17,10 @@ from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
 
-from orb.forms import ResourceForm, SearchForm, TagFilterForm
+from orb.forms import ResourceForm, SearchForm, TagFilterForm, ResourceRejectForm
 from orb.models import Tag, Resource, ResourceURL , Category
-from orb.models import ResourceFile, ResourceTag
-from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search
+from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker
+from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow
 
 from PIL import Image
 
@@ -208,9 +208,7 @@ def resource_view(request,resource_slug):
             om['title'] = _(u'Approve')   
             om['url'] = reverse('orb_resource_approve', args=[resource.id])
             options_menu.append(om)
-        
-        
-          
+
     resource_viewed.send(sender=resource, resource=resource, request=request)
     return render_to_response('orb/resource/view.html',
                               {'resource': resource, 
@@ -257,7 +255,10 @@ def resource_create_view(request):
                 
             # add tags
             resource_add_tags(request, form, resource)
-                
+              
+            # see if email needs to be sent
+            resource_workflow.send(sender=resource, resource=resource, request=request, status=ResourceWorkflowTracker.PENDING_CRT, notes="")  
+            
             # redirect to info page
             return HttpResponseRedirect(reverse('orb_resource_create_thanks', args=[resource.id])) # Redirect after POST
             
@@ -290,6 +291,8 @@ def resource_approve_view(request, id):
     resource = Resource.objects.get(pk=id)
     resource.status = Resource.APPROVED
     resource.save()
+    
+    resource_workflow.send(sender=resource, resource=resource, request=request, status=ResourceWorkflowTracker.APPROVED, notes="")
     return render_to_response('orb/resource/status_updated.html',
                               { 'resource':resource,},
                               context_instance=RequestContext(request))
@@ -297,9 +300,32 @@ def resource_approve_view(request, id):
 def resource_reject_view(request, id):
     if not request.user.is_staff:
         return HttpResponse(status=401,content="Not Authorized")
+    
     resource = Resource.objects.get(pk=id)
-    resource.status = Resource.REJECTED
-    resource.save()
+    
+    if request.method == 'POST':
+        form = ResourceRejectForm(data = request.POST)
+            
+        if form.is_valid():
+            resource.status = Resource.REJECTED
+            resource.save()
+            notes = form.cleaned_data.get("notes")
+            resource_workflow.send(sender=resource, resource=resource, request=request, status=ResourceWorkflowTracker.REJECTED, notes=notes)
+            return HttpResponseRedirect(reverse('orb_resource_reject_sent', args=[resource.id]))
+    else:
+        form = ResourceRejectForm()
+        
+    return render_to_response('orb/resource/reject_form.html',
+                              { 'resource':resource,
+                                'form': form },
+                              context_instance=RequestContext(request))
+    
+def resource_reject_sent_view(request, id):
+    if not request.user.is_staff:
+        return HttpResponse(status=401,content="Not Authorized") 
+    
+    resource = Resource.objects.get(pk=id)
+    
     return render_to_response('orb/resource/status_updated.html',
                               { 'resource':resource,},
                               context_instance=RequestContext(request))
@@ -311,6 +337,8 @@ def resource_pending_mep_view(request, id):
     resource = Resource.objects.get(pk=id)
     resource.status = Resource.PENDING_MRT
     resource.save()
+    
+    resource_workflow.send(sender=resource, resource=resource, request=request, status=ResourceWorkflowTracker.PENDING_MEP, notes="")
     return render_to_response('orb/resource/status_updated.html',
                               { 'resource':resource,},
                               context_instance=RequestContext(request))

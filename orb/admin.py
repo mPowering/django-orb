@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from orb.models import Category, Tag, Resource, ResourceURL
 from orb.models import ResourceFile, ResourceTag, UserProfile
-from orb.models import ResourceTracker, SearchTracker, TagOwner
+from orb.models import ResourceTracker, SearchTracker, TagOwner, ResourceWorkflowTracker
 # Register your models here.
 
     
@@ -26,7 +26,11 @@ class ResourceTagAdmin(admin.ModelAdmin):
 
 class ResourceTrackerAdmin(admin.ModelAdmin):
     list_display = ('resource', 'user', 'access_date', 'ip', 'type')
-  
+ 
+class ResourceWorkflowTrackerAdmin(admin.ModelAdmin):
+    list_display = ('resource', 'create_user', 'create_date', 'status', 'notes', 'owner_email_sent')
+    search_fields = ['notes']
+     
 class SearchTrackerAdmin(admin.ModelAdmin):
     list_display = ('query', 'user', 'access_date', 'no_results', 'ip', 'type')
         
@@ -48,5 +52,6 @@ admin.site.register(ResourceURL, ResourceURLAdmin)
 admin.site.register(ResourceFile, ResourceFileAdmin)
 admin.site.register(ResourceTag, ResourceTagAdmin)
 admin.site.register(ResourceTracker, ResourceTrackerAdmin)
+admin.site.register(ResourceWorkflowTracker, ResourceWorkflowTrackerAdmin)
 admin.site.register(SearchTracker, SearchTrackerAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)

@@ -22,3 +22,22 @@ def password_reset(to_user, new_password):
               html_message=html_content)
             
     return
+
+def first_resource(to_user, resource):
+    template_html = 'orb/email/first_resource.html'
+    template_text = 'orb/email/first_resource.txt'
+    
+    from_email = settings.SERVER_EMAIL
+    subject = settings.EMAIL_SUBJECT_PREFIX + _(u"Resource Submitted")
+    
+    text_content = render_to_string(template_text, {"resource_title": resource.title})
+    html_content = render_to_string(template_html, {"resource_title": resource.title})
+
+    send_mail(subject, 
+              text_content, 
+              from_email,
+              [to_user.email], 
+              fail_silently=False, 
+              html_message=html_content)
+            
+    return

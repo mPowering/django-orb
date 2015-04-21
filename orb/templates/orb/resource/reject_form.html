@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load crispy_forms_tags %}
+
+{% block extra_head_title %}{% trans 'Resource - Reject' %}{% endblock extra_head_title %}
+{% block content %}
+
+<h3>{% trans 'Reject Resource' %}: {{ resource.title }}</h3>
+
+{% blocktrans with firstname=resource.create_user.first_name lastname=resource.create_user.last_name email=resource.create_user.email %}
+<p>Please enter a reason as to why this resource is being rejected for inclusion on ORB.</p>
+<p>The text you enter here will be included in the email to {{ firstname }} {{ lastname }} ({{ email }}), so please bear this in mind when explaining your reasoning.</p>
+{% endblocktrans %}	
+
+{% crispy form %}
+
+{% endblock %}

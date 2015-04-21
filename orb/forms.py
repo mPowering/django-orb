@@ -278,3 +278,25 @@ class TagFilterForm(forms.Form):
             raise forms.ValidationError( _(u"Please select at least one tag to filter on"))
             
         return self.cleaned_data
+    
+class ResourceRejectForm(forms.Form):
+    notes = forms.CharField(
+                    widget=forms.Textarea,
+                    required=True,
+                    error_messages={'required': _('Please enter a reason as to why the resource has been rejected')},
+                    label=_(u"Reason for rejection")
+                    )
+    
+    def __init__(self, *args, **kwargs):
+        super(ResourceRejectForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+                                    'notes',
+                                    Div(
+                                       Submit('submit', _(u'Submit'), css_class='btn btn-default'),
+                                       css_class='col-lg-offset-2 col-lg-8',
+                                    ),
+                                )

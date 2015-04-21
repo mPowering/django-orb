@@ -47,6 +47,7 @@ urlpatterns = patterns('',
     url(r'^resource/approve/(?P<id>\d+)/$', 'orb.views.resource_approve_view', name="orb_resource_approve"),
     url(r'^resource/pending_mep/(?P<id>\d+)/$', 'orb.views.resource_pending_mep_view', name="orb_resource_pending_mep"),
     url(r'^resource/reject/(?P<id>\d+)/$', 'orb.views.resource_reject_view', name="orb_resource_reject"),
+    url(r'^resource/reject/(?P<id>\d+)/sent/$', 'orb.views.resource_reject_sent_view', name="orb_resource_reject_sent"),
     
     url(r'^resource/rate/$', 'orb.views.resource_rate_view', name="orb_resource_rate"),
     url(r'^resource/guidelines/$',TemplateView.as_view(template_name="orb/resource/guidelines.html"), name="orb_guidelines"),
