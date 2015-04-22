@@ -1,6 +1,13 @@
 Change log
 =====================================
 
+
+22 Apr 2015
+-------------
+* 181: Allow tag owners to edit any resources - http://github.com/mpowering/django-orb/issues/issue/181
+* 183: Change 'save' button on add resource form to be 'submit' instead - http://github.com/mpowering/django-orb/issues/issue/183
+* 173: Make license a drop down option - http://github.com/mpowering/django-orb/issues/issue/173
+
 21 Apr 2015
 -----------
 * 154: When submitting first resource, send welcome email about the process - http://github.com/mpowering/django-orb/issues/issue/154

@@ -46,12 +46,12 @@ def resource_workflow_callback(sender, **kwargs):
     if status == ResourceWorkflowTracker.PENDING_CRT:
         no_previous_resources = ResourceWorkflowTracker.objects.filter(create_user=request.user).count()
         if no_previous_resources == 0:
-            first_resource(request.user, resource)
+            #first_resource(request.user, resource)
             email_sent = True
     
     # if approved
     if status == ResourceWorkflowTracker.APPROVED:
-        resource_approved(request, resource.create_user, resource)
+        #resource_approved(request, resource.create_user, resource)
         email_sent = True
     
     # if passed to MEP
@@ -60,7 +60,7 @@ def resource_workflow_callback(sender, **kwargs):
     
     # if rejected
     if status == ResourceWorkflowTracker.REJECTED:
-        resource_rejected(resource.create_user, resource, notes)
+        #resource_rejected(resource.create_user, resource, notes)
         email_sent = True
         pass
             

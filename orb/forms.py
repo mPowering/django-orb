@@ -60,7 +60,7 @@ class ResourceForm(forms.Form):
                         required=True,
                         error_messages={'required': _('Please select at least one device')},)
     license = forms.ChoiceField(
-                        widget=forms.RadioSelect,
+                        widget=forms.Select,
                         required=True,
                         error_messages={'required': _('Please select a license')},)
     other_tags = forms.CharField(
@@ -131,7 +131,7 @@ class ResourceForm(forms.Form):
                 'terms',
                 Row (HTML('<hr>')),
                 Div(
-                   Submit('submit', _(u'Save'), css_class='btn btn-default'),
+                   Submit('submit', _(u'Submit'), css_class='btn btn-default'),
                    css_class='col-lg-offset-2 col-lg-8',
                 ),
             )

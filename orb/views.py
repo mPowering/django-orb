@@ -18,7 +18,7 @@ from django.utils.translation import ugettext as _
 from haystack.query import SearchQuerySet
 
 from orb.forms import ResourceForm, SearchForm, TagFilterForm, ResourceRejectForm
-from orb.models import Tag, Resource, ResourceURL , Category
+from orb.models import Tag, Resource, ResourceURL , Category, TagOwner
 from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker
 from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow
 
@@ -598,7 +598,11 @@ def resource_can_edit(resource,user):
     if user.is_staff or user == resource.create_user or user == resource.update_user:
         return True
     else:
-        return False
+        tag_owner = TagOwner.objects.filter(user=user,tag__resourcetag__resource=resource).count()
+        if tag_owner > 0:
+            return True
+        else:
+            return False
 
 def resource_add_free_text_tags(request, form, resource, field, slug):
     free_text_tags = [x.strip() for x in form.cleaned_data.get(field).split(',')]
