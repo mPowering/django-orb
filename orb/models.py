@@ -188,8 +188,18 @@ class ResourceRelationship (models.Model):
     update_user = models.ForeignKey(User, related_name='resource_relationship_update_user')
 
 class ResourceCriteria(models.Model):
+    CATEGORIES = (
+        ('qa', _('Quality Assurance')),
+        ('value', _('Value for Frontline Health Workers (FLHW)')),
+        ('video', _('Video resources')),
+        ('animation', _('Animation resources')),
+        ('audio', _('Audio resources')),
+        ('text', _('Text based resources')),
+    )
     description = models.TextField(blank=False, null=False) 
     order_by = models.IntegerField(default=0)
+    category = models.CharField(max_length=50,choices=CATEGORIES)
+    category_order_by = models.IntegerField(default=0)
     
 # Category
 class Category (models.Model):
