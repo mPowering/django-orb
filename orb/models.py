@@ -186,6 +186,10 @@ class ResourceRelationship (models.Model):
     create_user = models.ForeignKey(User, related_name='resource_relationship_create_user')
     update_date = models.DateTimeField(auto_now=True) 
     update_user = models.ForeignKey(User, related_name='resource_relationship_update_user')
+
+class ResourceCriteria(models.Model):
+    description = models.TextField(blank=False, null=False) 
+    order_by = models.IntegerField(default=0)
     
 # Category
 class Category (models.Model):
