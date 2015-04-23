@@ -19,7 +19,7 @@ from haystack.query import SearchQuerySet
 
 from orb.forms import ResourceForm, SearchForm, TagFilterForm, ResourceRejectForm
 from orb.models import Tag, Resource, ResourceURL , Category, TagOwner
-from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker
+from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria
 from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow
 
 from PIL import Image
@@ -284,7 +284,17 @@ def resource_create_thanks_view(request,id):
                                },
                               context_instance=RequestContext(request))
     
- 
+def resource_guidelines_view(request):
+    
+    criteria = []
+    
+    resource_criteria = ResourceCriteria.objects.all().order_by('category_order_by', 'order_by')
+    
+    return render_to_response('orb/resource/guidelines.html',
+                              {'criteria': criteria, 
+                               },
+                              context_instance=RequestContext(request))
+    
 def resource_approve_view(request, id):
     if not request.user.is_staff:
         return HttpResponse(status=401,content="Not Authorized") 
@@ -598,7 +608,7 @@ def resource_can_edit(resource,user):
     if user.is_staff or user == resource.create_user or user == resource.update_user:
         return True
     else:
-        tag_owner = TagOwner.objects.filter(user=user,tag__resourcetag__resource=resource).count()
+        tag_owner = TagOwner.objects.filter(user__pk=user.id,tag__resourcetag__resource=resource).count()
         if tag_owner > 0:
             return True
         else:

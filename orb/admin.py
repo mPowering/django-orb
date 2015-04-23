@@ -14,7 +14,7 @@ class ResourceAdmin(admin.ModelAdmin):
     search_fields = ['title','description']
  
 class ResourceCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('description','order_by')
+    list_display = ('description','category','category_order_by', 'order_by', )
     search_fields = ['description']
        
 class ResourceURLAdmin(admin.ModelAdmin):
