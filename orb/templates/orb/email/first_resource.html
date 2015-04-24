@@ -1,19 +1,34 @@
 <p>Dear {{ firstname }} {{ lastname }},</p>
 
+<p>Welcome to the ORB community!</p>
+
 <p>Thank you for submitting your first resource ('{{ title }}').</p>
 
-<p>As this is the first resource you’ve submitted, here’s some information about our content approval process:</p>
+<p>Since this is your first resource on ORB, here’s some information
+	about our content approval process:</p>
 
 <ol>
-<li>Our Content Review Team reviews all resources for general suitability for inclusion in ORB (health domain, licensing, quality etc).</li>
-<li>Recommended resources are passed to our Medical Expert Panel, which checks the content meets current best medical practice and guidelines.</li>
-<li>The Medical Expert Panel makes the final decision and informs the ORB staff team whether the content is approved for inclusion in ORB.</li>
+	<li>Our Content Review Team will review your resource to make sure
+		it meets our inclusion guidelines.</li>
+	<li>If they approve your resource, they will pass it on to our
+		Medical Expert Panel. They will check that your resource meets current
+		best medical practice and guidelines.</li>
+	<li>The Medical Expert Panel will decide if your resource is ready
+		to go up on the site.</li>
+	<li>We will send you an email to let you know if your resource was
+		accepted, or, if not, why we decided not to include it on ORB.</li>
 </ol>
 
-<p>You can find more detailed information about the process here: <a href="http://health-orb.org/about/">http://health-orb.org/about/</a>.</p>
+<p>
+	You can find more detailed information about the process here: <a
+		href="http://health-orb.org/about/">http://health-orb.org/about/</a>.
+</p>
 
-<p>The approvals process takes about 2 weeks. You will be notified via email of the outcome. 
-If your resource is not approved for inclusion on ORB, we will provide you with the reasons for this decision. 
-If you have any questions please contact us at <a href="mailto:{{ info_email }}">{{ info_email }}</a></p>
+<p>
+	The approvals process takes about 2 weeks. If you have any questions
+	please contact us at <a href="mailto:{{ info_email }}">{{ info_email }}</a>
+</p>
+
+<p>Thanks again for submitting your resource!</p> 
 
 {% include 'orb/email/footer.html' %}

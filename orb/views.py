@@ -288,10 +288,19 @@ def resource_guidelines_view(request):
     
     criteria = []
     
-    resource_criteria = ResourceCriteria.objects.all().order_by('category_order_by', 'order_by')
-    
+    for k,v  in ResourceCriteria.CATEGORIES:
+        #print k.get_category_display()
+        print v
+        obj = {}
+        cat = ResourceCriteria.objects.filter(category=k).order_by('order_by')
+        obj['category'] = cat[0].get_category_display()
+        obj['criteria'] = cat
+        #obj['category'] = k.get_category_display()
+        
+        criteria.append(obj)
+        
     return render_to_response('orb/resource/guidelines.html',
-                              {'criteria': criteria, 
+                              {'criteria_categories': criteria, 
                                },
                               context_instance=RequestContext(request))
     

@@ -1,7 +1,12 @@
 <p>Dear {{ firstname }} {{ lastname }},</p>
 
-<p>We are pleased to inform you that your resource "{{ title }}" has now been approved for inclusion on the ORB platform.</p>
+<p>Thank you for submitting "{{ title }}" to the ORB platform.</p>
 
-<p>You can access your resource here: <a href="{{ resource_link }}">{{ resource_link }}</a>.</p>
+<p>We are pleased to let you know that your resource has now been
+	approved and is freely available on ORB.</p>
+<p>
+	You can access your resource here: <a href="{{ resource_link }}">{{
+		resource_link }}</a>.
+</p>
 
 {% include 'orb/email/footer.html' %}
