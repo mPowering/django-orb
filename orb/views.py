@@ -294,6 +294,7 @@ def resource_guidelines_view(request):
         obj = {}
         cat = ResourceCriteria.objects.filter(category=k).order_by('order_by')
         obj['category'] = cat[0].get_category_display()
+        obj['category_order_by'] = cat[0].category_order_by
         obj['criteria'] = cat
         #obj['category'] = k.get_category_display()
         

@@ -10,22 +10,23 @@
 {% blocktrans %}
 <p>ORB and mPowering Frontline Health Workers aim to provide high
 	quality, relevant and up to date resources that will help to improve
-	the performance of frontline health workers. Our platform hosts
+	the performance of frontline health workers. ORB hosts
 	learning tools, courses, job aids, videos, and similar resources.</p>
-{% endblocktrans %} {% blocktrans %}
-<p>All resources submitted to the platform will be reviewed by our
-	Content Review Team and Medical Expert Panel, against the criteria
-	listed below. All resources submitted to the site evaluated against the
-	following criteria:</p>
+{% endblocktrans %} 
+
+{% blocktrans %}
+<p>All resources submitted to ORB will be evaluated, by our
+	Content Review Team and Medical Expert Panel, against the following
+	criteria:</p>
 {% endblocktrans %} 
 
 {% for cc in criteria_categories %} 
-	<strong>{{ cc.category }}</strong>
-	<ul>
+	<strong>{{ cc.category_order_by }}. {{ cc.category }}</strong>
+	<ol style="list-style-type: lower-roman;">
 		{% for c in cc.criteria %}
 			<li>{{ c.description }}</li>
 		{% endfor %} 
-	</ul> 
+	</ol> 
 {% endfor %} 
 
 {% endblock %}
