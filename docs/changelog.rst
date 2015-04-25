@@ -1,6 +1,9 @@
 Change log
 =====================================
 
+24 Apr 2015
+-----------
+* 177: Add selection criteria to the guidelines page - http://github.com/mpowering/django-orb/issues/issue/177
 
 22 Apr 2015
 -------------

@@ -14,6 +14,12 @@ resource_workflow = Signal(providing_args=["request", "resource", "status", "not
 resource_url_viewed = Signal(providing_args=["resource_url", "request"])
 resource_file_viewed = Signal(providing_args=["resource_file", "request"])
 search = Signal(providing_args=["query", "no_results", "request"])
+user_registered = Signal(providing_args=["user"])
+
+def user_registered(sender, **kwargs):
+    if sended.created:
+        pass
+    pass
 
 def resource_viewed_callback(sender, **kwargs):
     request = kwargs.get('request')

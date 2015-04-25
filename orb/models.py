@@ -13,7 +13,7 @@ from lib.unique_slugify import unique_slugify
 from orb.analytics.models import UserLocationVisualization
 
 models.signals.post_save.connect(create_api_key, sender=User)
-
+models.signals.post_save.connect(user_registered, sender=User)
 
 # Create your models here.
       
