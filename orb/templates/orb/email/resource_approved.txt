@@ -1,7 +1,9 @@
 Dear {{ firstname }} {{ lastname }},
 
-We are pleased to inform you that your resource "{{ title }}" has now been approved for inclusion on the ORB platform.
+Thank you for submitting "{{ title }}" to the ORB platform.
 
-You can access your resource here: {{ resource_link }}
+We are pleased to let you know that your resource has now been approved and is freely available on ORB.
+
+You can access your resource here: {{ resource_link }}.
 
 {% include 'orb/email/footer.txt' %}

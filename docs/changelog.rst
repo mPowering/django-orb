@@ -1,6 +1,11 @@
 Change log
 =====================================
 
+26 Apr 2015
+------------
+* 154: When submitting first resource, send welcome email about the process - http://github.com/mpowering/django-orb/issues/issue/154
+* 171: Have a welcome email for new users who register - http://github.com/mpowering/django-orb/issues/issue/171
+
 24 Apr 2015
 -----------
 * 177: Add selection criteria to the guidelines page - http://github.com/mpowering/django-orb/issues/issue/177

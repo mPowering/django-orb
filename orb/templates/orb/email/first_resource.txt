@@ -1,17 +1,20 @@
 Dear {{ firstname }} {{ lastname }},
 
+Welcome to the ORB community!
+
 Thank you for submitting your first resource ('{{ title }}').
 
-As this is the first resource you’ve submitted, here’s some information about our content approval process:
+Since this is your first resource on ORB, here’s some information about our content approval process:
 
-1. Our Content Review Team reviews all resources for general suitability for inclusion in ORB (health domain, licensing, quality etc).
+* Our Content Review Team will review your resource to make sure it meets our inclusion guidelines.
+* If they approve your resource, they will pass it on to our Medical Expert Panel. They will check that your resource meets current best medical practice and guidelines.
+* The Medical Expert Panel will decide if your resource is ready to go up on the site.
+* We will send you an email to let you know if your resource was accepted, or, if not, why we decided not to include it on ORB.
 
-2. Recommended resources are passed to our Medical Expert Panel, which checks the content meets current best medical practice and guidelines.
+You can find more detailed information about the process here: http://health-orb.org/about/
 
-3. The Medical Expert Panel makes the final decision and informs the ORB staff team whether the content is approved for inclusion in ORB.
+The approvals process takes about 2 weeks. If you have any questions please contact us at {{ info_email }}
 
-You can find more detailed information about the process here: http://health-orb.org/about/ .
-
-The approvals process takes about 2 weeks. You will be notified via email of the outcome. If your resource is not approved for inclusion on ORB, we will provide you with the reasons for this decision. If you have any questions please contact us at {{ info_email }}
+Thanks again for submitting your resource!
 
 {% include 'orb/email/footer.txt' %}

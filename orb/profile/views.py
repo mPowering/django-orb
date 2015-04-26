@@ -17,6 +17,7 @@ from django.utils.translation import ugettext as _
 from orb.models import UserProfile, Tag, Category
 from orb.profile.forms import LoginForm, RegisterForm, ResetForm, ProfileForm
 from orb.emailer import password_reset
+from orb.signals import user_registered
 from tastypie.models import ApiKey
 
 
@@ -87,6 +88,10 @@ def register(request):
             user_profile.mailing= form.cleaned_data.get("mailing")
             
             user_profile.save()
+            
+            # send welcome email
+            user_registered.send(sender=user, user=user,request=request)
+            
             u = authenticate(username=username, password=password)
             if u is not None:
                 if u.is_active:

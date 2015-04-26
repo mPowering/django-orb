@@ -10,10 +10,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from tastypie.models import create_api_key
 from lib.unique_slugify import unique_slugify
-from orb.analytics.models import UserLocationVisualization
+from orb.analytics.models import UserLocationVisualization 
 
 models.signals.post_save.connect(create_api_key, sender=User)
-models.signals.post_save.connect(user_registered, sender=User)
 
 # Create your models here.
       
