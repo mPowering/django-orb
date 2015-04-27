@@ -124,3 +124,28 @@ def resource_rejected(to_user, resource, criteria, notes):
               html_message=html_content)
             
     return
+
+def new_resource_submitted(request, resource):
+    template_html = 'orb/email/resource_submitted.html'
+    template_text = 'orb/email/resource_submitted.txt'
+
+    from_email = settings.SERVER_EMAIL
+    subject = settings.EMAIL_SUBJECT_PREFIX + _(u" New resource submitted") + ": " + resource.title
+    
+    data = {"title": resource.title,
+            "firstname": resource.create_user.first_name,
+            "lastname": resource.create_user.last_name,
+            "info_email": settings.ORB_INFO_EMAIL,
+           }
+    
+    text_content = render_to_string(template_text, data)
+    html_content = render_to_string(template_html, data)
+
+    send_mail(subject, 
+              text_content, 
+              from_email,
+              [settings.ORB_INFO_EMAIL], 
+              fail_silently=False, 
+              html_message=html_content)
+            
+    return

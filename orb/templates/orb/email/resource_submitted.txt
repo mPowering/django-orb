@@ -1,0 +1,6 @@
+
+
+{{ firstname }} {{ lastname }} has just submitted a new resource '{{ title }}'.
+
+
+{% include 'orb/email/footer.txt' %}

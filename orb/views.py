@@ -20,7 +20,7 @@ from haystack.query import SearchQuerySet
 from orb.forms import ResourceForm, SearchForm, TagFilterForm, ResourceRejectForm
 from orb.models import Tag, Resource, ResourceURL , Category, TagOwner
 from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria
-from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow
+from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow, resource_submitted
 
 from PIL import Image
 
@@ -258,6 +258,7 @@ def resource_create_view(request):
               
             # see if email needs to be sent
             resource_workflow.send(sender=resource, resource=resource, request=request, status=ResourceWorkflowTracker.PENDING_CRT, notes="")  
+            resource_submitted.send(sender=resource, resource=resource, request=request)
             
             # redirect to info page
             return HttpResponseRedirect(reverse('orb_resource_create_thanks', args=[resource.id])) # Redirect after POST

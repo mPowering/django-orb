@@ -5,6 +5,7 @@ Change log
 -----------
 * 175: For rejection ask user to tick which items the resource didn't match - http://github.com/mpowering/django-orb/issues/issue/175
 * 120: How to notify users when their resources are approved/rejected - http://github.com/mpowering/django-orb/issues/issue/120
+* 186: Add email notification to admins when new resource submitted - http://github.com/mpowering/django-orb/issues/issue/186
 
 26 Apr 2015
 ------------

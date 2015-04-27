@@ -5,10 +5,8 @@ Thank you for submitting "{{ title }}" to the ORB platform.
 Unfortunately, your resource did not meet the following criteria to be included on ORB:
 {% for c in criteria %}
 * {{ c.description }}
-
 {% endfor %} 
 
-	
 The review team made the following comments:	
 	
 "{{ notes }}"

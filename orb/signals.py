@@ -3,10 +3,11 @@ import json
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
 from django.dispatch import Signal
 
-from orb.emailer import first_resource, resource_approved, resource_rejected, user_welcome
-from orb.models import ResourceTracker, SearchTracker, ResourceWorkflowTracker, ResourceCriteria
+from orb.emailer import first_resource, resource_approved, resource_rejected, user_welcome, new_resource_submitted
+from orb.models import Resource, ResourceTracker, SearchTracker, ResourceWorkflowTracker, ResourceCriteria
 from orb.lib.search_crawler import is_search_crawler
 
 resource_viewed = Signal(providing_args=["resource", "request", "type"])
@@ -15,6 +16,7 @@ resource_url_viewed = Signal(providing_args=["resource_url", "request"])
 resource_file_viewed = Signal(providing_args=["resource_file", "request"])
 search = Signal(providing_args=["query", "no_results", "request"])
 user_registered = Signal(providing_args=["user", "request"])
+resource_submitted = Signal(providing_args=["resource", "request"])
 
 def user_registered_callback(sender, **kwargs):
     request = kwargs.get('request')
@@ -40,6 +42,14 @@ def resource_viewed_callback(sender, **kwargs):
     tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
     tracker.type = type
     tracker.save()
+    return
+
+def resource_submitted_callback(sender, **kwargs):
+    request = kwargs.get('request')
+    resource = kwargs.get('instance')
+    created = kwargs.get('created')
+    if created:
+        new_resource_submitted(request, resource)
     return
 
 def resource_workflow_callback(sender, **kwargs):
@@ -143,3 +153,5 @@ resource_url_viewed.connect(resource_url_viewed_callback)
 resource_file_viewed.connect(resource_file_viewed_callback)
 search.connect(search_callback)
 user_registered.connect(user_registered_callback)
+resource_submitted.connect(resource_submitted_callback)
+post_save.connect(resource_submitted_callback, sender=Resource)
