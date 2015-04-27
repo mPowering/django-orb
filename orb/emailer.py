@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 
+from orb.models import ResourceCriteria
 
 def user_welcome(to_user):
     template_html = 'orb/email/welcome.html'
@@ -97,17 +98,19 @@ def resource_approved(request, to_user, resource):
             
     return
 
-def resource_rejected(to_user, resource, notes):
+def resource_rejected(to_user, resource, criteria, notes):
     template_html = 'orb/email/resource_rejected.html'
     template_text = 'orb/email/resource_rejected.txt'
     
     from_email = settings.SERVER_EMAIL
     subject = settings.EMAIL_SUBJECT_PREFIX + _(u"Resource Submission") + ": " + resource.title
     
+    rejection_criteria = ResourceCriteria.objects.filter(id__in=criteria)
     data = {"title": resource.title,
             "firstname": to_user.first_name,
             "lastname": to_user.last_name,
             "info_email": settings.ORB_INFO_EMAIL,
+            "criteria": rejection_criteria,
             "notes": notes }
     
     text_content = render_to_string(template_text, data)

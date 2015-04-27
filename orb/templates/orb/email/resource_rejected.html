@@ -1,4 +1,17 @@
+<p>Dear {{ firstname }} {{ lastname }},</p>
 
+<p>Thank you for submitting "{{ title }}" to the ORB platform.</p>
+
+<p>Unfortunately, your resource did not meet the following criteria to be included on ORB:</p>
+<ul>
+	{% for c in criteria %}
+		<li>{{ c.description }}</li>
+	{% endfor %} 
+</ul>
+	
+<p>The review team made the following comments:</p>	
+	
+<p>"{{ notes }}"</p>
 
 
 {% include 'orb/email/footer.html' %}

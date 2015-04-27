@@ -1,6 +1,11 @@
 Change log
 =====================================
 
+27 Apr 2015
+-----------
+* 175: For rejection ask user to tick which items the resource didn't match - http://github.com/mpowering/django-orb/issues/issue/175
+* 120: How to notify users when their resources are approved/rejected - http://github.com/mpowering/django-orb/issues/issue/120
+
 26 Apr 2015
 ------------
 * 154: When submitting first resource, send welcome email about the process - http://github.com/mpowering/django-orb/issues/issue/154

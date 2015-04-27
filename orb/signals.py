@@ -6,11 +6,11 @@ from django.db import models
 from django.dispatch import Signal
 
 from orb.emailer import first_resource, resource_approved, resource_rejected, user_welcome
-from orb.models import ResourceTracker, SearchTracker, ResourceWorkflowTracker
+from orb.models import ResourceTracker, SearchTracker, ResourceWorkflowTracker, ResourceCriteria
 from orb.lib.search_crawler import is_search_crawler
 
 resource_viewed = Signal(providing_args=["resource", "request", "type"])
-resource_workflow = Signal(providing_args=["request", "resource", "status", "notes"])
+resource_workflow = Signal(providing_args=["request", "resource", "status", "notes", "criteria"])
 resource_url_viewed = Signal(providing_args=["resource_url", "request"])
 resource_file_viewed = Signal(providing_args=["resource_file", "request"])
 search = Signal(providing_args=["query", "no_results", "request"])
@@ -47,6 +47,7 @@ def resource_workflow_callback(sender, **kwargs):
     resource = kwargs.get('resource')
     status = kwargs.get('status')
     notes = kwargs.get('notes')
+    criteria = kwargs.get('criteria')
     
     email_sent = False
     # if status is pending CRT (i.e new) and owner hasn't submitted before then send email
@@ -67,9 +68,10 @@ def resource_workflow_callback(sender, **kwargs):
     
     # if rejected
     if status == ResourceWorkflowTracker.REJECTED:
-        resource_rejected(resource.create_user, resource, notes)
+        resource_rejected(resource.create_user, resource, criteria, notes)
         email_sent = True
-        pass
+        rejection_criteria = ResourceCriteria.objects.filter(id__in=criteria).values_list('description', flat=True)
+        notes =  ", ".join(rejection_criteria) + " : " + notes
             
     # add a record to workflow tracker
     workflow_tracker = ResourceWorkflowTracker()

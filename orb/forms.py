@@ -280,10 +280,14 @@ class TagFilterForm(forms.Form):
         return self.cleaned_data
     
 class ResourceRejectForm(forms.Form):
+    criteria = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=True,)
     notes = forms.CharField(
                     widget=forms.Textarea,
                     required=True,
                     error_messages={'required': _('Please enter a reason as to why the resource has been rejected')},
+                    help_text = _('The text you enter here will be included in the email to the submitter of the resource, so please bear this in mind when explaining your reasoning.'),
                     label=_(u"Reason for rejection")
                     )
     
@@ -294,6 +298,7 @@ class ResourceRejectForm(forms.Form):
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-8'
         self.helper.layout = Layout(
+                                    'criteria',
                                     'notes',
                                     Div(
                                        Submit('submit', _(u'Submit'), css_class='btn btn-default'),

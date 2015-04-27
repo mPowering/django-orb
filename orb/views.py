@@ -325,15 +325,18 @@ def resource_reject_view(request, id):
     
     if request.method == 'POST':
         form = ResourceRejectForm(data = request.POST)
+        form.fields['criteria'].choices = [(t.id, t.description) for t in ResourceCriteria.objects.all().order_by('category_order_by','order_by')]
             
         if form.is_valid():
             resource.status = Resource.REJECTED
             resource.save()
             notes = form.cleaned_data.get("notes")
-            resource_workflow.send(sender=resource, resource=resource, request=request, status=ResourceWorkflowTracker.REJECTED, notes=notes)
+            criteria = form.cleaned_data.get("criteria")
+            resource_workflow.send(sender=resource, resource=resource, request=request, status=ResourceWorkflowTracker.REJECTED, notes=notes, criteria=criteria)
             return HttpResponseRedirect(reverse('orb_resource_reject_sent', args=[resource.id]))
     else:
         form = ResourceRejectForm()
+        form.fields['criteria'].choices = [(t.id, t.description) for t in ResourceCriteria.objects.all().order_by('category_order_by','order_by')]
         
     return render_to_response('orb/resource/reject_form.html',
                               { 'resource':resource,
