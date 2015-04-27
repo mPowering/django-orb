@@ -64,30 +64,71 @@
 
 <a name="pc"></a>
 <h3>{% trans 'Pending CRT' %}</h3>
-<ul>
-{% for pr in pending_crt_resources %}
-	<li>{{ pr.title }} -
-		<a target="_blank" href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
-		| <a target="_blank" href="{% url 'orb_resource_pending_mep' pr.id%}">{% trans 'Pending MEP' %}</a>
-		| <a target="_blank" href="{% url 'orb_resource_approve' pr.id %}">{% trans 'Approve' %}</a>
-		| <a target="_blank" href="{% url 'orb_resource_reject' pr.id %}">{% trans 'Reject' %}</a> </li>
-{% empty %}
-	<li>{% trans 'No resources pending CRT review' %}</li>
-{% endfor %}
-</ul>
+
+{% if pending_crt_resources %}
+<div class="table-responsive">
+         <table class="table table-striped">
+         	 <thead>
+                <tr>
+                  <th>{% trans 'Submitted' %}</th>
+                  <th>{% trans 'Title' %}</th>
+                  <th>{% trans 'Options' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+			{% for pr in pending_crt_resources %}
+ 			 <tr>
+ 			 	  <td>{{ pr.create_date }}</td>
+                  <td>{{ pr.title }}</td>
+                  <td>
+                  <a target="_blank" href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
+					| <a target="_blank" href="{% url 'orb_resource_pending_mep' pr.id%}">{% trans 'Pending MEP' %}</a>
+					| <a target="_blank" href="{% url 'orb_resource_approve' pr.id %}">{% trans 'Approve' %}</a>
+					| <a target="_blank" href="{% url 'orb_resource_reject' pr.id %}">{% trans 'Reject' %}</a> 
+                  </td>
+                
+                </tr>
+ 			{% endfor %}
+ 			</tbody>
+ 		</table>
+	</div>
+{% else %}
+	<p>{% trans 'No resources pending CRT review' %}</p>
+{% endif%}
 
 <a name="pm"></a>
 <h3>{% trans 'Pending MEP' %}</h3>
-<ul>
-{% for pr in pending_mep_resources %}
-	<li>{{ pr.title }} -
-		<a target="_blank" href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
-		| <a target="_blank" href="{% url 'orb_resource_approve' pr.id %}">{% trans 'Approve' %}</a>
-		| <a target="_blank" href="{% url 'orb_resource_reject' pr.id %}">{% trans 'Reject' %}</a> </li>
-{% empty %}
-	<li>{% trans 'No resources pending MEP review' %}</li>
-{% endfor %}
-</ul>
+
+{% if pending_mep_resources %}
+<div class="table-responsive">
+         <table class="table table-striped">
+         	 <thead>
+                <tr>
+                  <th>{% trans 'Submitted' %}</th>
+                  <th>{% trans 'Title' %}</th>
+                  <th>{% trans 'Options' %}</th>
+                </tr>
+              </thead>
+              <tbody>
+			{% for pr in pending_mep_resources %}
+ 			 <tr>
+ 			 	  <td>{{ pr.create_date }}</td>
+                  <td>{{ pr.title }}</td>
+                  <td>
+                  <a target="_blank" href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
+					| <a target="_blank" href="{% url 'orb_resource_approve' pr.id %}">{% trans 'Approve' %}</a>
+					| <a target="_blank" href="{% url 'orb_resource_reject' pr.id %}">{% trans 'Reject' %}</a> 
+                  </td>
+                
+                </tr>
+ 			{% endfor %}
+ 			</tbody>
+ 		</table>
+	</div>
+{% else %}
+	<p>{% trans 'No resources pending MEP review' %}</p>
+{% endif%}
+
 
 <a name="ps"></a>
 <h3>{% trans 'Popular Searches (last month)' %}</h3>

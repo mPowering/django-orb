@@ -22,8 +22,8 @@ def home_view(request):
         return HttpResponse(status=401,content="Not Authorized") 
     start_date = timezone.now() - datetime.timedelta(days=31)
     end_date = timezone.now()
-    pending_crt_resources = Resource.objects.filter(status=Resource.PENDING_CRT)
-    pending_mep_resources = Resource.objects.filter(status=Resource.PENDING_MRT)
+    pending_crt_resources = Resource.objects.filter(status=Resource.PENDING_CRT).order_by('create_date')
+    pending_mep_resources = Resource.objects.filter(status=Resource.PENDING_MRT).order_by('create_date')
     popular_searches = SearchTracker.objects.filter(access_date__gte=start_date).values('query').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
     popular_resources = ResourceTracker.objects.filter(access_date__gte=start_date).values('resource','resource__slug','resource__title').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
     organisations = Tag.objects.filter(category__slug='organisation',resourcetag__isnull=False).annotate(total_resources=Count('resourcetag__id')).order_by('name')
