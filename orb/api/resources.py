@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 from haystack.query import SearchQuerySet
 
 from orb.api.serializers import PrettyJSONSerializer, ResourceSerializer
-from orb.api.authorization import UserObjectsOnlyAuthorization
+from orb.api.authorization import UserObjectsOnlyAuthorization, ORBAuthorization
 from orb.models import Resource, ResourceFile, ResourceURL, ResourceTag
 from orb.models import User, Tag, Category, ResourceTracker, SearchTracker
 from orb.signals import resource_viewed, search
@@ -173,7 +173,7 @@ class ResourceTagResource(ModelResource):
         authorization = UserObjectsOnlyAuthorization()
         serializer = PrettyJSONSerializer()
         always_return_data = True  
-        include_resource_uri = False 
+        include_resource_uri = True
     
     def hydrate(self, bundle, request=None):
         bundle.obj.create_user_id = bundle.request.user.id  
@@ -186,11 +186,11 @@ class TagResource(ModelResource):
     class Meta:
         queryset = Tag.objects.all()
         resource_name = 'tag'
-        allowed_methods = ['get']
+        allowed_methods = ['get','post']
         fields = ['id','name', 'image']
         filtering = {"name": [ "exact" ]}
         authentication = ApiKeyAuthentication()
-        authorization = ReadOnlyAuthorization() 
+        authorization = ORBAuthorization() 
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
@@ -204,6 +204,23 @@ class TagResource(ModelResource):
             return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
         else:
             return None
+    
+    def hydrate(self, bundle, request=None):
+        
+        # check tag doesn't already exist
+        try:
+            tag = Tag.objects.get(name=bundle.data['name'])
+            tr = TagResource()
+            bundle = tr.build_bundle(obj=tag,request=request)
+            raise BadRequest(_(u'This tag already exists'))
+        except Tag.DoesNotExist:
+            pass
+        
+        category = Category.objects.get(slug='other')
+        bundle.obj.create_user_id = bundle.request.user.id  
+        bundle.obj.update_user_id = bundle.request.user.id
+        bundle.obj.category_id = category.id
+        return bundle  
     
 # Helper methods.   
 def get_full_url_prefix(bundle):
