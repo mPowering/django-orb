@@ -1,6 +1,11 @@
 Change log
 =====================================
 
+
+28 Apr 2015
+-----------
+* 189: Add option to order resource files and links - http://github.com/mpowering/django-orb/issues/issue/189
+
 27 Apr 2015
 -----------
 * 175: For rejection ask user to tick which items the resource didn't match - http://github.com/mpowering/django-orb/issues/issue/175

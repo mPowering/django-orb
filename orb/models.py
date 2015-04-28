@@ -68,10 +68,10 @@ class Resource (models.Model):
         return Tag.objects.filter(resourcetag__resource=self,category__slug='organisation')
     
     def get_files(self):
-        return ResourceFile.objects.filter(resource=self)
+        return ResourceFile.objects.filter(resource=self).order_by('order_by')
     
     def get_urls(self):
-        return ResourceURL.objects.filter(resource=self)
+        return ResourceURL.objects.filter(resource=self).order_by('order_by')
     
     def get_categories(self):
         categories = Category.objects.filter(tag__resourcetag__resource=self).distinct().order_by('order_by')
@@ -136,6 +136,7 @@ class ResourceURL (models.Model):
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True) 
+    order_by = models.IntegerField(default=0)
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User, related_name='resource_url_create_user')
     update_date = models.DateTimeField(auto_now=True) 
@@ -154,6 +155,7 @@ class ResourceFile (models.Model):
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True) 
+    order_by = models.IntegerField(default=0)
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User, related_name='resource_file_create_user')
     update_date = models.DateTimeField(auto_now=True) 
