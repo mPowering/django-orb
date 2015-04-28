@@ -137,36 +137,34 @@ class ResourceForm(forms.Form):
             )
         
     def clean(self):
-        cleaned_data = self.cleaned_data
-        file = cleaned_data.get("file")
-        url = cleaned_data.get("url")
+        file = self.cleaned_data.get("file")
+        url = self.cleaned_data.get("url")
+        file_clear = self.cleaned_data.get("file-clear")
         
         if self._errors:
             raise forms.ValidationError( _(u"Please correct the errors below and resubmit the form."))
-        if file is None and not url:
+        
+        if file is None and not url and file_clear:
             raise forms.ValidationError( _(u"Please submit a file and/or a url for this resource"))
-        if cleaned_data.get("study_time_number") is not None and cleaned_data.get("study_time_number") != 0 and cleaned_data.get("study_time_unit") is None:
+        
+        if self.cleaned_data.get("study_time_number") is not None and self.cleaned_data.get("study_time_number") != 0 and self.cleaned_data.get("study_time_unit") is None:
             raise forms.ValidationError( _(u"You have entered a study time, but not selected a unit."))
             
-        
         return self.cleaned_data
     
     def clean_file(self):
         file = self.cleaned_data['file']
-        try:
-            if file:
-                file_type = file.content_type.split('/')[0]
+        if file:
+            file_type = file.content_type.split('/')[0]
 
-                if len(file.name.split('.')) == 1:
-                    raise forms.ValidationError(_(u'File type is not supported'))
+            if len(file.name.split('.')) == 1:
+                raise forms.ValidationError(_(u'File type is not supported'))
 
-                if file_type in settings.TASK_UPLOAD_FILE_TYPES:
-                    if file._size > settings.TASK_UPLOAD_FILE_MAX_SIZE:
-                        raise forms.ValidationError(_(u'Please keep filesize under %(max_size)s. Current filesize %(actual_size)s') % {'max_size':filesizeformat(settings.TASK_UPLOAD_FILE_MAX_SIZE), 'actual_size': filesizeformat(file._size)})
-                else:
-                    raise forms.ValidationError(_(u'File type is not supported'))
-        except:
-            pass
+            if file_type in settings.TASK_UPLOAD_FILE_TYPES:
+                if file._size > settings.TASK_UPLOAD_FILE_MAX_SIZE:
+                    raise forms.ValidationError(_(u'Please keep filesize under %(max_size)s. Current filesize %(actual_size)s') % {'max_size':filesizeformat(settings.TASK_UPLOAD_FILE_MAX_SIZE), 'actual_size': filesizeformat(file._size)})
+            else:
+                raise forms.ValidationError(_(u'File type is not supported'))
 
         return file
     
