@@ -87,15 +87,18 @@ From:
 	<ul>
 	{% for f in resource.get_files %}
 		<li>
-			{% if f.title  %}
-				<a href="{% url 'orb_resource_view_file' f.id %}">{{ f.title }}</a>
-			{% else %}
-				<a href="{% url 'orb_resource_view_file' f.id %}">{{ f.filename }}</a>
-			{% endif %}
-			({{ f.filesize|filesizeformat }})
+			<a href="{% url 'orb_resource_view_file' f.id %}">
 			{% if f.description and f.description.strip %}
-				<p>{{ f.description }}</p>
+				{{ f.description }} : 
 			{% endif %}
+			{% if f.title  %}
+				{{ f.title }}
+			{% else %}
+				{{ f.filename }}
+			{% endif %}
+			</a>
+			({{ f.filesize|filesizeformat }})
+			
 		</li>
 	{% endfor %}
 	</ul>

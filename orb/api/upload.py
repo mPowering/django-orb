@@ -8,6 +8,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.csrf import csrf_exempt
 
+from orb.api.error_codes import *
 from orb.models import Resource, ResourceFile
 
 from tastypie.authentication import ApiKeyAuthentication
@@ -22,7 +23,7 @@ def image_view(request):
     auth = ApiKeyAuthentication()
     auth_result = auth.is_authenticated(request)
     if auth_result == False:
-        return HttpResponse(status=401)
+        return HttpResponse(status=HTML_UNAUTHORIZED)
     elif auth_result != True:
         return auth_result
 
@@ -30,10 +31,10 @@ def image_view(request):
     
     for r in required_params:
         if r not in request.POST:
-            return HttpResponse(status=400, content='{ "error": "No '+r+' provided"}')
+            return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No '+r+' provided"}')
      
     if 'image_file' not in request.FILES:
-       return HttpResponse(status=400, content='{ "error": "No image file provided"}')
+       return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No image file provided"}')
       
     # check owner of resource
     resource_id = request.POST['resource_id']
@@ -57,18 +58,18 @@ def file_view(request):
     auth = ApiKeyAuthentication()
     auth_result = auth.is_authenticated(request)
     if auth_result == False:
-        return HttpResponse(status=401)
+        return HttpResponse(status=HTML_UNAUTHORIZED)
     elif auth_result != True:
         return auth_result
 
-    required_params = ['resource_id','title', 'description']
+    required_params = ['resource_id','title', 'description', 'order_by']
     
     for r in required_params:
         if r not in request.POST:
-            return HttpResponse(status=400, content='{ "error": "No '+r+' provided"}')
+            return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No '+r+' provided"}')
      
     if 'resource_file' not in request.FILES:
-       return HttpResponse(status=400, content='{ "error": "No resource file provided"}')
+       return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No resource file provided"}')
       
     # check owner of resource
     resource_id = request.POST['resource_id']
@@ -84,6 +85,7 @@ def file_view(request):
     rf.update_user = request.user
     rf.file = request.FILES['resource_file']
     rf.description = request.POST['description']
+    rf.order_by = request.POST['order_by']
     rf.save()
     
     return HttpResponse(status=201)
