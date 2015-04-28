@@ -109,6 +109,7 @@ class ResourceResource(ModelResource):
     def hydrate(self, bundle, request=None):
         bundle.obj.create_user_id = bundle.request.user.id
         bundle.obj.update_user_id = bundle.request.user.id
+        
         # check required fields
         if 'title' not in bundle.data or bundle.data['title'].strip() == '':
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_NO_TITLE)
@@ -132,7 +133,7 @@ class ResourceFileResource(ModelResource):
         queryset = ResourceFile.objects.all()
         resource_name = 'resourcefile'
         allowed_methods = ['get']
-        fields = ['file', 'description']
+        fields = ['file', 'title', 'description', 'order_by']
         authentication = ApiKeyAuthentication()
         authorization = UserObjectsOnlyAuthorization() 
         serializer = PrettyJSONSerializer()
@@ -150,7 +151,7 @@ class ResourceURLResource(ModelResource):
         queryset = ResourceURL.objects.all()
         resource_name = 'resourceurl'
         allowed_methods = ['get','post']
-        fields = ['url', 'title', 'description']
+        fields = ['id', 'url', 'title', 'description', 'order_by']
         authentication = ApiKeyAuthentication()
         authorization = UserObjectsOnlyAuthorization() 
         serializer = PrettyJSONSerializer()
@@ -158,6 +159,12 @@ class ResourceURLResource(ModelResource):
         include_resource_uri = False
      
     def hydrate(self, bundle, request=None):
+        # chcek that user has permissions on the resource
+        resource = Resource.objects.get(pk=bundle.data['resource_id'])
+        user = User.objects.get(pk=bundle.request.user.id)
+        if not resource_can_edit(resource, user):
+            raise Unauthorized("You do not have edit access for this resource")
+        
         bundle.obj.create_user_id = bundle.request.user.id  
         bundle.obj.update_user_id = bundle.request.user.id 
         bundle.obj.resource_id = bundle.data['resource_id']
