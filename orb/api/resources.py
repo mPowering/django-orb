@@ -11,8 +11,10 @@ from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
 
-from orb.api.serializers import PrettyJSONSerializer, ResourceSerializer
 from orb.api.authorization import UserObjectsOnlyAuthorization, ORBAuthorization
+from orb.api.error_codes import *
+from orb.api.exceptions import ORBAPIBadRequest
+from orb.api.serializers import PrettyJSONSerializer, ResourceSerializer
 from orb.models import Resource, ResourceFile, ResourceURL, ResourceTag
 from orb.models import User, Tag, Category, ResourceTracker, SearchTracker
 from orb.signals import resource_viewed, search
@@ -26,6 +28,7 @@ from tastypie.models import ApiKey
 from tastypie.resources import ModelResource
 from tastypie.throttle import CacheDBThrottle
 from tastypie.utils import trailing_slash
+
 
 class ResourceResource(ModelResource):
     files = fields.ToManyField('orb.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True, null = True)
@@ -107,24 +110,18 @@ class ResourceResource(ModelResource):
         bundle.obj.create_user_id = bundle.request.user.id
         bundle.obj.update_user_id = bundle.request.user.id
         # check required fields
-        if 'title' not in bundle.data:
-            raise BadRequest({'code': 4000, 'message':_(u'No title provided')})
-        
-        if bundle.data['title'].strip() == '':
-            raise BadRequest({'code': 4000, 'message':_(u'No title provided')})
-        
-        if 'description' not in bundle.data:
-            raise BadRequest(_(u'No description provided'))
-        
-        if bundle.data['description'].strip() == '':
-            raise BadRequest(_(u'No description provided'))
-        
+        if 'title' not in bundle.data or bundle.data['title'].strip() == '':
+            raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_NO_TITLE)
+
+        if 'description' not in bundle.data or bundle.data['description'].strip() == '':
+            raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_NO_DESCRIPTION)
+
         # check that resource doesn't already exist for this user
         try:
             resource = Resource.objects.get(create_user=bundle.request.user,title =bundle.data['title'])
             rr = ResourceResource()
             bundle = rr.build_bundle(obj=resource,request=request)
-            raise BadRequest({'code': 2000, 'message':_(u'You have already uploaded a resource with this title')})
+            raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_EXISTS)
         except Resource.DoesNotExist:
             pass
         
@@ -218,14 +215,14 @@ class TagResource(ModelResource):
     def hydrate(self, bundle, request=None):
         
         if bundle.data['name'].strip() == '':
-            raise BadRequest(_(u'Cannot add empty tag'))
+            raise ORBAPIBadRequest(ERROR_CODE_TAG_EMPTY)
         
         # check tag doesn't already exist
         try:
             tag = Tag.objects.get(name=bundle.data['name'])
             tr = TagResource()
             bundle = tr.build_bundle(obj=tag,request=request)
-            raise BadRequest(_(u'This tag already exists'))
+            raise ORBAPIBadRequest(ERROR_CODE_TAG_EXISTS)
         except Tag.DoesNotExist:
             pass
         
