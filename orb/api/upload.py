@@ -46,7 +46,7 @@ def image_view(request):
     resource.image = request.FILES['image_file']
     resource.save()
    
-    return HttpResponse(status=200)
+    return HttpResponse(status=201)
 
 
 @csrf_exempt

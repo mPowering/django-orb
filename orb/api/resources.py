@@ -16,11 +16,12 @@ from orb.api.authorization import UserObjectsOnlyAuthorization, ORBAuthorization
 from orb.models import Resource, ResourceFile, ResourceURL, ResourceTag
 from orb.models import User, Tag, Category, ResourceTracker, SearchTracker
 from orb.signals import resource_viewed, search
+from orb.views import resource_can_edit
 
 from tastypie import fields
 from tastypie.authentication import Authentication,ApiKeyAuthentication
 from tastypie.authorization import ReadOnlyAuthorization, Authorization
-from tastypie.exceptions import BadRequest
+from tastypie.exceptions import BadRequest, Unauthorized
 from tastypie.models import ApiKey
 from tastypie.resources import ModelResource
 from tastypie.throttle import CacheDBThrottle
@@ -98,9 +99,6 @@ class ResourceResource(ModelResource):
         tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
         tracker.type = SearchTracker.SEARCH_API
         tracker.save()
-    
-        # add to ResourceTracker
-        #search.send(sender=sqs, query=request.GET.get('q', ''), no_results=sqs.count(),  request=request, type=SearchTracker.VIEW_API)
         
         self.log_throttled_access(request)
         return self.create_response(request, object_list)    
@@ -110,9 +108,15 @@ class ResourceResource(ModelResource):
         bundle.obj.update_user_id = bundle.request.user.id
         # check required fields
         if 'title' not in bundle.data:
-            raise BadRequest(_(u'No title provided'))
+            raise BadRequest({'code': 4000, 'message':_(u'No title provided')})
+        
+        if bundle.data['title'].strip() == '':
+            raise BadRequest({'code': 4000, 'message':_(u'No title provided')})
         
         if 'description' not in bundle.data:
+            raise BadRequest(_(u'No description provided'))
+        
+        if bundle.data['description'].strip() == '':
             raise BadRequest(_(u'No description provided'))
         
         # check that resource doesn't already exist for this user
@@ -120,7 +124,7 @@ class ResourceResource(ModelResource):
             resource = Resource.objects.get(create_user=bundle.request.user,title =bundle.data['title'])
             rr = ResourceResource()
             bundle = rr.build_bundle(obj=resource,request=request)
-            raise BadRequest(_(u'You have already uploaded a resource with this title'))
+            raise BadRequest({'code': 2000, 'message':_(u'You have already uploaded a resource with this title')})
         except Resource.DoesNotExist:
             pass
         
@@ -176,6 +180,12 @@ class ResourceTagResource(ModelResource):
         include_resource_uri = True
     
     def hydrate(self, bundle, request=None):
+        # chcek that user has permissions on the resource
+        resource = Resource.objects.get(pk=bundle.data['resource_id'])
+        user = User.objects.get(pk=bundle.request.user.id)
+        if not resource_can_edit(resource, user):
+            raise Unauthorized("You do not have edit access for this resource")
+        
         bundle.obj.create_user_id = bundle.request.user.id  
         bundle.obj.resource_id = bundle.data['resource_id']
         bundle.obj.tag_id = bundle.data['tag_id']
@@ -206,6 +216,9 @@ class TagResource(ModelResource):
             return None
     
     def hydrate(self, bundle, request=None):
+        
+        if bundle.data['name'].strip() == '':
+            raise BadRequest(_(u'Cannot add empty tag'))
         
         # check tag doesn't already exist
         try:

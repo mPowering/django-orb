@@ -614,8 +614,6 @@ def resource_can_view(resource, user):
     elif resource.status == Resource.APPROVED:
         return True
     else:
-        print resource
-        print user
         return False
 
 def resource_can_edit(resource,user):
