@@ -5,6 +5,7 @@ Change log
 28 Apr 2015
 -----------
 * 189: Add option to order resource files and links - http://github.com/mpowering/django-orb/issues/issue/189
+* 191: Add image credits for flags etc - http://github.com/mpowering/django-orb/issues/issue/191
 
 27 Apr 2015
 -----------
