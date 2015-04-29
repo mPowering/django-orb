@@ -1,5 +1,6 @@
 
 import json
+import re
 
 from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
@@ -221,7 +222,13 @@ class TagResource(ModelResource):
     
     def hydrate(self, bundle, request=None):
         
+        # check not empty
         if bundle.data['name'].strip() == '':
+            raise ORBAPIBadRequest(ERROR_CODE_TAG_EMPTY)
+        
+        # check not all non-word chars
+        regex = re.compile('[,\.!?"\']')
+        if regex.sub('', bundle.data['name'].strip()) == '':
             raise ORBAPIBadRequest(ERROR_CODE_TAG_EMPTY)
         
         # check tag doesn't already exist
