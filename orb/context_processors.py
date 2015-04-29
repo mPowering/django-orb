@@ -1,5 +1,6 @@
 # orb/context_processors.py
 from django.conf import settings
+import orb
 from orb.models import Category, Tag, TagOwner
 
 def get_menu(request):
@@ -16,6 +17,9 @@ def get_menu(request):
             'header_owns_tags': tags,
             'settings': settings,}
     
+def get_version(request):
+    version = "v" + str(orb.VERSION[0]) + "." + str(orb.VERSION[1]) + "." + str(orb.VERSION[2])
+    return {'version': version }
 
 def base_context_processor(request):
     return {

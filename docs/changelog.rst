@@ -5,6 +5,7 @@ Change log
 ------------
 * 197: Add organisation(s) to analytics pending resources - http://github.com/mpowering/django-orb/issues/issue/197
 * 200: Check to see if the jquery UI lib can be removed - http://github.com/mpowering/django-orb/issues/issue/200
+* 199: Add version no to the footer - http://github.com/mpowering/django-orb/issues/issue/199
 
 28 Apr 2015
 -----------
