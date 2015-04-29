@@ -11,7 +11,6 @@ Contents:
 .. toctree::
    :maxdepth: 1
    
-   addresource
    code
    restapi
    changelog
