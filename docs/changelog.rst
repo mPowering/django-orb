@@ -1,6 +1,9 @@
 Change log
 =====================================
 
+29 Apr 2015
+------------
+* 197: Add organisation(s) to analytics pending resources - http://github.com/mpowering/django-orb/issues/issue/197
 
 28 Apr 2015
 -----------

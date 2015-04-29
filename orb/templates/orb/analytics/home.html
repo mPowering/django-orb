@@ -72,6 +72,7 @@
                 <tr>
                   <th>{% trans 'Submitted' %}</th>
                   <th>{% trans 'Title' %}</th>
+                  <th>{% trans 'Organisation' %}</th>
                   <th>{% trans 'Options' %}</th>
                 </tr>
               </thead>
@@ -80,6 +81,12 @@
  			 <tr>
  			 	  <td>{{ pr.create_date }}</td>
                   <td>{{ pr.title }}</td>
+                  <td>
+                  	{% for o in pr.get_organisations %}
+                  		{{ o.name }}
+                  	
+                  	{% endfor %}
+                  </td>
                   <td>
                   <a target="_blank" href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
 					| <a target="_blank" href="{% url 'orb_resource_pending_mep' pr.id%}">{% trans 'Pending MEP' %}</a>
@@ -106,6 +113,7 @@
                 <tr>
                   <th>{% trans 'Submitted' %}</th>
                   <th>{% trans 'Title' %}</th>
+                  <th>{% trans 'Organisation' %}</th>
                   <th>{% trans 'Options' %}</th>
                 </tr>
               </thead>
@@ -114,6 +122,12 @@
  			 <tr>
  			 	  <td>{{ pr.create_date }}</td>
                   <td>{{ pr.title }}</td>
+                  <td>
+                  	{% for o in pr.get_organisations %}
+                  		{{ o.name }}
+                  	
+                  	{% endfor %}
+                  </td>
                   <td>
                   <a target="_blank" href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
 					| <a target="_blank" href="{% url 'orb_resource_approve' pr.id %}">{% trans 'Approve' %}</a>
