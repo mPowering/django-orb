@@ -157,10 +157,10 @@ class ResourceURLResource(ModelResource):
         authorization = UserObjectsOnlyAuthorization() 
         serializer = PrettyJSONSerializer()
         always_return_data = True 
-        include_resource_uri = False
+        include_resource_uri = True
      
     def hydrate(self, bundle, request=None):
-        # chcek that user has permissions on the resource
+        # check that user has permissions on the resource
         resource = Resource.objects.get(pk=bundle.data['resource_id'])
         user = User.objects.get(pk=bundle.request.user.id)
         if not resource_can_edit(resource, user):
