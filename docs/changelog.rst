@@ -1,6 +1,10 @@
 Change log
 =====================================
 
+30 Apr 2015
+-----------
+* 203: Add optional file size on ResourceURL object - http://github.com/mpowering/django-orb/issues/issue/203
+
 29 Apr 2015
 ------------
 * 197: Add organisation(s) to analytics pending resources - http://github.com/mpowering/django-orb/issues/issue/197

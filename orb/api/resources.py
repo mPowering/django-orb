@@ -152,7 +152,7 @@ class ResourceURLResource(ModelResource):
         queryset = ResourceURL.objects.all()
         resource_name = 'resourceurl'
         allowed_methods = ['get','post']
-        fields = ['id', 'url', 'title', 'description', 'order_by']
+        fields = ['id', 'url', 'title', 'description', 'order_by', 'file_size']
         authentication = ApiKeyAuthentication()
         authorization = UserObjectsOnlyAuthorization() 
         serializer = PrettyJSONSerializer()
@@ -169,6 +169,10 @@ class ResourceURLResource(ModelResource):
         bundle.obj.create_user_id = bundle.request.user.id  
         bundle.obj.update_user_id = bundle.request.user.id 
         bundle.obj.resource_id = bundle.data['resource_id']
+        
+        if 'file_size' not in bundle.data:
+            bundle.obj.file_size = 0
+            
         return bundle   
         
 class ResourceTagResource(ModelResource):

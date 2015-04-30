@@ -137,6 +137,7 @@ class ResourceURL (models.Model):
     title = models.TextField(blank=True, null=True)
     description = models.TextField(blank=True, null=True) 
     order_by = models.IntegerField(default=0)
+    file_size = models.IntegerField(default=0)
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User, related_name='resource_url_create_user')
     update_date = models.DateTimeField(auto_now=True) 
