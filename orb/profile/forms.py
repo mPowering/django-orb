@@ -100,7 +100,7 @@ class RegisterForm(forms.Form):
                         required=True,
                         error_messages={'required': _('Please tick the box to confirm that you have read the terms')})
     mailing = forms.BooleanField(
-                        label=_(u"Please tick the box to subscribe to mPowering update emails"),            
+                        label=_(u"Subscribe to mPowering update emails"),            
                         required=False)
     
 
