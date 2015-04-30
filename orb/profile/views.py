@@ -99,7 +99,7 @@ def register(request):
                     return HttpResponseRedirect('thanks/')
             return HttpResponseRedirect('thanks/') # Redirect after POST
     else:
-        form = RegisterForm(initial={'next':request.GET.get('next'),})
+        form = RegisterForm(initial={'next':request.GET.get('next'), 'mailing':True })
         build_form_options(form)
 
     return render(request, 'orb/form.html', {'form': form, 'title': _(u'Register')})

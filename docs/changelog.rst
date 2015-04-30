@@ -4,6 +4,7 @@ Change log
 30 Apr 2015
 -----------
 * 203: Add optional file size on ResourceURL object - http://github.com/mpowering/django-orb/issues/issue/203
+* 204: Make sure mailing list checkbox on register form is ticked by default - http://github.com/mpowering/django-orb/issues/issue/204
 
 29 Apr 2015
 ------------
