@@ -17,17 +17,17 @@
 
 		<p>{% for c in resource.get_geographies %}
 					{% thumbnail c.image "30x30" format="PNG" padding=True as im %}
-						<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
+						<img style="opacity: .6;" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
 					{% endthumbnail %}	
 				{% endfor %}
 			{% for c in resource.get_languages %}
 					{% thumbnail c.image "30x30" format="PNG" padding=True as im %}
-						<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
+						<img style="opacity: .6;" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
 					{% endthumbnail %}	
 				{% endfor %}
 			{% for c in resource.get_devices %}
 					{% thumbnail c.image "30x30" format="PNG" padding=True as im %}
-						<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
+						<img style="opacity: .6;" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
 					{% endthumbnail %}	
 				{% endfor %}
 		</p>
