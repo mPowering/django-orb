@@ -79,7 +79,7 @@
 	
 	{% include "orb/includes/page_navigator.html" %}
 {% else %}
-	<p>{% trans 'There are no resources tagged with this tag.' %}</p>
+	<p>{% trans 'There are no resources tagged with ' %}{{ tag.name }}.</p>
 {% endif %}
 
 {% endblock %}

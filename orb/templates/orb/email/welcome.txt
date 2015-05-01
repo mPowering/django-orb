@@ -1,11 +1,9 @@
 Dear {{ firstname }} {{ lastname }},
 
-Welcome to the ORB community!
+Thank you for registering on ORB and welcome to our community!
 
-Thank you for registering on ORB!
+As a registered user you can now submit resources to ORB as well as opt to receive news and updates from our team.
 
-As a registered user you can now submit resources to ORB and opt to receive news and updates from our team.
+We're here to help if you have any questions, so please feel free to contact us.
 
-We're here to help if you have any questions, so please feel free to contact us!
-	
 {% include 'orb/email/footer.txt' %}
