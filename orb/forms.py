@@ -158,15 +158,11 @@ class ResourceForm(forms.Form):
         file = self.cleaned_data['file']
         if file:
             file_type = file.content_type.split('/')[0]
+            if file_type in settings.TASK_UPLOAD_FILE_TYPE_BLACKLIST:
+                raise forms.ValidationError(_(u'Currently, ORB does not allow uploading of \'%s\' files' % file_type))
 
-            if len(file.name.split('.')) == 1:
-                raise forms.ValidationError(_(u'File type is not supported'))
-
-            if file_type in settings.TASK_UPLOAD_FILE_TYPES:
-                if file._size > settings.TASK_UPLOAD_FILE_MAX_SIZE:
-                    raise forms.ValidationError(_(u'Please keep filesize under %(max_size)s. Current filesize %(actual_size)s') % {'max_size':filesizeformat(settings.TASK_UPLOAD_FILE_MAX_SIZE), 'actual_size': filesizeformat(file._size)})
-            else:
-                raise forms.ValidationError(_(u'File type is not supported'))
+            if file._size > settings.TASK_UPLOAD_FILE_MAX_SIZE:
+                raise forms.ValidationError(_(u'Please keep filesize under %(max_size)s. Current filesize %(actual_size)s') % {'max_size':filesizeformat(settings.TASK_UPLOAD_FILE_MAX_SIZE), 'actual_size': filesizeformat(file._size)})
 
         return file
     
