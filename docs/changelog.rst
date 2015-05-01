@@ -7,6 +7,7 @@ Change log
 * 88: Decide on valid file upload types - http://github.com/mpowering/django-orb/issues/issue/88
 * 206: Script to do link checking - http://github.com/mpowering/django-orb/issues/issue/206
 * 205: Script to clear up unused uploaded resource files - http://github.com/mpowering/django-orb/issues/issue/205
+* 119: Check that user doesn't upload same resource twice - http://github.com/mpowering/django-orb/issues/issue/119
 
 30 Apr 2015
 -----------

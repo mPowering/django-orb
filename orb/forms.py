@@ -83,6 +83,7 @@ class ResourceForm(forms.Form):
 
     
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(ResourceForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
@@ -182,6 +183,21 @@ class ResourceForm(forms.Form):
         if no_words > settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS :
             raise forms.ValidationError( _(u"You have entered %d words, please enter no more than %d" % (no_words, settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS)))
         return description
+    
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        
+        # check if user has already uploaded a resource with this title
+        # but only if request object has been passed to form (so only for new Resources
+        if not self.request:
+            return title
+        
+        exists = Resource.objects.filter(create_user__pk=self.request.user.id, title = title).count()
+        
+        if exists != 0:
+            raise forms.ValidationError( _(u"You have entered already submitted a resource with this title."))
+        
+        return title
         
 class SearchForm(forms.Form): 
     q = forms.CharField(

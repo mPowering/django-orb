@@ -221,7 +221,7 @@ def resource_create_view(request):
                               {'message': _(u'You need to be logged in to add a resource.') },
                               context_instance=RequestContext(request))
     if request.method == 'POST':
-        form = ResourceForm(request.POST, request.FILES)
+        form = ResourceForm(request.POST, request.FILES, request=request)
         resource_form_set_choices(form)
         if form.is_valid():
             # save resource
@@ -265,7 +265,7 @@ def resource_create_view(request):
             
     else:
         user_org = request.user.userprofile.organisation.name
-        form = ResourceForm(initial={'organisations':user_org,})
+        form = ResourceForm(initial={'organisations':user_org,}, request=request)
         resource_form_set_choices(form)
         
     return render_to_response('orb/resource/create.html',
