@@ -149,3 +149,27 @@ def new_resource_submitted(request, resource):
               html_message=html_content)
             
     return
+
+def link_checker_results(resource_urls, tags):
+    template_html = 'orb/email/link_checker_results.html'
+    template_text = 'orb/email/link_checker_results.txt'
+
+    from_email = settings.SERVER_EMAIL
+    subject = settings.EMAIL_SUBJECT_PREFIX + _(u"Link checker results")
+    
+    data = {"resource_urls": resource_urls,
+            "tags": tags,
+            "info_email": settings.ORB_INFO_EMAIL,
+           }
+    
+    text_content = render_to_string(template_text, data)
+    html_content = render_to_string(template_html, data)
+
+    send_mail(subject, 
+              text_content, 
+              from_email,
+              [email for name,email in settings.ADMINS], 
+              fail_silently=False, 
+              html_message=html_content)
+            
+    return

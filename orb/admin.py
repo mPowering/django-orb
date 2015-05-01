@@ -39,7 +39,7 @@ class SearchTrackerAdmin(admin.ModelAdmin):
     list_display = ('query', 'user', 'access_date', 'no_results', 'ip', 'type')
         
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name','category', 'parent_tag', 'slug', 'order_by')
+    list_display = ('name','category', 'external_url', 'slug', 'order_by')
     search_fields = ['name','description']
 
 class UserProfileAdmin(admin.ModelAdmin):

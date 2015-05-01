@@ -5,6 +5,7 @@ Change log
 -----------
 * 144: Max 100-150 words for description of resource - http://github.com/mpowering/django-orb/issues/issue/144
 * 88: Decide on valid file upload types - http://github.com/mpowering/django-orb/issues/issue/88
+* 206: Script to do link checking - http://github.com/mpowering/django-orb/issues/issue/206
 
 30 Apr 2015
 -----------

@@ -1,0 +1,25 @@
+<p>Results from Link Checker Validation</p>
+
+<p>The following urls had issues:</p>
+
+{% if resource_urls %}
+<p>Resource URLs</p>
+<ul>
+	{% for ru in resource_urls %}
+		<li>{{ ru.id }} - <a href="{{ ru.url }}">{{ ru.url }}</a></li>
+	{% endfor %}
+</ul>
+{% endif %}
+
+
+{% if tags %}
+<p>Tags</p>
+<ul>
+	{% for t in tags %}
+		<li>{{ t.id }} - <a href="{{ t.external_url }}">{{ t.external_url }}</a></li>
+	{% endfor %}
+</ul>
+
+{% endif %}
+
+{% include 'orb/email/footer.html' %}

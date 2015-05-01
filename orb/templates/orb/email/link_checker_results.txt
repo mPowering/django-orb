@@ -1,0 +1,20 @@
+Results from Link Checker Validation
+
+The following urls had issues:
+
+{% if resource_urls %}
+Resource URLs
+{% for ru in resource_urls %}
+* {{ ru.id }} - {{ ru.url }}
+{% endfor %}
+{% endif %}
+
+
+{% if tags %}
+Tags
+{% for t in tags %}
+* {{ t.id }} - {{ t.external_url }}
+{% endfor %}
+{% endif %}
+
+{% include 'orb/email/footer.txt' %}
