@@ -17,7 +17,7 @@ def run():
     urls = ResourceURL.objects.all()
     for u in urls:
         time.sleep(1)
-        req = urllib2.Request(u.url, headers={ 'User-Agent': 'Mozilla/5.0', })
+        req = urllib2.Request(u.url, headers={ 'User-Agent': 'ORB Link Validator', })
         try:
             response = urllib2.urlopen(req)
         except:
