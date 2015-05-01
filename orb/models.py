@@ -260,6 +260,11 @@ class Tag (models.Model):
         # add generic geography icon if not specified
         if self.category.slug == 'geography' and not self.image:
             self.image = 'tag/geography_default.png'
+            
+        # add generic language icon if not specified
+        if self.category.slug == 'language' and not self.image:
+            self.image = 'tag/language_default.png'
+            
         super(Tag, self).save(*args, **kwargs)
      
     def image_filename(self):
