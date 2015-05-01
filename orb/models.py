@@ -256,6 +256,10 @@ class Tag (models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             unique_slugify(self, self.name)
+            
+        # add generic geography icon if not specified
+        if self.category.slug == 'geography' and not self.image:
+            self.image = 'tag/geography_default.png'
         super(Tag, self).save(*args, **kwargs)
      
     def image_filename(self):
