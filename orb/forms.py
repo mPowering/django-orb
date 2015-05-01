@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper
@@ -24,7 +25,8 @@ class ResourceForm(forms.Form):
     description = forms.CharField(
                 widget=forms.Textarea,
                 required=True,
-                error_messages={'required': _('Please enter a description')},)
+                error_messages={'required': _('Please enter a description')},
+                help_text=_('Please enter no more than %d words.' % settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS), )
     image = forms.ImageField(
                 required=False,
                 error_messages={},)
@@ -68,7 +70,7 @@ class ResourceForm(forms.Form):
                         required=False,
                         )
     terms = forms.BooleanField(
-                        label=_(u"Please tick the box to confirm that you have read the <a href='/resource/guidelines/' target='_blank'>guidelines</a> about submitting resources to ORB"),            
+                        label=_(u"Please tick the box to confirm that you have read the <a href='/resource/guidelines/' target='_blank'>guidelines and criteria</a> for submitting resources to ORB"),            
                         required=True,
                         error_messages={'required': _('Please tick the box to confirm that you have read the guidelines for submitting resources to ORB')})
     study_time_number = forms.IntegerField(
@@ -171,13 +173,19 @@ class ResourceForm(forms.Form):
     def clean_url(self):
         url = self.cleaned_data['url']
         validate = URLValidator()
-        if url:
-            print "checking url" 
+        if url: 
             try:
                 validate(url)
             except ValidationError:
                 raise forms.ValidationError( _(u"This does not appear to be a valid Url"))
         return url
+    
+    def clean_description(self):
+        description = self.cleaned_data['description']
+        no_words = len(strip_tags(description).split(' '))
+        if no_words > settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS :
+            raise forms.ValidationError( _(u"You have entered %d words, please enter no more than %d" % (no_words, settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS)))
+        return description
         
 class SearchForm(forms.Form): 
     q = forms.CharField(

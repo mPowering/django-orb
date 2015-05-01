@@ -10,6 +10,8 @@ def modify(settings):
     
     settings['ORB_INFO_EMAIL'] = 'info@mpoweringhealth.org'
     
+    settings['ORB_RESOURCE_DESCRIPTION_MAX_WORDS'] = 150
+    
     settings['TASK_UPLOAD_FILE_TYPES'] = ['pdf', 'vnd.oasis.opendocument.text','vnd.ms-excel','msword','application',]
     settings['TASK_UPLOAD_FILE_MAX_SIZE'] = "5242880"
     settings['DJANGO_WYSIWYG_FLAVOR'] = "tinymce_advanced"
