@@ -11,7 +11,7 @@ import urllib2
 import json 
 import argparse, hashlib, subprocess
 from django.db.models import Count
-from orb.models import ResourceTracker, SearchTracker
+from orb.models import ResourceTracker, SearchTracker, TagTracker
 from orb.analytics.models import UserLocationVisualization
 
 def run():
@@ -37,6 +37,17 @@ def run():
             print "search hits updated"
         except UserLocationVisualization.DoesNotExist:
             update_via_freegeoip(s, 'search')  
+            
+    tag_ip_hits = TagTracker.objects.all().values('ip').annotate(count_hits=Count('ip'))
+    for t in tag_ip_hits:
+        # lookup whether already cached in db
+        try:
+            cached = UserLocationVisualization.objects.get(ip=t['ip'], source='tag')
+            cached.hits = t['count_hits']
+            cached.save()
+            print "tag hits updated"
+        except UserLocationVisualization.DoesNotExist:
+            update_via_freegeoip(t, 'tag')
     
 def update_via_freegeoip(t, source):
     url = 'https://freegeoip.net/json/%s' % (t['ip'])
