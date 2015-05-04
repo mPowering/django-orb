@@ -18,7 +18,7 @@ from django.utils.translation import ugettext as _
 from haystack.query import SearchQuerySet
 
 from orb.forms import ResourceForm, SearchForm, TagFilterForm, ResourceRejectForm
-from orb.models import Tag, Resource, ResourceURL , Category, TagOwner
+from orb.models import Tag, Resource, ResourceURL , Category, TagOwner, TagTracker
 from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria
 from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow, resource_submitted, tag_viewed
 
@@ -593,6 +593,14 @@ def search_view(request):
                               context_instance=RequestContext(request))
     
 
+def tag_link_view(request, id):
+    try:
+        tag = Tag.objects.get(pk=id)
+        
+        tag_viewed.send(sender=tag, tag=tag, request=request, data=tag.external_url, type=TagTracker.VIEW_URL)
+        return HttpResponseRedirect(tag.external_url)
+    except Tag.DoesNotExist:
+        raise Http404()
 
 ''' 
 Helper functions

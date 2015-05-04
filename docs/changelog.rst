@@ -9,6 +9,7 @@ Change log
 * 207: License - have text next to the icon instead of underneath - http://github.com/mpowering/django-orb/issues/issue/207
 * 83: Add images for all tags - http://github.com/mpowering/django-orb/issues/issue/83
 * 217: Add TagTracker - so we know which are are the popular tags - http://github.com/mpowering/django-orb/issues/issue/217
+* 190: Record no of hits directly out to organisation websites - http://github.com/mpowering/django-orb/issues/issue/190
 
 1 May 2015
 -----------

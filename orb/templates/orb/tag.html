@@ -37,7 +37,7 @@
 {% endif %}
 
 {% if tag.external_url %}
-	<p>{% trans 'Website:' %} <a href="{{ tag.external_url }}">{{ tag.external_url }}</a></p>
+	<p>{% trans 'Website:' %} <a href="{% url 'orb_tag_view_link' tag.id %}">{{ tag.external_url }}</a></p>
 {% endif %}
 
 {% if tag.contact_email %}

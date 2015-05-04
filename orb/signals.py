@@ -15,7 +15,7 @@ resource_workflow = Signal(providing_args=["request", "resource", "status", "not
 resource_url_viewed = Signal(providing_args=["resource_url", "request"])
 resource_file_viewed = Signal(providing_args=["resource_file", "request"])
 search = Signal(providing_args=["query", "no_results", "request"])
-tag_viewed = Signal(providing_args=["tag", "request", "type"])
+tag_viewed = Signal(providing_args=["tag", "request", "type", "data"])
 user_registered = Signal(providing_args=["user", "request"])
 resource_submitted = Signal(providing_args=["resource", "request"])
 
@@ -133,6 +133,8 @@ def resource_file_viewed_callback(sender, **kwargs):
 def tag_viewed_callback(sender, **kwargs):
     request = kwargs.get('request')
     tag = kwargs.get('tag')
+    type = kwargs.get('type', TagTracker.VIEW)
+    data = kwargs.get('data', '')
     
     if is_search_crawler(request.META.get('HTTP_USER_AGENT','unknown')):
         return 
@@ -143,7 +145,8 @@ def tag_viewed_callback(sender, **kwargs):
     tracker.tag = tag
     tracker.ip = request.META.get('REMOTE_ADDR','0.0.0.0')
     tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
-    tracker.type = TagTracker.VIEW
+    tracker.type = type
+    tracker.extra_data = data
     tracker.save()
     return
 
