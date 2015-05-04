@@ -16,17 +16,17 @@
 		<p>{{ resource.description|striptags|truncatewords:40 }}</p>
 
 		<p>{% for c in resource.get_geographies %}
-					{% thumbnail c.image "30x30" format="PNG" padding=True as im %}
+					{% thumbnail c.image "30x30" crop="center" format="PNG" padding=True as im %}
 						<img style="opacity: .6;" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
 					{% endthumbnail %}	
 				{% endfor %}
 			{% for c in resource.get_languages %}
-					{% thumbnail c.image "30x30" format="PNG" padding=True as im %}
+					{% thumbnail c.image "30x30"  crop="center" format="PNG" padding=True as im %}
 						<img style="opacity: .6;" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
 					{% endthumbnail %}	
 				{% endfor %}
 			{% for c in resource.get_devices %}
-					{% thumbnail c.image "30x30" format="PNG" padding=True as im %}
+					{% thumbnail c.image "30x30"  crop="center" format="PNG" padding=True as im %}
 						<img style="opacity: .6;" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
 					{% endthumbnail %}	
 				{% endfor %}

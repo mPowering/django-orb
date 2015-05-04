@@ -1,6 +1,11 @@
 Change log
 =====================================
 
+4 May 2015
+-----------
+* 208: Move flag icons to be last in row - http://github.com/mpowering/django-orb/issues/issue/208
+
+
 1 May 2015
 -----------
 * 144: Max 100-150 words for description of resource - http://github.com/mpowering/django-orb/issues/issue/144
