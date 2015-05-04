@@ -1,6 +1,6 @@
 def modify(settings):
     
-    settings['INSTALLED_APPS'] += ('crispy_forms', 'tastypie', 'tinymce', 'django_wysiwyg', 'haystack', 'sorl.thumbnail', 'orb.analytics', 'tastypie_swagger')
+    settings['INSTALLED_APPS'] += ('crispy_forms', 'tastypie', 'tinymce', 'django_wysiwyg', 'haystack', 'sorl.thumbnail', 'orb.analytics')
     settings['MIDDLEWARE_CLASSES'] += ('orb.middleware.SearchFormMiddleware',)
     settings['TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_menu',)
     settings['TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_version',)
@@ -34,7 +34,6 @@ def modify(settings):
                                          ('language', 'language'), 
                                          ('device', 'device'), 
                                          ('license', 'license')]
-    
     
 
 

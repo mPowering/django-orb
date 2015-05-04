@@ -63,7 +63,8 @@ class ResourceResource(ModelResource):
     
     def authorized_read_detail(self, object_list, bundle):
         # add to ResourceTracker
-        resource_viewed.send(sender=bundle.obj, resource=bundle.obj, request=bundle.request, type=ResourceTracker.VIEW_API)
+        if bundle.obj.id:
+            resource_viewed.send(sender=bundle.obj, resource=bundle.obj, request=bundle.request, type=ResourceTracker.VIEW_API)
     
     def prepend_urls(self):
         '''
