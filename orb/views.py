@@ -20,7 +20,7 @@ from haystack.query import SearchQuerySet
 from orb.forms import ResourceForm, SearchForm, TagFilterForm, ResourceRejectForm
 from orb.models import Tag, Resource, ResourceURL , Category, TagOwner
 from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria
-from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow, resource_submitted
+from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow, resource_submitted, tag_viewed
 
 from PIL import Image
 
@@ -80,7 +80,9 @@ def tag_view(request,tag_slug):
     show_filter_link = False
     if tag.category.slug in [slug for name, slug in settings.TAG_FILTER_CATEGORIES]:
         show_filter_link = True
-        
+      
+    tag_viewed.send(sender=tag, tag=tag, request=request)
+      
     return render_to_response('orb/tag.html',
                               {
                                'tag': tag,

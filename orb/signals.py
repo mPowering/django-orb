@@ -7,7 +7,7 @@ from django.db.models.signals import post_save
 from django.dispatch import Signal
 
 from orb.emailer import first_resource, resource_approved, resource_rejected, user_welcome, new_resource_submitted
-from orb.models import Resource, ResourceTracker, SearchTracker, ResourceWorkflowTracker, ResourceCriteria
+from orb.models import Resource, ResourceTracker, SearchTracker, ResourceWorkflowTracker, ResourceCriteria, TagTracker
 from orb.lib.search_crawler import is_search_crawler
 
 resource_viewed = Signal(providing_args=["resource", "request", "type"])
@@ -15,6 +15,7 @@ resource_workflow = Signal(providing_args=["request", "resource", "status", "not
 resource_url_viewed = Signal(providing_args=["resource_url", "request"])
 resource_file_viewed = Signal(providing_args=["resource_file", "request"])
 search = Signal(providing_args=["query", "no_results", "request"])
+tag_viewed = Signal(providing_args=["tag", "request", "type"])
 user_registered = Signal(providing_args=["user", "request"])
 resource_submitted = Signal(providing_args=["resource", "request"])
 
@@ -129,6 +130,23 @@ def resource_file_viewed_callback(sender, **kwargs):
     tracker.save()
     return
 
+def tag_viewed_callback(sender, **kwargs):
+    request = kwargs.get('request')
+    tag = kwargs.get('tag')
+    
+    if is_search_crawler(request.META.get('HTTP_USER_AGENT','unknown')):
+        return 
+    
+    tracker = TagTracker()
+    if not request.user.is_anonymous():
+        tracker.user = request.user
+    tracker.tag = tag
+    tracker.ip = request.META.get('REMOTE_ADDR','0.0.0.0')
+    tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
+    tracker.type = TagTracker.VIEW
+    tracker.save()
+    return
+
 def search_callback(sender, **kwargs):
     request = kwargs.get('request')
     query = kwargs.get('query')
@@ -151,6 +169,7 @@ resource_viewed.connect(resource_viewed_callback)
 resource_workflow.connect(resource_workflow_callback)
 resource_url_viewed.connect(resource_url_viewed_callback)
 resource_file_viewed.connect(resource_file_viewed_callback)
+tag_viewed.connect(tag_viewed_callback)
 search.connect(search_callback)
 user_registered.connect(user_registered_callback)
 resource_submitted.connect(resource_submitted_callback)

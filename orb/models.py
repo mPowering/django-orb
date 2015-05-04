@@ -373,7 +373,24 @@ class SearchTracker(models.Model):
     ip = models.IPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
     type = models.CharField(max_length=50,choices=SEARCH_TYPES, default=SEARCH)
-    
+ 
+class TagTracker(models.Model):
+    VIEW = 'view'
+    VIEW_API = 'view-api'
+    VIEW_URL = 'view-url'
+    TRACKER_TYPES = (
+        (VIEW, _(u'View')),
+        (VIEW_API, _(u'View-API')),
+        (VIEW_URL, _(u'View-URL')),
+    )
+    user = models.ForeignKey(User, blank=True, null=True, default=None)
+    type = models.CharField(max_length=50,choices=TRACKER_TYPES, default=VIEW)
+    tag = models.ForeignKey(Tag, blank=True, null=True, default=None)
+    access_date = models.DateTimeField(auto_now_add=True)
+    ip = models.IPAddressField(blank=True, null=True, default=None)
+    user_agent = models.TextField(blank=True, null=True, default=None)
+    extra_data = models.TextField(blank=True, null=True, default=None)
+       
 class ResourceRating(models.Model):
     user = models.ForeignKey(User, blank=False, null=False)
     resource = models.ForeignKey(Resource, blank=False, null=False)

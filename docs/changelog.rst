@@ -8,6 +8,7 @@ Change log
 * 210: On resource view page allow tags and icons to flow/wrap properly - http://github.com/mpowering/django-orb/issues/issue/210
 * 207: License - have text next to the icon instead of underneath - http://github.com/mpowering/django-orb/issues/issue/207
 * 83: Add images for all tags - http://github.com/mpowering/django-orb/issues/issue/83
+* 217: Add TagTracker - so we know which are are the popular tags - http://github.com/mpowering/django-orb/issues/issue/217
 
 1 May 2015
 -----------
