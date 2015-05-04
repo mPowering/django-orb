@@ -252,3 +252,25 @@ div.date-picker-row-fluid {
 .page_navigator, .orderby {
 	padding:10px 0;
 }
+
+div.category {
+	padding-bottom:10px;
+}
+
+div.resourcetag {
+	display:inline-block; 
+	width:120px; 
+	min-height:120px; 
+	text-align:center; 
+	margin: auto;
+}
+
+.file-row {
+	padding-bottom: 10px;
+}
+
+.vcenter {
+    display: inline-block;
+    vertical-align: middle;
+    float: none;
+}

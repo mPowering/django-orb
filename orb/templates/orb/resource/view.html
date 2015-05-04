@@ -79,51 +79,67 @@ From:
 </div>
 <div style="clear: both"></div>
 
-
-
 {% if resource.get_files %}
 	<hr/>
 	<h4>{% trans 'Files' %}</h4>
-	<ul>
+
 	{% for f in resource.get_files %}
-		<li>
-			<a href="{% url 'orb_resource_view_file' f.id %}">
-			{% if f.description and f.description.strip %}
-				{{ f.description }} : 
-			{% endif %}
-			{% if f.title  %}
-				{{ f.title }}
-			{% else %}
-				{{ f.filename }}
-			{% endif %}
-			</a>
-			({{ f.filesize|filesizeformat }})
-			
-		</li>
+		<div class="row file-row">
+		
+			<div class="col-md-1 col-xs-3 vcenter">
+				<a href="{% url 'orb_resource_view_file' f.id %}" title="{% trans 'Download' %} {{ f.filename }}">
+					<img src="{{ STATIC_URL }}orb/images/download_file.png"/>
+				</a>
+			</div><!-- 
+			 --><div class="col-md-8 col-xs-8 vcenter" >
+				<a href="{% url 'orb_resource_view_file' f.id %}" title="{% trans 'Download' %} {{ f.filename }}">
+					{% if f.description and f.description.strip %}
+						{{ f.description }}: 
+					{% endif %}
+					{% if f.title  %}
+						{{ f.title }}
+					{% else %}
+						{{ f.filename }}
+					{% endif %}
+				</a>
+				<br/>
+				({{ f.filesize|filesizeformat }})
+			</div>
+		</div>
 	{% endfor %}
-	</ul>
+	
 {% endif %}
 
 {% if resource.get_urls %}
 	<hr/>
+	
 	<h4>{% trans 'Links' %}</h4>
-	<ul>
 	{% for u in resource.get_urls %}
-		<li>
-			{% if u.title %}
-				<a href="{% url 'orb_resource_view_link' u.id %}">{{ u.title }}</a>
-			{% else %}
-				<a href="{% url 'orb_resource_view_link' u.id %}">{{ u.url }}</a>
-			{% endif %}
-			{% if u.description and u.description.strip %}
-				<p>{{ u.description }}</p>
-			{% endif %}
-			{% if u.file_size != 0 %}
-				({{ u.file_size|filesizeformat }})
-			{% endif %}
-		</li>
+		<div class="row file-row">
+		
+			<div class="col-md-1 col-xs-3 vcenter">
+				<a href="{% url 'orb_resource_view_link' u.id %}" title="{% trans 'Go to' %} {{ u.url }}">
+					<img src="{{ STATIC_URL }}orb/images/external_link.png"/>
+				</a>
+			</div><!-- 
+			 --><div class="col-md-8 col-xs-8 vcenter">
+				<a href="{% url 'orb_resource_view_link' u.id %}" title="{% trans 'Go to' %} {{ u.url }}">
+					{% if u.title %}
+						{{ u.title }}
+					{% else %}
+						{{ u.url }}
+					{% endif %}
+					</a><br/>
+				{% if u.description and u.description.strip %}
+					<p>{{ u.description }}</p>
+				{% endif %}
+				{% if u.file_size != 0 %}
+					({{ u.file_size|filesizeformat }})
+				{% endif %}
+			</div>
 	{% endfor %}
-	</ul>
+	</div>
+	
 {% endif %}
 
 {% if resource.study_time_number %}
@@ -137,10 +153,9 @@ From:
 		<hr/>
 		
 		<h4>{{ c.name }}</h4>
-			<div class="row" style="padding-bottom:10px;">
+			<div class="category">
 			{% for t in c.tags %}
-				 
-					<div class="col-xs-4 col-md-2 col-lg-2" style="text-align:center;">
+					<div class="resourcetag">
 						<a href="{% url 'orb_tags' t.slug %}">
 						 {% if t.image %}
 						 	{% thumbnail t.image "70x70" padding=True format="PNG" upscale=False as im %}
