@@ -7,6 +7,7 @@ Change log
 * 211: Add option to add an image for each ResourceFile and ResourceURL - http://github.com/mpowering/django-orb/issues/issue/211
 * 210: On resource view page allow tags and icons to flow/wrap properly - http://github.com/mpowering/django-orb/issues/issue/210
 * 207: License - have text next to the icon instead of underneath - http://github.com/mpowering/django-orb/issues/issue/207
+* 83: Add images for all tags - http://github.com/mpowering/django-orb/issues/issue/83
 
 1 May 2015
 -----------

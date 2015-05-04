@@ -263,6 +263,7 @@ div.resourcetag {
 	min-height:100px; 
 	text-align:center; 
 	margin: auto;
+	vertical-align:top;
 }
 
 .file-row {
