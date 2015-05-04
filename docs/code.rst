@@ -8,7 +8,7 @@ The site is built using the Django framework.
 Required packages are:
 
 * django-tastypie - for the API
-* django-tablib - for exporting 
+* django-tablib - for exporting analytics
 * django-crispy-forms - for forms
 * django-tinymce - for HTML editor
 * django-wysiwyg - for HTML editor
