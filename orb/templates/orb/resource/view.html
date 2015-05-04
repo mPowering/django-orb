@@ -148,8 +148,8 @@ From:
 	{{ resource.study_time_number }} {{ resource.study_time_unit}}
 {% endif %}
 
-{% if resource.get_categories %}
-	{% for c in resource.get_categories %}
+{% if resource.get_display_categories %}
+	{% for c in resource.get_display_categories %}
 		<hr/>
 		
 		<h4>{{ c.name }}</h4>
@@ -174,6 +174,21 @@ From:
 			{% endfor %}
 			</div>
 	{% endfor %}
+{% endif %}
+
+{% if resource.get_license %}
+	
+		<hr/>
+		
+		<h4>{% trans 'License' %}</h4>
+		{% for l in resource.get_license %}
+			<a href="{% url 'orb_tags' l.slug %}">
+			{% thumbnail l.image "x60" padding=True format="PNG" upscale=False as im %}
+			<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+			{% endthumbnail %}
+			{{ l.name }}
+			</a>
+		{% endfor %}
 {% endif %}
 
 <hr/>

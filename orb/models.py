@@ -79,6 +79,12 @@ class Resource (models.Model):
             c.tags = Tag.objects.filter(resourcetag__resource=self, category=c)
         return categories
     
+    def get_display_categories(self):
+        categories = Category.objects.filter(tag__resourcetag__resource=self).exclude(slug='license').distinct().order_by('order_by')
+        for c in categories:
+            c.tags = Tag.objects.filter(resourcetag__resource=self, category=c)
+        return categories
+    
     def get_category(self, category_slug):
         tags = Tag.objects.filter(resourcetag__resource=self, category__slug=category_slug)
         return tags
@@ -110,6 +116,10 @@ class Resource (models.Model):
     
     def get_languages(self):
         tags = Tag.objects.filter(resourcetag__resource=self, category__slug='language')
+        return tags
+    
+    def get_license(self):
+        tags = Tag.objects.filter(resourcetag__resource=self, category__slug='license')
         return tags
   
 class ResourceWorkflowTracker(models.Model):

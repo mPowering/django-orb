@@ -260,7 +260,7 @@ div.category {
 div.resourcetag {
 	display:inline-block; 
 	width:120px; 
-	min-height:120px; 
+	min-height:100px; 
 	text-align:center; 
 	margin: auto;
 }
