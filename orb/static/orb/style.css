@@ -274,3 +274,11 @@ div.resourcetag {
     vertical-align: middle;
     float: none;
 }
+
+img.resource-row-icon {
+	opacity: .6;
+}
+
+img.resource-row-icon:hover {
+	opacity: 1;
+}
