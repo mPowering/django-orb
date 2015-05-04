@@ -145,7 +145,14 @@ From:
 {% if resource.study_time_number %}
 	<hr/>
 	<h4>{% trans 'Study Time' %}</h4>
-	{{ resource.study_time_number }} {{ resource.study_time_unit}}
+	<div class="row file-row">
+		<div class="col-md-1 col-xs-3 vcenter">
+			<img src="{{ STATIC_URL }}orb/images/study_time.png"/>
+		</div><!-- 
+		--><div class="col-md-8 col-xs-8 vcenter" >
+		{{ resource.study_time_number }} {{ resource.study_time_unit}}
+		</div>
+	</div>
 {% endif %}
 
 {% if resource.get_display_categories %}
