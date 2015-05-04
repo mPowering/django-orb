@@ -32,6 +32,9 @@ from tastypie.utils import trailing_slash
 
 
 class ResourceResource(ModelResource):
+    '''
+    To get, post and pushing resources
+    '''
     files = fields.ToManyField('orb.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True, null = True)
     urls = fields.ToManyField('orb.api.resources.ResourceURLResource', 'resourceurl_set', related_name='resource', full=True, null = True)
     #tags = fields.ToManyField('orb.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True, null = True)
@@ -63,6 +66,9 @@ class ResourceResource(ModelResource):
         resource_viewed.send(sender=bundle.obj, resource=bundle.obj, request=bundle.request, type=ResourceTracker.VIEW_API)
     
     def prepend_urls(self):
+        '''
+        for implementing a search API
+        '''
         return [
             url(r"^(?P<resource_name>%s)/search%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_search'), name="api_get_search"),
         ]

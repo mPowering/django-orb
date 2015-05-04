@@ -3,17 +3,7 @@ from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.views.generic import TemplateView
 
-from orb.api.resources import ResourceResource, TagResource, ResourceTagResource, ResourceURLResource
 from orb.feeds import LatestTagEntries, LatestEntries
-
-from tastypie.api import Api
-
-
-v1_api = Api(api_name='v1')
-v1_api.register(ResourceResource())
-v1_api.register(TagResource())
-v1_api.register(ResourceTagResource())
-v1_api.register(ResourceURLResource())
 
 urlpatterns = patterns('',
 
@@ -60,8 +50,6 @@ urlpatterns = patterns('',
     url(r'^search/$', 'orb.views.search_view', name="orb_search"),
     url(r'^opensearch/$', TemplateView.as_view(template_name="search/opensearch.html"), name="orb_opensearch"),
     
-    url(r'^api/', include(v1_api.urls)),
-    url(r'^api/upload/image/$', 'orb.api.upload.image_view', name="orb_image_upload"),
-    url(r'^api/upload/file/$', 'orb.api.upload.file_view', name="orb_file_upload"),
+    url(r'^api/', include('orb.api.urls')),
     
 )
