@@ -79,6 +79,9 @@ class ResourceResource(ModelResource):
         self.is_authenticated(request)
         self.throttle_check(request)
 
+        if request.GET.get('q', '') == '':
+            raise ORBAPIBadRequest(ERROR_CODE_SEARCH_NO_QUERY)
+        
         # Do the query.
         sqs = SearchQuerySet().models(Resource).load_all().auto_query(request.GET.get('q', ''))
         paginator = Paginator(sqs, 20)

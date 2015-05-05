@@ -1,6 +1,10 @@
 Change log
 =====================================
 
+5 May 2015
+----------
+* 222: In Search API if query string not provided (or empty) - should return bad request - http://github.com/mpowering/django-orb/issues/issue/222
+
 4 May 2015
 -----------
 * 208: Move flag icons to be last in row - http://github.com/mpowering/django-orb/issues/issue/208
