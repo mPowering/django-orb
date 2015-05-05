@@ -71,7 +71,39 @@ class SearchResourceTest(ResourceTestCase):
     # check authorized
     def test_authorized(self):
         tracker_count_start = SearchTracker.objects.all().count()
-        resp = self.api_client.get(self.url, format='json', data=self.auth_data)
+        resp = self.api_client.get(self.url, format='json', data=self.standard_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        tracker_count_end = SearchTracker.objects.all().count()
+        self.assertEqual(tracker_count_start+1, tracker_count_end)
+        
+        tracker_count_start = SearchTracker.objects.all().count()
+        resp = self.api_client.get(self.url, format='json', data=self.api_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        tracker_count_end = SearchTracker.objects.all().count()
+        self.assertEqual(tracker_count_start+1, tracker_count_end)
+        
+        tracker_count_start = SearchTracker.objects.all().count()
+        resp = self.api_client.get(self.url, format='json', data=self.super_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        tracker_count_end = SearchTracker.objects.all().count()
+        self.assertEqual(tracker_count_start+1, tracker_count_end)
+        
+        tracker_count_start = SearchTracker.objects.all().count()
+        resp = self.api_client.get(self.url, format='json', data=self.staff_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        tracker_count_end = SearchTracker.objects.all().count()
+        self.assertEqual(tracker_count_start+1, tracker_count_end)
+        
+        tracker_count_start = SearchTracker.objects.all().count()
+        resp = self.api_client.get(self.url, format='json', data=self.orgowner_user)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
         
@@ -80,7 +112,33 @@ class SearchResourceTest(ResourceTestCase):
    
     #check results are returned     
     def test_search_results(self):
-        data = self.auth_data
+        data = self.standard_user
+        data['q'] = 'medical'
+        
+        tracker_count_start = SearchTracker.objects.all().count()
+        
+        resp = self.api_client.get(self.url, format='json', data=data)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        self.assertEqual(len(self.deserialize(resp)['objects']), 1)
+        
+        tracker_count_end = SearchTracker.objects.all().count()
+        self.assertEqual(tracker_count_start+1, tracker_count_end)
+        
+        data = self.api_user
+        data['q'] = 'medical'
+        
+        tracker_count_start = SearchTracker.objects.all().count()
+        
+        resp = self.api_client.get(self.url, format='json', data=data)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        self.assertEqual(len(self.deserialize(resp)['objects']), 1)
+        
+        tracker_count_end = SearchTracker.objects.all().count()
+        self.assertEqual(tracker_count_start+1, tracker_count_end)
+        
+        data = self.super_user
         data['q'] = 'medical'
         
         tracker_count_start = SearchTracker.objects.all().count()
@@ -93,7 +151,31 @@ class SearchResourceTest(ResourceTestCase):
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
       
-       
+        data = self.staff_user
+        data['q'] = 'medical'
+        
+        tracker_count_start = SearchTracker.objects.all().count()
+        
+        resp = self.api_client.get(self.url, format='json', data=data)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        self.assertEqual(len(self.deserialize(resp)['objects']), 1)
+        
+        tracker_count_end = SearchTracker.objects.all().count()
+        self.assertEqual(tracker_count_start+1, tracker_count_end)
+        
+        data = self.orgowner_user
+        data['q'] = 'medical'
+        
+        tracker_count_start = SearchTracker.objects.all().count()
+        
+        resp = self.api_client.get(self.url, format='json', data=data)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        self.assertEqual(len(self.deserialize(resp)['objects']), 1)
+        
+        tracker_count_end = SearchTracker.objects.all().count()
+        self.assertEqual(tracker_count_start+1, tracker_count_end)
         
 # Resource API
 class ResourceResourceTest(ResourceTestCase):
@@ -227,11 +309,9 @@ class ResourceResourceTest(ResourceTestCase):
         
         resp = self.api_client.get(unapproved_resource_url, format='json', data=self.api_user)
         self.assertHttpNotFound(resp)
-        self.assertValidJSON(resp.content)
         
         resp = self.api_client.get(unapproved_resource_url, format='json', data=self.standard_user)
         self.assertHttpNotFound(resp)
-        self.assertValidJSON(resp.content)
         
         resp = self.api_client.get(unapproved_resource_url, format='json', data=self.super_user)
         self.assertHttpOK(resp)
@@ -243,30 +323,24 @@ class ResourceResourceTest(ResourceTestCase):
         
         resp = self.api_client.get(unapproved_resource_url, format='json', data=self.orgowner_user)
         self.assertHttpNotFound(resp)
-        self.assertValidJSON(resp.content)
         
     def test_get_unknown_resource(self): 
         unknown_resource_url = self.url + str(12345) + "/"
         
         resp = self.api_client.get(unknown_resource_url, format='json', data=self.api_user)
         self.assertHttpNotFound(resp)
-        self.assertValidJSON(resp.content)
         
         resp = self.api_client.get(unknown_resource_url, format='json', data=self.standard_user)
         self.assertHttpNotFound(resp)
-        self.assertValidJSON(resp.content)
         
         resp = self.api_client.get(unknown_resource_url, format='json', data=self.super_user)
         self.assertHttpNotFound(resp)
-        self.assertValidJSON(resp.content)
         
         resp = self.api_client.get(unknown_resource_url, format='json', data=self.staff_user)
         self.assertHttpNotFound(resp)
-        self.assertValidJSON(resp.content)
         
         resp = self.api_client.get(unknown_resource_url, format='json', data=self.orgowner_user)
         self.assertHttpNotFound(resp)
-        self.assertValidJSON(resp.content)
         
     '''
     Check:
