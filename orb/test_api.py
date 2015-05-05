@@ -1,5 +1,7 @@
 # orb.test_api.py
 
+import urllib
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test.client import Client
@@ -70,43 +72,48 @@ class SearchResourceTest(ResourceTestCase):
     
     # check authorized
     def test_authorized(self):
+        data = self.standard_user
+        data['q'] = 'medical'
         tracker_count_start = SearchTracker.objects.all().count()
-        resp = self.api_client.get(self.url, format='json', data=self.standard_user)
+        resp = self.api_client.get(self.url, format='json', data=data)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
-        
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
         
+        data = self.api_user
+        data['q'] = 'medical'
         tracker_count_start = SearchTracker.objects.all().count()
-        resp = self.api_client.get(self.url, format='json', data=self.api_user)
+        resp = self.api_client.get(self.url, format='json', data=data)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
-        
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
         
+        data = self.super_user
+        data['q'] = 'medical'
         tracker_count_start = SearchTracker.objects.all().count()
-        resp = self.api_client.get(self.url, format='json', data=self.super_user)
+        resp = self.api_client.get(self.url, format='json', data=data)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
-        
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
         
+        data = self.staff_user
+        data['q'] = 'medical'
         tracker_count_start = SearchTracker.objects.all().count()
-        resp = self.api_client.get(self.url, format='json', data=self.staff_user)
+        resp = self.api_client.get(self.url, format='json', data=data)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
-        
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
         
+        data = self.orgowner_user
+        data['q'] = 'medical'
         tracker_count_start = SearchTracker.objects.all().count()
-        resp = self.api_client.get(self.url, format='json', data=self.orgowner_user)
+        resp = self.api_client.get(self.url, format='json', data=data)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
-        
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
    
@@ -114,66 +121,51 @@ class SearchResourceTest(ResourceTestCase):
     def test_search_results(self):
         data = self.standard_user
         data['q'] = 'medical'
-        
         tracker_count_start = SearchTracker.objects.all().count()
-        
         resp = self.api_client.get(self.url, format='json', data=data)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
         self.assertEqual(len(self.deserialize(resp)['objects']), 1)
-        
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
         
         data = self.api_user
         data['q'] = 'medical'
-        
         tracker_count_start = SearchTracker.objects.all().count()
-        
         resp = self.api_client.get(self.url, format='json', data=data)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
         self.assertEqual(len(self.deserialize(resp)['objects']), 1)
-        
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
         
         data = self.super_user
         data['q'] = 'medical'
-        
         tracker_count_start = SearchTracker.objects.all().count()
-        
         resp = self.api_client.get(self.url, format='json', data=data)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
         self.assertEqual(len(self.deserialize(resp)['objects']), 1)
-        
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
       
         data = self.staff_user
         data['q'] = 'medical'
-        
         tracker_count_start = SearchTracker.objects.all().count()
-        
         resp = self.api_client.get(self.url, format='json', data=data)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
         self.assertEqual(len(self.deserialize(resp)['objects']), 1)
-        
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
         
         data = self.orgowner_user
         data['q'] = 'medical'
-        
         tracker_count_start = SearchTracker.objects.all().count()
-        
         resp = self.api_client.get(self.url, format='json', data=data)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
         self.assertEqual(len(self.deserialize(resp)['objects']), 1)
-        
         tracker_count_end = SearchTracker.objects.all().count()
         self.assertEqual(tracker_count_start+1, tracker_count_end)
         
@@ -226,8 +218,23 @@ class ResourceResourceTest(ResourceTestCase):
         resp = self.api_client.get(self.url, format='json', data=self.standard_user)
         self.assertHttpOK(resp)
         self.assertValidJSON(resp.content)
-
-    # check get allowed for valid user  
+        
+        resp = self.api_client.get(self.url, format='json', data=self.api_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        resp = self.api_client.get(self.url, format='json', data=self.super_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        resp = self.api_client.get(self.url, format='json', data=self.staff_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        resp = self.api_client.get(self.url, format='json', data=self.orgowner_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+ 
     def test_get_not_valid(self):
         self.assertHttpUnauthorized(self.api_client.get(self.url, format='json', data={}))
         
@@ -235,19 +242,18 @@ class ResourceResourceTest(ResourceTestCase):
     def test_post_invalid(self):
         resp = self.api_client.post(self.url, format='json', data=self.standard_user)
         self.assertHttpUnauthorized(resp)
+        
+        resp = self.api_client.post(self.url, format='json', data=self.super_user)
+        self.assertHttpUnauthorized(resp)
+        
+        resp = self.api_client.post(self.url, format='json', data=self.staff_user)
+        self.assertHttpUnauthorized(resp)
+        
+        resp = self.api_client.post(self.url, format='json', data=self.orgowner_user)
+        self.assertHttpUnauthorized(resp)
      
     # check put not allowed
     def test_put_invalid(self):
-        resp = self.api_client.put(self.url, format='json', data=self.standard_user)
-        self.assertHttpMethodNotAllowed(resp)
-        
-    # check delete not allowed
-    def test_delete_invalid(self):
-        resp = self.api_client.delete(self.url, format='json', data=self.standard_user)
-        self.assertHttpMethodNotAllowed(resp) 
-     
-    # check put not allowed
-    def test_put_invalid_api_user(self):
         resp = self.api_client.put(self.url, format='json', data=self.api_user)
         self.assertHttpMethodNotAllowed(resp)
         
@@ -264,21 +270,21 @@ class ResourceResourceTest(ResourceTestCase):
         self.assertHttpMethodNotAllowed(resp)
         
     # check delete not allowed
-    def test_delete_invalid_api_user(self):
+    def test_delete_invalid(self):
         resp = self.api_client.delete(self.url, format='json', data=self.api_user)
-        self.assertHttpMethodNotAllowed(resp)  
+        self.assertHttpMethodNotAllowed(resp)
         
         resp = self.api_client.delete(self.url, format='json', data=self.standard_user)
-        self.assertHttpMethodNotAllowed(resp) 
+        self.assertHttpMethodNotAllowed(resp)
         
         resp = self.api_client.delete(self.url, format='json', data=self.super_user)
-        self.assertHttpMethodNotAllowed(resp) 
+        self.assertHttpMethodNotAllowed(resp)
         
         resp = self.api_client.delete(self.url, format='json', data=self.staff_user)
-        self.assertHttpMethodNotAllowed(resp) 
+        self.assertHttpMethodNotAllowed(resp)
         
         resp = self.api_client.delete(self.url, format='json', data=self.orgowner_user)
-        self.assertHttpMethodNotAllowed(resp)  
+        self.assertHttpMethodNotAllowed(resp) 
          
         
     def test_get_approved_resource(self):
@@ -314,12 +320,10 @@ class ResourceResourceTest(ResourceTestCase):
         self.assertHttpNotFound(resp)
         
         resp = self.api_client.get(unapproved_resource_url, format='json', data=self.super_user)
-        self.assertHttpOK(resp)
-        self.assertValidJSON(resp.content)
+        self.assertHttpNotFound(resp)
         
         resp = self.api_client.get(unapproved_resource_url, format='json', data=self.staff_user)
-        self.assertHttpOK(resp)
-        self.assertValidJSON(resp.content)
+        self.assertHttpNotFound(resp)
         
         resp = self.api_client.get(unapproved_resource_url, format='json', data=self.orgowner_user)
         self.assertHttpNotFound(resp)
@@ -391,7 +395,141 @@ class TagResourceTest(ResourceTestCase):
         }
         
         self.url = '/api/v1/tag/'
+     
+    # check get allowed for valid user
+    def test_get_valid(self):
+        resp = self.api_client.get(self.url, format='json', data=self.standard_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
         
+        resp = self.api_client.get(self.url, format='json', data=self.api_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        resp = self.api_client.get(self.url, format='json', data=self.super_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        resp = self.api_client.get(self.url, format='json', data=self.staff_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        resp = self.api_client.get(self.url, format='json', data=self.orgowner_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+ 
+    def test_get_not_valid(self):
+        self.assertHttpUnauthorized(self.api_client.get(self.url, format='json', data={}))
+    
+    # check post not allowed for invalid user
+    def test_post_invalid(self):
+        resp = self.api_client.post(self.url, format='json', data=self.standard_user)
+        self.assertHttpUnauthorized(resp)
+        
+        resp = self.api_client.post(self.url, format='json', data=self.super_user)
+        self.assertHttpUnauthorized(resp)
+        
+        resp = self.api_client.post(self.url, format='json', data=self.staff_user)
+        self.assertHttpUnauthorized(resp)
+        
+        resp = self.api_client.post(self.url, format='json', data=self.orgowner_user)
+        self.assertHttpUnauthorized(resp)
+     
+    # check put not allowed
+    def test_put_invalid(self):
+        resp = self.api_client.put(self.url, format='json', data=self.api_user)
+        self.assertHttpMethodNotAllowed(resp)
+        
+        resp = self.api_client.put(self.url, format='json', data=self.standard_user)
+        self.assertHttpMethodNotAllowed(resp)
+        
+        resp = self.api_client.put(self.url, format='json', data=self.super_user)
+        self.assertHttpMethodNotAllowed(resp)
+        
+        resp = self.api_client.put(self.url, format='json', data=self.staff_user)
+        self.assertHttpMethodNotAllowed(resp)
+        
+        resp = self.api_client.put(self.url, format='json', data=self.orgowner_user)
+        self.assertHttpMethodNotAllowed(resp)
+        
+    # check delete not allowed
+    def test_delete_invalid(self):
+        resp = self.api_client.delete(self.url, format='json', data=self.api_user)
+        self.assertHttpMethodNotAllowed(resp)
+        
+        resp = self.api_client.delete(self.url, format='json', data=self.standard_user)
+        self.assertHttpMethodNotAllowed(resp)
+        
+        resp = self.api_client.delete(self.url, format='json', data=self.super_user)
+        self.assertHttpMethodNotAllowed(resp)
+        
+        resp = self.api_client.delete(self.url, format='json', data=self.staff_user)
+        self.assertHttpMethodNotAllowed(resp)
+        
+        resp = self.api_client.delete(self.url, format='json', data=self.orgowner_user)
+        self.assertHttpMethodNotAllowed(resp) 
+    
+    def test_get_existing_tag(self):
+        tag_name_obj = { "name": "Digital Campus" }
+        
+        existing_tag_url = self.url + "?" + urllib.urlencode(tag_name_obj)
+        
+        resp = self.api_client.get(existing_tag_url, format='json', data=self.api_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        resp = self.api_client.get(existing_tag_url, format='json', data=self.standard_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        resp = self.api_client.get(existing_tag_url, format='json', data=self.super_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        resp = self.api_client.get(existing_tag_url, format='json', data=self.staff_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+        resp = self.api_client.get(existing_tag_url, format='json', data=self.orgowner_user)
+        self.assertHttpOK(resp)
+        self.assertValidJSON(resp.content)
+        
+    def test_get_unknown_tag(self):
+        
+        tag_name_obj = { "name": "Some other tag" }
+        
+        approved_resource_url = self.url + "?" + urllib.urlencode(tag_name_obj)
+        
+        resp = self.api_client.get(approved_resource_url, format='json', data=self.api_user)
+        self.assertHttpNotFound(resp)
+        
+        resp = self.api_client.get(approved_resource_url, format='json', data=self.standard_user)
+        self.assertHttpNotFound(resp)
+        
+        resp = self.api_client.get(approved_resource_url, format='json', data=self.super_user)
+        self.assertHttpNotFound(resp)
+        
+        resp = self.api_client.get(approved_resource_url, format='json', data=self.staff_user)
+        self.assertHttpNotFound(resp)
+        
+        resp = self.api_client.get(approved_resource_url, format='json', data=self.orgowner_user)
+        self.assertHttpNotFound(resp)
+        
+    def test_post_empty_tag(self):
+        data = self.api_user
+        data['name'] = ''
+        
+        resp = self.api_client.post(approved_resource_url, format='json', data=data)
+        self.self.assertHttpBadRequest(resp)
+        
+    def test_post_tag(self):
+        data = self.api_user
+        data['name'] = 'my new tag'
+        
+        resp = self.api_client.post(approved_resource_url, format='json', data=data)
+        self.assertHttpCreated(resp)
+        self.assertValidJSON(resp.content)
+                 
 # ResourceTag API
 class ResourceTagResourceTest(ResourceTestCase):
     fixtures = ['user.json', 'orb.json']
