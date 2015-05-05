@@ -4,6 +4,7 @@ import json
 import tablib
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.contrib.auth.models import User
 from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render,render_to_response
@@ -54,6 +55,17 @@ def home_view(request):
             count_activity['search']+=1
             
         recent_activity.append([temp.strftime("%d %b %y"),count_activity])
+    
+    
+    user_registrations = []
+    no_days = (end_date-start_date).days + 1
+    for i in range(0,no_days,+1):
+        temp = start_date + datetime.timedelta(days=i)
+        day = temp.strftime("%d")
+        month = temp.strftime("%m")
+        year = temp.strftime("%Y")
+        no_registrations = User.objects.filter(date_joined__day=day,date_joined__month=month,date_joined__year=year).count()     
+        user_registrations.append([temp.strftime("%d %b %y"),no_registrations])
         
     return render_to_response('orb/analytics/home.html',
                               {'pending_crt_resources': pending_crt_resources,
@@ -62,7 +74,8 @@ def home_view(request):
                                'popular_resources': popular_resources,
                                'organisations': organisations,
                                'recent_activity': recent_activity,
-                               'searches_no_results': searches_no_results},
+                               'searches_no_results': searches_no_results,
+                               'user_registrations': user_registrations,},
                               context_instance=RequestContext(request))
     
 def map_view(request):
