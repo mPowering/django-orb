@@ -9,7 +9,7 @@
         "last_name" : "user",
         "password" : "pbkdf2_sha256$15000$przPwSwHrmbO$J4vUow/aRLImIH71M3LUcwVNwWXDbMSZAuO/FhZAu8c=",
         "user_permissions" : [  ],
-        "username" : "demo1"
+        "username" : "superuser"
       },
     "model" : "auth.user",
     "pk" : 1
@@ -20,12 +20,12 @@
         "groups" : [  ],
         "is_active" : true,
         "is_staff" : true,
-        "is_superuser" : true,
+        "is_superuser" : false,
         "last_login" : "2015-01-23T11:38:24Z",
         "last_name" : "user",
         "password" : "pbkdf2_sha256$15000$przPwSwHrmbO$J4vUow/aRLImIH71M3LUcwVNwWXDbMSZAuO/FhZAu8c=",
         "user_permissions" : [  ],
-        "username" : "demo2"
+        "username" : "staffuser"
       },
     "model" : "auth.user",
     "pk" : 2
@@ -35,13 +35,13 @@
         "first_name" : "demo3",
         "groups" : [  ],
         "is_active" : true,
-        "is_staff" : true,
-        "is_superuser" : true,
+        "is_staff" : false,
+        "is_superuser" : false,
         "last_login" : "2015-04-21T20:15:55Z",
         "last_name" : "user",
         "password" : "pbkdf2_sha256$15000$przPwSwHrmbO$J4vUow/aRLImIH71M3LUcwVNwWXDbMSZAuO/FhZAu8c=",
         "user_permissions" : [  ],
-        "username" : "demo3"
+        "username" : "apiuser"
       },
     "model" : "auth.user",
     "pk" : 3
@@ -51,13 +51,13 @@
         "first_name" : "demo4",
         "groups" : [  ],
         "is_active" : true,
-        "is_staff" : true,
-        "is_superuser" : true,
+        "is_staff" : false,
+        "is_superuser" : false,
         "last_login" : "2015-04-14T15:22:25Z",
         "last_name" : "user",
         "password" : "pbkdf2_sha256$15000$przPwSwHrmbO$J4vUow/aRLImIH71M3LUcwVNwWXDbMSZAuO/FhZAu8c=",
         "user_permissions" : [  ],
-        "username" : "demo4"
+        "username" : "orgowner"
       },
     "model" : "auth.user",
     "pk" : 4
@@ -73,7 +73,7 @@
         "last_name" : "user",
         "password" : "pbkdf2_sha256$15000$przPwSwHrmbO$J4vUow/aRLImIH71M3LUcwVNwWXDbMSZAuO/FhZAu8c=",
         "user_permissions" : [  ],
-        "username" : "demo5"
+        "username" : "standarduser"
       },
     "model" : "auth.user",
     "pk" : 8
