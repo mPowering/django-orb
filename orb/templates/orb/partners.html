@@ -36,7 +36,8 @@
 	</div>
 	<div class="col-md-8">
 		<h4>{{ p.name }}</h4>
-		<p>{{ p.description|safe }}</p>
+		<p>{{ p.description|safe }}<br/>
+		<a href="{% url 'orb.views.tag_view' p.slug %}">View all {{ p.name }} resources on ORB</a></p>
 	</div>
 	
 </div>

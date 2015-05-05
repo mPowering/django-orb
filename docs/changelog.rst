@@ -4,6 +4,7 @@ Change log
 5 May 2015
 ----------
 * 222: In Search API if query string not provided (or empty) - should return bad request - http://github.com/mpowering/django-orb/issues/issue/222
+* 223: Content partner page - link directly to partner resources - http://github.com/mpowering/django-orb/issues/issue/223
 
 4 May 2015
 -----------
