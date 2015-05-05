@@ -319,7 +319,7 @@ class UserProfile (models.Model):
     user = models.OneToOneField(User)
     about = models.TextField(blank=True, null=True, default=None)
     job_title = models.TextField(blank=True, null=True, default=None)
-    organisation = models.ForeignKey(Tag, related_name='organisation')
+    organisation = models.ForeignKey(Tag, related_name='organisation', blank=True, null=True, default=None)
     role = models.ForeignKey(Tag, related_name='role', blank=True, null=True, default=None)
     role_other = models.TextField(blank=True, null=True, default=None)
     phone_number = models.TextField(blank=True, null=True, default=None)

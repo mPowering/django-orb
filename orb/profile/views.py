@@ -73,17 +73,18 @@ def register(request):
                 user_profile.role = role
             user_profile.role_other = form.cleaned_data.get("role_other")
             
-            category = Category.objects.get(slug='organisation')
-            try:
-                organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
-            except Tag.DoesNotExist:
-                organisation = Tag()
-                organisation.name = form.cleaned_data.get("organisation")
-                organisation.category = category
-                organisation.create_user = user
-                organisation.update_user = user
-                organisation.save()
-            user_profile.organisation = organisation
+            if form.cleaned_data.get("organisation").strip() != '':
+                category = Category.objects.get(slug='organisation')
+                try:
+                    organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
+                except Tag.DoesNotExist:
+                    organisation = Tag()
+                    organisation.name = form.cleaned_data.get("organisation")
+                    organisation.category = category
+                    organisation.create_user = user
+                    organisation.update_user = user
+                    organisation.save()
+                user_profile.organisation = organisation
             
             user_profile.mailing= form.cleaned_data.get("mailing")
             
