@@ -49,6 +49,8 @@ urlpatterns = patterns('',
     
     url(r'^tinymce/', include('tinymce.urls')),
     url(r'^search/$', 'orb.views.search_view', name="orb_search"),
+    url(r'^search/advanced/$', 'orb.views.search_advanced_view', name="orb_search_advanced"),
+    url(r'^search/advanced/results/$', 'orb.views.search_advanced_results_view', name="orb_search_advanced_results"),
     url(r'^opensearch/$', TemplateView.as_view(template_name="search/opensearch.html"), name="orb_opensearch"),
     
     url(r'^api/', include('orb.api.urls')),

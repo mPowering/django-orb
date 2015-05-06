@@ -362,9 +362,11 @@ class ResourceTracker(models.Model):
 class SearchTracker(models.Model):
     SEARCH = 'search'
     SEARCH_API = 'search-api'
+    SEARCH_ADV = 'search-adv'
     SEARCH_TYPES = (
         (SEARCH, _(u'search')),
         (SEARCH_API, _(u'search-api')),
+        (SEARCH_ADV, _(u'search-adv')),
     )
     user = models.ForeignKey(User, blank=True, null=True, default=None)
     query = models.TextField(blank=True, null=True, default=None)

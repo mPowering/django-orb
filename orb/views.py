@@ -17,8 +17,8 @@ from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
 
-from orb.forms import ResourceForm, SearchForm, TagFilterForm, ResourceRejectForm
-from orb.models import Tag, Resource, ResourceURL , Category, TagOwner, TagTracker
+from orb.forms import ResourceForm, SearchForm, TagFilterForm, ResourceRejectForm, AdvancedSearchForm
+from orb.models import Tag, Resource, ResourceURL , Category, TagOwner, TagTracker, SearchTracker
 from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria
 from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow, resource_submitted, tag_viewed
 
@@ -592,6 +592,64 @@ def search_view(request):
                                'page': results},
                               context_instance=RequestContext(request))
     
+
+def search_advanced_view(request):
+      
+    if request.method == 'POST':
+        form = AdvancedSearchForm(request.POST)
+        tag_filter_form_set_choices(form)
+        if form.is_valid():
+            urlparams = request.POST.copy()
+            # delete these from params as not required
+            del urlparams['csrfmiddlewaretoken']
+            del urlparams['submit']
+            return HttpResponseRedirect(reverse('orb_search_advanced_results') + "?" + urlparams.urlencode())
+    else:
+        form = AdvancedSearchForm()
+        tag_filter_form_set_choices(form)
+           
+    return render_to_response('orb/search_advanced.html',
+                              {'form': form, 
+                               },
+                              context_instance=RequestContext(request))
+
+def search_advanced_results_view(request):
+    
+    form = AdvancedSearchForm(request.GET)
+    tag_filter_form_set_choices(form)
+    if form.is_valid():
+        tag_ids = []
+        for name, slug  in settings.TAG_FILTER_CATEGORIES:
+            for i in form.cleaned_data.get(name):
+                tag_ids.append(i)
+        resource_tags = ResourceTag.objects.filter(tag__pk__in=tag_ids).values('resource').annotate(dcount=Count('resource')).filter(dcount=len(tag_ids)).values('resource')
+        
+        q = request.GET.get('q', '')
+        search_results = SearchQuerySet().filter(content=q).models(Resource).values_list('pk', flat=True)
+        
+        resources = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED).filter(pk__in=search_results)
+        
+        search.send(sender=search_results, query=q, no_results=resources.count(), request=request, type=SearchTracker.SEARCH_ADV)
+        
+        paginator = Paginator(resources, 20)
+        # Make sure page request is an int. If not, deliver first page.
+        try:
+            page = int(request.GET.get('page', '1'))
+        except ValueError:
+            page = 1
+        
+        try:
+            resources = paginator.page(page)
+        except (EmptyPage, InvalidPage):
+            resources = paginator.page(paginator.num_pages)
+        
+        filter_tags = Tag.objects.filter(pk__in=tag_ids)
+        
+    return render_to_response('orb/search_advanced_results.html',
+                              { 'filter_tags': filter_tags,
+                               'q': q,
+                               'page': resources,},
+                              context_instance=RequestContext(request))
 
 def tag_link_view(request, id):
     try:

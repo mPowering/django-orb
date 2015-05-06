@@ -283,3 +283,8 @@ img.resource-row-icon {
 img.resource-row-icon:hover {
 	opacity: 1;
 }
+
+.advanced-search-link {
+	text-align:right;
+	margin-top:-10px;
+}

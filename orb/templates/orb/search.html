@@ -9,6 +9,7 @@
 <h2>{% trans 'Search' %}</h2>
 
 {% crispy form %}
+<a href="{% url 'orb_search_advanced' %}">Advanced search</a>
 
 {% if query %}
       <h3>{% trans 'Results' %}</h3>

@@ -4,6 +4,7 @@ Change log
 6 May 2015
 ----------
 * 225: Use minified version of stylesheet - http://github.com/mpowering/django-orb/issues/issue/225
+* 224: Add advanced search option - http://github.com/mpowering/django-orb/issues/issue/224
 
 5 May 2015
 ----------

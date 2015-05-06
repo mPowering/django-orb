@@ -2,6 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from django.core.urlresolvers import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
@@ -213,6 +214,7 @@ class SearchForm(forms.Form):
         self.helper.field_class = 'col-lg-8'
         self.helper.layout = Layout(
                 FieldWithButtons('q',Submit('submit', _(u'Go'), css_class='btn btn-default')),
+                
             )
         
 class HeaderSearchForm(forms.Form): 
@@ -230,8 +232,9 @@ class HeaderSearchForm(forms.Form):
         self.helper.label_class = 'col-lg-1'
         self.helper.field_class = 'col-lg-4 navbar-right'
         self.helper.layout = Layout(
-                                    FieldWithButtons('q',Submit('submit', _(u'Search'), css_class='btn btn-default')),
-                                    )
+                    FieldWithButtons('q',Submit('submit', _(u'Search'), css_class='btn btn-default')),
+                    Row (HTML('<a href="' + reverse('orb_search_advanced') + '">Advanced search</a>'), css_class='advanced-search-link'),
+                    )
         
 class TagFilterForm(forms.Form):
     health_topic = forms.MultipleChoiceField(
@@ -259,8 +262,6 @@ class TagFilterForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super(TagFilterForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        #self.helper.form_method = "GET"
-        #self.helper.form_action = 'orb_tags_filter_results'
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-8'
@@ -296,7 +297,63 @@ class TagFilterForm(forms.Form):
             raise forms.ValidationError( _(u"Please select at least one tag to filter on"))
             
         return self.cleaned_data
+
+class AdvancedSearchForm(forms.Form):
+    q = forms.CharField(
+                required=True,
+                label= _(u'Search terms'),
+                error_messages={'required': _(u'Please enter something to search for')},)
+    health_topic = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    resource_type = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    audience = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    geography = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    language = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    device = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
+    license = forms.MultipleChoiceField(
+                        widget=forms.CheckboxSelectMultiple,
+                        required=False,)
     
+    def __init__(self, *args, **kwargs):
+        super(AdvancedSearchForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+                'q',
+                Row (HTML('<hr>')),
+                'health_topic',
+                Row (HTML('<hr>')),
+                'resource_type',
+                Row (HTML('<hr>')),
+                'audience',
+                Row (HTML('<hr>')),
+                'geography',
+                Row (HTML('<hr>')),
+                'language',
+                Row (HTML('<hr>')),
+                'device',
+                Row (HTML('<hr>')),
+                'license',
+                Row (HTML('<hr>')),
+                Div(
+                   Submit('submit', _(u'Search'), css_class='btn btn-default'),
+                   css_class='col-lg-offset-2 col-lg-8',
+                ),
+            )
+
 class ResourceRejectForm(forms.Form):
     criteria = forms.MultipleChoiceField(
                         widget=forms.CheckboxSelectMultiple,

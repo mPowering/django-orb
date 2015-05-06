@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load add_get_parameter %}
+{% block extra_head_title %}{% trans 'Advanced Search Results' %}{% endblock extra_head_title %}
+{% block content %}
+
+{% include 'orb/includes/search_bar.html' %}
+
+<h3>{% trans 'Advanced Search Results' %}</h3>
+
+<h4>Results for '{{ q }}' and tagged with:
+{% for tf in filter_tags %}
+	{{ tf.name }}{% if not forloop.last %}, {% endif %} 
+{% endfor %}
+</h4>
+{% include "orb/includes/page_navigator.html" %}
+
+{% for resource in page.object_list %}
+     {% include "orb/includes/resource_row.html" %}
+{% empty %}
+	{% trans 'Sorry, no resources were found matching your criteria.' %}
+{% endfor %}
+
+{% include "orb/includes/page_navigator.html" %}
+
+{% endblock %}
