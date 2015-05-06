@@ -10,15 +10,30 @@ from orb.profile.forms import RegisterForm
 from orb.profile.views import build_form_options
 
 from tastypie.models import ApiKey
-
-class BasicTest(TestCase):
+  
+class ProfilePageTest(TestCase):
+    fixtures = ['user.json', 'orb.json']
+    
     def setUp(self):
         self.client = Client()
     
-    def test_home(self):
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
-    
+    def test_pages(self):        
+        response = self.client.get(reverse('profile_register'))
+        self.assertEqual(response.status_code, 200)    
+        
+        response = self.client.get(reverse('profile_login'))
+        self.assertEqual(response.status_code, 200) 
+        
+        
+        
+    '''
+    profile_register_thanks
+    logout
+    profile_reset
+    profile_reset_sent
+    profile_edit
+    '''
+         
     
 class RegisterTest(TestCase):
     fixtures = ['user.json', 'orb.json']
@@ -77,10 +92,23 @@ class RegisterTest(TestCase):
         response = self.client.post('/profile/login/', {'username': 'demo', 'password': 'secret'})
         self.assertEqual(response.status_code, 200)
 
-'''
-TODO: test:
-- password update
-- profile update
-- password reset
 
-'''
+class PasswordUpdateTest(TestCase):
+    fixtures = ['user.json', 'orb.json']
+    
+    def setUp(self):
+        self.client = Client()
+        
+class ProfileUpdateTest(TestCase):
+    fixtures = ['user.json', 'orb.json']
+    
+    def setUp(self):
+        self.client = Client()
+
+
+class PasswordResetTest(TestCase):
+    fixtures = ['user.json', 'orb.json']
+    
+    def setUp(self):
+        self.client = Client()        
+
