@@ -1,6 +1,10 @@
 Change log
 =====================================
 
+6 May 2015
+----------
+* 225: Use minified version of stylesheet - http://github.com/mpowering/django-orb/issues/issue/225
+
 5 May 2015
 ----------
 * 222: In Search API if query string not provided (or empty) - should return bad request - http://github.com/mpowering/django-orb/issues/issue/222
