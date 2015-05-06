@@ -1,20 +1,86 @@
 {% extends "base.html" %} 
 {% load i18n %} 
 {% block extra_head_title %}
-	{% trans 'How to use ORB content' %}
+	{% trans 'How to use ORB resources' %}
 {% endblock extra_head_title %} 
 
 {% block content %}
 
-<h2>{% trans 'How to use ORB content' %}</h2>
+<h2>{% trans 'How to use ORB resources' %}</h2>
+
+<h3>{% trans 'Find Resources' %}</h3>
+
+{% url 'orb_home' as orb_browse %}
+{% url 'orb_search' as orb_search %}
+{% url 'orb_tags_filter' as orb_filter %}
+
 {% blocktrans %}
+<p>The ORB platform gives you several methods to help find the right
+	content for you:</p>
 
-<!-- finding content -->
+<ul>
+	<li><a href="{{ orb_home }}">Browsing</a></li>
+	<li><a href="{{ orb_search }}">Searching</a></li>
+	<li><a href="{{ orb_filter }}">Filtering</a></li>
+</ul>
 
-<!-- adding content -->
+<p>All the resources are free to use and access, and no registration
+	is required. When you're using the resources, and especially so if
+	you're adapting them, remember to keep within the terms of the license
+	and include attribution. Every resource on ORB is openly licensed,
+	however some have restrictions on creating adaptations or translations.</p>
 
+<p>Once you've found the resources you're looking for, each resource
+	will have at least one download or web link option. Use these to save
+	the resource onto your laptop or mobile device and then use either for
+	your own self-study or integrating into your training
+	programme/workshop.</p>
+<p>Some ideas for how you could use the content in your training
+	programme:</p>
+<ul>
+	<li>Copy the videos onto SD cards, to give to your health workers
+		to watch on their mobile devices</li>
+	<li>Integrate into a mobile learning or elearning training course.</li>
+</ul>
 
+<p>Soon we'll be adding tools to the ORB platform to make it easy
+	for you to create mobile enabled training courses, using and adapting
+	the ORB resources.</p>
 
-
+<p>
+	We'd love to hear from you about how you've used the ORB resources, if
+	you have a story to share, please <a
+		href="mailto:{{ settings.ORB_INFO_EMAIL }}">contact us</a>.
+</p>
 {% endblocktrans %}
-{% endblock content %}
+
+<h3>{% trans 'Submit Resources' %}</h3>
+
+{% url 'orb_resource_create' as orb_add %}
+{% url 'orb_guidelines' as orb_criteria %}
+{% url 'orb_partners' as orb_partners %}
+{% blocktrans %}
+<p>
+	If you have some great resources to share, then please submit them to
+	the ORB platform. To submit a resource, you'll need to register
+	(instant and free), then use the <a href="{{ orb_add }}">Add
+		Resource</a> form to submit your resource.
+</p>
+
+<p>
+	All submitted resources must meet the <a href="{{ orb_criteria }}">ORB
+		Guidelines and Criteria</a> to be made available pulically through the
+	platform.
+</p>
+
+<p>
+	If you have many resources to share, then consider becoming an <a
+		href="{{ orb_partners }}">ORB Content Partner</a>. ORB Content
+	Partners get extra benefits, such as access to the ORB API, a
+	customised organisation page and usage and analytics reports for their
+	resources. For more information on how to become an ORB Content
+	partner, please <a href="mailto:{{ settings.ORB_INFO_EMAIL }}">contact
+		us</a>.
+</p>
+
+{% endblocktrans %} {% endblock content %}
