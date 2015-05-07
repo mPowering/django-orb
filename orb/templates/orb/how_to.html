@@ -14,7 +14,7 @@
 {% url 'orb_search' as orb_search %}
 {% url 'orb_tags_filter' as orb_filter %}
 
-{% blocktrans %}
+{% blocktrans with settings.ORB_INFO_EMAIL as email %}
 <p>The ORB platform gives you several methods to help find the right
 	content for you:</p>
 
@@ -55,7 +55,7 @@
 <p>
 	We'd love to hear from you about how you've used the ORB resources. If
 	you have a story to share, please <a
-		href="mailto:{{ settings.ORB_INFO_EMAIL }}">contact us</a>.
+		href="mailto:{{ email }}">contact us</a>.
 </p>
 {% endblocktrans %}
 
@@ -64,7 +64,8 @@
 {% url 'orb_resource_create' as orb_add %}
 {% url 'orb_guidelines' as orb_criteria %}
 {% url 'orb_partners' as orb_partners %}
-{% blocktrans %}
+
+{% blocktrans with settings.ORB_INFO_EMAIL as email %}
 <p>
 	If you have some great resources to share, please submit them to
 	the ORB platform. To submit a resource, you'll need to register
@@ -84,7 +85,7 @@
 	Partners get extra benefits, such as access to the ORB API, a
 	customized organization page and usage and analytics reports for their
 	resources. For more information on how to become an ORB Content
-	partner, please <a href="mailto:{{ settings.ORB_INFO_EMAIL }}">contact
+	partner, please <a href="mailto:{{ email }}">contact
 		us</a>.
 </p>
 
