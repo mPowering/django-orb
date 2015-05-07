@@ -9,6 +9,7 @@ Change log
 * 241: Check study time can be submitted via the API - http://github.com/mpowering/django-orb/issues/issue/241
 * 235: Search results - cope with misspellings - http://github.com/mpowering/django-orb/issues/issue/235
 * 227: In icons on resource row show extra icons for... - http://github.com/mpowering/django-orb/issues/issue/227
+* 240: Add study time to resource row display - http://github.com/mpowering/django-orb/issues/issue/240
 
 6 May 2015
 ----------
