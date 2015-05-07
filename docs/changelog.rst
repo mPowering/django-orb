@@ -11,6 +11,8 @@ Change log
 * 227: In icons on resource row show extra icons for... - http://github.com/mpowering/django-orb/issues/issue/227
 * 240: Add study time to resource row display - http://github.com/mpowering/django-orb/issues/issue/240
 * 239: Make red line on banner 1px larger - http://github.com/mpowering/django-orb/issues/issue/239
+* 71: Add contact email, web/cookie/privacy policy - http://github.com/mpowering/django-orb/issues/issue/71
+* 141: Include disclaimer type info - http://github.com/mpowering/django-orb/issues/issue/141
 
 6 May 2015
 ----------
