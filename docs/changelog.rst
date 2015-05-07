@@ -6,6 +6,7 @@ Change log
 
 * 155: How to use the content - video plus FAQs type page? - http://github.com/mpowering/django-orb/issues/issue/155
 * 233: Add closed caption icon for subtitled videos - http://github.com/mpowering/django-orb/issues/issue/233
+* 241: Check study time can be submitted via the API - http://github.com/mpowering/django-orb/issues/issue/241
 
 6 May 2015
 ----------

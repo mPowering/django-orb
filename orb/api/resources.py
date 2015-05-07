@@ -150,7 +150,8 @@ class ResourceFileResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = False
-     
+        throttle = CacheDBThrottle(throttle_at=150, timeframe=3600)
+        
     def dehydrate_file(self,bundle):
         if bundle.obj.file:
             return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.file.name
@@ -168,6 +169,7 @@ class ResourceURLResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
+        throttle = CacheDBThrottle(throttle_at=150, timeframe=3600)
      
     def hydrate(self, bundle, request=None):
         # check that user has permissions on the resource
@@ -197,6 +199,7 @@ class ResourceTagResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True  
         include_resource_uri = True
+        throttle = CacheDBThrottle(throttle_at=1000, timeframe=3600)
     
     def hydrate(self, bundle, request=None):
         # chcek that user has permissions on the resource
@@ -223,6 +226,7 @@ class TagResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
+        throttle = CacheDBThrottle(throttle_at=1000, timeframe=3600)
    
     def dehydrate_url(self,bundle):
         url = get_full_url_prefix(bundle) + reverse('orb_tags', args=[bundle.obj.slug])
