@@ -288,3 +288,16 @@ img.resource-row-icon:hover {
 	text-align:right;
 	margin-top:-10px;
 }
+
+.resource-row-study-time {
+	display: inline-block; 
+	background-color: #033f62;
+	opacity: .6;
+	color: #fff;
+	padding: 0 8px 0 0;
+	vertical-align: bottom;
+}
+
+.resource-row-study-time:hover {
+	opacity: 1;
+}

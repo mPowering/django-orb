@@ -15,22 +15,35 @@
 		</h4>
 		<p>{{ resource.description|striptags|truncatewords:40 }}</p>
 
-		<p>{% for c in resource.get_geographies %}
-					{% thumbnail c.image "30x30" crop="center" format="PNG" padding=True as im %}
-						<img class="resource-row-icon" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
-					{% endthumbnail %}	
-				{% endfor %}
+		<div>
+			{% for c in resource.get_type_tags %}
+				{% thumbnail c.image "30x30" crop="center" format="PNG" padding=True as im %}
+					<img class="resource-row-icon" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
+				{% endthumbnail %}	
+			{% endfor %}
+			{% for c in resource.get_geographies %}
+				{% thumbnail c.image "30x30" crop="center" format="PNG" padding=True as im %}
+					<img class="resource-row-icon" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
+				{% endthumbnail %}	
+			{% endfor %}
 			{% for c in resource.get_languages %}
-					{% thumbnail c.image "30x30"  crop="center" format="PNG" padding=True as im %}
-						<img class="resource-row-icon" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
-					{% endthumbnail %}	
-				{% endfor %}
+				{% thumbnail c.image "30x30"  crop="center" format="PNG" padding=True as im %}
+					<img class="resource-row-icon" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
+				{% endthumbnail %}	
+			{% endfor %}
 			{% for c in resource.get_devices %}
-					{% thumbnail c.image "30x30"  crop="center" format="PNG" padding=True as im %}
-						<img class="resource-row-icon" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
-					{% endthumbnail %}	
-				{% endfor %}
-		</p>
+				{% thumbnail c.image "30x30"  crop="center" format="PNG" padding=True as im %}
+					<img class="resource-row-icon" src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{{ c.name }}" title="{{ c.name }}"/>
+				{% endthumbnail %}	
+			{% endfor %}
+			{% if resource.study_time_number  %}
+				<div class="resource-row-study-time" title="{% trans 'Study time: ' %}{{ resource.study_time_number }} {{ resource.study_time_unit }}">
+					<img src="{{ STATIC_URL }}orb/images/study_time_30x30.png" width="30" height="30" alt="{% trans 'Study time: ' %}{{ resource.study_time_number }} {{ resource.study_time_unit }}"/>
+					<span>{{ resource.study_time_number }} {{ resource.study_time_unit }}</span>
+				</div>
+			{% endif %}
+			
+		</div>
 	</div>
 	<div class="col-md-2">
            {% if resource.image %}

@@ -199,7 +199,6 @@ class ResourceTagResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True  
         include_resource_uri = True
-        throttle = CacheDBThrottle(throttle_at=1000, timeframe=3600)
     
     def hydrate(self, bundle, request=None):
         # chcek that user has permissions on the resource
@@ -226,7 +225,6 @@ class TagResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
-        throttle = CacheDBThrottle(throttle_at=1000, timeframe=3600)
    
     def dehydrate_url(self,bundle):
         url = get_full_url_prefix(bundle) + reverse('orb_tags', args=[bundle.obj.slug])
