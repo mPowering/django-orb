@@ -10,6 +10,7 @@ Change log
 * 235: Search results - cope with misspellings - http://github.com/mpowering/django-orb/issues/issue/235
 * 227: In icons on resource row show extra icons for... - http://github.com/mpowering/django-orb/issues/issue/227
 * 240: Add study time to resource row display - http://github.com/mpowering/django-orb/issues/issue/240
+* 239: Make red line on banner 1px larger - http://github.com/mpowering/django-orb/issues/issue/239
 
 6 May 2015
 ----------

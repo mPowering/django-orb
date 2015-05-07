@@ -11,10 +11,10 @@
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-  padding-top: 70px;
+  padding-top: 72px;
 }
 .navbar-fixed-top {
-    min-height: 70px; 
+    min-height: 72px; 
 }
 .container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
     padding-top: 10px;
@@ -51,6 +51,7 @@ a:hover, a:focus {
 .navbar-inverse {
     background-color: #033f62;
     border-color: #EF485B;
+    border-bottom: 2px solid #EF485B;
 }
 
 .navbar-inverse .navbar-brand {
