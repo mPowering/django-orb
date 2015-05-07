@@ -5,6 +5,7 @@ Change log
 ----------
 
 * 155: How to use the content - video plus FAQs type page? - http://github.com/mpowering/django-orb/issues/issue/155
+* 233: Add closed caption icon for subtitled videos - http://github.com/mpowering/django-orb/issues/issue/233
 
 6 May 2015
 ----------
