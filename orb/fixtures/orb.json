@@ -667,8 +667,8 @@
 },
 {
     "fields": {
-        "status": "pending_crt",
-        "update_date": "2015-05-01T23:22:02Z",
+        "status": "pending_mrt",
+        "update_date": "2015-05-07T00:13:56Z",
         "study_time_number": 0,
         "create_date": "2015-05-01T23:22:02Z",
         "description": "Adolescent and Youth Reproductive Health module from HEAT",
@@ -703,8 +703,8 @@
 },
 {
     "fields": {
-        "status": "pending_crt",
-        "update_date": "2015-05-01T23:22:44Z",
+        "status": "rejected",
+        "update_date": "2015-05-07T00:14:15Z",
         "study_time_number": 0,
         "create_date": "2015-05-01T23:22:44Z",
         "description": "Immunization module from HEAT",
@@ -736,6 +736,30 @@
     },
     "model": "orb.resource",
     "pk": 127
+},
+{
+    "fields": {
+        "status": "pending_mep",
+        "create_date": "2015-05-07T00:13:56Z",
+        "notes": "",
+        "owner_email_sent": false,
+        "create_user": 1,
+        "resource": 124
+    },
+    "model": "orb.resourceworkflowtracker",
+    "pk": 1
+},
+{
+    "fields": {
+        "status": "rejected",
+        "create_date": "2015-05-07T00:14:16Z",
+        "notes": "Does the resource reflect current medical guidelines and best practice? : demo",
+        "owner_email_sent": true,
+        "create_user": 1,
+        "resource": 126
+    },
+    "model": "orb.resourceworkflowtracker",
+    "pk": 2
 },
 {
     "fields": {
@@ -8326,5 +8350,31 @@
     },
     "model": "orb.userprofile",
     "pk": 16
+},
+{
+    "fields": {
+        "ip": "127.0.0.1",
+        "tag": 2,
+        "user": 1,
+        "access_date": "2015-05-07T00:13:31Z",
+        "extra_data": "",
+        "type": "view",
+        "user_agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:37.0) Gecko/20100101 Firefox/37.0"
+    },
+    "model": "orb.tagtracker",
+    "pk": 1
+},
+{
+    "fields": {
+        "ip": "127.0.0.1",
+        "tag": 1,
+        "user": 4,
+        "access_date": "2015-05-07T00:16:41Z",
+        "extra_data": "",
+        "type": "view",
+        "user_agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:37.0) Gecko/20100101 Firefox/37.0"
+    },
+    "model": "orb.tagtracker",
+    "pk": 2
 }
 ]
