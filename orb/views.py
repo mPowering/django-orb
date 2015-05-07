@@ -673,7 +673,7 @@ def resource_form_set_choices(form):
 
 def tag_filter_form_set_choices(form):
     for name, slug in settings.TAG_FILTER_CATEGORIES:
-        form.fields[name].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug=slug).exclude(resourcetag__isnull=True).order_by('order_by','name')]
+        form.fields[name].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug=slug, resourcetag__resource__status=Resource.APPROVED).distinct().order_by('order_by','name')]
     return form 
 
 def resource_can_view(resource, user):

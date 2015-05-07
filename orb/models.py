@@ -155,11 +155,7 @@ class ResourceURL (models.Model):
     update_user = models.ForeignKey(User, related_name='resource_url_update_user')
 
     def __unicode__(self):
-        if self.description is None:
-            return self.url
-        else:
-            return self.description
-        
+        return self.url
         
 # ResourceFile
 class ResourceFile (models.Model):
