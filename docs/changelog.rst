@@ -1,13 +1,20 @@
 Change log
 =====================================
 
+7 May 2015
+----------
+
+* 155: How to use the content - video plus FAQs type page? - http://github.com/mpowering/django-orb/issues/issue/155
+
 6 May 2015
 ----------
+
 * 225: Use minified version of stylesheet - http://github.com/mpowering/django-orb/issues/issue/225
 * 224: Add advanced search option - http://github.com/mpowering/django-orb/issues/issue/224
 
 5 May 2015
 ----------
+
 * 222: In Search API if query string not provided (or empty) - should return bad request - http://github.com/mpowering/django-orb/issues/issue/222
 * 223: Content partner page - link directly to partner resources - http://github.com/mpowering/django-orb/issues/issue/223
 * 45: Check over guidelines page - http://github.com/mpowering/django-orb/issues/issue/45
@@ -15,6 +22,7 @@ Change log
 
 4 May 2015
 -----------
+
 * 208: Move flag icons to be last in row - http://github.com/mpowering/django-orb/issues/issue/208
 * 211: Add option to add an image for each ResourceFile and ResourceURL - http://github.com/mpowering/django-orb/issues/issue/211
 * 210: On resource view page allow tags and icons to flow/wrap properly - http://github.com/mpowering/django-orb/issues/issue/210
@@ -25,6 +33,7 @@ Change log
 
 1 May 2015
 -----------
+
 * 144: Max 100-150 words for description of resource - http://github.com/mpowering/django-orb/issues/issue/144
 * 88: Decide on valid file upload types - http://github.com/mpowering/django-orb/issues/issue/88
 * 206: Script to do link checking - http://github.com/mpowering/django-orb/issues/issue/206
@@ -34,17 +43,20 @@ Change log
 
 30 Apr 2015
 -----------
+
 * 203: Add optional file size on ResourceURL object - http://github.com/mpowering/django-orb/issues/issue/203
 * 204: Make sure mailing list checkbox on register form is ticked by default - http://github.com/mpowering/django-orb/issues/issue/204
 
 29 Apr 2015
 ------------
+
 * 197: Add organisation(s) to analytics pending resources - http://github.com/mpowering/django-orb/issues/issue/197
 * 200: Check to see if the jquery UI lib can be removed - http://github.com/mpowering/django-orb/issues/issue/200
 * 199: Add version no to the footer - http://github.com/mpowering/django-orb/issues/issue/199
 
 28 Apr 2015
 -----------
+
 * 189: Add option to order resource files and links - http://github.com/mpowering/django-orb/issues/issue/189
 * 191: Add image credits for flags etc - http://github.com/mpowering/django-orb/issues/issue/191
 * 192: Bug in updating resource that's been submitted via API - http://github.com/mpowering/django-orb/issues/issue/192
@@ -53,6 +65,7 @@ Change log
 
 27 Apr 2015
 -----------
+
 * 175: For rejection ask user to tick which items the resource didn't match - http://github.com/mpowering/django-orb/issues/issue/175
 * 120: How to notify users when their resources are approved/rejected - http://github.com/mpowering/django-orb/issues/issue/120
 * 186: Add email notification to admins when new resource submitted - http://github.com/mpowering/django-orb/issues/issue/186
@@ -60,15 +73,18 @@ Change log
 
 26 Apr 2015
 ------------
+
 * 154: When submitting first resource, send welcome email about the process - http://github.com/mpowering/django-orb/issues/issue/154
 * 171: Have a welcome email for new users who register - http://github.com/mpowering/django-orb/issues/issue/171
 
 24 Apr 2015
 -----------
+
 * 177: Add selection criteria to the guidelines page - http://github.com/mpowering/django-orb/issues/issue/177
 
 22 Apr 2015
 -------------
+
 * 181: Allow tag owners to edit any resources - http://github.com/mpowering/django-orb/issues/issue/181
 * 183: Change 'save' button on add resource form to be 'submit' instead - http://github.com/mpowering/django-orb/issues/issue/183
 * 173: Make license a drop down option - http://github.com/mpowering/django-orb/issues/issue/173
@@ -76,11 +92,13 @@ Change log
 
 21 Apr 2015
 -----------
+
 * 154: When submitting first resource, send welcome email about the process - http://github.com/mpowering/django-orb/issues/issue/154
 * 176: Reset user password - for long emails the last part gets cut off - http://github.com/mpowering/django-orb/issues/issue/176
 
 20 Apr 2015
 -----------
+
 * 7: How to filter by multiple tags - http://github.com/mpowering/django-orb/issues/issue/7
 * 163: On filter tags, validate that something has been selected - http://github.com/mpowering/django-orb/issues/issue/163
 * 158: Fill in Photo credits - http://github.com/mpowering/django-orb/issues/issue/158
@@ -90,34 +108,40 @@ Change log
 
 18 Apr 2015
 -----------
+
 * 161: RSS feeds link to example.com - rather than the actual site - http://github.com/mpowering/django-orb/issues/issue/161
 * 160: On advanced filtering page - only show options for which there are resources available - http://github.com/mpowering/django-orb/issues/issue/160
 
 17 Apr 2015
 -----------
+
 * 157: Get emailing working - http://github.com/mpowering/django-orb/issues/issue/157
 * 156: Add search function to tag django admin page - http://github.com/mpowering/django-orb/issues/issue/156
 * 159: Complete partners page - http://github.com/mpowering/django-orb/issues/issue/159
 
 15 Apr 2015
 -----------
+
 * 152: Add extra registration info to the profile page - http://github.com/mpowering/django-orb/issues/issue/152
 * 153: Finish up tag/organisation/country page - http://github.com/mpowering/django-orb/issues/issue/153
 * 148: On org analytics page allow download by month - http://github.com/mpowering/django-orb/issues/issue/148
 
 14 Apr 2015
 -----------
+
 * 111: On registration form use the target user as field - http://github.com/mpowering/django-orb/issues/issue/111
 * 145: For audience allow adding other type on registration page only - http://github.com/mpowering/django-orb/issues/issue/145
 * 146: On user profile add option to opt in/out of getting updates from mpowering - http://github.com/mpowering/django-orb/issues/issue/146
 
 13 Apr 2015
 -----------
+
 * 147: Automatically prepopulate the organisation with the users organisation - http://github.com/mpowering/django-orb/issues/issue/147
 * 75: Links for sharing resources - http://github.com/mpowering/django-orb/issues/issue/75
 
 pre 12 Apr 2015
 ---------------
+
 * 133: Added license (GPL) - http://github.com/mPowering/django-orb/issues/issue/133
 * 129: If on child tag page - show link back to parent tag - http://github.com/mPowering/django-orb/issues/issue/129
 * 126: On tag pages show the child tags (with no resources) - http://github.com/mPowering/django-orb/issues/issue/126

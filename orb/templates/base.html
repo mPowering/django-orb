@@ -46,25 +46,26 @@
 	<div id="footer">
 		<div class="row">
 			<div class="col-md-3 text-muted">
-				<h4>Contact Us</h4>
+				<h4>{% trans 'Contact Us' %}</h4>
 				<a href="mailto:{{ settings.ORB_INFO_EMAIL }}">{{ settings.ORB_INFO_EMAIL }}</a>
 			</div>
 			<div class="col-md-3 text-muted">
-				<h4>Follow Us</h4>
-				<a href="https://twitter.com/mpoweringhealth">Twitter</a><br/>
-				<a href="http://mpoweringhealth.org/blog/">Blog</a>
+				<h4>{% trans 'Follow Us' %}</h4>
+				<a href="https://twitter.com/mpoweringhealth">{% trans 'Twitter' %}</a><br/>
+				<a href="http://mpoweringhealth.org/blog/">{% trans 'Blog' %}</a>
 			</div>
 			<div class="col-md-3 text-muted">
-				<h4>About Us</h4>
-				<a href="{% url 'orb_about' %}">About</a><br/>
-				<a href="{% url 'orb_about' %}#crt">Content Review Team</a><br/>
-			    <a href="{% url 'orb_about' %}#mep">Medical Expert Panel</a><br/>
-			    <a href="{% url 'orb_partners' %}">Content Partners</a><br/>
-			    <a href="{% url 'orb_terms' %}">Terms and Privacy Policy</a><br/>
-			    <a href="{% url 'orb_developers' %}">Developers Area</a><br/>
+				<h4>{% trans 'About Us' %}</h4>
+				<a href="{% url 'orb_about' %}">{% trans 'About' %}</a><br/>
+				<a href="{% url 'orb_about' %}#crt">{% trans 'Content Review Team' %}</a><br/>
+			    <a href="{% url 'orb_about' %}#mep">{% trans 'Medical Expert Panel' %}</a><br/>
+			    <a href="{% url 'orb_partners' %}">{% trans 'Content Partners' %}</a><br/>
+			    <a href="{% url 'orb_how_to' %}">{% trans 'How to use ORB resources' %}</a><br/>
+			    <a href="{% url 'orb_developers' %}">{% trans 'Developers Area' %}</a><br/>
 			</div>
 			<div class="col-md-3 text-muted">
-				 {{ version }} &copy; {% now "Y" %} <a href="http://mpoweringhealth.org/">mPowering</a>
+				 {{ version }} &copy; {% now "Y" %} <a href="http://mpoweringhealth.org/">mPowering</a><br/>
+				 <a href="{% url 'orb_terms' %}">{% trans 'Terms and Privacy Policy' %}</a><br/>
 			</div>
 		</div>
 
