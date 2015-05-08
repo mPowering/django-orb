@@ -6,6 +6,7 @@ Change log
 
 * 246: Check spacing of link icons - http://github.com/mpowering/django-orb/issues/issue/246
 * 248: How to delete resources but without removing the tracker - http://github.com/mpowering/django-orb/issues/issue/248
+* 247: Filtering page no longer required now we have the advanced search? - http://github.com/mpowering/django-orb/issues/issue/247
 
 
 7 May 2015

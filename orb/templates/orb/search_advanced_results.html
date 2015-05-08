@@ -6,13 +6,16 @@
 
 {% include 'orb/includes/search_bar.html' %}
 
-<h3>{% trans 'Advanced Search Results' %}</h3>
+<h2>{% trans 'Advanced Search Results' %}</h2>
 
-<h4>Results for '{{ q }}' and tagged with:
-{% for tf in filter_tags %}
-	{{ tf.name }}{% if not forloop.last %}, {% endif %} 
-{% endfor %}
-</h4>
+<h3>{{ total_results }} results for 
+{% if q %}'{{ q }}'{% endif %}{% if q and filter_tags %}, {% endif %}
+{% if filter_tags %}
+	{% for tf in filter_tags %}
+		{{ tf.name }}{% if not forloop.last %}, {% endif %} 
+	{% endfor %}
+{% endif %}
+</h3>
 {% include "orb/includes/page_navigator.html" %}
 
 {% for resource in page.object_list %}

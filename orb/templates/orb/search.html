@@ -9,19 +9,22 @@
 <h2>{% trans 'Search' %}</h2>
 
 {% crispy form %}
-<a href="{% url 'orb_search_advanced' %}">Advanced search</a>
+
+<a href="{% url 'orb_search_advanced' %}">{% trans 'Advanced search & filter' %}</a>
 
 {% if query %}
-      <h3>{% trans 'Results' %}</h3>
-
-	  {% include "orb/includes/page_navigator.html" %}
-      {% for resource in page.object_list %}
-      	  {% with resource.object as resource %}
-	      	{% include "orb/includes/resource_row.html" %}
-	      {% endwith %}
-      {% empty %}
-          <p>{% trans 'No results found.' %}</p>
-      {% endfor %}
-      {% include "orb/includes/page_navigator.html" %}
+	  {% if page.object_list %}
+	      <h3>{{ total_results }} {% trans 'results' %}</h3>
+	
+		  {% include "orb/includes/page_navigator.html" %}
+	      {% for resource in page.object_list %}
+	      	  {% with resource.object as resource %}
+		      	{% include "orb/includes/resource_row.html" %}
+		      {% endwith %}
+	      {% endfor %}
+	      {% include "orb/includes/page_navigator.html" %}
+      {% else %}
+          <h3>{% trans 'No results found.' %}</h3>
+      {% endif %}    
 {% endif %}
 {% endblock %}
