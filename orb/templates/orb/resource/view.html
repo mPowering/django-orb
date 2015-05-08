@@ -129,16 +129,17 @@ From:
 					{% else %}
 						{{ u.url }}
 					{% endif %}
-					</a><br/>
+					</a>
 				{% if u.description and u.description.strip %}
 					<p>{{ u.description }}</p>
 				{% endif %}
 				{% if u.file_size != 0 %}
-					({{ u.file_size|filesizeformat }})
+					<br/>({{ u.file_size|filesizeformat }})
 				{% endif %}
-			</div>
+			</div>	
+		</div>
 	{% endfor %}
-	</div>
+	
 	
 {% endif %}
 

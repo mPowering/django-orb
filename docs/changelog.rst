@@ -1,6 +1,12 @@
 Change log
 =====================================
 
+8 May 2015
+-----------
+
+* 246: Check spacing of link icons - http://github.com/mpowering/django-orb/issues/issue/246
+
+
 7 May 2015
 ----------
 
