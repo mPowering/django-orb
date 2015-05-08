@@ -279,6 +279,7 @@ div.resourcetag {
 
 img.resource-row-icon {
 	opacity: .6;
+	margin-bottom: 10px;
 }
 
 img.resource-row-icon:hover {
@@ -297,6 +298,7 @@ img.resource-row-icon:hover {
 	color: #fff;
 	padding: 0 8px 0 0;
 	vertical-align: bottom;
+	margin-bottom: 10px;
 }
 
 .resource-row-study-time:hover {
