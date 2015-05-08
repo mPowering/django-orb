@@ -133,7 +133,7 @@ class ResourceWorkflowTracker(models.Model):
         (PENDING_MEP, _('Pending MEP')),
         (APPROVED, _('Approved')),
     )
-    resource = models.ForeignKey(Resource)
+    resource = models.ForeignKey(Resource, blank=True, null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User)
     status = models.CharField(max_length=50,choices=STATUS_TYPES, default=PENDING_CRT)
@@ -339,11 +339,11 @@ class ResourceTracker(models.Model):
         (DOWNLOAD, _(u'Download')),
         (CREATE, _(u'Create')),
     )
-    user = models.ForeignKey(User, blank=True, null=True, default=None)
+    user = models.ForeignKey(User, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     type = models.CharField(max_length=50,choices=TRACKER_TYPES, default=VIEW)
-    resource = models.ForeignKey(Resource, blank=True, null=True, default=None)
-    resource_file = models.ForeignKey(ResourceFile, blank=True, null=True, default=None)
-    resource_url = models.ForeignKey(ResourceURL, blank=True, null=True, default=None)
+    resource = models.ForeignKey(Resource, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    resource_file = models.ForeignKey(ResourceFile, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    resource_url = models.ForeignKey(ResourceURL, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     access_date = models.DateTimeField(auto_now_add=True)
     ip = models.IPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
@@ -364,7 +364,7 @@ class SearchTracker(models.Model):
         (SEARCH_API, _(u'search-api')),
         (SEARCH_ADV, _(u'search-adv')),
     )
-    user = models.ForeignKey(User, blank=True, null=True, default=None)
+    user = models.ForeignKey(User, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     query = models.TextField(blank=True, null=True, default=None)
     no_results = models.IntegerField(blank=True, null=True, default=0)
     access_date = models.DateTimeField(auto_now_add=True)
@@ -381,9 +381,9 @@ class TagTracker(models.Model):
         (VIEW_API, _(u'View-API')),
         (VIEW_URL, _(u'View-URL')),
     )
-    user = models.ForeignKey(User, blank=True, null=True, default=None)
+    user = models.ForeignKey(User, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     type = models.CharField(max_length=50,choices=TRACKER_TYPES, default=VIEW)
-    tag = models.ForeignKey(Tag, blank=True, null=True, default=None)
+    tag = models.ForeignKey(Tag, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     access_date = models.DateTimeField(auto_now_add=True)
     ip = models.IPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
