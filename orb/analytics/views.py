@@ -1,5 +1,6 @@
 
 import datetime
+import dateutil.relativedelta
 import json
 import tablib
 
@@ -13,10 +14,9 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from orb.analytics.models import UserLocationVisualization
-from orb.models import Resource, SearchTracker, ResourceTracker, Tag, TagOwner
+from orb.models import Resource, SearchTracker, ResourceTracker, Tag, TagOwner, TagTracker
 
 # Create your views here.
-
 
 def home_view(request):
     if not request.user.is_staff:
@@ -85,6 +85,59 @@ def map_view(request):
                               {},
                               context_instance=RequestContext(request))
 
+
+def visitor_view(request, year=None, month=None):
+    if not request.user.is_staff:
+        return HttpResponse(status=401,content="Not Authorized") 
+    
+    if year == None and month == None:
+        today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
+        last_month = today - dateutil.relativedelta.relativedelta(months=1)
+    
+        analytics_month = last_month.month
+        analytics_year = last_month.year
+    else:
+        analytics_month = month
+        analytics_year = year
+    
+    # for last full month:
+    
+    stats = {}
+    #  total unique users - and no hits
+    #  unique loggedin users  - and no hits
+    user_hits = list(ResourceTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year).exclude(user=None).values_list('user_id', flat=True).distinct())
+    user_hits += list(TagTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year).exclude(user=None).values_list('user_id', flat=True).distinct())
+    user_hits += list(SearchTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year).exclude(user=None).values_list('user_id', flat=True).distinct())
+
+    stats['user_hits'] = len(set(user_hits))
+    
+    #  unique anon users (IP addess)  - and no hits
+    anon_hits = list(ResourceTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year, user=None).values_list('ip', flat=True).distinct())
+    anon_hits += list(TagTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year, user=None).values_list('ip', flat=True).distinct())
+    anon_hits += list(SearchTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year, user=None).values_list('ip', flat=True).distinct())
+
+    stats['anon_hits'] = len(set(anon_hits))
+    
+    #resource hits
+    
+    #searches
+    
+    #downloads/links
+    
+    #locations/countries
+    
+    
+    # get links for previous months
+    month_views = ResourceTracker.objects.all().datetimes('access_date','month','DESC')
+    
+    return render_to_response('orb/analytics/visitor.html',
+                              {
+                               'month': analytics_month,
+                               'year': analytics_year,
+                               'stats': stats,
+                               'month_views': month_views,
+                               },
+                              context_instance=RequestContext(request))
 
 def tag_view(request,id):
     if not is_tag_owner(request, id):

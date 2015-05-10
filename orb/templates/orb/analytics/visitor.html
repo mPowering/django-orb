@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% load i18n %}
+
+{% block extra_head_title %}{% trans 'Activity Map' %}{% endblock extra_head_title %}
+
+{% block content %}
+
+<h2>{% trans 'Visitor Analytics' %}</h2>
+
+{% blocktrans %}
+<p>Also look at the stats/analytics on <a href="https://analytics.google.com/">Google Analytics</a></p>
+{% endblocktrans %}
+
+<div class="table-responsive">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th>{% trans 'Metric' %}</th>
+				<th>{% trans 'Total' %}</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{% trans 'Unique registered users' %}</td>
+				<td>{{ stats.user_hits }}</td>
+			</tr>
+			<tr>
+				<td>{% trans 'Unique anonymous users (IP)' %}</td>
+				<td>{{ stats.anon_hits }}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+
+
+<ul>
+{% for e in month_views %}
+	<li><a href="{% url 'orb_analytics_visitor_month_view' e|date:"Y" e|date:"n" %} ">{{ e|date:"M Y" }}</a></li>
+{% endfor %}
+</ul>
+
+
+{% endblock %}
