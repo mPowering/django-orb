@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h2>{% trans 'Visitor Analytics' %}</h2>
+<h2>{% trans 'Visitor Analytics' %} for {{ archive_month|date:"M Y" }}</h2>
 
 {% blocktrans %}
 <p>Also look at the stats/analytics on <a href="https://analytics.google.com/">Google Analytics</a></p>
@@ -27,11 +27,19 @@
 				<td>{% trans 'Unique anonymous users (IP)' %}</td>
 				<td>{{ stats.anon_hits }}</td>
 			</tr>
+			<tr>
+				<td>{% trans 'Total unique users' %}</td>
+				<td>{{ stats.anon_hits|add:stats.user_hits }}</td>
+			</tr>
+			<tr>
+				<td>{% trans 'Total distinct countries' %}</td>
+				<td>{{ stats.countries }}</td>
+			</tr>
 		</tbody>
 	</table>
 </div>
 
-
+<h3>{% trans 'Other Months' %}</h3>
 
 <ul>
 {% for e in month_views %}

@@ -100,6 +100,8 @@ def visitor_view(request, year=None, month=None):
         analytics_month = month
         analytics_year = year
     
+    archive_month = datetime.datetime.strptime(str(analytics_year) +"-"+str(analytics_month)+ "-1", "%Y-%m-%d")
+    
     # for last full month:
     
     stats = {}
@@ -125,15 +127,19 @@ def visitor_view(request, year=None, month=None):
     #downloads/links
     
     #locations/countries
-    
+    loc_hits = list(ResourceTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year).values_list('ip', flat=True).distinct())
+    loc_hits += list(TagTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year).values_list('ip', flat=True).distinct())
+    loc_hits += list(SearchTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year).values_list('ip', flat=True).distinct())
+
+    countries = UserLocationVisualization.objects.filter(ip__in=loc_hits).values_list('country_code').distinct().count()
+    stats['countries'] = countries
     
     # get links for previous months
     month_views = ResourceTracker.objects.all().datetimes('access_date','month','DESC')
     
     return render_to_response('orb/analytics/visitor.html',
                               {
-                               'month': analytics_month,
-                               'year': analytics_year,
+                               'archive_month': archive_month,
                                'stats': stats,
                                'month_views': month_views,
                                },
