@@ -4,7 +4,8 @@ import json
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import (authenticate, login, views)
+from django.contrib.auth import authenticate, login, views
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -126,8 +127,9 @@ def reset(request):
 
     return render(request, 'orb/form.html', {'form': form,'title': _(u'Reset password')})
 
+@login_required
 def edit(request):
-    key = ApiKey.objects.get(user = request.user)
+    key = ApiKey.objects.get(user__id = request.user.id)
     if request.method == 'POST':
         form = ProfileForm(request.POST)
         build_form_options(form, blank_options=False)

@@ -1,6 +1,11 @@
 Change log
 =====================================
 
+11 May 2015
+-------------
+
+* 250: Check profile form can't be accessed if not logged in - http://github.com/mpowering/django-orb/issues/issue/250
+
 8 May 2015
 -----------
 
