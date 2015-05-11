@@ -24,6 +24,14 @@ class ProfilePageTest(TestCase):
         response = self.client.get(reverse('profile_login'))
         self.assertEqual(response.status_code, 200) 
         
+        response = self.client.get(reverse('profile_edit'))
+        #should redirect to login page if not logged in
+        self.assertEqual(response.status_code, 302) 
+        
+        self.client.login(username='standarduser', password='password')
+        response = self.client.get(reverse('profile_edit'))
+        self.assertEqual(response.status_code, 200) 
+        self.client.logout()
         
         
     '''

@@ -38,9 +38,6 @@ class SiteTest(TestCase):
         response = self.client.get(reverse('orb_tag_cloud'))
         self.assertEqual(response.status_code, 200)
         
-        response = self.client.get(reverse('orb_tags_filter'))
-        self.assertEqual(response.status_code, 200)
-        
         response = self.client.get(reverse('orb_resource_create'))
         self.assertEqual(response.status_code, 200)
         
