@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
 
-from orb.api.authorization import ORBResourceAuthorization, ORBAuthorization
+from orb.api.authorization import ORBResourceAuthorization, ORBAuthorization, ORBResourceTagAuthorization
 from orb.api.error_codes import *
 from orb.api.exceptions import ORBAPIBadRequest
 from orb.api.serializers import PrettyJSONSerializer, ResourceSerializer
@@ -193,7 +193,7 @@ class ResourceTagResource(ModelResource):
         allowed_methods = ['get','post','delete']
         include_resource_uri = False
         authentication = ApiKeyAuthentication()
-        authorization = ORBAuthorization()
+        authorization = ORBResourceTagAuthorization()
         serializer = PrettyJSONSerializer()
         always_return_data = True  
         include_resource_uri = True
