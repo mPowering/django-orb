@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
 
-from orb.api.authorization import UserObjectsOnlyAuthorization, ORBAuthorization
+from orb.api.authorization import ORBResourceAuthorization, ORBAuthorization
 from orb.api.error_codes import *
 from orb.api.exceptions import ORBAPIBadRequest
 from orb.api.serializers import PrettyJSONSerializer, ResourceSerializer
@@ -41,11 +41,11 @@ class ResourceResource(ModelResource):
     url = fields.CharField(readonly=True)
     
     class Meta:
-        queryset = Resource.objects.filter(status=Resource.APPROVED)
+        queryset = Resource.objects.all()
         resource_name = 'resource'
         allowed_methods = ['get','post']
         authentication = ApiKeyAuthentication()
-        authorization = UserObjectsOnlyAuthorization() 
+        authorization = ORBResourceAuthorization() 
         serializer = ResourceSerializer()
         always_return_data = True 
         include_resource_uri = True
@@ -150,7 +150,6 @@ class ResourceFileResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
-        throttle = CacheDBThrottle(throttle_at=150, timeframe=3600)
         
     def dehydrate_file(self,bundle):
         if bundle.obj.file:
@@ -162,14 +161,13 @@ class ResourceURLResource(ModelResource):
     class Meta:
         queryset = ResourceURL.objects.all()
         resource_name = 'resourceurl'
-        allowed_methods = ['get','post']
+        allowed_methods = ['get','post','delete']
         fields = ['id', 'url', 'title', 'description', 'order_by', 'file_size']
         authentication = ApiKeyAuthentication()
-        authorization = UserObjectsOnlyAuthorization() 
+        authorization = ORBAuthorization() 
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
-        throttle = CacheDBThrottle(throttle_at=150, timeframe=3600)
      
     def hydrate(self, bundle, request=None):
         # check that user has permissions on the resource
@@ -192,10 +190,10 @@ class ResourceTagResource(ModelResource):
     class Meta:
         queryset = ResourceTag.objects.all()
         resource_name = 'resourcetag'
-        allowed_methods = ['get','post']
+        allowed_methods = ['get','post','delete']
         include_resource_uri = False
         authentication = ApiKeyAuthentication()
-        authorization = UserObjectsOnlyAuthorization()
+        authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
         always_return_data = True  
         include_resource_uri = True
