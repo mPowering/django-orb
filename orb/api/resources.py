@@ -37,7 +37,7 @@ class ResourceResource(ModelResource):
     '''
     files = fields.ToManyField('orb.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True, null = True)
     urls = fields.ToManyField('orb.api.resources.ResourceURLResource', 'resourceurl_set', related_name='resource', full=True, null = True)
-    #tags = fields.ToManyField('orb.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True, null = True)
+    tags = fields.ToManyField('orb.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True, null = True)
     url = fields.CharField(readonly=True)
     
     class Meta:
@@ -188,7 +188,7 @@ class ResourceURLResource(ModelResource):
         return bundle   
         
 class ResourceTagResource(ModelResource):
-    #tag = fields.ToOneField('orb.api.resources.TagResource', 'tag', full=True)
+    tag = fields.ToOneField('orb.api.resources.TagResource', 'tag', full=True)
     class Meta:
         queryset = ResourceTag.objects.all()
         resource_name = 'resourcetag'
