@@ -1,6 +1,12 @@
 Change log
 =====================================
 
+12 May 2015
+------------
+
+* 256: On content partner page add option to click on logo to view resources - http://github.com/mpowering/django-orb/issues/issue/256
+* 254: Update content partner page - http://github.com/mpowering/django-orb/issues/issue/254
+
 11 May 2015
 -------------
 

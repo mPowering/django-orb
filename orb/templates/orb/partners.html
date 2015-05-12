@@ -8,14 +8,31 @@
 {% block content %}
 
 <h2>{% trans 'Content Partners' %}</h2>
-{% blocktrans %}
-<p>If you’re interested in being an ORB Content Partner, we would
-	like to hear from you!</p>
+
+{% url 'orb_guidelines' as orb_guidelines %} {% blocktrans %}
+
+<p>Anyone is welcome to share content resources on ORB!</p>
+
+<p>
+	If you believe your content meets <a href="{{ orb_guidelines }}">our
+		criteria</a>, we would like to hear from you. Just go to our ‘Add a
+	Resource’ link and you’ll find out how your content could potentially
+	reach hundreds of thousands of health workers across the world.
+</p>
+
+
+<p>Are you interested in becoming an ORB Content Partner?</p>
+
+<p>This is a more formal relationship with mPowering Frontline Health Workers.</p>
 
 <p>As a Content Partner, we will create an ORB partner page with
 	your logo, a short description of your organisation and a link back to
 	your home page. We will also help connect with you other partners who
-	may want to use your content or commission new content from you.</p>
+	may want to use your content or commission new content from you.
+
+	Content Partners should have an internal quality assurance and review
+	process in place, as this will help us fast-track your ORB resources
+	through our content review process.</p>
 <p>In return, you will commit to sharing your digital health
 	resources with us using an open content license, including your updated
 	or new resources, and to being an ambassador for ORB (promoting its use
@@ -30,14 +47,17 @@
 {% for p in partners %}
 <div class="row" style="padding-bottom:20px"> 
 	<div class="col-md-1">
-	{% thumbnail p.image "70x70" format="PNG" padding=True as im %}
-		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-	{% endthumbnail %}
+		<a href="{% url 'orb.views.tag_view' p.slug %}" title="{% blocktrans with p.name as org %}View all {{ org }} resources on ORB{% endblocktrans %}">
+		{% thumbnail p.image "70x70" format="PNG" padding=True as im %}
+				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
+					alt="{% blocktrans with p.name as org %}View all {{ org }} resources on ORB{% endblocktrans %}">
+		{% endthumbnail %}
+		</a>
 	</div>
 	<div class="col-md-8">
 		<h4>{{ p.name }}</h4>
 		<p>{{ p.description|safe }}<br/>
-		<a href="{% url 'orb.views.tag_view' p.slug %}">View all {{ p.name }} resources on ORB</a></p>
+		<a href="{% url 'orb.views.tag_view' p.slug %}">{% blocktrans with p.name as org %}View all {{ org }} resources on ORB{% endblocktrans %}</a></p>
 	</div>
 	
 </div>
