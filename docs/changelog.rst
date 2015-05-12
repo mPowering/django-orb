@@ -6,6 +6,8 @@ Change log
 
 * 256: On content partner page add option to click on logo to view resources - http://github.com/mpowering/django-orb/issues/issue/256
 * 254: Update content partner page - http://github.com/mpowering/django-orb/issues/issue/254
+* 253: Update How to use ORB resources page - http://github.com/mpowering/django-orb/issues/issue/253
+* 251: On resource row page made the image clickable to link to the resource - http://github.com/mpowering/django-orb/issues/issue/251
 
 11 May 2015
 -------------
