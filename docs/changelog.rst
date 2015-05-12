@@ -6,6 +6,7 @@ Change log
 
 * 250: Check profile form can't be accessed if not logged in - http://github.com/mpowering/django-orb/issues/issue/250
 * 236: Expire sessions - http://github.com/mpowering/django-orb/issues/issue/236
+* 195: In API - if resource exists then return the full resource - http://github.com/mPowering/django-orb/issues/issue/195
 
 8 May 2015
 -----------

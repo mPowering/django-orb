@@ -133,7 +133,7 @@ class ResourceResource(ModelResource):
             resource = Resource.objects.get(create_user=bundle.request.user,title =bundle.data['title'])
             rr = ResourceResource()
             bundle = rr.build_bundle(obj=resource,request=request)
-            raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_EXISTS)
+            raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_EXISTS,pk=resource.id)
         except Resource.DoesNotExist:
             pass
         
@@ -143,13 +143,13 @@ class ResourceFileResource(ModelResource):
     class Meta:
         queryset = ResourceFile.objects.all()
         resource_name = 'resourcefile'
-        allowed_methods = ['get']
-        fields = ['file', 'title', 'description', 'order_by']
+        allowed_methods = ['get','delete']
+        fields = ['id', 'file', 'title', 'description', 'order_by', 'file_size']
         authentication = ApiKeyAuthentication()
-        authorization = UserObjectsOnlyAuthorization() 
+        authorization = ORBAuthorization() 
         serializer = PrettyJSONSerializer()
         always_return_data = True 
-        include_resource_uri = False
+        include_resource_uri = True
         throttle = CacheDBThrottle(throttle_at=150, timeframe=3600)
         
     def dehydrate_file(self,bundle):
@@ -201,11 +201,34 @@ class ResourceTagResource(ModelResource):
         include_resource_uri = True
     
     def hydrate(self, bundle, request=None):
-        # chcek that user has permissions on the resource
-        resource = Resource.objects.get(pk=bundle.data['resource_id'])
+        
+        if 'resource_id' not in bundle.data or not bundle.data['resource_id']:
+            raise ORBAPIBadRequest(ERROR_CODE_RESOURCETAG_NO_RESOURCE)
+
+        if 'tag_id' not in bundle.data or not bundle.data['tag_id']:
+            raise ORBAPIBadRequest(ERROR_CODE_RESOURCETAG_NO_TAG)
+        
+        # check resource exists
+        try:
+            resource = Resource.objects.get(pk=bundle.data['resource_id'])
+        except Resource.DoesNotExist:
+            raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_DOES_NOT_EXIST)
+        
+        # check tag exists
+        try:
+            tag = Tag.objects.get(pk=bundle.data['tag_id'])
+        except Tag.DoesNotExist:
+            raise ORBAPIBadRequest(ERROR_CODE_TAG_DOES_NOT_EXIST)
+        
+        # check that user has permissions on the resource
         user = User.objects.get(pk=bundle.request.user.id)
         if not resource_can_edit(resource, user):
             raise Unauthorized("You do not have edit access for this resource")
+        
+        # check that tag not already added to resource
+        resource_tags = ResourceTag.objects.filter(resource=resource, tag=tag).count()
+        if resource_tags != 0:
+            raise ORBAPIBadRequest(ERROR_CODE_RESOURCETAG_EXISTS)
         
         bundle.obj.create_user_id = bundle.request.user.id  
         bundle.obj.resource_id = bundle.data['resource_id']

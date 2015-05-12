@@ -34,4 +34,6 @@ class ORBAuthorization(Authorization):
         raise Unauthorized("Sorry, no deletes.")
 
     def delete_detail(self, object_list, bundle):
-        raise Unauthorized("Sorry, no deletes.")
+        if bundle.request.user.userprofile.api_access == False:
+            raise Unauthorized("You do not have API write access")
+        return bundle.obj.create_user == bundle.request.user
