@@ -159,9 +159,9 @@ class ResourceResourceTest(ResourceTestCase):
      
     # check put not allowed
     def test_put_invalid(self):
-        for u in self.user_set:
+        for u in [self.standard_user, self.super_user, self.staff_user, self.orgowner_user]:
             resp = self.api_client.put(self.url, format='json', data=u)
-            self.assertHttpMethodNotAllowed(resp)
+            self.assertHttpUnauthorized(resp)
         
     # check delete not allowed
     def test_delete_invalid(self):
@@ -175,12 +175,14 @@ class ResourceResourceTest(ResourceTestCase):
             resp = self.api_client.get(approved_resource_url, format='json', data=u)
             self.assertHttpOK(resp)
             self.assertValidJSON(resp.content)
+            self.assertEqual(len(self.deserialize(resp)['tags']), 11)
 
     def test_get_unapproved_resource(self):   
         unapproved_resource_url = self.url + str(125) + "/"
         for u in self.user_set:
             resp = self.api_client.get(unapproved_resource_url, format='json', data=u)
-            self.assertHttpNotFound(resp)
+            self.assertHttpOK(resp)
+            self.assertValidJSON(resp.content)
         
     def test_get_unknown_resource(self): 
         unknown_resource_url = self.url + str(12345) + "/"
@@ -188,11 +190,38 @@ class ResourceResourceTest(ResourceTestCase):
             resp = self.api_client.get(unknown_resource_url, format='json', data=u)
             self.assertHttpNotFound(resp)
         
-    '''
-    Check:
-    check that tags are returned for the resources
-       
-    '''
+    def test_post_resource(self):
+        resource = {
+                    'title': "my new title",
+                    'description': "<p>some description or other here</p>",
+                    'study_time_number': 15,
+                    'study_time_unit': 'days'
+                    }
+        auth = self.create_apikey(self.api_user['username'], self.api_user['api_key'])
+        resp = self.api_client.post(self.url, format='json', data=resource, authentication=auth)
+        self.assertHttpCreated(resp)
+        self.assertValidJSON(resp.content)
+        
+        # try posting the same resource again and should get 400 message and a pk of the original object
+        resp = self.api_client.post(self.url, format='json', data=resource, authentication=auth)
+        self.assertHttpBadRequest(resp)
+        self.deserialize(resp)
+        
+        
+    def test_change_status(self):
+        resource = {
+                    'title': "my new title",
+                    'description': "<p>some description or other here</p>",
+                    'study_time_number': 15,
+                    'study_time_unit': 'days',
+                    'status': 'approved'
+                    }
+        auth = self.create_apikey(self.api_user['username'], self.api_user['api_key'])
+        resp = self.api_client.post(self.url, format='json', data=resource, authentication=auth)
+        self.assertHttpCreated(resp)
+        self.assertValidJSON(resp.content)
+        self.assertEqual(self.deserialize(resp)['status'],'pending_crt')
+        
         
 # Tag API
 class TagResourceTest(ResourceTestCase):
@@ -252,7 +281,7 @@ class TagResourceTest(ResourceTestCase):
     # check post not allowed for invalid user
     def test_post_invalid(self):
         for u in [self.standard_user, self.super_user, self.staff_user, self.orgowner_user]:
-            resp = self.api_client.post(self.url, format='json', data=self.standard_user)
+            resp = self.api_client.post(self.url, format='json', data=u)
             self.assertHttpUnauthorized(resp)
      
     # check put not allowed

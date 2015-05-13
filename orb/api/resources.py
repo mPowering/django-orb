@@ -43,7 +43,7 @@ class ResourceResource(ModelResource):
     class Meta:
         queryset = Resource.objects.all()
         resource_name = 'resource'
-        allowed_methods = ['get','post']
+        allowed_methods = ['get','post','put']
         authentication = ApiKeyAuthentication()
         authorization = ORBResourceAuthorization() 
         serializer = ResourceSerializer()
@@ -120,7 +120,10 @@ class ResourceResource(ModelResource):
     def hydrate(self, bundle, request=None):
         bundle.obj.create_user_id = bundle.request.user.id
         bundle.obj.update_user_id = bundle.request.user.id
-        
+        if 'status' in bundle.data:
+            del bundle.obj.status
+            del bundle.data['status']
+            
         # check required fields
         if 'title' not in bundle.data or bundle.data['title'].strip() == '':
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_NO_TITLE)
@@ -128,16 +131,20 @@ class ResourceResource(ModelResource):
         if 'description' not in bundle.data or bundle.data['description'].strip() == '':
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_NO_DESCRIPTION)
 
+        request_method = bundle.request.META['REQUEST_METHOD']
+        
         # check that resource doesn't already exist for this user
-        try:
-            resource = Resource.objects.get(create_user=bundle.request.user,title =bundle.data['title'])
-            rr = ResourceResource()
-            bundle = rr.build_bundle(obj=resource,request=request)
-            raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_EXISTS,pk=resource.id)
-        except Resource.DoesNotExist:
-            pass
+        if request_method.lower() != 'put':
+            try:
+                resource = Resource.objects.get(create_user=bundle.request.user,title =bundle.data['title'])
+                rr = ResourceResource()
+                bundle = rr.build_bundle(obj=resource,request=request)
+                raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_EXISTS,pk=resource.id)
+            except Resource.DoesNotExist:
+                pass
         
         return bundle
+    
          
 class ResourceFileResource(ModelResource):
     class Meta:
