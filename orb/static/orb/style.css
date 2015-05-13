@@ -63,6 +63,7 @@ a:hover, a:focus {
 }
 .navbar-inverse .navbar-nav > li > a {
     color: #fff;
+    border: 1px solid #033f62;
 }
 
 .navbar-inverse .navbar-nav > li > a:hover,
@@ -88,7 +89,7 @@ a:hover, a:focus {
 
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
 	background-color: #033f62;
-	border: 1px dotted #fff	
+	border: 1px dotted #fff	;
 }
 
 
