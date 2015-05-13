@@ -210,8 +210,12 @@ def resource_create_view(request):
             return HttpResponseRedirect(reverse('orb_resource_create_thanks', args=[resource.id])) # Redirect after POST
             
     else:
-        user_org = request.user.userprofile.organisation.name
-        form = ResourceForm(initial={'organisations':user_org,}, request=request)
+        if request.user.userprofile.organisation:
+            user_org = request.user.userprofile.organisation.name
+            initial = {'organisations':user_org,}
+        else:
+            initial = {}
+        form = ResourceForm(initial=initial, request=request)
         resource_form_set_choices(form)
         
     return render_to_response('orb/resource/create.html',
