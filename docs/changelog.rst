@@ -10,6 +10,7 @@ Change log
 * 70: Should we add the time for the resource - http://github.com/mPowering/django-orb/issues/issue/70
 * 245: Align resource images in centre of cell? - http://github.com/mPowering/django-orb/issues/issue/245
 * 258: Update clean resourcefiles script to include tidying images and tags - http://github.com/mPowering/django-orb/issues/issue/258
+* 168: Potential error on tag filter results - http://github.com/mpowering/django-orb/issues/issue/168
 
 12 May 2015
 ------------

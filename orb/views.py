@@ -569,14 +569,14 @@ def search_advanced_results_view(request):
     
     form = AdvancedSearchForm(request.GET)
     advanced_search_form_set_choices(form)
+    q = request.GET.get('q', '').strip()
+    
     if form.is_valid():
         tag_ids = []
         for name, slug  in settings.ADVANCED_SEARCH_CATEGORIES:
             for i in form.cleaned_data.get(name):
                 tag_ids.append(i)
         resource_tags = ResourceTag.objects.filter(tag__pk__in=tag_ids).values('resource').annotate(dcount=Count('resource')).filter(dcount=len(tag_ids)).values('resource')
-        
-        q = request.GET.get('q', '').strip()
         
         if q == '' and len(resource_tags)  > 0:
             resources = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED)
@@ -602,6 +602,10 @@ def search_advanced_results_view(request):
             resources = paginator.page(paginator.num_pages)
         
         filter_tags = Tag.objects.filter(pk__in=tag_ids)
+    else:
+        filter_tags = Tag.objects.filter(pk=None)
+        resources = Resource.objects.filter(pk=None)
+        paginator = Paginator(resources, 20)
         
     return render_to_response('orb/search_advanced_results.html',
                               { 'filter_tags': filter_tags,
