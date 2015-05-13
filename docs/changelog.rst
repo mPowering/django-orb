@@ -8,6 +8,7 @@ Change log
 * 252: On analytics add no resources - http://github.com/mpowering/django-orb/issues/issue/252
 * 257: Check API can't change the status of a resource - http://github.com/mpowering/django-orb/issues/issue/257
 * 70: Should we add the time for the resource - http://github.com/mPowering/django-orb/issues/issue/70
+* 245: Align resource images in centre of cell? - http://github.com/mPowering/django-orb/issues/issue/245
 
 12 May 2015
 ------------

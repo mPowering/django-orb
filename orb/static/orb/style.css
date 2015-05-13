@@ -307,6 +307,11 @@ img.resource-row-icon:hover {
 	margin-bottom: 10px;
 }
 
+.resource-row-thumbnail {
+	display:block; 
+	margin: 0 auto;
+}
+
 .resource-row-study-time:hover {
 	opacity: 1;
 }

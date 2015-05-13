@@ -35,11 +35,11 @@
 			
 		</div>
 	</div>
-	<div class="col-md-2">
+	<div class="col-md-4">
            {% if resource.image %}
            	<a href="{% url 'orb_resource' resource.slug %}">
            	{% thumbnail resource.image "200x150" format="PNG" as im %}
-				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="display:block;" class="thumbnail" alt="{{ resource.title }}">
+				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-row-thumbnail" alt="{{ resource.title }}">
 			{% endthumbnail %}	
 			</a>
 		{% endif %}
