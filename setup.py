@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-orb',
-    version='0.2.0',
+    version='1.0.0',
     packages=['orb',
               'orb.analytics',
               'orb.api',
@@ -48,5 +48,6 @@ setup(
         "pillow",
         "sorl-thumbnail",
         "textract >= 1.2.0",
+        "pytz",
     ],
 )
