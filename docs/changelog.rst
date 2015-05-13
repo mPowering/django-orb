@@ -5,6 +5,7 @@ Change log
 -----------
 
 * 243: On analytics page add unique visitors per month - http://github.com/mpowering/django-orb/issues/issue/243
+* 252: On analytics add no resources - http://github.com/mpowering/django-orb/issues/issue/252
 
 12 May 2015
 ------------
