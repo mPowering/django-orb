@@ -14,6 +14,8 @@ Change log
 * 260: Bug when trying to add resource and no organisation on user profile - http://github.com/mpowering/django-orb/issues/issue/260
 * 226: Use proper translation strings in the email templates - http://github.com/mPowering/django-orb/issues/issue/226
 * 194: Finish adding error codes for API - http://github.com/mPowering/django-orb/issues/issue/194
+* 178: in the API use request.build_absolute_uri - http://github.com/mPowering/django-orb/issues/issue/178
+* 79: On SearchTracker log which page they're on - http://github.com/mPowering/django-orb/issues/issue/79
 
 12 May 2015
 ------------

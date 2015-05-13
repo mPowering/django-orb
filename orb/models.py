@@ -371,6 +371,7 @@ class SearchTracker(models.Model):
     ip = models.IPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
     type = models.CharField(max_length=50,choices=SEARCH_TYPES, default=SEARCH)
+    extra_data = models.TextField(blank=True, null=True, default=None)
  
 class TagTracker(models.Model):
     VIEW = 'view'

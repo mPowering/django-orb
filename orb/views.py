@@ -513,14 +513,12 @@ def search_view(request):
     
     if search_query:
         search_results = SearchQuerySet().filter(content=search_query)
-        search.send(sender=search_results, query=search_query, no_results=search_results.count(), request=request)
     else:
         search_results = []
         
     data = {}
     data['q'] = search_query
     form = SearchForm(initial=data)
-     
      
     paginator = Paginator(search_results, 20)
     # Make sure page request is an int. If not, deliver first page.
@@ -533,7 +531,10 @@ def search_view(request):
         results = paginator.page(page)
     except (EmptyPage, InvalidPage):
         results = paginator.page(paginator.num_pages)
-           
+     
+    if search_query:
+        search.send(sender=search_results, query=search_query, no_results=search_results.count(), request=request, page=page)
+              
     return render_to_response('orb/search.html',
                               {'form': form, 
                                'query': search_query,
@@ -583,17 +584,15 @@ def search_advanced_results_view(request):
         resource_tags = ResourceTag.objects.filter(tag__pk__in=tag_ids).values('resource').annotate(dcount=Count('resource')).filter(dcount=len(tag_ids)).values('resource')
         
         if q == '' and len(resource_tags)  > 0:
-            resources = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED)
+            results = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED)
         elif q != '' and len(resource_tags)  > 0:
             search_results = SearchQuerySet().filter(content=q).models(Resource).values_list('pk', flat=True)
-            resources = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED).filter(pk__in=search_results)
+            results = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED).filter(pk__in=search_results)
         elif len(resource_tags) == 0 : 
             search_results = SearchQuerySet().filter(content=q).models(Resource).values_list('pk', flat=True)
-            resources = Resource.objects.filter(pk__in=search_results, status=Resource.APPROVED)
+            results = Resource.objects.filter(pk__in=search_results, status=Resource.APPROVED)
         
-        search.send(sender=resources, query=q, no_results=resources.count(), request=request, type=SearchTracker.SEARCH_ADV)
-        
-        paginator = Paginator(resources, 20)
+        paginator = Paginator(results, 20)
         # Make sure page request is an int. If not, deliver first page.
         try:
             page = int(request.GET.get('page', '1'))
@@ -606,6 +605,8 @@ def search_advanced_results_view(request):
             resources = paginator.page(paginator.num_pages)
         
         filter_tags = Tag.objects.filter(pk__in=tag_ids)
+        
+        search.send(sender=results, query=q, no_results=results.count(), request=request, type=SearchTracker.SEARCH_ADV, page=page)
     else:
         filter_tags = Tag.objects.filter(pk=None)
         resources = Resource.objects.filter(pk=None)

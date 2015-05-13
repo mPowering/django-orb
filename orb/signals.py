@@ -14,7 +14,7 @@ resource_viewed = Signal(providing_args=["resource", "request", "type"])
 resource_workflow = Signal(providing_args=["request", "resource", "status", "notes", "criteria"])
 resource_url_viewed = Signal(providing_args=["resource_url", "request"])
 resource_file_viewed = Signal(providing_args=["resource_file", "request"])
-search = Signal(providing_args=["query", "no_results", "request", "type"])
+search = Signal(providing_args=["query", "no_results", "request", "type", "page"])
 tag_viewed = Signal(providing_args=["tag", "request", "type", "data"])
 user_registered = Signal(providing_args=["user", "request"])
 resource_submitted = Signal(providing_args=["resource", "request"])
@@ -155,10 +155,14 @@ def search_callback(sender, **kwargs):
     query = kwargs.get('query')
     no_results = kwargs.get('no_results')
     type = kwargs.get('type', SearchTracker.SEARCH)
+    page = kwargs.get('page',1)
     
     if is_search_crawler(request.META.get('HTTP_USER_AGENT','unknown')):
         return 
     
+    extra_data = {
+                  'page': page
+                  }
     tracker = SearchTracker()
     if not request.user.is_anonymous():
         tracker.user = request.user
@@ -167,6 +171,7 @@ def search_callback(sender, **kwargs):
     tracker.ip = request.META.get('REMOTE_ADDR','0.0.0.0')
     tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
     tracker.type = type
+    tracker.extra_data = json.dumps(extra_data)
     tracker.save()
     return
  

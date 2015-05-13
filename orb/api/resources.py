@@ -79,16 +79,17 @@ class ResourceResource(ModelResource):
         self.is_authenticated(request)
         self.throttle_check(request)
 
-        if request.GET.get('q', '') == '':
+        q = request.GET.get('q', '')
+        page_no = int(request.GET.get('page', 1))
+        if q == '':
             raise ORBAPIBadRequest(ERROR_CODE_SEARCH_NO_QUERY)
         
         # Do the query.
-        sqs = SearchQuerySet().models(Resource).load_all().auto_query(request.GET.get('q', ''))
+        sqs = SearchQuerySet().models(Resource).load_all().auto_query(q)
         paginator = Paginator(sqs, 20)
 
-        
         try:
-            page = paginator.page(int(request.GET.get('page', 1)))
+            page = paginator.page(page_no)
         except InvalidPage:
             raise Http404("Sorry, no results on that page.")
 
@@ -104,6 +105,9 @@ class ResourceResource(ModelResource):
             'objects': objects,
         }
         
+        search.send(sender=sqs, query=q, no_results=sqs.count(), request=request, page=page_no, type=SearchTracker.SEARCH_API)
+        
+        '''
         tracker = SearchTracker()
         if not request.user.is_anonymous():
             tracker.user = request.user
@@ -113,6 +117,7 @@ class ResourceResource(ModelResource):
         tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
         tracker.type = SearchTracker.SEARCH_API
         tracker.save()
+        '''
         
         self.log_throttled_access(request)
         return self.create_response(request, object_list)    
