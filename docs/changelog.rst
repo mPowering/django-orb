@@ -7,6 +7,7 @@ Change log
 * 243: On analytics page add unique visitors per month - http://github.com/mpowering/django-orb/issues/issue/243
 * 252: On analytics add no resources - http://github.com/mpowering/django-orb/issues/issue/252
 * 257: Check API can't change the status of a resource - http://github.com/mpowering/django-orb/issues/issue/257
+* 70: Should we add the time for the resource - http://github.com/mPowering/django-orb/issues/issue/70
 
 12 May 2015
 ------------
