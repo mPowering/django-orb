@@ -18,7 +18,7 @@ from tastypie.exceptions import BadRequest
 def image_view(request):
     
     if request.method != 'POST':
-        return HttpResponse(status=405)
+        return HttpResponse(status=HTML_METHOD_NOT_ALLOWED)
     
     auth = ApiKeyAuthentication()
     auth_result = auth.is_authenticated(request)
@@ -41,19 +41,19 @@ def image_view(request):
     try:
         resource = Resource.objects.get(create_user=request.user,pk=resource_id)
     except Resource.DoesNotExist:
-        return HttpResponse(status=401)
+        return HttpResponse(status=HTML_UNAUTHORIZED)
     
     # handle file upload
     resource.image = request.FILES['image_file']
     resource.save()
    
-    return HttpResponse(status=201)
+    return HttpResponse(status=HTML_CREATED)
 
 
 @csrf_exempt
 def file_view(request):
     if request.method != 'POST':
-        return HttpResponse(status=405)
+        return HttpResponse(status=HTML_METHOD_NOT_ALLOWED)
     
     auth = ApiKeyAuthentication()
     auth_result = auth.is_authenticated(request)
@@ -76,7 +76,7 @@ def file_view(request):
     try:
         resource = Resource.objects.get(create_user=request.user,pk=resource_id)
     except Resource.DoesNotExist:
-        return HttpResponse(status=401)
+        return HttpResponse(status=HTML_UNAUTHORIZED)
     
     rf = ResourceFile()
     rf.title = request.POST['title']
@@ -88,4 +88,4 @@ def file_view(request):
     rf.order_by = request.POST['order_by']
     rf.save()
     
-    return HttpResponse(status=201)
+    return HttpResponse(status=HTML_CREATED)

@@ -13,6 +13,7 @@ Change log
 * 168: Potential error on tag filter results - http://github.com/mpowering/django-orb/issues/issue/168
 * 260: Bug when trying to add resource and no organisation on user profile - http://github.com/mpowering/django-orb/issues/issue/260
 * 226: Use proper translation strings in the email templates - http://github.com/mPowering/django-orb/issues/issue/226
+* 194: Finish adding error codes for API - http://github.com/mPowering/django-orb/issues/issue/194
 
 12 May 2015
 ------------
