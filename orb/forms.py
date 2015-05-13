@@ -182,7 +182,7 @@ class ResourceForm(forms.Form):
         description = self.cleaned_data['description']
         no_words = len(strip_tags(description).split(' '))
         if no_words > settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS :
-            raise forms.ValidationError( _(u"You have entered %d words, please enter no more than %d" % (no_words, settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS)))
+            raise forms.ValidationError( _(u"You have entered {no_words} words, please enter no more than {max_words}".format(no_words=no_words, max_words=settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS)))
         return description
     
     def clean_title(self):

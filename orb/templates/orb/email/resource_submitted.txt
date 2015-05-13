@@ -1,6 +1,7 @@
-
+{% load i18n %} 
+{% blocktrans %}
 
 {{ firstname }} {{ lastname }} has just submitted a new resource '{{ title }}'.
 
-
+{% endblocktrans %}
 {% include 'orb/email/footer.txt' %}

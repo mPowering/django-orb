@@ -12,6 +12,7 @@ Change log
 * 258: Update clean resourcefiles script to include tidying images and tags - http://github.com/mPowering/django-orb/issues/issue/258
 * 168: Potential error on tag filter results - http://github.com/mpowering/django-orb/issues/issue/168
 * 260: Bug when trying to add resource and no organisation on user profile - http://github.com/mpowering/django-orb/issues/issue/260
+* 226: Use proper translation strings in the email templates - http://github.com/mPowering/django-orb/issues/issue/226
 
 12 May 2015
 ------------

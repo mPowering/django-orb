@@ -1,4 +1,5 @@
-
+{% load i18n %} 
+{% blocktrans %}
 <p>Dear {{ firstname }} {{ lastname }},</p>
 
 <p>Thank you for registering on ORB and welcome to our community!</p>
@@ -8,5 +9,5 @@
 
 <p>We're here to help if you have any questions, so please feel free
 	to contact us.</p>
-
+{% endblocktrans %}
 {% include 'orb/email/footer.html' %}

@@ -1,3 +1,5 @@
+{% load i18n %} 
+{% blocktrans %}
 Best regards,
 
 Lesley-Anne Long
@@ -6,3 +8,4 @@ ORB by mPowering Frontline Health Workers
 info@mpoweringhealth.org
 http://health-orb.org
 1776 Massachusetts Ave NW | Washington, D.C. 20036
+{% endblocktrans %}

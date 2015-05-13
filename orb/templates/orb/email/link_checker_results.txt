@@ -1,9 +1,11 @@
-Results from Link Checker Validation
+{% load i18n %} 
 
-The following urls had issues:
+{% trans 'Results from Link Checker Validation' %}
+
+{% trans 'The following urls had issues:' %}
 
 {% if resource_urls %}
-Resource URLs
+{% trans 'Resource URLs' %}
 {% for ru in resource_urls %}
 * {{ ru.id }} - {{ ru.url }}
 {% endfor %}
@@ -11,7 +13,7 @@ Resource URLs
 
 
 {% if tags %}
-Tags
+{% trans 'Tags' %}
 {% for t in tags %}
 * {{ t.id }} - {{ t.external_url }}
 {% endfor %}

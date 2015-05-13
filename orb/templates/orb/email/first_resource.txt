@@ -1,3 +1,5 @@
+{% load i18n %} 
+{% blocktrans %}
 Dear {{ firstname }} {{ lastname }},
 
 Welcome to the ORB community!
@@ -16,5 +18,5 @@ You can find more detailed information about the process here: http://health-orb
 The approvals process takes about 2 weeks. If you have any questions please contact us at {{ info_email }}
 
 Thanks again for submitting your resource!
-
+{% endblocktrans %}
 {% include 'orb/email/footer.txt' %}

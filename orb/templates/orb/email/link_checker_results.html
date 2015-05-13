@@ -1,9 +1,11 @@
-<p>Results from Link Checker Validation</p>
+{% load i18n %} 
 
-<p>The following urls had issues:</p>
+<p>{% trans 'Results from Link Checker Validation' %}</p>
+
+<p>{% trans 'The following urls had issues:' %}</p>
 
 {% if resource_urls %}
-<p>Resource URLs</p>
+<p>{% trans 'Resource URLs' %}</p>
 <ul>
 	{% for ru in resource_urls %}
 		<li>{{ ru.id }} - <a href="{{ ru.url }}">{{ ru.url }}</a></li>
@@ -13,7 +15,7 @@
 
 
 {% if tags %}
-<p>Tags</p>
+<p>{% trans 'Tags' %}</p>
 <ul>
 	{% for t in tags %}
 		<li>{{ t.id }} - <a href="{{ t.external_url }}">{{ t.external_url }}</a></li>
