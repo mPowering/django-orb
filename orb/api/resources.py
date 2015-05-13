@@ -53,12 +53,12 @@ class ResourceResource(ModelResource):
 
     def dehydrate_image(self,bundle):
         if bundle.obj.image:
-            return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
+            return bundle.request.build_absolute_uri(settings.MEDIA_URL + bundle.obj.image.name)
         else:
             return None
     
     def dehydrate_url(self,bundle):
-        url = get_full_url_prefix(bundle) + reverse('orb_resource', args=[bundle.obj.slug])
+        url = bundle.request.build_absolute_uri(reverse('orb_resource', args=[bundle.obj.slug]))
         return url
     
     def authorized_read_detail(self, object_list, bundle):
@@ -137,8 +137,6 @@ class ResourceResource(ModelResource):
         if request_method.lower() != 'put':
             try:
                 resource = Resource.objects.get(create_user=bundle.request.user,title =bundle.data['title'])
-                rr = ResourceResource()
-                bundle = rr.build_bundle(obj=resource,request=request)
                 raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_EXISTS,pk=resource.id)
             except Resource.DoesNotExist:
                 pass
@@ -160,7 +158,7 @@ class ResourceFileResource(ModelResource):
         
     def dehydrate_file(self,bundle):
         if bundle.obj.file:
-            return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.file.name
+            return bundle.request.build_absolute_uri(settings.MEDIA_URL + bundle.obj.file.name)
         else:
             return None
         
@@ -255,12 +253,12 @@ class TagResource(ModelResource):
         include_resource_uri = True
    
     def dehydrate_url(self,bundle):
-        url = get_full_url_prefix(bundle) + reverse('orb_tags', args=[bundle.obj.slug])
+        url = bundle.request.build_absolute_uri(reverse('orb_tags', args=[bundle.obj.slug]))
         return url
  
     def dehydrate_image(self,bundle):
         if bundle.obj.image:
-            return get_full_url_prefix(bundle) + settings.MEDIA_URL + bundle.obj.image.name
+            return bundle.request.build_absolute_uri(settings.MEDIA_URL + bundle.obj.image.name)
         else:
             return None
     
@@ -289,16 +287,4 @@ class TagResource(ModelResource):
         bundle.obj.update_user_id = bundle.request.user.id
         bundle.obj.category_id = category.id
         return bundle  
-    
-# Helper methods.   
-def get_full_url_prefix(bundle):
-    if bundle.request.is_secure():
-        prefix = 'https://'
-    else:
-        prefix = 'http://'
-    if bundle.request.META['SERVER_PORT'] == 80 or bundle.request.META['SERVER_PORT'] == 443:
-        port = ""
-    else:
-        port =  ":" + bundle.request.META['SERVER_PORT']
-    return prefix + bundle.request.META['SERVER_NAME'] + port
     
