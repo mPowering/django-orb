@@ -34,7 +34,8 @@
 				{% endfor %}
 				{% if user.is_staff %}
 						<li><a href="{% url 'orb_analytics_home' %}">{% trans 'Site analytics' %}</a></li>
-						<li><a href="{% url 'orb_analytics_map' %}">{% trans 'Activity Map' %}</a></li>
+						<li><a href="{% url 'orb_analytics_visitor' %}">{% trans 'Monthly Analytics' %}</a></li>
+						<li><a href="{% url 'orb_analytics_map' %}">{% trans 'Activity Map' %}</a></li>						
 				{% endif %}
 				</ul>
 			{% endif %}

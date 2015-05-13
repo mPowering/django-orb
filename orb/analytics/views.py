@@ -91,7 +91,7 @@ def visitor_view(request, year=None, month=None):
         return HttpResponse(status=401,content="Not Authorized") 
     
     if year == None and month == None:
-        today = datetime.datetime.strptime(str(datetime.date.today()), "%Y-%m-%d")
+        today = timezone.now()
         last_month = today - dateutil.relativedelta.relativedelta(months=1)
     
         analytics_month = last_month.month
@@ -120,8 +120,11 @@ def visitor_view(request, year=None, month=None):
 
     stats['anon_hits'] = len(set(anon_hits))
     
-    #resource hits
-    
+    #resources
+    tz = timezone.get_default_timezone()
+    last_day = datetime.datetime(int(analytics_year), int(analytics_month), 1, 23, 59, tzinfo=tz) + dateutil.relativedelta.relativedelta(day=1, months=+1, days=-1)
+    stats['resources'] = Resource.objects.filter(create_date__lte=last_day,status=Resource.APPROVED).count()
+
     #searches
     
     #downloads/links

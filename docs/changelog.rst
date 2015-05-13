@@ -1,6 +1,11 @@
 Change log
 =====================================
 
+13 May 2015
+-----------
+
+* 243: On analytics page add unique visitors per month - http://github.com/mpowering/django-orb/issues/issue/243
+
 12 May 2015
 ------------
 

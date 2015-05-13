@@ -1,6 +1,6 @@
 {% extends "base.html" %} {% load i18n %}
 
-{% block extra_head_title %}{% trans 'Activity Map' %}{% endblock extra_head_title %}
+{% block extra_head_title %}{% trans 'Visitor Analytics' %}{% endblock extra_head_title %}
 
 {% block content %}
 
@@ -34,6 +34,10 @@
 			<tr>
 				<td>{% trans 'Total distinct countries' %}</td>
 				<td>{{ stats.countries }}</td>
+			</tr>
+			<tr>
+				<td>{% blocktrans with archive_month|date:"M Y" as month %}Total approved resources (until end {{ month }}){% endblocktrans %}</td>
+				<td>{{ stats.resources }}</td>
 			</tr>
 		</tbody>
 	</table>
