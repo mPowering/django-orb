@@ -7,6 +7,7 @@
 {% block content %}
 
 <h2>{% trans 'About ORB' %}</h2>
+{% url 'orb_terms' as orb_terms %}
 {% blocktrans %}
 
 <p>ORB offers frontline health workers and trainers access to
@@ -30,6 +31,9 @@
 	helps health workers access the vital content they need to do their
 	work effectively and confidently.</p>
 
+<p>By using the site, you are agreeing to our <a href="{{ orb_terms }}">Terms and Privacy
+	Policy</a> and that the content on this site <a href="{{ orb_terms }}#not-medical">does not constitute medical
+	advice</a>.</p>
 <p>
 	ORB has been developed by the <a href="http://mpoweringhealth.org">mPowering
 		Frontline Health Workers</a> partnership.
@@ -38,7 +42,7 @@
 {% endblocktrans %}
 
 
-<h3><a name="crt"></a>{% trans 'Content Review Team' %}</h3>
+<h3><a name="crt" class="named-anchor"></a>{% trans 'Content Review Team' %}</h3>
 {% blocktrans %}
 <p>Our Content Review Team consists of staff from over 35
 	organsations, with backgrounds in global public health, training and
@@ -51,7 +55,7 @@
 
 
 <h3>
-	<a name="mep"></a>{% trans 'Medical Expert Panel' %}
+	<a name="mep" class="named-anchor"></a>{% trans 'Medical Expert Panel' %}
 </h3>
 {% blocktrans %}
 <p>Our Medical Expert Panel consists of medical professionals from

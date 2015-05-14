@@ -5,6 +5,7 @@ Change log
 ------------
 
 * 263: Error when exporting organisation analytics - http://github.com/mpowering/django-orb/issues/issue/263
+* 261: Finish About page - http://github.com/mpowering/django-orb/issues/issue/261
 
 13 May 2015
 -----------
