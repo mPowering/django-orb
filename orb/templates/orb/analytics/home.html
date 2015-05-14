@@ -83,11 +83,11 @@
 	| <a href="#o">{% trans 'Organisations' %}</a>
 	| <a href="#am">{% trans 'Activity Map' %}</a></p>
 
-<a name="ag"></a>
+<a name="ag" class="named-anchor"></a>
 <h3>{% trans 'Activity Graph' %}</h3>
 <div id="activity_chart_div" class="graph">{% trans 'graph_generating'%}</div>
 
-<a name="pc"></a>
+<a name="pc" class="named-anchor"></a>
 <h3>{% trans 'Pending CRT' %}</h3>
 
 {% if pending_crt_resources %}
@@ -128,7 +128,7 @@
 	<p>{% trans 'No resources pending CRT review' %}</p>
 {% endif%}
 
-<a name="pm"></a>
+<a name="pm" class="named-anchor"></a>
 <h3>{% trans 'Pending MEP' %}</h3>
 
 {% if pending_mep_resources %}
@@ -168,11 +168,11 @@
 	<p>{% trans 'No resources pending MEP review' %}</p>
 {% endif%}
 
-<a name="reg"></a>
+<a name="reg" class="named-anchor"></a>
 <h3>{% trans 'User Registrations' %}</h3>
 <div id="registrations_chart_div" class="graph">{% trans 'graph_generating'%}</div>
 
-<a name="ps"></a>
+<a name="ps" class="named-anchor"></a>
 <h3>{% trans 'Popular Searches (last month)' %}</h3>
 <ul>
 {% for ps in popular_searches %}
@@ -180,7 +180,7 @@
 {% endfor %}
 </ul>
 
-<a name="pr"></a>
+<a name="pr" class="named-anchor"></a>
 <h3>{% trans 'Popular Resources (last month)' %}</h3>
 <ul>
 {% for pr in popular_resources %}
@@ -188,7 +188,7 @@
 {% endfor %}
 </ul>
 
-<a name="sno"></a>
+<a name="sno" class="named-anchor"></a>
 <h3>{% trans 'Searches with no results (last 3 months)' %}</h3>
 <ul>
 {% for ps in searches_no_results %}
@@ -196,7 +196,7 @@
 {% endfor %}
 </ul>
 
-<a name="o"></a>
+<a name="o" class="named-anchor"></a>
 <h3>{% trans 'Organisations' %}</h3>
 <ul>
 {% for o in organisations %}
@@ -204,7 +204,7 @@
 {% endfor %}
 </ul>
 
-<a name="am"></a>
+<a name="am" class="named-anchor"></a>
 <h3>{% trans 'Activity Map' %}</h3>
 <iframe width='100%' height='600' frameborder='0'
 	src='http://digital-campus.cartodb.com/viz/1b3045c4-bb59-11e4-b0a7-0e4fddd5de28/embed_map?title=false&#038;description=false&#038;search=false&#038;shareable=true&#038;cartodb_logo=true&#038;layer_selector=false&#038;legends=false&#038;scrollwheel=true&#038;fullscreen=true&#038;sublayer_options=1&#038;sql='

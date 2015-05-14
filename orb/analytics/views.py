@@ -197,11 +197,15 @@ def tag_view(request,id):
     # get the monthly trackers
     export = ResourceTracker.objects.filter(resource__resourcetag__tag=tag,resource__status=Resource.APPROVED).datetimes('access_date','month','DESC')
     
+    # get the resources
+    resources = Resource.objects.filter(resourcetag__tag=tag).distinct().order_by('title')
+    
     return render_to_response('orb/analytics/tag.html',
                               { 'tag': tag,
                                'recent_activity': recent_activity,
                                'page': trackers,
-                               'export': export },
+                               'export': export,
+                               'resources': resources  },
                               context_instance=RequestContext(request))
 
 

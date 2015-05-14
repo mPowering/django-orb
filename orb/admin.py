@@ -19,7 +19,7 @@ class ResourceCriteriaAdmin(admin.ModelAdmin):
        
 class ResourceURLAdmin(admin.ModelAdmin):
     list_display = ('resource', 'url', 'title', 'description')
-    search_fields = ['title','description']
+    search_fields = ['title','description','url']
 
 class ResourceFileAdmin(admin.ModelAdmin):
     list_display = ('resource', 'file', 'title', 'description')

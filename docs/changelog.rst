@@ -9,6 +9,7 @@ Change log
 * 242: Add generic photo for resources uploaded with no image - http://github.com/mpowering/django-orb/issues/issue/242
 * 264: Update icons - http://github.com/mpowering/django-orb/issues/issue/264
 * 265: Update resource placeholder images - http://github.com/mpowering/django-orb/issues/issue/265
+* 266: On Organisation analytics page, list out all the resources (with links to edit) - http://github.com/mpowering/django-orb/issues/issue/266
 
 13 May 2015
 -----------

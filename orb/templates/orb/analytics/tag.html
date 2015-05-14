@@ -47,10 +47,15 @@
 
 <h2>{% trans 'Analytics for:' %} {{ tag.name }}</h2>
 
-<h3>{% trans 'Activity Graph (last month)' %}</h3>
+<p><a href="#graph">{% trans 'Activity Graph' %}</a> 
+	| <a href="#detail">{% trans 'Activity Detail' %}</a>
+	| <a href="#export">{% trans 'Export Analytics' %}</a>
+	| <a href="#resources">{% trans 'Resources' %}</a></p>
+
+<h3><a name="graph" class="named-anchor"></a>{% trans 'Activity Graph (last month)' %}</h3>
 <div id="activity_chart_div" class="graph">{% trans 'graph_generating'%}</div>
 
-<h3>{% trans 'Activity Detail (last month)' %}</h3>
+<h3><a name="detail" class="named-anchor"></a>{% trans 'Activity Detail (last month)' %}</h3>
 
 {% include "orb/includes/page_navigator.html" %}
 <table class="table table-condensed">
@@ -71,7 +76,7 @@
 
 {% include "orb/includes/page_navigator.html" %}
 
-<h3>{% trans 'Export Analytics' %}</h3>
+<h3><a name="export" class="named-anchor"></a>{% trans 'Export Analytics' %}</h3>
 
 <ul>
 {% for e in export %}
@@ -79,5 +84,28 @@
 {% endfor %}
 </ul>
 
+<h3><a name="resources" class="named-anchor"></a>{% trans 'Resources' %}</h3>
 
+{% if resources %}
+	<table class="table table-condensed">
+	    <thead>
+	        <tr>
+				<th>{% trans 'Last updated' %}</th>
+	            <th>{% trans 'Resource' %}</th>
+	            <th>{% trans 'Status' %}</th>
+	            <th>{% trans 'Options' %}</th>
+	        </tr>
+	    </thead>
+	    <tbody>
+	{% for r in resources %}
+			<tr>
+				<td>{{ r.update_date|date:"d M Y" }}</td>
+				<td>{{ r.title }}</td>
+				<td>{{ r.status }}</td>
+				<td><a href="{% url 'orb_resource_edit' r.id %}">{% trans 'Edit' %}</a></td>
+			</tr>
+	{% endfor %}
+		</tbody>
+	</table>
+{% endif %}
 {% endblock %}
