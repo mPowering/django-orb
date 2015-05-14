@@ -30,7 +30,6 @@ from tastypie.resources import ModelResource
 from tastypie.throttle import CacheDBThrottle
 from tastypie.utils import trailing_slash
 
-
 class ResourceResource(ModelResource):
     '''
     To get, post and pushing resources
@@ -106,18 +105,6 @@ class ResourceResource(ModelResource):
         }
         
         search.send(sender=sqs, query=q, no_results=sqs.count(), request=request, page=page_no, type=SearchTracker.SEARCH_API)
-        
-        '''
-        tracker = SearchTracker()
-        if not request.user.is_anonymous():
-            tracker.user = request.user
-        tracker.query = request.GET.get('q', '')
-        tracker.no_results = sqs.count()
-        tracker.ip = request.META.get('REMOTE_ADDR','0.0.0.0')
-        tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
-        tracker.type = SearchTracker.SEARCH_API
-        tracker.save()
-        '''
         
         self.log_throttled_access(request)
         return self.create_response(request, object_list)    
@@ -256,7 +243,7 @@ class TagResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
-   
+
     def dehydrate_url(self,bundle):
         url = bundle.request.build_absolute_uri(reverse('orb_tags', args=[bundle.obj.slug]))
         return url
@@ -292,4 +279,42 @@ class TagResource(ModelResource):
         bundle.obj.update_user_id = bundle.request.user.id
         bundle.obj.category_id = category.id
         return bundle  
+    
+class TagsResource(ModelResource):
+    resources = fields.ToManyField('orb.api.resources.ResourceTagsResource', 'resourcetags_set', related_name='tags', full=True,null=True)
+    url = fields.CharField(readonly=True)
+    class Meta:
+        queryset = Tag.objects.all()
+        resource_name = 'tags'
+        allowed_methods = ['get']
+        fields = ['id','name', 'image']
+        filtering = {"name": [ "exact" ]}
+        authentication = ApiKeyAuthentication()
+        authorization = ORBAuthorization() 
+        serializer = PrettyJSONSerializer()
+        always_return_data = True 
+        include_resource_uri = True
+
+    def dehydrate_url(self,bundle):
+        url = bundle.request.build_absolute_uri(reverse('orb_tags', args=[bundle.obj.slug]))
+        return url
+ 
+    def dehydrate_image(self,bundle):
+        if bundle.obj.image:
+            return bundle.request.build_absolute_uri(settings.MEDIA_URL + bundle.obj.image.name)
+        else:
+            return None 
+        
+class ResourceTagsResource(ModelResource):
+    tags = fields.ToOneField('orb.api.resources.TagsResource', 'tags', full=True, null=True)
+    class Meta:
+        queryset = ResourceTag.objects.all()
+        resource_name = 'resourcetags'
+        allowed_methods = ['get']
+        include_resource_uri = False
+        authentication = ApiKeyAuthentication()
+        authorization = ORBResourceTagAuthorization()
+        serializer = PrettyJSONSerializer()
+        always_return_data = True  
+        include_resource_uri = True
     
