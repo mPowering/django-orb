@@ -211,33 +211,52 @@ def tag_download(request,id, year, month):
     
     tag = Tag.objects.get(pk=id)
      
-    headers = ('Date', 'Resource', 'Resource File/URL', 'IP Address', 'User Agent', 'Country', 'Lat', 'Lng', 'Location')
+    headers = ('Date', 'Resource', 'Resource File or URL', 'IP Address', 'User Agent', 'Country', 'Lat', 'Lng', 'Location')
     data = []
     data = tablib.Dataset(*data, headers=headers)
-    trackers = ResourceTracker.objects.filter(resource__resourcetag__tag=tag,resource__status=Resource.APPROVED,access_date__month=month, access_date__year=year).order_by('access_date')
+    
+    trackers = ResourceTracker.objects.filter(resource__resourcetag__tag=tag,
+                                              resource__status=Resource.APPROVED,
+                                              access_date__month=month, 
+                                              access_date__year=year).order_by('access_date')
+    
     for t in trackers:
-        if t.resource_file:
-            object = t.resource_file.filename
-        elif t.resource_url:
-            object = t.resource_url.url
-        else:
-            object = ''
-            
-        if t.get_location():
-            lat = t.get_location().lat
-            lng = t.get_location().lng
-            location = t.get_location().region 
-            country = t.get_location().country_name
-        else:
-            lat = ''
-            lng = ''
-            location = ''
-            country = ''
-        data.append((t.access_date.strftime('%Y-%m-%d %H:%M:%S'), t.resource.title, object,t.ip, t.user_agent, country ,lat, lng, location ))
-        
+        if t.resource.title:
+            if t.resource_file and t.resource_file.filename():
+                print t.resource_file.filename()
+                object = t.resource_file.filename()
+            elif t.resource_url and t.resource_url.url:
+                object = t.resource_url.url
+            else:
+                object = "--"
+                
+            if t.get_location():
+                lat = t.get_location().lat
+                lng = t.get_location().lng
+                location = t.get_location().region 
+                country = t.get_location().country_name
+            else:
+                lat = ''
+                lng = ''
+                location = ''
+                country = ''
+            data.append(
+                            (
+                                t.access_date.strftime('%Y-%m-%d %H:%M:%S'), 
+                                t.resource.title, 
+                                object,
+                                t.ip, 
+                                t.user_agent, 
+                                country ,
+                                lat, 
+                                lng, 
+                                location 
+                            )
+                        )
+       
             
     response = HttpResponse(data.xls, content_type='application/vnd.ms-excel;charset=utf-8')
-    response['Content-Disposition'] = "attachment; filename=export.xls"
+    response['Content-Disposition'] = "attachment; filename=export-"+str(year)+ "-"+ str(month) +".xls"
 
     return response
 

@@ -307,7 +307,7 @@ class TagsResource(ModelResource):
 class TagsResourceResource(ModelResource):
     resource = fields.ToOneField('orb.api.resources.ResourceResource', 'resource', full=True)
     class Meta:
-        queryset = ResourceTag.objects.all()
+        queryset = ResourceTag.objects.filter(resource__status=Resource.APPROVED)
         resource_name = 'tagsresource'
         allowed_methods = ['get']
         authentication = ApiKeyAuthentication()
