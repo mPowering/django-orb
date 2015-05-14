@@ -44,7 +44,7 @@
 		{% else %}
 			{% for c in resource.get_health_domains|slice:":1" %}
 				{% thumbnail c.image "200x150" format="PNG" as im %}
-					<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-row-thumbnail-default" alt="{{ resource.title }}">
+					<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-row-thumbnail resource-row-thumbnail-default" alt="{{ resource.title }}">
 				{% endthumbnail %}
 			{% endfor %}
 		{% endif %}

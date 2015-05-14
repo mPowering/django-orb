@@ -307,15 +307,23 @@ img.resource-row-icon:hover {
 	margin-bottom: 10px;
 }
 
-.resource-row-thumbnail {
+.resource-image {
 	display:block; 
+	margin: 20px auto; 
+	max-width: 250px
+}
+
+.resource-image-default {
+	opacity: .5;
+}
+
+.resource-row-thumbnail {
+	display: block; 
 	margin: 0 auto;
 }
 
 .resource-row-thumbnail-default {
-	display:block; 
-	margin: 0 auto;
-	opacity: .6;
+	opacity: .5;
 }
 
 .resource-row-study-time:hover {

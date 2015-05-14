@@ -54,10 +54,14 @@ From:
 
 {% if resource.image %}
 	{% thumbnail resource.image "250x180" format="PNG" padding=True as im %}
-		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" style="display:block; margin: 20px auto; max-width: 250px" class="thumbnail">
-	{% empty %}
-  		<p>No image</p>
+		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-image" alt="{{ resource.title }}">
 	{% endthumbnail %}		
+{% else %}
+	{% for c in resource.get_health_domains|slice:":1" %}
+		{% thumbnail c.image "250x180" format="PNG" padding=True as im %}
+			<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-image resource-image-default" alt="{{ resource.title }}">
+		{% endthumbnail %}
+	{% endfor %}
 {% endif %}
 <p>
 {{ resource.description|safe }}
