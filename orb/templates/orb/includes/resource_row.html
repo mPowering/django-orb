@@ -36,13 +36,19 @@
 		</div>
 	</div>
 	<div class="col-md-4">
-           {% if resource.image %}
-           	<a href="{% url 'orb_resource' resource.slug %}">
-           	{% thumbnail resource.image "200x150" format="PNG" as im %}
+		<a href="{% url 'orb_resource' resource.slug %}">
+        {% if resource.image %}
+          	{% thumbnail resource.image "200x150" format="PNG" as im %}
 				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-row-thumbnail" alt="{{ resource.title }}">
 			{% endthumbnail %}	
-			</a>
+		{% else %}
+			{% for c in resource.get_health_domains|slice:":1" %}
+				{% thumbnail c.image "200x150" format="PNG" as im %}
+					<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-row-thumbnail-default" alt="{{ resource.title }}">
+				{% endthumbnail %}
+			{% endfor %}
 		{% endif %}
+		</a>
 	</div>
 </div>
 <hr/>

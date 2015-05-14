@@ -312,6 +312,12 @@ img.resource-row-icon:hover {
 	margin: 0 auto;
 }
 
+.resource-row-thumbnail-default {
+	display:block; 
+	margin: 0 auto;
+	opacity: .6;
+}
+
 .resource-row-study-time:hover {
 	opacity: 1;
 }

@@ -121,6 +121,10 @@ class Resource (models.Model):
     def get_license(self):
         tags = Tag.objects.filter(resourcetag__resource=self, category__slug='license')
         return tags
+    
+    def get_health_domains(self):
+        tags = Tag.objects.filter(resourcetag__resource=self, category__slug='health-domain')
+        return tags
   
 class ResourceWorkflowTracker(models.Model):
     REJECTED = 'rejected'
