@@ -107,18 +107,6 @@ class ResourceResource(ModelResource):
         
         search.send(sender=sqs, query=q, no_results=sqs.count(), request=request, page=page_no, type=SearchTracker.SEARCH_API)
         
-        '''
-        tracker = SearchTracker()
-        if not request.user.is_anonymous():
-            tracker.user = request.user
-        tracker.query = request.GET.get('q', '')
-        tracker.no_results = sqs.count()
-        tracker.ip = request.META.get('REMOTE_ADDR','0.0.0.0')
-        tracker.user_agent = request.META.get('HTTP_USER_AGENT','unknown')
-        tracker.type = SearchTracker.SEARCH_API
-        tracker.save()
-        '''
-        
         self.log_throttled_access(request)
         return self.create_response(request, object_list)    
        
