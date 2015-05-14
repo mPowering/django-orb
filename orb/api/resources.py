@@ -34,9 +34,9 @@ class ResourceResource(ModelResource):
     '''
     To get, post and pushing resources
     '''
-    files = fields.ToManyField('orb.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True, null = True)
-    urls = fields.ToManyField('orb.api.resources.ResourceURLResource', 'resourceurl_set', related_name='resource', full=True, null = True)
-    tags = fields.ToManyField('orb.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True, null = True)
+    files = fields.ToManyField('orb.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True, null = True, use_in='detail')
+    urls = fields.ToManyField('orb.api.resources.ResourceURLResource', 'resourceurl_set', related_name='resource', full=True, null = True, use_in='detail')
+    tags = fields.ToManyField('orb.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True, null = True, use_in='detail')
     url = fields.CharField(readonly=True)
     
     class Meta:
@@ -279,22 +279,21 @@ class TagResource(ModelResource):
         bundle.obj.update_user_id = bundle.request.user.id
         bundle.obj.category_id = category.id
         return bundle  
-    
+          
 class TagsResource(ModelResource):
-    resources = fields.ToManyField('orb.api.resources.ResourceTagsResource', 'resourcetags_set', related_name='tags', full=True,null=True)
+    resources = fields.ToManyField('orb.api.resources.TagsResourceResource', 'resourcetag_set', full=True, null=True, use_in='detail')
     url = fields.CharField(readonly=True)
     class Meta:
         queryset = Tag.objects.all()
         resource_name = 'tags'
         allowed_methods = ['get']
         fields = ['id','name', 'image']
-        filtering = {"name": [ "exact" ]}
         authentication = ApiKeyAuthentication()
         authorization = ORBAuthorization() 
         serializer = PrettyJSONSerializer()
         always_return_data = True 
         include_resource_uri = True
-
+        
     def dehydrate_url(self,bundle):
         url = bundle.request.build_absolute_uri(reverse('orb_tags', args=[bundle.obj.slug]))
         return url
@@ -303,18 +302,18 @@ class TagsResource(ModelResource):
         if bundle.obj.image:
             return bundle.request.build_absolute_uri(settings.MEDIA_URL + bundle.obj.image.name)
         else:
-            return None 
+            return None
         
-class ResourceTagsResource(ModelResource):
-    tags = fields.ToOneField('orb.api.resources.TagsResource', 'tags', full=True, null=True)
+class TagsResourceResource(ModelResource):
+    resource = fields.ToOneField('orb.api.resources.ResourceResource', 'resource', full=True)
     class Meta:
         queryset = ResourceTag.objects.all()
-        resource_name = 'resourcetags'
+        resource_name = 'tagsresource'
         allowed_methods = ['get']
-        include_resource_uri = False
         authentication = ApiKeyAuthentication()
         authorization = ORBResourceTagAuthorization()
         serializer = PrettyJSONSerializer()
         always_return_data = True  
         include_resource_uri = True
+
     
