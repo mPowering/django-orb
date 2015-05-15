@@ -9,6 +9,8 @@ urlpatterns = patterns('',
 
     url(r'^$', 'orb.views.home_view', name="orb_home"),
     
+    url(r'^robots.txt$',TemplateView.as_view(template_name="orb/robots.txt")),
+    
     url(r'^about/$',TemplateView.as_view(template_name="orb/about.html"), name="orb_about"),
     url(r'^developers/$',TemplateView.as_view(template_name="orb/developers.html"), name="orb_developers"),
     url(r'^feed/$', LatestEntries() , name="orb_feed"),

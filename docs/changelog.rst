@@ -1,6 +1,12 @@
 Change log
 =====================================
 
+
+15 May 2015
+-----------
+
+* 267: Add robots.txt to avoid downloading the actual resource files - http://github.com/mPowering/django-orb/issues/issue/267
+
 14 May 2015
 ------------
 
