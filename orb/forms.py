@@ -65,7 +65,8 @@ class ResourceForm(forms.Form):
     license = forms.ChoiceField(
                         widget=forms.Select,
                         required=True,
-                        error_messages={'required': _('Please select a license')},)
+                        error_messages={'required': _('Please select a license')},
+                        help_text=_(u"<a href='http://creativecommons.org/licenses/' target='_blank'>More information on Creative Commons licenses</a>"),)
     other_tags = forms.CharField(
                         help_text=_('Please enter any other relevant tags for this resource, comma separated if entering more than one tag'),               
                         required=False,

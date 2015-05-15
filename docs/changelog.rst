@@ -6,6 +6,7 @@ Change log
 -----------
 
 * 267: Add robots.txt to avoid downloading the actual resource files - http://github.com/mPowering/django-orb/issues/issue/267
+* 268: Add link to CC on resource form - http://github.com/mpowering/django-orb/issues/issue/268
 
 14 May 2015
 ------------
