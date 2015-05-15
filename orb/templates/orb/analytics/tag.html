@@ -102,7 +102,8 @@
 				<td>{{ r.update_date|date:"d M Y" }}</td>
 				<td>{{ r.title }}</td>
 				<td>{{ r.status }}</td>
-				<td><a href="{% url 'orb_resource_edit' r.id %}">{% trans 'Edit' %}</a></td>
+				<td><a href="{% url 'orb_resource' r.slug %}">{% trans 'View' %}</a>
+				 | <a href="{% url 'orb_resource_edit' r.id %}">{% trans 'Edit' %}</a></td>
 			</tr>
 	{% endfor %}
 		</tbody>
