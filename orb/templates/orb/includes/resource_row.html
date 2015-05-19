@@ -13,7 +13,7 @@
 			{{ o.name }}{% if not forloop.last %}, {% endif %}
 		{% endfor %}
 		</h4>
-		<p>{{ resource.description|striptags|truncatewords:40 }}</p>
+		<p>{{ resource.description|striptags|truncatewords:40|safe }}</p>
 
 		<div>
 			{% for c in resource.get_geographies %}

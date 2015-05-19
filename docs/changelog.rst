@@ -1,6 +1,10 @@
 Change log
 =====================================
 
+19 May 2015
+-----------
+
+* 274: Check the text in the resource overview, html entities not rendering properly - http://github.com/mpowering/django-orb/issues/issue/274
 
 15 May 2015
 -----------
