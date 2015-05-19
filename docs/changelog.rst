@@ -5,6 +5,7 @@ Change log
 -----------
 
 * 274: Check the text in the resource overview, html entities not rendering properly - http://github.com/mpowering/django-orb/issues/issue/274
+* 273: Can't upload pdf files, get message that can't upload application files - http://github.com/mpowering/django-orb/issues/issue/273
 
 15 May 2015
 -----------

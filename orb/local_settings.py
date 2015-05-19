@@ -16,7 +16,8 @@ def modify(settings):
     
     settings['ORB_RESOURCE_DESCRIPTION_MAX_WORDS'] = 150
     
-    settings['TASK_UPLOAD_FILE_TYPE_BLACKLIST'] = ['application','image']
+    settings['TASK_UPLOAD_FILE_TYPE_BLACKLIST'] = [u'application/vnd.android']
+    
     settings['TASK_UPLOAD_FILE_MAX_SIZE'] = "5242880"
     
     settings['DJANGO_WYSIWYG_FLAVOR'] = "tinymce_advanced"
