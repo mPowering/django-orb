@@ -48,7 +48,7 @@ class ResourceResource(ModelResource):
         serializer = ResourceSerializer()
         always_return_data = True 
         include_resource_uri = True
-        throttle = CacheDBThrottle(throttle_at=150, timeframe=3600)
+        throttle = CacheDBThrottle(throttle_at=1000, timeframe=3600)
 
     def dehydrate_image(self,bundle):
         if bundle.obj.image:
