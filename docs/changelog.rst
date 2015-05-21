@@ -6,6 +6,7 @@ Change log
 -----------
 
 * 282: Name Error when updating profile - Organisation not defined - http://github.com/mpowering/django-orb/issues/issue/282
+* 278: On homepage make the title "ORB by mPowering" - http://github.com/mpowering/django-orb/issues/issue/278
 
 19 May 2015
 -----------
