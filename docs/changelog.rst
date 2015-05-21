@@ -1,6 +1,12 @@
 Change log
 =====================================
 
+
+21 May 2015
+-----------
+
+* 282: Name Error when updating profile - Organisation not defined - http://github.com/mpowering/django-orb/issues/issue/282
+
 19 May 2015
 -----------
 

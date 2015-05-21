@@ -143,24 +143,27 @@ def edit(request):
             request.user.last_name = last_name
             request.user.save()
             
-            category = Category.objects.get(slug='organisation')
-            try:
-                organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
-            except Tag.DoesNotExist:
-                organisation = Organisation()
-                organisation.name = form.cleaned_data.get("organisation")
-                organisation.category = category
-                organisation.create_user = request.user
-                organisation.update_user = request.user
-                organisation.save()
-                
+            
             try:
                 user_profile = UserProfile.objects.get(user=request.user)
             except UserProfile.DoesNotExist:
                 user_profile = UserProfile()
                 user_profile.user = request.user
+              
+            if form.cleaned_data.get("organisation").strip() != '':  
+                category = Category.objects.get(slug='organisation')
+                try:
+                    organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
+                except Tag.DoesNotExist:
+                    organisation = Tag()
+                    organisation.name = form.cleaned_data.get("organisation")
+                    organisation.category = category
+                    organisation.create_user = request.user
+                    organisation.update_user = request.user
+                    organisation.save()
                 
-            user_profile.organisation = organisation
+                user_profile.organisation = organisation
+                
             if form.cleaned_data.get("role") != '0':
                 role = Tag.objects.get(pk=form.cleaned_data.get("role"))
                 user_profile.role = role
