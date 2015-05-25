@@ -63,6 +63,7 @@ class Resource (models.Model):
     
     def save(self, *args, **kwargs):
         unique_slugify(self, self.title)
+        self.title = self.title.strip()
         super(Resource, self).save(*args, **kwargs)
     
     def get_organisations(self):

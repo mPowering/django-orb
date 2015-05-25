@@ -5,7 +5,7 @@ Change log
 -----------
 
 * 276: On admin site order drop downs - http://github.com/mPowering/django-orb/issues/issue/276
-
+* 285: make sure title is trimmed before saving - http://github.com/mPowering/django-orb/issues/issue/285
 
 21 May 2015
 -----------
