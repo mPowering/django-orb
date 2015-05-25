@@ -1,6 +1,11 @@
 Change log
 =====================================
 
+25 May 2015
+-----------
+
+* 276: On admin site order drop downs - http://github.com/mPowering/django-orb/issues/issue/276
+
 
 21 May 2015
 -----------

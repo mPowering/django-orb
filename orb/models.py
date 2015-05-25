@@ -56,6 +56,7 @@ class Resource (models.Model):
     class Meta:
         verbose_name = _('Resource')
         verbose_name_plural = _('Resources')
+        ordering = ('title',)
         
     def __unicode__(self):
         return self.title
@@ -225,9 +226,11 @@ class Category (models.Model):
     class Meta:
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
+        ordering = ('name',)
         
     def __unicode__(self):
         return self.name
+    
     
     def save(self, *args, **kwargs):
         # If there is not already a slug in place...
@@ -258,6 +261,7 @@ class Tag (models.Model):
     class Meta:
         verbose_name = _('Tag')
         verbose_name_plural = _('Tags')
+        ordering = ('name',)
         
     def __unicode__(self):
         return self.name
