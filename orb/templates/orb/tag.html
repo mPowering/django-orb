@@ -33,7 +33,7 @@
 	{% endthumbnail %}{{ tag.name }}</h3>
 	
 {% if tag.description %}
-	<p>{{ tag.description }}</p>
+	<p>{{ tag.description|safe }}</p>
 {% endif %}
 
 {% if tag.external_url %}
