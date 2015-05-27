@@ -39,7 +39,8 @@ def home_view(request):
        topics.append(data)
     
     return render_to_response('orb/home.html',
-                              {'topics': topics,},
+                              {'topics': topics,
+                               'page_title': _(u'ORB by mPowering')},
                               context_instance=RequestContext(request))
 
 
