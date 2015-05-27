@@ -1,6 +1,13 @@
 Change log
 =====================================
 
+
+27 May 2015
+------------
+
+* 278: On homepage make the title "ORB by mPowering" - http://github.com/mpowering/django-orb/issues/issue/278
+* 201: Create specific cartodb account for mpowering - http://github.com/mPowering/django-orb/issues/issue/201
+
 25 May 2015
 -----------
 
