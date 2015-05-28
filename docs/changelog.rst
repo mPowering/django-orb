@@ -1,6 +1,10 @@
 Change log
 =====================================
 
+28 May 2015
+------------
+
+* 277: Add no languages the resources are in to the monthly analytics page - http://github.com/mPowering/django-orb/issues/issue/277
 
 27 May 2015
 ------------

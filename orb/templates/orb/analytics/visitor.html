@@ -32,12 +32,24 @@
 				<td>{{ stats.anon_hits|add:stats.user_hits }}</td>
 			</tr>
 			<tr>
-				<td>{% trans 'Total distinct countries' %}</td>
+				<td>{% trans 'Total new registrations' %}</td>
+				<td>{{ stats.registrations }}</td>
+			</tr>
+			<tr>
+				<td>{% trans 'Total distinct visitor countries' %}</td>
 				<td>{{ stats.countries }}</td>
+			</tr>
+			<tr>
+				<td>{% trans 'Total searches' %}</td>
+				<td>{{ stats.searches }}</td>
 			</tr>
 			<tr>
 				<td>{% blocktrans with archive_month|date:"M Y" as month %}Total approved resources (until end {{ month }}){% endblocktrans %}</td>
 				<td>{{ stats.resources }}</td>
+			</tr>
+			<tr>
+				<td>{% trans 'Total languages' %}</td>
+				<td>{{ stats.languages }}</td>
 			</tr>
 		</tbody>
 	</table>

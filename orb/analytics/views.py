@@ -126,8 +126,13 @@ def visitor_view(request, year=None, month=None):
     stats['resources'] = Resource.objects.filter(create_date__lte=last_day,status=Resource.APPROVED).count()
 
     #searches
+    stats['searches'] = SearchTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year).count()
     
-    #downloads/links
+    #users registered
+    stats['registrations'] = User.objects.filter(date_joined__month=analytics_month, date_joined__year=analytics_year).count()
+    
+    #languages
+    stats['languages'] = Tag.objects.filter(resourcetag__resource__status=Resource.APPROVED, resourcetag__resource__create_date__lte=last_day, category__slug='language').distinct().count()
     
     #locations/countries
     loc_hits = list(ResourceTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year).values_list('ip', flat=True).distinct())
