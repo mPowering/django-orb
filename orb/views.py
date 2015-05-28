@@ -45,7 +45,8 @@ def home_view(request):
 
 
 def partner_view(request):
-    partners = Tag.objects.filter(category__slug='organisation').exclude(description=None).exclude(description="").order_by('name')
+    PARTNERS = ['jhu-ccp','digital-campus','digital-green','global-health-media-project', 'medical-aid-films', 'zinc-ors']
+    partners = Tag.objects.filter(category__slug='organisation', slug__in=PARTNERS).order_by('name')
     return render_to_response('orb/partners.html',
                               {'partners': partners,},
                               context_instance=RequestContext(request))

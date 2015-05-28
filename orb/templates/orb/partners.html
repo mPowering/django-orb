@@ -57,7 +57,12 @@
 	<div class="col-md-8">
 		<h4>{{ p.name }}</h4>
 		<p>{{ p.description|safe }}<br/>
-		<a href="{% url 'orb.views.tag_view' p.slug %}">{% blocktrans with p.name as org %}View all {{ org }} resources on ORB{% endblocktrans %}</a></p>
+		{% if p.slug = 'jhu-ccp' %}
+			<a href="{% url 'orb.views.tag_view' 'nurhi' %}">{% blocktrans %}View all NURHI project resources on ORB{% endblocktrans %}</a><br/>
+			<a href="{% url 'orb.views.tag_view' 'ghana-behavior-change-support' %}">{% blocktrans %}View all Ghana BCS project resources on ORB{% endblocktrans %}</a></p>
+		{% else %}
+			<a href="{% url 'orb.views.tag_view' p.slug %}">{% blocktrans with p.name as org %}View all {{ org }} resources on ORB{% endblocktrans %}</a></p>
+		{%endif %}
 	</div>
 	
 </div>
