@@ -269,6 +269,40 @@ def tag_download(request,id, year, month):
 
     return response
 
+def mailing_list_view(request):
+    if not is_tag_owner(request, id):
+        return HttpResponse(status=401,content="Not Authorized")
+    
+    users = User.objects.filter(userprofile__mailing=True).order_by('first_name')
+     
+    headers = ('Date joined', 'First name', 'Last name', 'Organisation', 'Role', 'Email')
+    data = []
+    data = tablib.Dataset(*data, headers=headers)
+
+    
+    for u in users:
+        
+        if u.userprofile.role:
+            role = u.userprofile.role.name
+        else:
+            role = u.userprofile.role_other
+        data.append(
+                    (
+                        u.date_joined.strftime('%Y-%m-%d %H:%M:%S'), 
+                        u.first_name, 
+                        u.last_name, 
+                        u.userprofile.organisation.name, 
+                        role,
+                        u.email    
+                    )
+                )
+       
+            
+    response = HttpResponse(data.xls, content_type='application/vnd.ms-excel;charset=utf-8')
+    response['Content-Disposition'] = "attachment; filename=orb-mailing-list-" + timezone.now().strftime('%Y-%m-%d') +".xls"
+
+    return response
+    
 # Helper functions
 def is_tag_owner(request,id):
     if not request.user.is_authenticated:
