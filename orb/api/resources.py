@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.conf.urls import url
 from django.http import HttpRequest, HttpResponse
 from django.http.response import Http404
+from django.utils.html import strip_tags
 from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
@@ -123,6 +124,10 @@ class ResourceResource(ModelResource):
         if 'description' not in bundle.data or bundle.data['description'].strip() == '':
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_NO_DESCRIPTION)
 
+        no_words = len(strip_tags(bundle.data['description']).split(' '))
+        if no_words > settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS :
+            raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_DESCRIPTION_TOO_LONG)
+            
         request_method = bundle.request.META['REQUEST_METHOD']
         
         # check that resource doesn't already exist for this user

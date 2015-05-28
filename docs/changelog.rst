@@ -5,6 +5,7 @@ Change log
 ------------
 
 * 277: Add no languages the resources are in to the monthly analytics page - http://github.com/mPowering/django-orb/issues/issue/277
+* 209: Add description word count limit to API too - http://github.com/mPowering/django-orb/issues/issue/209
 
 27 May 2015
 ------------

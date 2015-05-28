@@ -1,4 +1,5 @@
 
+from django.conf import settings
 from django.utils.translation import ugettext as _
 
 
@@ -15,6 +16,7 @@ ERROR_CODE_RESOURCE_EXISTS = 2000
 ERROR_CODE_RESOURCE_DOES_NOT_EXIST = 3000
 ERROR_CODE_RESOURCE_NO_TITLE = 4000
 ERROR_CODE_RESOURCE_NO_DESCRIPTION = 4001
+ERROR_CODE_RESOURCE_DESCRIPTION_TOO_LONG = 4002
 ERROR_CODE_RESOURCETAG_NO_RESOURCE = 4100
 ERROR_CODE_RESOURCETAG_NO_TAG = 4101
 ERROR_CODE_RESOURCETAG_EXISTS = 4110
@@ -37,4 +39,5 @@ ERROR_CODES = {
                ERROR_CODE_RESOURCETAG_NO_TAG : _(u'No tag specfified'),
                ERROR_CODE_TAG_DOES_NOT_EXIST: _(u'Tag not found'),
                ERROR_CODE_RESOURCETAG_EXISTS: _(u'Resource already tagged with this tag'),
+               ERROR_CODE_RESOURCE_DESCRIPTION_TOO_LONG: _(u"Description is too long, please enter no more than {max_words} words".format(max_words=settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS)),
                }
