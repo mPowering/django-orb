@@ -14,8 +14,14 @@ def is_search_crawler(user_agent):
                'Teoma', 
                'Gigabot', 
                'Googlebot-Mobile',
-               'MJ12bot'}
+               'MJ12bot',
+               'bingbot',
+               'LinkedInBot',
+               'baiduspider',
+               'facebookexternalhit',
+               'spider'
+               }
     for s in spiders:
-        if s in user_agent:
+        if s.lower() in user_agent.lower():
             return True
     return False
