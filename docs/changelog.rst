@@ -1,14 +1,18 @@
 Change log
 =====================================
 
+
 v1.1.0 - not yet released
 ------------------------------
 
 * 293: Add order by last updated to order options - http://github.com/mPowering/django-orb/issues/issue/293
 
 
-v1.0.0 - Launched 1 June 2015
-------------------------------
+v1.0.1 - 1 June 2015 
+---------------------
+
+* 294: Add total countries to analytics - http://github.com/mpowering/django-orb/issues/issue/294
+
 28 May 2015
 ------------
 

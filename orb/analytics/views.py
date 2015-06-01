@@ -66,7 +66,11 @@ def home_view(request):
         year = temp.strftime("%Y")
         no_registrations = User.objects.filter(date_joined__day=day,date_joined__month=month,date_joined__year=year).count()     
         user_registrations.append([temp.strftime("%d %b %y"),no_registrations])
-        
+    
+    total_user_registrations = User.objects.exclude(is_staff=True).count(); 
+    
+    countries = UserLocationVisualization.objects.exclude(country_name='').values_list('country_name',flat=True).distinct().order_by('country_name')
+    
     return render_to_response('orb/analytics/home.html',
                               {'pending_crt_resources': pending_crt_resources,
                                'pending_mep_resources': pending_mep_resources,
@@ -75,7 +79,10 @@ def home_view(request):
                                'organisations': organisations,
                                'recent_activity': recent_activity,
                                'searches_no_results': searches_no_results,
-                               'user_registrations': user_registrations,},
+                               'user_registrations': user_registrations,
+                               'total_user_registrations': total_user_registrations,
+                               'countries': countries,
+                                },
                               context_instance=RequestContext(request))
     
 def map_view(request):

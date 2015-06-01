@@ -170,6 +170,7 @@
 
 <a name="reg" class="named-anchor"></a>
 <h3>{% trans 'User Registrations' %}</h3>
+<p>{% trans 'Total registrations' %}: {{ total_user_registrations }}</p>
 <div id="registrations_chart_div" class="graph">{% trans 'graph_generating'%}</div>
 
 <a name="ps" class="named-anchor"></a>
@@ -210,6 +211,12 @@
 	src='https://mpowering.cartodb.com/viz/accaec34-03e6-11e5-a245-0e4fddd5de28/embed_map?title=false&#038;description=false&#038;search=false&#038;shareable=true&#038;cartodb_logo=true&#038;layer_selector=false&#038;legends=false&#038;scrollwheel=true&#038;fullscreen=true&#038;sublayer_options=1&#038;sql='
 	allowfullscreen webkitallowfullscreen mozallowfullscreen
 	oallowfullscreen msallowfullscreen></iframe>
-	
-	
+
+<p>{% trans 'Countries' %}:</p>
+<ol>
+{% for c in countries %}
+	<li>{{ c }}</li>
+{% endfor %}
+</ol>	
+
 {% endblock %}
