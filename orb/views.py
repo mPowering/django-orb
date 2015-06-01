@@ -19,7 +19,7 @@ from haystack.query import SearchQuerySet
 
 from orb.forms import ResourceForm, SearchForm, ResourceRejectForm, AdvancedSearchForm
 from orb.models import Tag, Resource, ResourceURL , Category, TagOwner, TagTracker, SearchTracker
-from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria
+from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria, ResourceRating
 from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow, resource_submitted, tag_viewed
 
 from PIL import Image
@@ -160,9 +160,18 @@ def resource_view(request,resource_slug):
             options_menu.append(om)
 
     resource_viewed.send(sender=resource, resource=resource, request=request)
+    
+    user_rating = 0
+    if request.user.is_authenticated():
+        try:
+            user_rating = ResourceRating.objects.get(resource=resource,user=request.user).rating
+        except ResourceRating.DoesNotExist:
+            pass
+        
     return render_to_response('orb/resource/view.html',
                               {'resource': resource, 
-                               'options_menu': options_menu, },
+                               'options_menu': options_menu, 
+                               'user_rating': user_rating },
                               context_instance=RequestContext(request))  
     
 def resource_create_view(request):
@@ -504,8 +513,24 @@ def resource_rate_view(request):
     if request.method == 'POST':
         resource_id = request.POST.get('resource_id')
         rating = request.POST.get('rating')
-        comment = request.POST.get('comment')
+        #comment = request.POST.get('comment')
         
+        try:
+            resource = Resource.objects.get(pk=resource_id)
+        except Resource.DoesNotExist:
+            raise Http404()
+        
+        # check if an update or new rating
+        try:
+            user_rated = ResourceRating.objects.get(resource=resource,user=request.user)
+            user_rated.rating = rating
+            user_rated.save()
+        except ResourceRating.DoesNotExist:
+            rating_obj = ResourceRating() 
+            rating_obj.resource = resource
+            rating_obj.rating = rating
+            rating_obj.user = request.user
+            rating_obj.save()
         return HttpResponse()
     else:
         raise Http404()   

@@ -8,16 +8,37 @@
 {% block extra_head_keywords %}{% for c in resource.get_categories %}{% for t in c.tags %}{{ t.name }},{% endfor %}{% endfor %}{% endblock extra_head_keywords %}
 
 {% block extra_scripts %}
+
 <script>
 
 $.ajaxSetup({
 	  data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
 	});
-	
-//$.post("/resource/rate/", { rating: 3, resource_id: {{ resource.id }} },
-//    function(data) {
-       // success! so now set the UI star to 3
-//});
+
+{% if user_rating %}
+	USER_RATING = {{ user_rating }};
+{% else %}
+	USER_RATING = 0;
+{% endif %}
+
+function ratingOnHover(i){
+	for (j = 1; j<=i ; j++){
+		$("#rating_"+j).attr('src', '{{ STATIC_URL }}orb/images/star-full.png');
+	}
+}
+
+function ratingOffHover(i){
+	for (j = 1; j<=i ; j++){
+		$("#rating_"+j).attr('src', '{{ STATIC_URL }}orb/images/star-empty.png');
+	}
+}
+
+function rateResource(i){
+	$.post("/resource/rate/", { rating: i, resource_id: {{ resource.id }} },
+	    function(data) {
+			USER_RATING = i;
+		});
+}
 </script>
 
 <script>(function(d, s, id) {
@@ -82,6 +103,14 @@ From:
 	<script type="in/share" data-counter="right"></script>
 </div>
 <div style="clear: both"></div>
+
+<hr/>
+<h4>{% trans 'Your Rating' %}</h4>
+{% if user.is_authenticated %}
+	{% include "orb/includes/user_rating.html" %}
+{% else %}
+	<p>Log in to rate this resource<p>
+{% endif %}
 
 {% if resource.get_files %}
 	<hr/>
