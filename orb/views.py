@@ -58,9 +58,11 @@ def tag_view(request,tag_slug):
     
     CREATED = u'-create_date'
     TITLE = u'title'
+    UPDATED = u'-update_date'
     ORDER_OPTIONS = (
         (CREATED, _(u'Create date')),
         (TITLE, _(u'Title')),
+        (UPDATED, _(u'Update date')),
     )
     
     order_by = request.GET.get('order', CREATED)

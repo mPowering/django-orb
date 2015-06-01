@@ -1,6 +1,14 @@
 Change log
 =====================================
 
+v1.1.0 - not yet released
+------------------------------
+
+* 293: Add order by last updated to order options - http://github.com/mPowering/django-orb/issues/issue/293
+
+
+v1.0.0 - Launched 1 June 2015
+------------------------------
 28 May 2015
 ------------
 
