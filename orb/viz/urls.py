@@ -7,6 +7,6 @@ from django.views.generic import TemplateView
 urlpatterns = patterns('',
     
     
-    url(r'^$', 'orb.viz.views.country_map_view', name="orb_country_map"),
+    url(r'^country/$', 'orb.viz.views.country_map_view', name="orb_country_map"),
     
 )

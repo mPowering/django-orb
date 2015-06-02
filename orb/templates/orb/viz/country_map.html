@@ -9,7 +9,11 @@
     <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.ie.css" />
   <![endif]-->
   <style>
-    #cartodb-map { width: 100%; height:500px; background: black;}
+    #cartodb-map { width: 100%; height:500px; background: #fff;}
+    div.cartodb-popup h4 { color: #033f62; max-width: 120px; font-size: 14px;}
+    div.cartodb-popup div.cartodb-popup-tip-container { width: 150px }
+    div.cartodb-popup p { max-width: 120px }
+    div.cartodb-popup div.cartodb-popup-content-wrapper { width: 150px }
   </style>
 
   <script>
@@ -17,8 +21,8 @@
     function init(){
       // initiate leaflet map
       map = new L.Map('cartodb-map', { 
-        center: [0,0],
-        zoom: 2
+        center: [0,30],
+        zoom: 3
       })
       
       var layerUrl = 'https://mpowering.cartodb.com/api/v2/viz/3f25287c-08b2-11e5-86ac-0e9d821ea90d/viz.json';
@@ -33,10 +37,9 @@
     	  var sublayer = layer.getSubLayer(0);
           sublayer.infowindow.set('template', $('#infowindow_template').html());
           sublayer.on('featureClick', function(e, latlng, pos, data) {
-              //alert("Hey! You clicked " + data.name);
         });
       }).on('error', function() {
-    	  console.log("some error occurred");
+    	  console.log("Error occurred");
       });
     }
   </script>
@@ -45,13 +48,10 @@
   		<div class="cartodb-popup">
    			<a href="#close" class="cartodb-popup-close-button close">x</a>
      		<div class="cartodb-popup-content-wrapper">
-       			<div class="cartodb-popup-header">
-         			<img style="width: 100%" src="http://cartodb.com/assets/logos/logos_full_cartodb_light.png"></src>
-       			</div>
        			<div class="cartodb-popup-content">
          			<!-- content.data contains the field info -->
-         			<h4>Country: </h4>
-         			<p>{{content.data.name}}</p>
+         			<h4>{% verbatim %}{{ content.data.name }}{% endverbatim %}</h4>
+         			<p><a href="/tag/view/{% verbatim %}{{ content.data.slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_resources }}{% endverbatim %} resources for {% verbatim %}{{ content.data.name }}{% endverbatim %}</a></p>
        			</div>
      		</div>
      		<div class="cartodb-popup-tip-container"></div>

@@ -29,7 +29,8 @@ def run(cartodb_account, cartodb_key):
     print dataJSON
     
     for c in countries:
-        sql = "UPDATE %s SET display=True WHERE name = '%s'" % (cartodb_table,c.name)
+        no_resources = Resource.objects.filter(resourcetag__tag=c,status=Resource.APPROVED).count()
+        sql = "UPDATE %s SET display=True, slug='%s', no_resources=%d WHERE name = '%s'" % (cartodb_table,c.slug,no_resources, c.name)
         url = "http://%s.cartodb.com/api/v2/sql?q=%s&api_key=%s" % (cartodb_account,sql,cartodb_key)
         u = urllib.urlopen(url)
         data = u.read() 
