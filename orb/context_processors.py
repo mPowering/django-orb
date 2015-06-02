@@ -19,7 +19,8 @@ def get_menu(request):
     
 def get_version(request):
     version = "v" + str(orb.VERSION[0]) + "." + str(orb.VERSION[1]) + "." + str(orb.VERSION[2])
-    return {'version': version }
+    return {'version': version,
+            'ORB_GOOGLE_ANALYTICS_CODE': settings.ORB_GOOGLE_ANALYTICS_CODE }
 
 def base_context_processor(request):
     return {
