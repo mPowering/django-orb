@@ -25,16 +25,26 @@ function ratingOnHover(i){
 	for (j = 1; j<=i ; j++){
 		$("#rating_"+j).attr('src', '{{ STATIC_URL }}orb/images/star-full.png');
 	}
+	for (j = i+1; j<=5 ; j++){
+		$("#rating_"+j).attr('src', '{{ STATIC_URL }}orb/images/star-empty.png');
+	}
 }
 
 function ratingOffHover(i){
 	for (j = 1; j<=i ; j++){
 		$("#rating_"+j).attr('src', '{{ STATIC_URL }}orb/images/star-empty.png');
 	}
+	for (j = 1; j<=USER_RATING ; j++){
+		$("#rating_"+j).attr('src', '{{ STATIC_URL }}orb/images/star-full.png');
+	}
+	for (j = USER_RATING+1; j<=5 ; j++){
+		$("#rating_"+j).attr('src', '{{ STATIC_URL }}orb/images/star-empty.png');
+	}
+	
 }
 
 function rateResource(i){
-	$.post("/resource/rate/", { rating: i, resource_id: {{ resource.id }} },
+	$.post("{% url 'orb_rate' %}", { rating: i, resource_id: {{ resource.id }} },
 	    function(data) {
 			USER_RATING = i;
 		});

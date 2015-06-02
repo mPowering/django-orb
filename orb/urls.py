@@ -40,7 +40,6 @@ urlpatterns = patterns('',
     url(r'^resource/reject/(?P<id>\d+)/$', 'orb.views.resource_reject_view', name="orb_resource_reject"),
     url(r'^resource/reject/(?P<id>\d+)/sent/$', 'orb.views.resource_reject_sent_view', name="orb_resource_reject_sent"),
     
-    url(r'^resource/rate/$', 'orb.views.resource_rate_view', name="orb_resource_rate"),
     url(r'^resource/guidelines/$', 'orb.views.resource_guidelines_view', name="orb_guidelines"),
     
     
@@ -54,5 +53,7 @@ urlpatterns = patterns('',
     url(r'^opensearch/$', TemplateView.as_view(template_name="search/opensearch.html"), name="orb_opensearch"),
     
     url(r'^api/', include('orb.api.urls')),
+    
+    url(r'^rate/', include('orb.rating.urls')),
     
 )
