@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% load i18n %}
+
+{% block extra_head_title %}{% trans 'Country Map' %}{% endblock extra_head_title %}
+
+{% block extra_scripts %}
+  <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+  <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
+  <!--[if lte IE 8]>
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v2/themes/css/cartodb.ie.css" />
+  <![endif]-->
+  <style>
+    #cartodb-map { width: 100%; height:500px; background: black;}
+  </style>
+
+  <script>
+    var map;
+    function init(){
+      // initiate leaflet map
+      map = new L.Map('cartodb-map', { 
+        center: [0,0],
+        zoom: 2
+      })
+      
+      var layerUrl = 'https://mpowering.cartodb.com/api/v2/viz/3f25287c-08b2-11e5-86ac-0e9d821ea90d/viz.json';
+      
+      L.tileLayer('http://a.basemaps.cartocdn.com/light_all//{z}/{x}/{y}.png', {
+    	  attribution: 'Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.'
+    	}).addTo(map);
+      
+      cartodb.createLayer(map, layerUrl)
+      .addTo(map)
+      .on('done', function(layer) {
+    	  var sublayer = layer.getSubLayer(0);
+          sublayer.infowindow.set('template', $('#infowindow_template').html());
+          sublayer.on('featureClick', function(e, latlng, pos, data) {
+              //alert("Hey! You clicked " + data.name);
+        });
+      }).on('error', function() {
+    	  console.log("some error occurred");
+      });
+    }
+  </script>
+
+	<script type="infowindow/html" id="infowindow_template">
+  		<div class="cartodb-popup">
+   			<a href="#close" class="cartodb-popup-close-button close">x</a>
+     		<div class="cartodb-popup-content-wrapper">
+       			<div class="cartodb-popup-header">
+         			<img style="width: 100%" src="http://cartodb.com/assets/logos/logos_full_cartodb_light.png"></src>
+       			</div>
+       			<div class="cartodb-popup-content">
+         			<!-- content.data contains the field info -->
+         			<h4>Country: </h4>
+         			<p>{{content.data.name}}</p>
+       			</div>
+     		</div>
+     		<div class="cartodb-popup-tip-container"></div>
+  		</div>
+	</script>
+{% endblock extra_scripts %}
+
+
+{% block extra_body %}onload='init()'{% endblock extra_body %}
+
+{% block content %}
+
+<h2>{% trans 'Country Map' %}</h2>
+
+<div id='cartodb-map'></div>
+
+{% endblock %}

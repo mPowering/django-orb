@@ -55,5 +55,6 @@ urlpatterns = patterns('',
     url(r'^api/', include('orb.api.urls')),
     
     url(r'^rate/', include('orb.rating.urls')),
+    url(r'^viz/', include('orb.viz.urls')),
     
 )
