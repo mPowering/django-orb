@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from orb.models import Category, Tag, Resource, ResourceURL
 from orb.models import ResourceFile, ResourceTag, UserProfile, ResourceCriteria
-from orb.models import ResourceTracker, SearchTracker, TagOwner, ResourceWorkflowTracker
+from orb.models import ResourceTracker, SearchTracker, TagOwner, ResourceWorkflowTracker, ResourceRating
 # Register your models here.
 
     
@@ -27,6 +27,9 @@ class ResourceFileAdmin(admin.ModelAdmin):
   
 class ResourceTagAdmin(admin.ModelAdmin):
     list_display = ('resource', 'tag')
+    
+class ResourceRatingAdmin(admin.ModelAdmin):
+    list_display = ('resource', 'rating', 'user', 'comments')
 
 class ResourceTrackerAdmin(admin.ModelAdmin):
     list_display = ('resource', 'user', 'access_date', 'ip', 'type')
@@ -60,3 +63,4 @@ admin.site.register(ResourceTracker, ResourceTrackerAdmin)
 admin.site.register(ResourceWorkflowTracker, ResourceWorkflowTrackerAdmin)
 admin.site.register(SearchTracker, SearchTrackerAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(ResourceRating, ResourceRatingAdmin)

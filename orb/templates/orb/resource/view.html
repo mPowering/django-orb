@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %} 
 {% load thumbnail %}
+{% load display_functions %}
 
 {% block extra_head_title %}{{ resource.title }}{% endblock extra_head_title %}
 
@@ -82,6 +83,23 @@ From:
 {% endfor %}
 </p>
 
+<p style="text-align:center">
+{% if resource.get_rating.rating and resource.get_rating.count >= ORB_RESOURCE_MIN_RATINGS  %}
+	
+	{% for i in "xxxxx"%}
+		{% if forloop.counter <= resource.get_rating.rating %}
+			<img src="{{ STATIC_URL }}orb/images/star-full-small.png"/>
+		{% else %}
+			<img src="{{ STATIC_URL }}orb/images/star-empty-small.png"/>
+		{% endif %}
+	{% endfor %}
+	({{ resource.get_rating.count }} users)
+{% elif resource.get_rating.count > 0 %}
+    {% trans 'Pending rating' %}
+{% else  %}
+	{% trans 'Not yet rated' %}
+{% endif %}
+</p>
 
 {% if resource.image %}
 	{% thumbnail resource.image "250x180" format="PNG" padding=True as im %}

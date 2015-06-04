@@ -2,7 +2,17 @@
 {% load thumbnail %}
 <div class="row"> 
 	<div class="col-md-8">
-		<a href="{% url 'orb_resource' resource.slug %}"><h4>{{ resource.title }}</h4></a>
+		<h4><a href="{% url 'orb_resource' resource.slug %}">{{ resource.title }}</a></h4>
+		
+		{% if resource.get_rating.rating and resource.get_rating.count >= ORB_RESOURCE_MIN_RATINGS %}
+			<p>{% for i in "xxxxx"%}
+				{% if forloop.counter <= resource.get_rating.rating %}
+					<img src="{{ STATIC_URL }}orb/images/star-full-small.png"/>
+				{% else %}
+					<img src="{{ STATIC_URL }}orb/images/star-empty-small.png"/>
+				{% endif %}
+			{% endfor %}</p>
+		{% endif %}
 		
 		<h4>
 		{% for t in resource.get_type_tags %}

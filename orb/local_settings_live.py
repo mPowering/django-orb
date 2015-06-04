@@ -17,6 +17,8 @@ def modify(settings):
     
     settings['ORB_RESOURCE_DESCRIPTION_MAX_WORDS'] = 150
     
+    settings['ORB_RESOURCE_MIN_RATINGS'] = 5
+    
     settings['TASK_UPLOAD_FILE_TYPE_BLACKLIST'] = [u'application/vnd.android']
     
     settings['TASK_UPLOAD_FILE_MAX_SIZE'] = "5242880"

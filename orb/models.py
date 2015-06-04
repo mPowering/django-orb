@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.core import urlresolvers
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Avg, Count
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -128,6 +129,13 @@ class Resource (models.Model):
         tags = Tag.objects.filter(resourcetag__resource=self, category__slug='health-domain')
         return tags
   
+    def get_rating(self):
+        rating = ResourceRating.objects.filter(resource=self).aggregate(rating=Avg('rating'),count=Count('rating'))
+        if rating['rating']:
+            rating['rating'] = round(rating['rating'],0)
+        return rating
+
+        
 class ResourceWorkflowTracker(models.Model):
     REJECTED = 'rejected'
     PENDING_CRT = 'pending_crt'
