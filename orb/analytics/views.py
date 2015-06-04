@@ -277,7 +277,7 @@ def tag_download(request,id, year, month):
     return response
 
 def mailing_list_view(request):
-    if not is_tag_owner(request, id):
+    if not request.user.is_staff:
         return HttpResponse(status=401,content="Not Authorized")
     
     users = User.objects.filter(userprofile__mailing=True).order_by('first_name')
@@ -293,12 +293,17 @@ def mailing_list_view(request):
             role = u.userprofile.role.name
         else:
             role = u.userprofile.role_other
+            
+        if u.userprofile.organisation:
+            org = u.userprofile.organisation.name
+        else:
+            org = ''
         data.append(
                     (
                         u.date_joined.strftime('%Y-%m-%d %H:%M:%S'), 
                         u.first_name, 
                         u.last_name, 
-                        u.userprofile.organisation.name, 
+                        org, 
                         role,
                         u.email    
                     )
