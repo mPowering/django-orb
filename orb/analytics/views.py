@@ -25,7 +25,7 @@ def home_view(request):
     end_date = timezone.now()
     pending_crt_resources = Resource.objects.filter(status=Resource.PENDING_CRT).order_by('create_date')
     pending_mep_resources = Resource.objects.filter(status=Resource.PENDING_MRT).order_by('create_date')
-    popular_searches = SearchTracker.objects.filter(access_date__gte=start_date).values('query').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
+    popular_searches = SearchTracker.objects.filter(access_date__gte=start_date).exclude(query='').values('query').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
     popular_resources = ResourceTracker.objects.filter(access_date__gte=start_date).exclude(resource=None).values('resource','resource__slug','resource__title').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
     organisations = Tag.objects.filter(category__slug='organisation',resourcetag__isnull=False).annotate(total_resources=Count('resourcetag__id')).order_by('name')
     
@@ -277,7 +277,7 @@ def tag_download(request,id, year, month):
     return response
 
 def mailing_list_view(request):
-    if not is_tag_owner(request, id):
+    if not request.user.is_staff:
         return HttpResponse(status=401,content="Not Authorized")
     
     users = User.objects.filter(userprofile__mailing=True).order_by('first_name')
@@ -293,12 +293,17 @@ def mailing_list_view(request):
             role = u.userprofile.role.name
         else:
             role = u.userprofile.role_other
+            
+        if u.userprofile.organisation:
+            org = u.userprofile.organisation.name
+        else:
+            org = ''
         data.append(
                     (
                         u.date_joined.strftime('%Y-%m-%d %H:%M:%S'), 
                         u.first_name, 
                         u.last_name, 
-                        u.userprofile.organisation.name, 
+                        org, 
                         role,
                         u.email    
                     )
