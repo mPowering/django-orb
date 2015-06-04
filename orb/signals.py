@@ -160,6 +160,9 @@ def search_callback(sender, **kwargs):
     if is_search_crawler(request.META.get('HTTP_USER_AGENT','unknown')):
         return 
     
+    if query is None or query == '':
+        return
+    
     extra_data = {
                   'page': page
                   }
