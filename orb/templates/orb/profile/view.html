@@ -14,18 +14,20 @@
 	</div>
 </div>
 
-<div class="row profile">
-	<div class="col-md-2 col-xs-3">
-		<strong>{% trans 'Role' %}</strong>
-	</div><!-- 
-	--><div class="col-md-8 col-xs-8" >
-		{% if user.userprofile.role %}
-			{{ user.userprofile.role }}
-		{% else %}
-			{{ user.userprofile.role_other }}
-		{% endif %}
+{% if user.userprofile.role  or user.userprofile.role_other %}
+	<div class="row profile">
+		<div class="col-md-2 col-xs-3">
+			<strong>{% trans 'Role' %}</strong>
+		</div><!-- 
+		--><div class="col-md-8 col-xs-8" >
+			{% if user.userprofile.role %}
+				{{ user.userprofile.role }}
+			{% else %}
+				{{ user.userprofile.role_other }}
+			{% endif %}
+		</div>
 	</div>
-</div>
+{% endif %}
 
 {% if user.userprofile.organisation %}
 	<div class="row profile">
@@ -66,7 +68,7 @@
 			<strong>{% trans 'Twitter' %}</strong>
 		</div><!-- 
 		--><div class="col-md-8 col-xs-8" >
-				{{ user.userprofile.twitter }}
+				<a href="{{ user.userprofile.get_twitter_url }}">{{ user.userprofile.twitter }}</a>
 		</div>
 	</div>
 {% endif %}

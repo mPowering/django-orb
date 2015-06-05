@@ -345,6 +345,12 @@ class UserProfile (models.Model):
     mailing = models.BooleanField(default=False, blank=False)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+    
+    def get_twitter_url(self):
+        if self.twitter is not None:
+            return "https://twitter.com/" + self.twitter.replace('@','')
+        else:
+            return None    
         
 class ResourceTracker(models.Model):
     VIEW = 'view'
