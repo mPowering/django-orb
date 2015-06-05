@@ -8,6 +8,7 @@ v1.0.1
 * 294: Add total countries to analytics - http://github.com/mpowering/django-orb/issues/issue/294
 * 298: Error when getting mailing list - http://github.com/mpowering/django-orb/issues/issue/298
 * 297: Blank searches being recorded? - http://github.com/mpowering/django-orb/issues/issue/297
+* 302: Memory Error for large file downloads - http://github.com/mpowering/django-orb/issues/issue/302
 
 28 May 2015
 ------------
