@@ -332,10 +332,13 @@ class UserProfile (models.Model):
     user = models.OneToOneField(User)
     about = models.TextField(blank=True, null=True, default=None)
     job_title = models.TextField(blank=True, null=True, default=None)
+    
     organisation = models.ForeignKey(Tag, related_name='organisation', blank=True, null=True, default=None)
     role = models.ForeignKey(Tag, related_name='role', blank=True, null=True, default=None)
     role_other = models.TextField(blank=True, null=True, default=None)
     phone_number = models.TextField(blank=True, null=True, default=None)
+    website = models.CharField(blank=True, null=True, max_length=100, default=None)
+    twitter = models.CharField(blank=True, null=True, max_length=100, default=None)
     api_access = models.BooleanField(default=False, blank=False)
     gender = models.CharField(max_length=50,choices=GENDER, default='none')
     age_range = models.CharField(max_length=50,choices=AGE_RANGE, default='none')

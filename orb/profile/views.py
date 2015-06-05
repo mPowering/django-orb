@@ -1,6 +1,8 @@
 # orb/profile/views.py
 import datetime
+import hashlib
 import json
+import urllib
 
 from django.conf import settings
 from django.contrib import messages
@@ -172,7 +174,10 @@ def edit(request):
             user_profile.role_other = form.cleaned_data.get("role_other")
             user_profile.gender = form.cleaned_data.get("gender")
             user_profile.age_range = form.cleaned_data.get("age_range")
-            user_profile.mailing= form.cleaned_data.get("mailing")
+            user_profile.mailing = form.cleaned_data.get("mailing")
+            user_profile.website = form.cleaned_data.get("website")
+            user_profile.twitter = form.cleaned_data.get("twitter")
+            user_profile.about = form.cleaned_data.get("about")
             user_profile.save()
             messages.success(request, _(u"Profile updated"))
             
@@ -202,11 +207,29 @@ def edit(request):
                                     'role_other': user_profile.role_other,
                                     'age_range': user_profile.age_range,
                                     'gender': user_profile.gender,
-                                    'mailing': user_profile.mailing })
+                                    'mailing': user_profile.mailing,
+                                    'about': user_profile.about,
+                                    'website': user_profile.website,
+                                    'twitter': user_profile.twitter })
         build_form_options(form, blank_options=False)
         
     return render(request, 'orb/profile/profile.html', {'form': form,})
 
+def view_profile(request,id):
+    try:
+        user = User.objects.get(pk=id)
+    except User.DoesNotExist:
+        raise Http404()
+    
+    gravatar_url = "https://www.gravatar.com/avatar.php?"
+    gravatar_url += urllib.urlencode({
+        'gravatar_id':hashlib.md5(user.email).hexdigest(),
+        'size':64
+    })
+    
+    return render(request, 'orb/profile/view.html', {'user': user, 'gravatar_url': gravatar_url })
+
+# Helper Methods
 def build_form_options(form, blank_options=True):
     # roles
     form.fields['role'].choices = [('0','--')]    

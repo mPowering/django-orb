@@ -337,3 +337,8 @@ a.named-anchor {
 .rating-star:hover {
 	cursor:pointer;
 }
+
+div.profile {
+	margin-bottom:10px;
+	
+}

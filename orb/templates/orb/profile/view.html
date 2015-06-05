@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block extra_head_title %}{{ user.first_name }} {{ user.last_name }} - {% trans 'profile' %}{% endblock extra_head_title %}
+
+
+{% block content %}
+
+<div class="row profile">
+	<div class="col-md-2 col-xs-3 vcenter">
+		<img src="{{ gravatar_url }}">
+	</div><!-- 
+	--><div class="col-md-8 col-xs-8 vcenter" >
+		<h2> {{ user.first_name }} {{ user.last_name }}</h2>
+	</div>
+</div>
+
+<div class="row profile">
+	<div class="col-md-2 col-xs-3">
+		<strong>{% trans 'Role' %}</strong>
+	</div><!-- 
+	--><div class="col-md-8 col-xs-8" >
+		{% if user.userprofile.role %}
+			{{ user.userprofile.role }}
+		{% else %}
+			{{ user.userprofile.role_other }}
+		{% endif %}
+	</div>
+</div>
+
+{% if user.userprofile.organisation %}
+	<div class="row profile">
+		<div class="col-md-2 col-xs-3">
+			<strong>{% trans 'Organisation' %}</strong>
+		</div><!-- 
+		--><div class="col-md-8 col-xs-8 vcenter" >
+				{{ user.userprofile.organisation.name }}
+		</div>
+	</div>
+{% endif %}
+
+{% if user.userprofile.about %}
+	<div class="row profile">
+		<div class="col-md-2 col-xs-3">
+			<strong>{% trans 'About' %}</strong>
+		</div><!-- 
+		--><div class="col-md-8 col-xs-8" >
+				{{ user.userprofile.about }}
+		</div>
+	</div>
+{% endif %}
+
+{% if user.userprofile.website %}
+	<div class="row profile">
+		<div class="col-md-2 col-xs-3">
+			<strong>{% trans 'Website' %}</strong>
+		</div><!-- 
+		--><div class="col-md-8 col-xs-8" >
+				<a href="{{ user.userprofile.website }}">{{ user.userprofile.website }}</a>
+		</div>
+	</div>
+{% endif %}
+
+{% if user.userprofile.twitter %}
+	<div class="row profile">
+		<div class="col-md-2 col-xs-3">
+			<strong>{% trans 'Twitter' %}</strong>
+		</div><!-- 
+		--><div class="col-md-8 col-xs-8" >
+				{{ user.userprofile.twitter }}
+		</div>
+	</div>
+{% endif %}
+
+{% endblock %}

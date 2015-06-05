@@ -12,4 +12,5 @@ urlpatterns = patterns('',
     url(r'^reset/$', 'orb.profile.views.reset', name="profile_reset"),
     url(r'^reset/sent/$', TemplateView.as_view(template_name="orb/profile/reset-sent.html"), name="profile_reset_sent"),
     url(r'^edit/$', 'orb.profile.views.edit', name="profile_edit"),
+    url(r'^view/(?P<id>\d+)/$', 'orb.profile.views.view_profile', name="profile_view"),
 )

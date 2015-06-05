@@ -244,6 +244,12 @@ class ProfileForm(forms.Form):
                         label=_(u"Please tick the box to subscribe to mPowering update emails"),            
                         required=False)
     
+    website = forms.CharField(max_length=100,
+                                 required=False)
+    twitter = forms.CharField(max_length=100,
+                                 required=False)
+    about = forms.CharField(widget=forms.Textarea, required=False)
+    
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)
         if len(args) == 1:
@@ -285,6 +291,9 @@ class ProfileForm(forms.Form):
                     'organisation',
                     'age_range',
                     'gender',
+                    'about',
+                    'website',
+                    'twitter',
                     'mailing',
                     Div(
                         HTML("""<h3>"""+_(u'Change password') + """</h3>"""),
