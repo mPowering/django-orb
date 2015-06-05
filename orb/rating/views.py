@@ -1,6 +1,6 @@
 # orb/rating/views.py
 
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 
 from orb.models import Resource, ResourceRating
 
@@ -14,10 +14,17 @@ def resource_rate_view(request):
         rating = request.POST.get('rating')
         #comment = request.POST.get('comment')
         
+        if resource_id is None or rating is None:
+            return HttpResponseBadRequest()
+        
+        rating = int(rating)
+        if rating > 5 or rating < 1: 
+            return HttpResponseBadRequest()
+        
         try:
-            resource = Resource.objects.get(pk=resource_id)
+            resource = Resource.objects.get(pk=resource_id, status=Resource.APPROVED)
         except Resource.DoesNotExist:
-            raise Http404()
+            return HttpResponseBadRequest()
         
         # check if an update or new rating
         try:
@@ -32,5 +39,5 @@ def resource_rate_view(request):
             rating_obj.save()
         return HttpResponse()
     else:
-        raise Http404()   
+        return HttpResponseBadRequest()   
     

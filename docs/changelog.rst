@@ -6,6 +6,7 @@ v1.1.0 - not yet released
 
 * 293: Add order by last updated to order options - http://github.com/mPowering/django-orb/issues/issue/293
 * 228: Allow ordering by rating - http://github.com/mpowering/django-orb/issues/issue/228
+* 296: Write unit tests for rating functionality - http://github.com/mpowering/django-orb/issues/issue/296
 
 v1.0.1
 ---------------------
