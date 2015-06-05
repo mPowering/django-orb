@@ -7,7 +7,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.db.models import Count, Max, Min, Q
+from django.db.models import Count, Max, Min, Q, Avg
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, render_to_response
 from django.shortcuts import get_object_or_404
@@ -59,15 +59,17 @@ def tag_view(request,tag_slug):
     CREATED = u'-create_date'
     TITLE = u'title'
     UPDATED = u'-update_date'
+    RATING = u'-rating'
     ORDER_OPTIONS = (
         (CREATED, _(u'Create date')),
         (TITLE, _(u'Title')),
+        (RATING, _(u'Rating')),
         (UPDATED, _(u'Update date')),
     )
     
     order_by = request.GET.get('order', CREATED)
     
-    data = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).order_by(order_by)
+    data = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).annotate(rating=Avg('resourcerating__rating')).order_by(order_by)
     
     paginator = Paginator(data, 20)
     # Make sure page request is an int. If not, deliver first page.

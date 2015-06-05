@@ -415,4 +415,3 @@ class ResourceRating(models.Model):
     rating = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
     comments = models.TextField(blank=True, null=True, default=None)
     
-    
