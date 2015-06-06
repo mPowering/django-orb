@@ -8,6 +8,7 @@ v1.1.0 - not yet released
 * 228: Allow ordering by rating - http://github.com/mpowering/django-orb/issues/issue/228
 * 296: Write unit tests for rating functionality - http://github.com/mpowering/django-orb/issues/issue/296
 * 279: Create admin page to get email addresses for those who have signed up to newsletter - http://github.com/mpowering/django-orb/issues/issue/279
+* 271: Add popular tags to analytics main page - http://github.com/mpowering/django-orb/issues/issue/271
 
 v1.0.1
 ---------------------

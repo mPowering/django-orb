@@ -182,6 +182,14 @@
 {% endfor %}
 </ul>
 
+<a name="pt" class="named-anchor"></a>
+<h3>{% trans 'Popular Tags (last month)' %}</h3>
+<ul>
+{% for pt in popular_tags %}
+	<li><a href="{% url 'orb_tags' pt.tag__slug %}">{{ pt.tag__name }} ({{ pt.total_hits }})</a></li>
+{% endfor %}
+</ul>
+
 <a name="pr" class="named-anchor"></a>
 <h3>{% trans 'Popular Resources (last month)' %}</h3>
 <ul>
