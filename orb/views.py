@@ -384,7 +384,8 @@ def resource_edit_view(request,resource_id):
                 
             # update image
             image_clear = form.cleaned_data.get("image-clear")
-        
+            print image_clear
+            
             if image_clear:
                 resource.image = None
                 resource.save()

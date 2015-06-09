@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 {% load crispy_forms_tags %}
 {% block extra_head_title %}{% trans 'Your Profile' %}{% endblock extra_head_title %}
 
@@ -7,7 +8,16 @@
 
 <h2>{% trans 'Your Profile' %}</h2>
 
+
+
 {% include "includes/messages.html" %}	
+
+{% if user.userprofile.photo %}
+	{% thumbnail user.userprofile.photo "80x80" format="PNG" padding=True as im %}
+		<div class="col-lg-2">&nbsp;</div>
+		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail profile-image" >
+	{% endthumbnail %}	
+{% endif %}
 
 {% crispy form %}
 

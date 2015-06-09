@@ -11,6 +11,7 @@ v1.1.0 - not yet released
 * 271: Add popular tags to analytics main page - http://github.com/mpowering/django-orb/issues/issue/271
 * 13: Add option to view users - http://github.com/mpowering/django-orb/issues/issue/13
 * 149: Option to show analytics for an individual resource - http://github.com/mpowering/django-orb/issues/issue/149
+* 304: Allow users to upload profile image - http://github.com/mpowering/django-orb/issues/issue/304
 
 v1.0.1
 ---------------------

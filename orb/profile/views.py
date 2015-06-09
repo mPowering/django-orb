@@ -133,7 +133,7 @@ def reset(request):
 def edit(request):
     key = ApiKey.objects.get(user__id = request.user.id)
     if request.method == 'POST':
-        form = ProfileForm(request.POST)
+        form = ProfileForm(request.POST, request.FILES)
         build_form_options(form, blank_options=False)
         if form.is_valid():
             # update basic data
@@ -145,12 +145,14 @@ def edit(request):
             request.user.last_name = last_name
             request.user.save()
             
-            
             try:
                 user_profile = UserProfile.objects.get(user=request.user)
             except UserProfile.DoesNotExist:
                 user_profile = UserProfile()
                 user_profile.user = request.user
+            
+            if request.FILES.has_key('photo'):
+                user_profile.photo = request.FILES["photo"]
               
             if form.cleaned_data.get("organisation").strip() != '':  
                 category = Category.objects.get(slug='organisation')
@@ -179,6 +181,7 @@ def edit(request):
             user_profile.twitter = form.cleaned_data.get("twitter")
             user_profile.about = form.cleaned_data.get("about")
             user_profile.save()
+            
             messages.success(request, _(u"Profile updated"))
             
             # if password should be changed
@@ -210,7 +213,8 @@ def edit(request):
                                     'mailing': user_profile.mailing,
                                     'about': user_profile.about,
                                     'website': user_profile.website,
-                                    'twitter': user_profile.twitter })
+                                    'twitter': user_profile.twitter,
+                                    'photo': user_profile.photo })
         build_form_options(form, blank_options=False)
         
     return render(request, 'orb/profile/profile.html', {'form': form,})

@@ -145,6 +145,10 @@ class ResourceForm(forms.Form):
         file = self.cleaned_data.get("file")
         url = self.cleaned_data.get("url")
         file_clear = self.cleaned_data.get("file-clear")
+        image_clear = self.cleaned_data.get("image-clear")
+        print "-----"
+        print image_clear
+        print "-----"
         
         if self._errors:
             raise forms.ValidationError( _(u"Please correct the errors below and resubmit the form."))

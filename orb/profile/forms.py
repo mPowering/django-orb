@@ -224,6 +224,9 @@ class ProfileForm(forms.Form):
     last_name = forms.CharField(max_length=100,
                                 min_length=2,
                                 required=True)
+    photo = forms.ImageField(  
+                required=False,
+                error_messages={},)
     role = forms.ChoiceField(
                         widget=forms.Select,
                         required=False,
@@ -251,81 +254,42 @@ class ProfileForm(forms.Form):
     about = forms.CharField(widget=forms.Textarea, required=False)
     
     def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
         super(ProfileForm, self).__init__(*args, **kwargs)
-        if len(args) == 1:
-            email = args[0]['email']
-            username = args[0]['username']
-        else:
-            kw = kwargs.pop('initial')
-            email = kw['email'] 
-            username = kw['username'] 
         self.helper = FormHelper()
         self.helper.form_action = reverse('profile_edit')
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-4'
-        if settings.SHOW_GRAVATARS:
-            gravatar_url = "https://www.gravatar.com/avatar.php?"
-            gravatar_url += urllib.urlencode({
-                'gravatar_id':hashlib.md5(email).hexdigest(),
-                'size':64
-            })
-            self.helper.layout = Layout(
-                    Div(
-                        HTML("""<label class="control-label col-lg-2">"""+_(u'Photo') + """</label>"""),
-                        Div(
-                            HTML(mark_safe('<img src="{0}" alt="gravatar for {1}" class="gravatar" width="{2}" height="{2}"/>'.format(gravatar_url, username, 64))),
-                            HTML("""<br/>"""),
-                            HTML("""<a href="https://www.gravatar.com">"""+_(u'Update your gravatar')+"""</a>"""),
-                            css_class="col-lg-4",
-                        ),
-                        css_class="form-group",
-                        ),
-                    
-                    'username',
-                    'email',
-                    'first_name',
-                    'last_name',
-                    'role',
-                    'role_other',
-                    'organisation',
-                    'age_range',
-                    'gender',
-                    'about',
-                    'website',
-                    'twitter',
-                    'mailing',
-                    Div(
-                        HTML("""<h3>"""+_(u'Change password') + """</h3>"""),
-                        ),
-                    'password',
-                    'password_again',
-                    Div(
-                        HTML("""<h3>"""+_(u'API Key') + """</h3>"""),
-                        ),
-                    'api_key',
-                    Div(
-                       Submit('submit', _(u'Save'), css_class='btn btn-default'),
-                       css_class='col-lg-offset-2 col-lg-4',
+        self.helper.layout = Layout(
+                'photo',
+                'username',
+                'email',
+                'first_name',
+                'last_name',
+                'role',
+                'role_other',
+                'organisation',
+                'age_range',
+                'gender',
+                'about',
+                'website',
+                'twitter',
+                'mailing',
+                Div(
+                    HTML("""<h3>"""+_(u'Change password') + """</h3>"""),
                     ),
-                )
-        else:
-            self.helper.layout = Layout(
-                    'api_key',
-                    'username',
-                    'email',
-                    'first_name',
-                    'last_name',
-                    Div(
-                        HTML("""<h3>"""+_(u'Change password') + """</h3>"""),
-                        ),
-                    'password',
-                    'password_again',
-                    Div(
-                       Submit('submit', _(u'Save'), css_class='btn btn-default'),
-                       css_class='col-lg-offset-2 col-lg-4',
+                'password',
+                'password_again',
+                Div(
+                    HTML("""<h3>"""+_(u'API Key') + """</h3>"""),
                     ),
-                )      
+                'api_key',
+                Div(
+                   Submit('submit', _(u'Save'), css_class='btn btn-default'),
+                   css_class='col-lg-offset-2 col-lg-4',
+                ),
+            )
 
         
     def clean(self):

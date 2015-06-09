@@ -1,13 +1,18 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load thumbnail %}
 {% block extra_head_title %}{{ user.first_name }} {{ user.last_name }} - {% trans 'profile' %}{% endblock extra_head_title %}
 
 
 {% block content %}
 
 <div class="row profile">
-	<div class="col-md-2 col-xs-3 vcenter">
-		<img src="{{ gravatar_url }}">
+	<div class="col-lg-2 vcenter">
+		{% if user.userprofile.photo %}
+			{% thumbnail user.userprofile.photo "80x80" format="PNG" padding=True as im %}
+				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail profile-image" >
+			{% endthumbnail %}	
+		{% endif %}
 	</div><!-- 
 	--><div class="col-md-8 col-xs-8 vcenter" >
 		<h2> {{ user.first_name }} {{ user.last_name }}</h2>
@@ -16,7 +21,7 @@
 
 {% if user.userprofile.role  or user.userprofile.role_other %}
 	<div class="row profile">
-		<div class="col-md-2 col-xs-3">
+		<div class="col-lg-2">
 			<strong>{% trans 'Role' %}</strong>
 		</div><!-- 
 		--><div class="col-md-8 col-xs-8" >
@@ -31,7 +36,7 @@
 
 {% if user.userprofile.organisation %}
 	<div class="row profile">
-		<div class="col-md-2 col-xs-3">
+		<div class="col-lg-2">
 			<strong>{% trans 'Organisation' %}</strong>
 		</div><!-- 
 		--><div class="col-md-8 col-xs-8 vcenter" >
@@ -42,7 +47,7 @@
 
 {% if user.userprofile.about %}
 	<div class="row profile">
-		<div class="col-md-2 col-xs-3">
+		<div class="col-lg-2">
 			<strong>{% trans 'About' %}</strong>
 		</div><!-- 
 		--><div class="col-md-8 col-xs-8" >
@@ -53,7 +58,7 @@
 
 {% if user.userprofile.website %}
 	<div class="row profile">
-		<div class="col-md-2 col-xs-3">
+		<div class="col-lg-2">
 			<strong>{% trans 'Website' %}</strong>
 		</div><!-- 
 		--><div class="col-md-8 col-xs-8" >
@@ -64,7 +69,7 @@
 
 {% if user.userprofile.twitter %}
 	<div class="row profile">
-		<div class="col-md-2 col-xs-3">
+		<div class="col-lg-2">
 			<strong>{% trans 'Twitter' %}</strong>
 		</div><!-- 
 		--><div class="col-md-8 col-xs-8" >
