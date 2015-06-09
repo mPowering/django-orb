@@ -261,8 +261,8 @@ From:
 {% endif %}
 
 <hr/>
-<small>Resource uploaded by {{ resource.create_user.first_name }} {{ resource.create_user.last_name }} ({{ resource.create_date }})
-and last updated by {{ resource.update_user.first_name }} {{ resource.update_user.last_name }} ({{ resource.update_date }})</small>
+<small>Resource uploaded by <a href="{% url 'profile_view' resource.create_user.id %}">{{ resource.create_user.first_name }} {{ resource.create_user.last_name }}</a> ({{ resource.create_date }})
+and last updated by <a href="{% url 'profile_view' resource.update_user.id %}">{{ resource.update_user.first_name }} {{ resource.update_user.last_name }}</a> ({{ resource.update_date }})</small>
 
 <hr/>
 <p>Resource viewed {{ resource.get_no_hits }} times </p>
