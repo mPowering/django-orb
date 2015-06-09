@@ -10,6 +10,7 @@ v1.1.0 - not yet released
 * 279: Create admin page to get email addresses for those who have signed up to newsletter - http://github.com/mpowering/django-orb/issues/issue/279
 * 271: Add popular tags to analytics main page - http://github.com/mpowering/django-orb/issues/issue/271
 * 13: Add option to view users - http://github.com/mpowering/django-orb/issues/issue/13
+* 149: Option to show analytics for an individual resource - http://github.com/mpowering/django-orb/issues/issue/149
 
 v1.0.1
 ---------------------

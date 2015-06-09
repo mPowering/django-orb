@@ -26,7 +26,7 @@ def home_view(request):
     pending_crt_resources = Resource.objects.filter(status=Resource.PENDING_CRT).order_by('create_date')
     pending_mep_resources = Resource.objects.filter(status=Resource.PENDING_MRT).order_by('create_date')
     popular_searches = SearchTracker.objects.filter(access_date__gte=start_date).exclude(query='').values('query').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
-    popular_resources = ResourceTracker.objects.filter(access_date__gte=start_date).exclude(resource=None).values('resource','resource__slug','resource__title').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
+    popular_resources = ResourceTracker.objects.filter(access_date__gte=start_date).exclude(resource=None).values('resource','resource__slug','resource__title','resource__id').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
     popular_tags = TagTracker.objects.filter(access_date__gte=start_date).values('tag','tag__slug','tag__name').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
     organisations = Tag.objects.filter(category__slug='organisation',resourcetag__isnull=False).annotate(total_resources=Count('resourcetag__id')).order_by('name')
     
@@ -316,7 +316,60 @@ def mailing_list_view(request):
     response['Content-Disposition'] = "attachment; filename=orb-mailing-list-" + timezone.now().strftime('%Y-%m-%d') +".xls"
 
     return response
+ 
+def resource_view(request,id):
+    if not request.user.is_staff:
+        return HttpResponse(status=401,content="Not Authorized")
     
+    resource = Resource.objects.get(pk=id) 
+    
+    start_date = timezone.now() - datetime.timedelta(days=31)
+    end_date = timezone.now()
+    
+    # Activity Graph
+    recent_activity = []
+    no_days = (end_date-start_date).days + 1
+    for i in range(0,no_days,+1):
+        temp = start_date + datetime.timedelta(days=i)
+        day = temp.strftime("%d")
+        month = temp.strftime("%m")
+        year = temp.strftime("%Y")
+        r_trackers = ResourceTracker.objects.filter(access_date__day=day,access_date__month=month,access_date__year=year, resource=resource)
+        count_activity = {'resource':0, 'resource_file':0, 'resource_url':0, 'total':0}
+        for r in r_trackers:
+            count_activity['total']+=1
+            if r.resource_file:
+                count_activity['resource_file']+=1
+            elif r.resource_url:
+                count_activity['resource_url']+=1
+            else:
+                count_activity['resource']+=1
+            
+        recent_activity.append([temp.strftime("%d %b %y"),count_activity])
+    
+    
+    # Activity detail
+    trackers = ResourceTracker.objects.filter(access_date__gte=start_date,resource=resource).order_by('-access_date')
+    
+    paginator = Paginator(trackers, 20)
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+    
+    try:
+        trackers = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        trackers = paginator.page(paginator.num_pages)
+    
+    return render_to_response('orb/analytics/resource.html',
+                              { 'resource': resource,
+                               'recent_activity': recent_activity,
+                               'page': trackers,
+                               },
+                              context_instance=RequestContext(request))
+       
 # Helper functions
 def is_tag_owner(request,id):
     if not request.user.is_authenticated:

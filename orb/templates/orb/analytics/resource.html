@@ -1,0 +1,74 @@
+{% extends "base.html" %} {% load i18n %}
+
+{% block extra_head_title %}{{ tag.name }} - {% trans 'Analytics' %}{% endblock extra_head_title %}
+
+{% block extra_scripts %}
+	<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+	<script type="text/javascript">
+	
+	// Load the Visualization API and the piechart package.
+	google.load('visualization', '1.0', {'packages':['corechart']});
+
+	// Set a callback to run when the Google Visualization API is loaded.
+	google.setOnLoadCallback(drawChart);
+	function drawChart() {
+
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', "{% trans 'Date' %}");
+		data.addColumn('number', "{% trans 'Total' %}");
+		data.addColumn('number', "{% trans 'Resource Views' %}");
+		data.addColumn('number', "{% trans 'Resource File Views' %}");
+		data.addColumn('number', "{% trans 'Resource URL Views' %}");
+		data.addRows( {{ recent_activity|length }} );
+		
+		{% for date,activity in recent_activity %}
+			data.setValue({{ forloop.counter0 }},0,'{{ date }}');
+			data.setValue({{ forloop.counter0 }},1,{{ activity.total }});
+			data.setValue({{ forloop.counter0 }},2,{{ activity.resource }});
+			data.setValue({{ forloop.counter0 }},3,{{ activity.resource_file }});
+			data.setValue({{ forloop.counter0 }},4,{{ activity.resource_url }});
+		{% endfor %}
+
+        var chart = new google.visualization.LineChart(document.getElementById('activity_chart_div'));
+        chart.draw(data, {	width: "100%", 
+                			height: 400,
+                			vAxis: {title: "{% trans 'Activity' %}"},
+                			pointSize:5,
+                			chartArea:{left:50,top:50,width:"70%",height:"70%"},
+                			backgroundColor: 'transparent',
+                			legend: {position:'right'}
+							});
+      }
+</script>
+{% endblock extra_scripts %}
+
+
+{% block content %}
+
+<h2>{% trans 'Analytics for:' %} {{ resource.title }}</h2>
+
+<h3><a name="graph" class="named-anchor"></a>{% trans 'Activity Graph (last month)' %}</h3>
+<div id="activity_chart_div" class="graph">{% trans 'graph_generating'%}</div>
+
+<h3><a name="detail" class="named-anchor"></a>{% trans 'Activity Detail (last month)' %}</h3>
+
+{% include "orb/includes/page_navigator.html" %}
+<table class="table table-condensed">
+    <thead>
+        <tr>
+			<th>{% trans 'Date' %}</th>
+            <th>{% trans 'Resource' %}</th>
+            <th>{% trans 'Location' %}</th>
+            <th>{% trans 'Resource File/URL' %}</th>
+        </tr>
+    </thead>
+    <tbody>
+		{% for tracker in page.object_list %}
+			{% include "orb/includes/resourcetracker_row.html" %}
+		{% endfor %}
+	</tbody>
+</table>
+
+{% include "orb/includes/page_navigator.html" %}
+
+{% endblock %}

@@ -194,7 +194,7 @@
 <h3>{% trans 'Popular Resources (last month)' %}</h3>
 <ul>
 {% for pr in popular_resources %}
-	<li><a href="{% url 'orb_resource' pr.resource__slug %}">{{ pr.resource__title }} ({{ pr.total_hits }})</a></li>
+	<li><a href="{% url 'orb_resource' pr.resource__slug %}">{{ pr.resource__title }}</a> ({{ pr.total_hits }} | <a href="{% url 'orb_analytics_resource' pr.resource__id %}">{% trans 'stats' %}</a>)</li>
 {% endfor %}
 </ul>
 
