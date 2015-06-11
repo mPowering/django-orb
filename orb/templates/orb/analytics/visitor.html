@@ -44,6 +44,10 @@
 				<td>{{ stats.searches }}</td>
 			</tr>
 			<tr>
+				<td>{% trans 'Resources submitted' %}</td>
+				<td>{{ stats.resources_submitted }}</td>
+			</tr>
+			<tr>
 				<td>{% blocktrans with archive_month|date:"M Y" as month %}Total approved resources (until end {{ month }}){% endblocktrans %}</td>
 				<td>{{ stats.resources }}</td>
 			</tr>

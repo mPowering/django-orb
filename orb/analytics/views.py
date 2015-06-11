@@ -15,6 +15,7 @@ from django.utils.translation import ugettext as _
 
 from orb.analytics.models import UserLocationVisualization
 from orb.models import Resource, SearchTracker, ResourceTracker, Tag, TagOwner, TagTracker
+from orb.views import resource_can_edit
 
 # Create your views here.
 
@@ -134,6 +135,8 @@ def visitor_view(request, year=None, month=None):
     last_day = datetime.datetime(int(analytics_year), int(analytics_month), 1, 23, 59, tzinfo=tz) + dateutil.relativedelta.relativedelta(day=1, months=+1, days=-1)
     stats['resources'] = Resource.objects.filter(create_date__lte=last_day,status=Resource.APPROVED).count()
 
+    stats['resources_submitted'] = Resource.objects.filter(create_date__month=analytics_month, create_date__year=analytics_year).count()
+    
     #searches
     stats['searches'] = SearchTracker.objects.filter(access_date__month=analytics_month, access_date__year=analytics_year).count()
     
@@ -318,7 +321,12 @@ def mailing_list_view(request):
     return response
  
 def resource_view(request,id):
-    if not request.user.is_staff:
+    try:
+        resource = Resource.objects.get(pk=id)
+    except Resource.DoesNotExist:
+        return Http404()
+    
+    if not resource_can_edit(resource, request.user):
         return HttpResponse(status=401,content="Not Authorized")
     
     resource = Resource.objects.get(pk=id) 
