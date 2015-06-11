@@ -194,6 +194,7 @@ def resource_create_view(request):
                 resource.study_time_unit = form.cleaned_data.get("study_time_unit")
             if request.FILES.has_key('image'):
                 resource.image = request.FILES["image"]
+            resource.attribution = form.cleaned_data.get("attribution")
             resource.save()
             
             # add organisation(s)/geography and other tags
@@ -380,6 +381,7 @@ def resource_edit_view(request,resource_id):
             if form.cleaned_data.get("study_time_number") and form.cleaned_data.get("study_time_unit"):
                 resource.study_time_number = form.cleaned_data.get("study_time_number")
                 resource.study_time_unit = form.cleaned_data.get("study_time_unit")
+            resource.attribution = form.cleaned_data.get("attribution")
             resource.save()
                 
             # update image
@@ -453,6 +455,7 @@ def resource_edit_view(request,resource_id):
         data['image'] = resource.image
         data['study_time_number'] = resource.study_time_number
         data['study_time_unit'] = resource.study_time_unit
+        data['attribution'] = resource.attribution
         
         files = ResourceFile.objects.filter(resource=resource)[:1]
         if files:

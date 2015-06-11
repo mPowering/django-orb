@@ -82,7 +82,12 @@ class ResourceForm(forms.Form):
                                         label="",
                                         widget=forms.Select(choices=Resource.STUDY_TIME_UNITS),
                                         required=False,)
-
+    attribution = forms.CharField(
+                widget=forms.Textarea(attrs={'rows':2,
+                                            'style':'resize:none;'}),
+                required=False,
+                help_text=_('Please enter any specific text you would like to be used for the attribution for this resource'),
+                )
     
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
@@ -130,6 +135,7 @@ class ResourceForm(forms.Form):
                 'device',
                 Row (HTML('<hr>')),
                 'license',
+                'attribution',
                 Row (HTML('<hr>')),
                 'other_tags',
                 Row (HTML('<hr>')),

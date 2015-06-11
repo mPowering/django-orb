@@ -251,12 +251,21 @@ From:
 		
 		<h4>{% trans 'License' %}</h4>
 		{% for l in resource.get_license %}
-			<a href="{% url 'orb_tags' l.slug %}">
-			{% thumbnail l.image "x60" padding=True format="PNG" upscale=False as im %}
-			<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-			{% endthumbnail %}
-			{{ l.name }}
-			</a>
+			<div class="row file-row">
+				<div class="col-md-2 col-xs-4 vcenter">
+					<a href="{% url 'orb_tags' l.slug %}">
+					{% thumbnail l.image "x30" padding=True format="PNG" upscale=False as im %}
+						<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+					{% endthumbnail %}
+					</a>
+				</div><!-- 
+			 --><div class="col-md-8 col-xs-8 vcenter">
+			 	<a href="{% url 'orb_tags' l.slug %}">{{ l.name }}</a>
+				{% if resource.attribution %}
+					<br/>{% trans 'Attribution' %}: {{ resource.attribution }}
+				{% endif %}
+				</div>
+			</div>
 		{% endfor %}
 {% endif %}
 
