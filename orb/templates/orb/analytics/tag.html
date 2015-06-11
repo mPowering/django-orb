@@ -103,7 +103,8 @@
 				<td>{{ r.title }}</td>
 				<td>{{ r.status }}</td>
 				<td><a href="{% url 'orb_resource' r.slug %}">{% trans 'View' %}</a>
-				 | <a href="{% url 'orb_resource_edit' r.id %}">{% trans 'Edit' %}</a></td>
+				 | <a href="{% url 'orb_resource_edit' r.id %}">{% trans 'Edit' %}</a>
+				 | <a href="{% url 'orb_analytics_resource' r.id %}">{% trans 'Stats' %}</a></td>
 			</tr>
 	{% endfor %}
 		</tbody>
