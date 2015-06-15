@@ -33,14 +33,17 @@ class ProfilePageTest(TestCase):
         self.assertEqual(response.status_code, 200) 
         self.client.logout()
         
+        response = self.client.get(reverse('profile_register_thanks'))
+        self.assertEqual(response.status_code, 200)
         
-    '''
-    profile_register_thanks
-    logout
-    profile_reset
-    profile_reset_sent
-    profile_edit
-    '''
+        response = self.client.get(reverse('profile_logout'))
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client.get(reverse('profile_reset'))
+        self.assertEqual(response.status_code, 200)
+        
+        response = self.client.get(reverse('profile_reset_sent'))
+        self.assertEqual(response.status_code, 200)
          
     
 class RegisterTest(TestCase):
@@ -107,12 +110,24 @@ class PasswordUpdateTest(TestCase):
     def setUp(self):
         self.client = Client()
         
+    def test_update_password(self):
+        new_password= '123456'
+        self.client.login(username='standarduser', password='password')
+        data = {'password': new_password, 'password_again': new_password }
+        response = self.client.post(reverse('profile_edit'), data)
+        self.assertEqual(response.status_code, 200)
+        self.client.logout()
+        self.client.login(username='standarduser', password=new_password)
+        
+        
+        
 class ProfileUpdateTest(TestCase):
     fixtures = ['user.json', 'orb.json']
     
     def setUp(self):
         self.client = Client()
 
+    # check can't change profile of another user
 
 class PasswordResetTest(TestCase):
     fixtures = ['user.json', 'orb.json']
