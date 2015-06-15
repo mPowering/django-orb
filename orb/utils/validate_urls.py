@@ -15,19 +15,23 @@ def run():
     resource_urls = []
     
     urls = ResourceURL.objects.all()
-    urls = [{'url': 'http://globalhealthmedia.org/portfolio-items/como-o-cuando-referir-a-un-bebe-enfermo/?portfolioID=5626'}]
+    #urls = [{'url': 'http://globalhealthmedia.org/portfolio-items/como-o-cuando-referir-a-un-bebe-enfermo/?portfolioID=5626'}]
     for u in urls:
         time.sleep(1)
-        req = urllib2.Request(u['url'], headers={ 'User-Agent': 'ORB Link Validator', })
+        #req = urllib2.Request(u.url, headers={ 'User-Agent': 'ORB Link Validator', })
+        handler = urllib2.HTTPHandler()
+        opener = urllib2.build_opener(handler)
+        request = urllib2.Request(u.url )
+        request.add_header("User-Agent",'ORB Link Validator')
+        
         try:
-            response = urllib2.urlopen(req)
-            print "hlloe"
-        except:
+            connection = opener.open(request)
+        except urllib2.HTTPError,e:
+            connection = e
             resource_urls.append(u)
-            
             continue
 
-        print u['url'] + " : " + str(HTML_OK)
+        print u.url + " : " + str(connection.code)
   
     return
 

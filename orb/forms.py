@@ -30,7 +30,8 @@ class ResourceForm(forms.Form):
                 help_text=_('Please enter no more than %d words.' % settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS), )
     image = forms.ImageField(
                 required=False,
-                error_messages={},)
+                error_messages={},
+                widget=forms.ClearableFileInput)
     file = forms.FileField(
                 required=False,
                 error_messages={},)
@@ -148,11 +149,12 @@ class ResourceForm(forms.Form):
             )
         
     def clean(self):
-        file = self.cleaned_data.get("file")
-        url = self.cleaned_data.get("url")
         file_clear = self.cleaned_data.get("file-clear")
         image_clear = self.cleaned_data.get("image-clear")
-        print "-----"
+        file = self.cleaned_data.get("file")
+        url = self.cleaned_data.get("url")
+        
+        print "-----forms.py"
         print image_clear
         print "-----"
         
