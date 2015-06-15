@@ -15,10 +15,8 @@ def run():
     resource_urls = []
     
     urls = ResourceURL.objects.all()
-    #urls = [{'url': 'http://globalhealthmedia.org/portfolio-items/como-o-cuando-referir-a-un-bebe-enfermo/?portfolioID=5626'}]
     for u in urls:
         time.sleep(1)
-        #req = urllib2.Request(u.url, headers={ 'User-Agent': 'ORB Link Validator', })
         handler = urllib2.HTTPHandler()
         opener = urllib2.build_opener(handler)
         request = urllib2.Request(u.url )
@@ -26,28 +24,32 @@ def run():
         
         try:
             connection = opener.open(request)
-        except urllib2.HTTPError,e:
-            connection = e
+        except:
+            #connection = e
             resource_urls.append(u)
             continue
 
         print u.url + " : " + str(connection.code)
   
-    return
 
     tags = []
     
     urls = Tag.objects.exclude(external_url=None).exclude(external_url='')
     for u in urls:
         time.sleep(1)
-        req = urllib2.Request(u.external_url, headers={ 'User-Agent': 'Mozilla/5.0', })
+        
+        handler = urllib2.HTTPHandler()
+        opener = urllib2.build_opener(handler)
+        request = urllib2.Request(u.external_url )
+        request.add_header("User-Agent",'ORB Link Validator')
         try:
-            response = urllib2.urlopen(req)
-        except Exception, e:
+            connection = opener.open(request)
+        except urllib2.HTTPError,e:
+            connection = e
             tags.append(u)
             continue
 
-        print u.external_url + " : " + str(HTML_OK)
+        print u.external_url + " : " + str(connection.code)
     
     print resource_urls
     print tags
