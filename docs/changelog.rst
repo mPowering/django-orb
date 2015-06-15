@@ -15,6 +15,7 @@ v1.1.0 - not yet released
 * 287: New field for attribution for resources - http://github.com/mpowering/django-orb/issues/issue/287
 * 80: Provide analytics of resource usage/downloads to content providers - http://github.com/mpowering/django-orb/issues/issue/80
 * 270: Add no resources submitted during month on Visitor analytics page - http://github.com/mpowering/django-orb/issues/issue/270
+* 187: Check that invalid header error emails are suppressed - http://github.com/mpowering/django-orb/issues/issue/187
 
 v1.0.1
 ---------------------
