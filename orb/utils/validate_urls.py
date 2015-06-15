@@ -24,13 +24,11 @@ def run():
         
         try:
             connection = opener.open(request)
+            print u.url + " : " + str(connection.code)
         except:
-            #connection = e
+            print "ERROR connecting to " + u.url
+            print u.url + " : " + str(connection.code)
             resource_urls.append(u)
-            continue
-
-        print u.url + " : " + str(connection.code)
-  
 
     tags = []
     
@@ -44,12 +42,11 @@ def run():
         request.add_header("User-Agent",'ORB Link Validator')
         try:
             connection = opener.open(request)
-        except urllib2.HTTPError,e:
-            connection = e
+            print u.external_url + " : " + str(connection.code)
+        except:
+            print "ERROR connecting to " + u.url
+            print u.external_url + " : " + str(connection.code)
             tags.append(u)
-            continue
-
-        print u.external_url + " : " + str(connection.code)
     
     print resource_urls
     print tags
