@@ -44,15 +44,6 @@
 	<p>{% trans 'Email:' %} <a href="mailto:{{ tag.contact_email }}">{{ tag.contact_email }}</a></p>
 {% endif %}
 
-{% if child_tags %}
-	<div style="text-align:center">
-	{% for tag in child_tags %}
-		<a href="{% url 'orb_tags' tag.slug %}">{{ tag.name}} ({{ tag.resource_count }})</a>
-		{% if not forloop.last %} | {% endif %}
-	{% endfor %}
-	</div>
-{% endif %}
-
 {% if page.object_list %}
 
 	<div class="orderby">
