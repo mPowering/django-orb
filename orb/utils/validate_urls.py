@@ -15,17 +15,22 @@ def run():
     resource_urls = []
     
     urls = ResourceURL.objects.all()
+    urls = [{'url': 'http://globalhealthmedia.org/portfolio-items/como-o-cuando-referir-a-un-bebe-enfermo/?portfolioID=5626'}]
     for u in urls:
         time.sleep(1)
-        req = urllib2.Request(u.url, headers={ 'User-Agent': 'ORB Link Validator', })
+        req = urllib2.Request(u['url'], headers={ 'User-Agent': 'ORB Link Validator', })
         try:
             response = urllib2.urlopen(req)
+            print "hlloe"
         except:
             resource_urls.append(u)
+            
             continue
 
-        print u.url + " : " + str(HTML_OK)
+        print u['url'] + " : " + str(HTML_OK)
   
+    return
+
     tags = []
     
     urls = Tag.objects.exclude(external_url=None).exclude(external_url='')
