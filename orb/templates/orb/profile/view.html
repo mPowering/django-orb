@@ -8,12 +8,10 @@
 
 <div class="row profile">
 	<div class="col-lg-2 vcenter">
-		{{ viewuser.userprofile.photo }}
 		{% if viewuser.userprofile.photo %}
 			{% thumbnail viewuser.userprofile.photo "80x80" format="PNG" padding=True as im %}
 				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail profile-image" >
 			{% endthumbnail %}	
-			
 		{% endif %}
 	</div><!-- 
 	--><div class="col-md-8 col-xs-8 vcenter" >
