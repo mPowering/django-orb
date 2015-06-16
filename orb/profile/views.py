@@ -231,7 +231,7 @@ def view_profile(request,id):
         'size':64
     })
     
-    return render(request, 'orb/profile/view.html', {'user': user, 'gravatar_url': gravatar_url })
+    return render(request, 'orb/profile/view.html', {'viewuser': user, 'gravatar_url': gravatar_url })
 
 # Helper Methods
 def build_form_options(form, blank_options=True):
