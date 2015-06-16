@@ -385,10 +385,9 @@ def resource_edit_view(request,resource_id):
             resource.save()
                 
             # update image
-            image_clear = form.cleaned_data.get("image-clear")
-            print image_clear
+            image = form.cleaned_data.get("image")
             
-            if image_clear:
+            if image == False:
                 resource.image = None
                 resource.save()
             
@@ -397,8 +396,8 @@ def resource_edit_view(request,resource_id):
                 resource.save()
             
             # update file
-            file_clear = form.cleaned_data.get("file-clear")
-            if file_clear:
+            file = form.cleaned_data.get("file")
+            if file == False:
                 ResourceFile.objects.filter(resource=resource).delete()
                 
             if request.FILES.has_key('file'):

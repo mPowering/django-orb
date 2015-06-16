@@ -149,19 +149,13 @@ class ResourceForm(forms.Form):
             )
         
     def clean(self):
-        file_clear = self.cleaned_data.get("file-clear")
-        image_clear = self.cleaned_data.get("image-clear")
         file = self.cleaned_data.get("file")
         url = self.cleaned_data.get("url")
-        
-        print "-----forms.py"
-        print image_clear
-        print "-----"
         
         if self._errors:
             raise forms.ValidationError( _(u"Please correct the errors below and resubmit the form."))
         
-        if file is None and not url and file_clear:
+        if file == False and not url:
             raise forms.ValidationError( _(u"Please submit a file and/or a url for this resource"))
         
         if self.cleaned_data.get("study_time_number") is not None and self.cleaned_data.get("study_time_number") != 0 and self.cleaned_data.get("study_time_unit") is None:

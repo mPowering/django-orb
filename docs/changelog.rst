@@ -16,6 +16,7 @@ v1.1.0 - not yet released
 * 80: Provide analytics of resource usage/downloads to content providers - http://github.com/mpowering/django-orb/issues/issue/80
 * 270: Add no resources submitted during month on Visitor analytics page - http://github.com/mpowering/django-orb/issues/issue/270
 * 187: Check that invalid header error emails are suppressed - http://github.com/mpowering/django-orb/issues/issue/187
+* 291: Changing/removing/adding resource image not working when editing a resource - http://github.com/mpowering/django-orb/issues/issue/291
 
 v1.0.1
 ---------------------
