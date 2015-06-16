@@ -27,10 +27,10 @@ def run(cartodb_account, cartodb_key):
     data = u.read() 
     dataJSON = json.loads(data)
     print dataJSON
-    
+
     for c in countries:
         no_resources = Resource.objects.filter(resourcetag__tag=c,status=Resource.APPROVED).count()
-        sql = "UPDATE %s SET display=True, slug='%s', no_resources=%d WHERE name = '%s'" % (cartodb_table,c.slug,no_resources, c.name)
+        sql = "UPDATE %s SET display=True, slug='%s', no_country_resources=%d WHERE name = '%s'" % (cartodb_table,c.slug,no_resources, c.name)
         url = "http://%s.cartodb.com/api/v2/sql?q=%s&api_key=%s" % (cartodb_account,sql,cartodb_key)
         u = urllib.urlopen(url)
         data = u.read() 
@@ -38,6 +38,21 @@ def run(cartodb_account, cartodb_key):
         print c.name
         print dataJSON
         time.sleep(1)
+
+    cont_countries = Tag.objects.filter(category=category, parent_tag__isnull=False).distinct()
+    
+    for cc in cont_countries:
+        no_cont_resources = Resource.objects.filter(resourcetag__tag=cc.parent_tag,status=Resource.APPROVED).count()
+        if no_cont_resources != 0:
+            sql = "UPDATE %s SET display=True, slug='%s', no_continent_resources=%d, region_slug='%s' WHERE name = '%s'" % (cartodb_table, cc.slug, no_cont_resources, cc.parent_tag.slug, cc.name)
+            url = "http://%s.cartodb.com/api/v2/sql?q=%s&api_key=%s" % (cartodb_account,sql,cartodb_key)
+            u = urllib.urlopen(url)
+            data = u.read() 
+            dataJSON = json.loads(data)
+            print cc.name
+            print dataJSON
+            time.sleep(1)
+        
     
  
 if __name__ == "__main__":

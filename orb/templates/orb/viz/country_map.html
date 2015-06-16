@@ -38,6 +38,10 @@
           sublayer.infowindow.set('template', $('#infowindow_template').html());
           sublayer.on('featureClick', function(e, latlng, pos, data) {
         });
+          var sublayer1 = layer.getSubLayer(1);
+          sublayer1.infowindow.set('template', $('#infowindow_template_generic').html());
+          sublayer1.on('featureClick', function(e, latlng, pos, data) {
+        });
       }).on('error', function() {
     	  console.log("Error occurred");
       });
@@ -51,7 +55,22 @@
        			<div class="cartodb-popup-content">
          			<!-- content.data contains the field info -->
          			<h4>{% verbatim %}{{ content.data.name }}{% endverbatim %}</h4>
-         			<p><a href="/tag/view/{% verbatim %}{{ content.data.slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_resources }}{% endverbatim %} resources for {% verbatim %}{{ content.data.name }}{% endverbatim %}</a></p>
+         			<p><a href="/tag/view/{% verbatim %}{{ content.data.slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_country_resources }}{% endverbatim %} resources for {% verbatim %}{{ content.data.name }}{% endverbatim %}</a></p>
+					<p><a href="/tag/view/{% verbatim %}{{ content.data.region_slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_continent_resources }}{% endverbatim %} generic resources</a></p>
+       			</div>
+     		</div>
+     		<div class="cartodb-popup-tip-container"></div>
+  		</div>
+	</script>
+	
+	<script type="infowindow/html" id="infowindow_template_generic">
+  		<div class="cartodb-popup">
+   			<a href="#close" class="cartodb-popup-close-button close">x</a>
+     		<div class="cartodb-popup-content-wrapper">
+       			<div class="cartodb-popup-content">
+         			<!-- content.data contains the field info -->
+         			<h4>{% verbatim %}{{ content.data.name }}{% endverbatim %}</h4>
+         			<p><a href="/tag/view/{% verbatim %}{{ content.data.region_slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_continent_resources }}{% endverbatim %} generic resources</a></p>
        			</div>
      		</div>
      		<div class="cartodb-popup-tip-container"></div>
