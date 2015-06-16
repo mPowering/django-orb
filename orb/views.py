@@ -54,7 +54,7 @@ def partner_view(request):
 def tag_view(request,tag_slug):
     
     tag = get_object_or_404(Tag, slug=tag_slug)
-    child_tags = Tag.objects.filter(parent_tag=tag, resourcetag__resource__status=Resource.APPROVED).annotate(resource_count=Count('resourcetag__resource')).order_by('order_by')
+    child_tags = Tag.objects.filter(parent_tag=tag, resourcetag__resource__status=Resource.APPROVED).annotate(resource_count=Count('resourcetag__resource')).order_by('order_by','name')
     
     CREATED = u'-create_date'
     TITLE = u'title'
