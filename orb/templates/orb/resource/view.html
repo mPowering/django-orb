@@ -85,7 +85,6 @@ From:
 
 <p style="text-align:center">
 {% if resource.get_rating.rating and resource.get_rating.count >= ORB_RESOURCE_MIN_RATINGS  %}
-	
 	{% for i in "xxxxx"%}
 		{% if forloop.counter <= resource.get_rating.rating %}
 			<img src="{{ STATIC_URL }}orb/images/star-full-small.png"/>
@@ -137,7 +136,9 @@ From:
 {% if user.is_authenticated %}
 	{% include "orb/includes/user_rating.html" %}
 {% else %}
-	<p>Log in to rate this resource<p>
+	{% url 'profile_login' as login %}
+	{% url 'profile_register' as register %}
+	{% blocktrans %}Please <a href="{{ login }}">login</a> or <a href="{{ register }}">register</a> to rate this resource{% endblocktrans %}
 {% endif %}
 
 {% if resource.get_files %}
