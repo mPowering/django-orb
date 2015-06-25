@@ -19,7 +19,8 @@ def is_search_crawler(user_agent):
                'LinkedInBot',
                'baiduspider',
                'facebookexternalhit',
-               'spider'
+               'spider',
+               'domainreanimator.com'
                }
     for s in spiders:
         if s.lower() in user_agent.lower():

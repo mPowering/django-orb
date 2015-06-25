@@ -1,6 +1,7 @@
 '''
 Script to validate urls
 '''
+import datetime
 import django
 import time
 import urllib2 
@@ -13,15 +14,15 @@ def run():
     from orb.api.error_codes import HTML_OK
 
     resource_urls = []
+    today_number = datetime.datetime.today().weekday()
     
     urls = ResourceURL.objects.all()
     for u in urls:
-        time.sleep(1)
-        handler = urllib2.HTTPHandler()
-        opener = urllib2.build_opener(handler)
-        request = urllib2.Request(u.url )
-        request.add_header("User-Agent",'ORB Link Validator')
+        if u.id % 7 != today_number:
+            continue
         
+        time.sleep(10)
+        req = urllib2.Request(u.url, headers={ 'User-Agent': 'ORB Link Validator', })
         try:
             connection = opener.open(request)
             print u.url + " : " + str(connection.code)
@@ -34,12 +35,12 @@ def run():
     
     urls = Tag.objects.exclude(external_url=None).exclude(external_url='')
     for u in urls:
-        time.sleep(1)
+        if u.id % 7 != today_number:
+            continue
         
-        handler = urllib2.HTTPHandler()
-        opener = urllib2.build_opener(handler)
-        request = urllib2.Request(u.external_url )
-        request.add_header("User-Agent",'ORB Link Validator')
+        time.sleep(10)
+        req = urllib2.Request(u.external_url, headers={ 'User-Agent': 'Mozilla/5.0', })
+
         try:
             connection = opener.open(request)
             print u.external_url + " : " + str(connection.code)
