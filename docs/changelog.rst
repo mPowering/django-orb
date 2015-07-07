@@ -1,6 +1,7 @@
 Change log
 =====================================
 
+
 v1.1.0 - not yet released
 ------------------------------
 
@@ -18,6 +19,11 @@ v1.1.0 - not yet released
 * 187: Check that invalid header error emails are suppressed - http://github.com/mpowering/django-orb/issues/issue/187
 * 291: Changing/removing/adding resource image not working when editing a resource - http://github.com/mpowering/django-orb/issues/issue/291
 * 306: When on user profile view page - displays banner as if user is logged in - http://github.com/mpowering/django-orb/issues/issue/306
+
+v1.0.2
+-----------
+* 314: Allow CRT and MEP members to view resources even though not approved - http://github.com/mpowering/django-orb/issues/issue/314
+
 
 v1.0.1
 ---------------------

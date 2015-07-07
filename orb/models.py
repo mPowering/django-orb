@@ -346,6 +346,8 @@ class UserProfile (models.Model):
     mailing = models.BooleanField(default=False, blank=False)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+    crt_member = models.BooleanField(default=False, blank=False)
+    mep_member = models.BooleanField(default=False, blank=False)
     
     def get_twitter_url(self):
         if self.twitter is not None:
