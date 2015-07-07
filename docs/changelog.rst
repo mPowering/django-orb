@@ -1,6 +1,9 @@
 Change log
 =====================================
 
+v1.0.2
+-----------
+* 314: Allow CRT and MEP members to view resources even though not approved - http://github.com/mpowering/django-orb/issues/issue/314
 
 v1.0.1
 ---------------------
