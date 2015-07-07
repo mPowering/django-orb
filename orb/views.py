@@ -648,14 +648,14 @@ def advanced_search_form_set_choices(form):
     return form 
 
 def resource_can_view(resource, user):
-    if (user.is_staff or 
+    if resource.status == Resource.APPROVED:
+        return True
+    elif ((user.is_staff or 
         user == resource.create_user or 
-        user == resource.update_user or
-        user.userprofile.crt_member == True or
-        user.userprofile.mep_member == True):
-        return True
-    elif resource.status == Resource.APPROVED:
-        return True
+        user == resource.update_user) or
+        (user.userprofile and (user.userprofile.crt_member == True or
+        user.userprofile.mep_member == True))):
+        return True 
     else:
         return False
 
