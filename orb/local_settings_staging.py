@@ -10,6 +10,8 @@ def modify(settings):
     settings['CRISPY_TEMPLATE_PACK'] = 'bootstrap3'
     settings['LOGIN_URL'] = reverse_lazy('profile_login')
     
+    settings['STAGING'] = True
+    
     settings['SHOW_GRAVATARS'] = True
     settings['ORB_GOOGLE_ANALYTICS_CODE'] = 'UA-58593028-1'
     

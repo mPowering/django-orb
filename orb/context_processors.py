@@ -19,9 +19,16 @@ def get_menu(request):
     
 def get_version(request):
     version = "v" + str(orb.VERSION[0]) + "." + str(orb.VERSION[1]) + "." + str(orb.VERSION[2])
+    
+    if getattr(settings, 'STAGING', False):
+        staging = True
+    else:
+        staging = False
+        
     return {'version': version,
             'ORB_GOOGLE_ANALYTICS_CODE': settings.ORB_GOOGLE_ANALYTICS_CODE,
-            'ORB_RESOURCE_MIN_RATINGS': settings.ORB_RESOURCE_MIN_RATINGS }
+            'ORB_RESOURCE_MIN_RATINGS': settings.ORB_RESOURCE_MIN_RATINGS,
+            'STAGING': staging }
 
 def base_context_processor(request):
     return {
