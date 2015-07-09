@@ -578,7 +578,7 @@ def search_advanced_results_view(request):
     
     if form.is_valid():
         tag_ids = []
-        for name, slug  in settings.ADVANCED_SEARCH_CATEGORIES:
+        for name, slug in settings.ADVANCED_SEARCH_CATEGORIES:
             for i in form.cleaned_data.get(name):
                 tag_ids.append(i)
         resource_tags = ResourceTag.objects.filter(tag__pk__in=tag_ids).values('resource').annotate(dcount=Count('resource')).filter(dcount=len(tag_ids)).values('resource')
@@ -588,10 +588,12 @@ def search_advanced_results_view(request):
         elif q != '' and len(resource_tags)  > 0:
             search_results = SearchQuerySet().filter(content=q).models(Resource).values_list('pk', flat=True)
             results = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED).filter(pk__in=search_results)
-        elif len(resource_tags) == 0 : 
+        elif q != '' and len(resource_tags) == 0 : 
             search_results = SearchQuerySet().filter(content=q).models(Resource).values_list('pk', flat=True)
             results = Resource.objects.filter(pk__in=search_results, status=Resource.APPROVED)
-        
+        elif q == '' and len(resource_tags) == 0 : 
+            results = Resource.objects.none()
+            
         paginator = Paginator(results, 20)
         # Make sure page request is an int. If not, deliver first page.
         try:
