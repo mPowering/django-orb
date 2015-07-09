@@ -5,6 +5,7 @@ v1.0.2
 -----------
 * 314: Allow CRT and MEP members to view resources even though not approved - http://github.com/mpowering/django-orb/issues/issue/314
 * 312: Advanced search not working? - http://github.com/mpowering/django-orb/issues/issue/312
+* 315: Check up on bots to ignore - http://github.com/mpowering/django-orb/issues/issue/315
 
 v1.0.1
 ---------------------
