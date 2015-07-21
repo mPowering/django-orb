@@ -23,6 +23,8 @@ def is_search_crawler(user_agent):
                'domainreanimator.com',
                'seznambot',
                'ahrefsbot',
+               'spbot',
+               'wbsearchbot',
                }
     for s in spiders:
         if s.lower() in user_agent.lower():
