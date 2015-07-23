@@ -20,6 +20,7 @@ v1.1.0 - not yet released
 * 291: Changing/removing/adding resource image not working when editing a resource - http://github.com/mpowering/django-orb/issues/issue/291
 * 306: When on user profile view page - displays banner as if user is logged in - http://github.com/mpowering/django-orb/issues/issue/306
 * 308: How to distinguish between live and staging server? - http://github.com/mpowering/django-orb/issues/issue/308
+* 318: Error when accessing unapproved resource from direct link and not logged in - http://github.com/mpowering/django-orb/issues/issue/318
 
 v1.0.2
 -----------

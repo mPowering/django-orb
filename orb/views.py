@@ -652,6 +652,8 @@ def advanced_search_form_set_choices(form):
 def resource_can_view(resource, user):
     if resource.status == Resource.APPROVED:
         return True
+    elif user.is_anonymous():
+        return False
     elif ((user.is_staff or 
         user == resource.create_user or 
         user == resource.update_user) or
