@@ -22,6 +22,7 @@ v1.1.0 - not yet released
 * 308: How to distinguish between live and staging server? - http://github.com/mpowering/django-orb/issues/issue/308
 * 318: Error when accessing unapproved resource from direct link and not logged in - http://github.com/mpowering/django-orb/issues/issue/318
 * 33: Allow users to rate resources - http://github.com/mpowering/django-orb/issues/issue/33
+* 299: Update How to page - to include Moodle/courses - http://github.com/mpowering/django-orb/issues/issue/299
 
 v1.0.2
 -----------
