@@ -23,6 +23,7 @@ v1.1.0 - not yet released
 * 318: Error when accessing unapproved resource from direct link and not logged in - http://github.com/mpowering/django-orb/issues/issue/318
 * 33: Allow users to rate resources - http://github.com/mpowering/django-orb/issues/issue/33
 * 299: Update How to page - to include Moodle/courses - http://github.com/mpowering/django-orb/issues/issue/299
+* 316: On login page, add info about all being case sensitive - http://github.com/mpowering/django-orb/issues/issue/316
 
 v1.0.2
 -----------

@@ -16,10 +16,12 @@ from crispy_forms.layout import Button, Layout, Fieldset, ButtonHolder, Submit, 
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=30, 
-                               error_messages={'required': _(u'Please enter a username.')},)
+                               error_messages={'required': _(u'Please enter a username.')},
+                               )
     password = forms.CharField(widget=forms.PasswordInput,
                                 error_messages={'required': _(u'Please enter a password.'),},      
-                                required=True)
+                                required=True,
+                                help_text=_('Please note that your username and password are case-sensitive.'),)
     next = forms.CharField(widget=forms.HiddenInput())
     
     def __init__(self, *args, **kwargs):
