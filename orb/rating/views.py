@@ -1,5 +1,7 @@
 # orb/rating/views.py
+import json
 
+from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 
 from orb.models import Resource, ResourceRating
@@ -37,7 +39,11 @@ def resource_rate_view(request):
             rating_obj.rating = rating
             rating_obj.user = request.user
             rating_obj.save()
-        return HttpResponse()
+        
+        resp_obj = {}    
+        resp_obj['no_ratings'] = ResourceRating.objects.filter(resource=resource).count()
+        resp_obj['ratings_required'] = settings.ORB_RESOURCE_MIN_RATINGS
+        return HttpResponse(json.dumps(resp_obj),content_type="application/json; charset=utf-8")
     else:
         return HttpResponseBadRequest()   
     

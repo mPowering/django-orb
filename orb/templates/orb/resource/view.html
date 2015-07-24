@@ -48,6 +48,13 @@ function rateResource(i){
 	$.post("{% url 'orb_rate' %}", { rating: i, resource_id: {{ resource.id }} },
 	    function(data) {
 			USER_RATING = i;
+			if (data.no_ratings < data.ratings_required) {
+				console.log(data.ratings_required)
+				$("#rating-min-users").text(data.ratings_required);
+				$("#rating-pending").show();
+			} else {
+				$("#rating-added").show();
+			}
 		});
 }
 </script>
@@ -93,10 +100,6 @@ From:
 		{% endif %}
 	{% endfor %}
 	({{ resource.get_rating.count }} users)
-{% elif resource.get_rating.count > 0 %}
-    {% trans 'Pending rating' %}
-{% else  %}
-	{% trans 'Not yet rated' %}
 {% endif %}
 </p>
 

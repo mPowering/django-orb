@@ -16,4 +16,12 @@
 	{% endif %}
 {% endfor %}
 
+<div class="alert alert-info" id="rating-added" style="margin-top:10px; display:none">
+    {% blocktrans %}Thank you for your rating!{% endblocktrans %}
+</div>
+
+<div class="alert alert-info" id="rating-pending" style="margin-top:10px; display:none">
+    {% blocktrans %}Thank you for your rating! Your rating will be shown once at least <span id="rating-min-users"></span> different users have submitted a rating.{% endblocktrans %}
+</div>
+
 
