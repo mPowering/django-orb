@@ -69,8 +69,18 @@ def tag_view(request,tag_slug):
     
     order_by = request.GET.get('order', CREATED)
     
-    data = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).annotate(rating=Avg('resourcerating__rating')).order_by(order_by)
-    
+    if order_by == RATING:
+        data = []
+        data_top = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).annotate(rating=Avg('resourcerating__rating'),rate_count=Count('resourcerating')).exclude(rate_count__lt=settings.ORB_RESOURCE_MIN_RATINGS).order_by(order_by)
+        for d in data_top:
+            data.append(d)
+            
+        data_bottom = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).annotate(rating=Avg('resourcerating__rating'),rate_count=Count('resourcerating')).exclude(rate_count__gte=settings.ORB_RESOURCE_MIN_RATINGS).order_by(order_by)
+        for d in data_bottom:
+            data.append(d)
+    else:
+        data = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).order_by(order_by)
+        
     paginator = Paginator(data, 20)
     # Make sure page request is an int. If not, deliver first page.
     try:
