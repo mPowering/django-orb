@@ -13,6 +13,7 @@
 {% url 'orb_home' as orb_browse %}
 {% url 'orb_search' as orb_search %}
 {% url 'orb_tags_filter' as orb_filter %}
+{% url 'orb_cc_faq' as orb_cc_faq %}
 
 {% blocktrans with settings.ORB_INFO_EMAIL as email %}
 <p>The ORB platform gives you several methods to help find the right
@@ -31,9 +32,9 @@
 	however some have restrictions on creating adaptations or translations.</p>
 
 <p>
-	A helpful resource on Creative Commons licenses is here: <a
-		href="http://creativecommons.org/licenses/">http://creativecommons.org/licenses/</a>.
-</p>
+	For helpful resources on Creative Commons licenses, visit our <a href="{{ orb_cc_faq }}">FAQs on Creative 
+	Commons Licensing for Global Health Content</a>, or the <a href="http://creativecommons.org/">Creative Commons website</a>.</p>
+
 <p>Once you've found the resources you're looking for, each resource
 	will have at least one download or web link option. Use these to save
 	the resource onto your laptop or mobile device. You can use the resources for
