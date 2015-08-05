@@ -24,6 +24,7 @@ v1.1.0 - not yet released
 * 33: Allow users to rate resources - http://github.com/mpowering/django-orb/issues/issue/33
 * 299: Update How to page - to include Moodle/courses - http://github.com/mpowering/django-orb/issues/issue/299
 * 316: On login page, add info about all being case sensitive - http://github.com/mpowering/django-orb/issues/issue/316
+* 321: Add CC FAQs page - http://github.com/mpowering/django-orb/issues/issue/321
 
 v1.0.2
 -----------
