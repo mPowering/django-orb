@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load crispy_forms_tags %}
+{% block extra_scripts %}
+{% endblock extra_scripts %} 
+{% block extra_head_title %}{% trans 'Add Resource -Step 2' %}{% endblock extra_head_title %}
+{% block content %}
+
+<h2>{% trans 'Add Resource - Step 2' %}</h2>
+
+{% blocktrans with resource.title as title %}
+<p>Now please add the file(s) and/or URL(s) for '{{ title }}'.</p>	
+{% endblocktrans %}
+
+<h3>{% trans 'Files' %}</h3>
+{% if resource_files %}
+	<ul>
+	{% for rf in resource_files %}
+		<li>
+		{% if rf.title %}
+			{{ rf.title }}
+		{% else %}
+			{{ rf.file }}
+		{% endif %}
+		 - <a href="{% url 'orb_resource_delete_file' resource.id  rf.id %}">remove</a>
+		</li>
+	{% endfor %}
+	</ul>
+{% else %}
+	{% trans 'There are no files for this resource' %}
+{% endif %}
+
+<h3>{% trans 'URLs' %}</h3>
+{% if resource_urls %}
+	<ul>
+	{% for ru in resource_urls %}
+		<li>
+		{% if ru.title %}
+			{{ ru.title }}
+		{% else %}
+			{{ ru.url }}
+		{% endif %}
+		 - <a href="{% url 'orb_resource_delete_url' resource.id  ru.id %}">remove</a>
+		</li>
+	{% endfor %}
+	</ul>
+{% else %}
+	{% trans 'There are no urls for this resource' %}
+{% endif %}
+
+
+{% crispy form %}
+
+<a href="{% url 'orb_resource_create_thanks' resource.id %}">Finished</a>
+
+{% endblock %}

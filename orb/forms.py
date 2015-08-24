@@ -15,7 +15,7 @@ from orb.models import Tag, Resource, Category
 from tinymce.models import HTMLField
 
     
-class ResourceForm(forms.Form):
+class ResourceStep1Form(forms.Form):
     
     
     title = forms.CharField(
@@ -34,12 +34,6 @@ class ResourceForm(forms.Form):
                 required=False,
                 error_messages={},
                 widget=forms.ClearableFileInput)
-    file = forms.FileField(
-                required=False,
-                error_messages={},)
-    url = forms.CharField(
-                required=False,
-                error_messages={},)
     health_topic = forms.MultipleChoiceField(
                         label=_(u'Health domain'),
                         widget=forms.CheckboxSelectMultiple,
@@ -94,7 +88,7 @@ class ResourceForm(forms.Form):
     
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
-        super(ResourceForm, self).__init__(*args, **kwargs)
+        super(ResourceStep1Form, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
@@ -104,10 +98,6 @@ class ResourceForm(forms.Form):
                 'organisations',
                 'description',
                 'image',
-                Row (HTML('<hr>')),
-                Row (HTML(_(u'<p class="col-lg-offset-2">Please either upload a file and/or submit a url. Our preference is that the actual resource file is uploaded, but if you submit a url, please ensure this is a direct download for the resource.</p>'))),
-                'file',
-                'url',
                 Row (HTML('<hr>')),
                 'health_topic',
                 Row (HTML('<hr>')),
@@ -145,11 +135,68 @@ class ResourceForm(forms.Form):
                 'terms',
                 Row (HTML('<hr>')),
                 Div(
-                   Submit('submit', _(u'Submit'), css_class='btn btn-default'),
+                   Submit('submit', _(u'Continue &gt;&gt;'), css_class='btn btn-default'),
                    css_class='col-lg-offset-2 col-lg-8',
                 ),
             )
         
+    def clean(self):        
+        if self.cleaned_data.get("study_time_number") is not None and self.cleaned_data.get("study_time_number") != 0 and self.cleaned_data.get("study_time_unit") is None:
+            raise forms.ValidationError( _(u"You have entered a study time, but not selected a unit."))
+            
+        return self.cleaned_data
+    
+    def clean_description(self):
+        description = self.cleaned_data['description']
+        no_words = len(strip_tags(description).split(' '))
+        if no_words > settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS :
+            raise forms.ValidationError( _(u"You have entered {no_words} words, please enter no more than {max_words}".format(no_words=no_words, max_words=settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS)))
+        return description
+    
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        
+        # check if user has already uploaded a resource with this title
+        # but only if request object has been passed to form (so only for new Resources
+        if not self.request:
+            return title
+        
+        exists = Resource.objects.filter(create_user__pk=self.request.user.id, title = title).count()
+        
+        if exists != 0:
+            raise forms.ValidationError( _(u"You have entered already submitted a resource with this title."))
+        
+        return title
+
+class ResourceStep2Form(forms.Form):
+    
+    title = forms.CharField(
+                required=False,)
+    file = forms.FileField(
+                required=False,
+                error_messages={},)
+    url = forms.CharField(
+                required=False,
+                error_messages={},)
+    
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(ResourceStep2Form, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+                Row (HTML('<hr>')),
+                'title',
+                'file',
+                'url',
+                Div(
+                   Submit('submit', _(u'Add'), css_class='btn btn-default'),
+                   css_class='col-lg-offset-2 col-lg-8',
+                ),
+                Row (HTML('<div style="clear:both;"></div><hr>')),)
+    
     def clean(self):
         file = self.cleaned_data.get("file")
         url = self.cleaned_data.get("url")
@@ -159,9 +206,6 @@ class ResourceForm(forms.Form):
         
         if file == False and not url:
             raise forms.ValidationError( _(u"Please submit a file and/or a url for this resource"))
-        
-        if self.cleaned_data.get("study_time_number") is not None and self.cleaned_data.get("study_time_number") != 0 and self.cleaned_data.get("study_time_unit") is None:
-            raise forms.ValidationError( _(u"You have entered a study time, but not selected a unit."))
             
         return self.cleaned_data
     
@@ -187,29 +231,7 @@ class ResourceForm(forms.Form):
             except ValidationError:
                 raise forms.ValidationError( _(u"This does not appear to be a valid Url"))
         return url
-    
-    def clean_description(self):
-        description = self.cleaned_data['description']
-        no_words = len(strip_tags(description).split(' '))
-        if no_words > settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS :
-            raise forms.ValidationError( _(u"You have entered {no_words} words, please enter no more than {max_words}".format(no_words=no_words, max_words=settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS)))
-        return description
-    
-    def clean_title(self):
-        title = self.cleaned_data['title']
-        
-        # check if user has already uploaded a resource with this title
-        # but only if request object has been passed to form (so only for new Resources
-        if not self.request:
-            return title
-        
-        exists = Resource.objects.filter(create_user__pk=self.request.user.id, title = title).count()
-        
-        if exists != 0:
-            raise forms.ValidationError( _(u"You have entered already submitted a resource with this title."))
-        
-        return title
-        
+
 class SearchForm(forms.Form): 
     q = forms.CharField(
                 required=True,

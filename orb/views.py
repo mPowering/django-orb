@@ -17,7 +17,7 @@ from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
 
-from orb.forms import ResourceForm, SearchForm, ResourceRejectForm, AdvancedSearchForm
+from orb.forms import ResourceStep1Form, ResourceStep2Form, SearchForm, ResourceRejectForm, AdvancedSearchForm
 from orb.models import Tag, Resource, ResourceURL , Category, TagOwner, TagTracker, SearchTracker
 from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria, ResourceRating
 from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow, resource_submitted, tag_viewed
@@ -186,13 +186,13 @@ def resource_view(request,resource_slug):
                                'user_rating': user_rating },
                               context_instance=RequestContext(request))  
     
-def resource_create_view(request):
+def resource_create_step1_view(request):
     if request.user.is_anonymous():
         return render_to_response('orb/login_required.html',
                               {'message': _(u'You need to be logged in to add a resource.') },
                               context_instance=RequestContext(request))
     if request.method == 'POST':
-        form = ResourceForm(request.POST, request.FILES, request=request)
+        form = ResourceStep1Form(request.POST, request.FILES, request=request)
         resource_form_set_choices(form)
         if form.is_valid():
             # save resource
@@ -213,18 +213,6 @@ def resource_create_view(request):
             resource_add_free_text_tags(request, form, resource, 'languages','language')
             resource_add_free_text_tags(request, form, resource, 'other_tags','other')
                 
-            # add file and url
-            if request.FILES.has_key('file'):
-                rf = ResourceFile(resource=resource, create_user=request.user, update_user=request.user)
-                rf.file=request.FILES["file"]
-                rf.save()
-            
-            url = form.cleaned_data.get("url")
-            if url:
-                ru = ResourceURL(resource=resource, create_user=request.user, update_user=request.user) 
-                ru.url = url
-                ru.save()
-                
             # add tags
             resource_add_tags(request, form, resource)
               
@@ -232,8 +220,8 @@ def resource_create_view(request):
             resource_workflow.send(sender=resource, resource=resource, request=request, status=ResourceWorkflowTracker.PENDING_CRT, notes="")  
             resource_submitted.send(sender=resource, resource=resource, request=request)
             
-            # redirect to info page
-            return HttpResponseRedirect(reverse('orb_resource_create_thanks', args=[resource.id])) # Redirect after POST
+            # redirect to step 2
+            return HttpResponseRedirect(reverse('orb_resource_create2', args=[resource.id])) # Redirect after POST
             
     else:
         if request.user.userprofile.organisation:
@@ -241,14 +229,91 @@ def resource_create_view(request):
             initial = {'organisations':user_org,}
         else:
             initial = {}
-        form = ResourceForm(initial=initial, request=request)
+        form = ResourceStep1Form(initial=initial, request=request)
         resource_form_set_choices(form)
         
-    return render_to_response('orb/resource/create.html',
+    return render_to_response('orb/resource/create_step1.html',
                               {'form': form, 
                                },
                               context_instance=RequestContext(request))
  
+ 
+def resource_create_step2_view(request, id):
+    if request.user.is_anonymous():
+        return render_to_response('orb/login_required.html',
+                              {'message': _(u'You need to be logged in to add a resource.') },
+                              context_instance=RequestContext(request))
+     
+    try:
+        resource = Resource.objects.get(pk=id)
+    except Resource.DoesNotExist:
+        raise Http404()
+       
+    # check if owner of this resource
+    if not resource_can_edit(resource, request.user):
+        raise Http404()
+    
+    if request.method == 'POST':
+        form = ResourceStep2Form(request.POST, request.FILES, request=request)
+        
+        if form.is_valid():
+            title = form.cleaned_data.get("title")
+            # add file and url
+            if request.FILES.has_key('file'):
+                rf = ResourceFile(resource=resource, create_user=request.user, update_user=request.user)
+                rf.file=request.FILES["file"]
+                if title:
+                    rf.title = title
+                rf.save()
+            
+            url = form.cleaned_data.get("url")
+            if url:
+                ru = ResourceURL(resource=resource, create_user=request.user, update_user=request.user) 
+                ru.url = url
+                if title:
+                    ru.title = title
+                ru.save()
+        
+    initial = {}
+    form = ResourceStep2Form(initial=initial, request=request)
+       
+    resource_files = ResourceFile.objects.filter(resource=resource)
+    resource_urls = ResourceURL.objects.filter(resource=resource)
+    
+    return render_to_response('orb/resource/create_step2.html',
+                              {'form': form, 
+                               'resource': resource,
+                               'resource_files': resource_files,
+                               'resource_urls': resource_urls,
+                               },
+                              context_instance=RequestContext(request))
+
+def resource_file_delete_view(request, id, file_id):
+    # check ownership
+    try:
+        resource = Resource.objects.get(pk=id)
+    except Resource.DoesNotExist:
+        raise Http404()
+    if not resource_can_edit(resource, request.user):
+        raise Http404()
+    
+    ResourceFile.objects.get(resource=resource, pk=file_id).delete()
+    
+    return HttpResponseRedirect(reverse('orb_resource_create2', args=[id])) 
+
+def resource_url_delete_view(request, id, url_id):
+    # check ownership
+    try:
+        resource = Resource.objects.get(pk=id)
+    except Resource.DoesNotExist:
+        raise Http404()
+    if not resource_can_edit(resource, request.user):
+        raise Http404()
+    
+    ResourceURL.objects.get(resource=resource, pk=url_id).delete()
+    
+    return HttpResponseRedirect(reverse('orb_resource_create2', args=[id])) 
+
 def resource_create_thanks_view(request,id):
     try:
         resource = Resource.objects.get(pk=id)
@@ -381,7 +446,7 @@ def resource_edit_view(request,resource_id):
         raise Http404() 
 
     if request.method == 'POST':
-        form = ResourceForm(data = request.POST, files = request.FILES)
+        form = ResourceStep1Form(data = request.POST, files = request.FILES)
         resource_form_set_choices(form)
             
         if form.is_valid():
@@ -451,7 +516,7 @@ def resource_edit_view(request,resource_id):
             files = ResourceFile.objects.filter(resource=resource)[:1]
             if files:
                 initial['file'] = files[0].file
-            form = ResourceForm(initial = initial, data = request.POST, files = request.FILES)
+            form = ResourceStep1Form(initial = initial, data = request.POST, files = request.FILES)
             resource_form_set_choices(form)       
             
             
@@ -500,7 +565,7 @@ def resource_edit_view(request,resource_id):
         other_tags = Tag.objects.filter(resourcetag__resource=resource, category__slug='other').values_list('name', flat=True)
         data['other_tags'] = ', '.join(other_tags)
         
-        form = ResourceForm(initial= data)
+        form = ResourceStep1Form(initial= data)
         resource_form_set_choices(form )
         
     return render_to_response('orb/resource/edit.html',
