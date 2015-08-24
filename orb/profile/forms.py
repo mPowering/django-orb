@@ -98,7 +98,7 @@ class RegisterForm(forms.Form):
                         error_messages={'required': _('Please select a gender')},)
      
     terms = forms.BooleanField(
-                        label=_(u"Please tick the box to confirm that you have read the <a href='/terms/' target='_blank'>terms</a> about registering with ORB"),            
+                        label=_(u"Please tick the box to confirm that you have read the <a href='/terms/' target='_blank' class='prominent'>terms</a> about registering with ORB"),            
                         required=True,
                         error_messages={'required': _('Please tick the box to confirm that you have read the terms')})
     mailing = forms.BooleanField(

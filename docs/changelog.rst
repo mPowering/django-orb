@@ -7,6 +7,7 @@ v2.0.0 - not yet released
 * 212: On resource form allow specifying the title of file or url - http://github.com/mPowering/django-orb/issues/issue/212
 * 86: UI to add multiple files to a resource - http://github.com/mPowering/django-orb/issues/issue/86
 * 101: After login/registration go back to original page - http://github.com/mPowering/django-orb/issues/issue/101
+* 311: Terms link on registration form not prominent - http://github.com/mPowering/django-orb/issues/issue/311
 
 v1.1.0 - released 11th Aug 2015
 ---------------------------------
