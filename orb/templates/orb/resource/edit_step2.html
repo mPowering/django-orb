@@ -3,10 +3,10 @@
 {% load crispy_forms_tags %}
 {% block extra_scripts %}
 {% endblock extra_scripts %} 
-{% block extra_head_title %}{% trans 'Add Resource -Step 2' %}{% endblock extra_head_title %}
+{% block extra_head_title %}{% trans 'Edit Resource -Step 2' %}{% endblock extra_head_title %}
 {% block content %}
 
-<h2>{% trans 'Add Resource - Step 2' %}</h2>
+<h2>{% trans 'Edit Resource - Step 2' %}</h2>
 
 {% blocktrans with resource.title as title %}
 <p>Now please add the file(s) and/or URL(s) for '{{ title }}'.</p>	
@@ -22,7 +22,7 @@
 		{% else %}
 			{{ rf.file }}
 		{% endif %}
-		 - <a href="{% url 'orb_resource_create_delete_file' resource.id  rf.id %}">remove</a>
+		 - <a href="{% url 'orb_resource_edit_delete_file' resource.id  rf.id %}">remove</a>
 		</li>
 	{% endfor %}
 	</ul>
@@ -40,7 +40,7 @@
 		{% else %}
 			{{ ru.url }}
 		{% endif %}
-		 - <a href="{% url 'orb_resource_create_delete_url' resource.id  ru.id %}">remove</a>
+		 - <a href="{% url 'orb_resource_edit_delete_url' resource.id  ru.id %}">remove</a>
 		</li>
 	{% endfor %}
 	</ul>
@@ -52,7 +52,7 @@
 {% crispy form %}
 
 <div class="col-lg-offset-2 col-lg-8">
-	<a href="{% url 'orb_resource_create_thanks' resource.id %}" class="btn btn-primary btn btn-default" >Finished</a>
+	<a href="{% url 'orb_resource_edit_thanks' resource.id %}" class="btn btn-primary btn btn-default" >Finished</a>
 </div>
 
 

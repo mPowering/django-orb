@@ -288,7 +288,7 @@ def resource_create_step2_view(request, id):
                                },
                               context_instance=RequestContext(request))
 
-def resource_file_delete_view(request, id, file_id):
+def resource_create_file_delete_view(request, id, file_id):
     # check ownership
     try:
         resource = Resource.objects.get(pk=id)
@@ -297,11 +297,14 @@ def resource_file_delete_view(request, id, file_id):
     if not resource_can_edit(resource, request.user):
         raise Http404()
     
-    ResourceFile.objects.get(resource=resource, pk=file_id).delete()
+    try:
+        ResourceFile.objects.get(resource=resource, pk=file_id).delete()
+    except ResourceFile.DoesNotExist:
+        pass
     
     return HttpResponseRedirect(reverse('orb_resource_create2', args=[id])) 
 
-def resource_url_delete_view(request, id, url_id):
+def resource_create_url_delete_view(request, id, url_id):
     # check ownership
     try:
         resource = Resource.objects.get(pk=id)
@@ -310,9 +313,44 @@ def resource_url_delete_view(request, id, url_id):
     if not resource_can_edit(resource, request.user):
         raise Http404()
     
-    ResourceURL.objects.get(resource=resource, pk=url_id).delete()
+    try:
+        ResourceURL.objects.get(resource=resource, pk=url_id).delete()
+    except ResourceURL.DoesNotExist:
+        pass
     
     return HttpResponseRedirect(reverse('orb_resource_create2', args=[id])) 
+
+def resource_edit_file_delete_view(request, id, file_id):
+    # check ownership
+    try:
+        resource = Resource.objects.get(pk=id)
+    except Resource.DoesNotExist:
+        raise Http404()
+    if not resource_can_edit(resource, request.user):
+        raise Http404()
+    
+    try:
+        ResourceFile.objects.get(resource=resource, pk=file_id).delete()
+    except ResourceFile.DoesNotExist:
+        pass
+    
+    return HttpResponseRedirect(reverse('orb_resource_edit2', args=[id])) 
+
+def resource_edit_url_delete_view(request, id, url_id):
+    # check ownership
+    try:
+        resource = Resource.objects.get(pk=id)
+    except Resource.DoesNotExist:
+        raise Http404()
+    if not resource_can_edit(resource, request.user):
+        raise Http404()
+    
+    try:
+        ResourceURL.objects.get(resource=resource, pk=url_id).delete()
+    except ResourceURL.DoesNotExist:
+        pass
+    
+    return HttpResponseRedirect(reverse('orb_resource_edit2', args=[id])) 
 
 def resource_create_thanks_view(request,id):
     try:
@@ -470,34 +508,6 @@ def resource_edit_view(request,resource_id):
                 resource.image = request.FILES["image"]
                 resource.save()
             
-            # update file
-            file = form.cleaned_data.get("file")
-            if file == False:
-                ResourceFile.objects.filter(resource=resource).delete()
-                
-            if request.FILES.has_key('file'):
-                rf = ResourceFile(resource=resource, create_user=request.user, update_user=request.user)
-                rf.file=request.FILES["file"]
-                rf.save()   
-            
-            
-            # update url
-            url = form.cleaned_data.get("url")
-            # check if resource already had a url or not
-            urls = ResourceURL.objects.filter(resource=resource)
-            if url:
-                if urls:
-                    resource_url = urls[0]
-                    resource_url.url = url
-                    resource_url.update_user = request.user
-                    resource_url.save()
-                else:
-                    resource_url = ResourceURL(resource=resource, create_user=request.user, update_user=request.user) 
-                    resource_url.url = url
-                    resource_url.save()
-            else:
-                if urls:
-                    urls.delete()
             
             
             # update tags - remove all current tags first
@@ -509,7 +519,7 @@ def resource_edit_view(request,resource_id):
             resource_add_free_text_tags(request, form, resource,'other_tags','other')
             
             # All successful - now redirect
-            return HttpResponseRedirect(reverse('orb_resource_edit_thanks', args=[resource.id]))
+            return HttpResponseRedirect(reverse('orb_resource_edit2', args=[resource.id])) # Redirect after POST
         else:
             initial = request.POST
             initial['image'] = resource.image
@@ -572,7 +582,57 @@ def resource_edit_view(request,resource_id):
                               {'form': form, 
                                },
                               context_instance=RequestContext(request))
+ 
+def resource_edit_step2_view(request, resource_id):
+    if request.user.is_anonymous():
+        return render_to_response('orb/login_required.html',
+                              {'message': _(u'You need to be logged in to add a resource.') },
+                              context_instance=RequestContext(request))
+     
+    try:
+        resource = Resource.objects.get(pk=resource_id)
+    except Resource.DoesNotExist:
+        raise Http404()
+       
+    # check if owner of this resource
+    if not resource_can_edit(resource, request.user):
+        raise Http404()
     
+    if request.method == 'POST':
+        form = ResourceStep2Form(request.POST, request.FILES, request=request)
+        
+        if form.is_valid():
+            title = form.cleaned_data.get("title")
+            # add file and url
+            if request.FILES.has_key('file'):
+                rf = ResourceFile(resource=resource, create_user=request.user, update_user=request.user)
+                rf.file=request.FILES["file"]
+                if title:
+                    rf.title = title
+                rf.save()
+            
+            url = form.cleaned_data.get("url")
+            if url:
+                ru = ResourceURL(resource=resource, create_user=request.user, update_user=request.user) 
+                ru.url = url
+                if title:
+                    ru.title = title
+                ru.save()
+        
+    initial = {}
+    form = ResourceStep2Form(initial=initial, request=request)
+       
+    resource_files = ResourceFile.objects.filter(resource=resource)
+    resource_urls = ResourceURL.objects.filter(resource=resource)
+    
+    return render_to_response('orb/resource/edit_step2.html',
+                              {'form': form, 
+                               'resource': resource,
+                               'resource_files': resource_files,
+                               'resource_urls': resource_urls,
+                               },
+                              context_instance=RequestContext(request))
+       
 def resource_edit_thanks_view(request,id):
     try:
         resource = Resource.objects.get(pk=id)
