@@ -43,8 +43,7 @@ def modify(settings):
                                          ('audience', 'audience'), 
                                          ('geography', 'geography'), 
                                          ('language', 'language'), 
-                                         ('device', 'device'), 
-                                         ('license', 'license')]
+                                         ('device', 'device')]
     
 
 

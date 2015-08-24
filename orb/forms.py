@@ -326,6 +326,7 @@ class AdvancedSearchForm(forms.Form):
 
     def clean(self):
         empty_tags = True
+        empty_license = True
         query = self.cleaned_data.get("q","").strip()
         
         for name,slug in settings.ADVANCED_SEARCH_CATEGORIES:
@@ -333,7 +334,11 @@ class AdvancedSearchForm(forms.Form):
             if tag_ids:
                 empty_tags = False
         
-        if empty_tags and query == "":
+        license_ids = self.cleaned_data.get('license')
+        if license_ids:
+            empty_license = False
+            
+        if empty_tags and query == "" and empty_license:
             raise forms.ValidationError( _(u"Please select at least a search term or a tag"))
             
         return self.cleaned_data

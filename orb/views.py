@@ -721,16 +721,23 @@ def search_advanced_results_view(request):
                 tag_ids.append(i)
         resource_tags = ResourceTag.objects.filter(tag__pk__in=tag_ids).values('resource').annotate(dcount=Count('resource')).filter(dcount=len(tag_ids)).values('resource')
         
+        licenses = form.cleaned_data.get('license')
+        print licenses
+        licenses_exclude = ResourceTag.objects.filter(tag__tagproperty__name='feature:shortname', tag__tagproperty__value__in=licenses).values('resource')
+        print licenses_exclude
+        
         if q == '' and len(resource_tags)  > 0:
-            results = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED)
+            results = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED).exclude(pk__in=licenses_exclude)
         elif q != '' and len(resource_tags)  > 0:
             search_results = SearchQuerySet().filter(content=q).models(Resource).values_list('pk', flat=True)
-            results = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED).filter(pk__in=search_results)
-        elif q != '' and len(resource_tags) == 0 : 
+            results = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED).filter(pk__in=search_results).exclude(pk__in=licenses_exclude)
+        elif q != '' and len(resource_tags) == 0: 
             search_results = SearchQuerySet().filter(content=q).models(Resource).values_list('pk', flat=True)
-            results = Resource.objects.filter(pk__in=search_results, status=Resource.APPROVED)
-        elif q == '' and len(resource_tags) == 0 : 
+            results = Resource.objects.filter(pk__in=search_results, status=Resource.APPROVED).exclude(pk__in=licenses_exclude)
+        elif q == '' and len(resource_tags) == 0 and len(licenses_exclude) == 0: 
             results = Resource.objects.none()
+        elif q == '' and len(resource_tags) == 0 and len(licenses_exclude) > 0:
+            results = Resource.objects.filter(status=Resource.APPROVED).exclude(pk__in=licenses_exclude)
             
         paginator = Paginator(results, 20)
         # Make sure page request is an int. If not, deliver first page.
@@ -754,6 +761,7 @@ def search_advanced_results_view(request):
         
     return render_to_response('orb/search_advanced_results.html',
                               { 'filter_tags': filter_tags,
+                               'license_tags': licenses,
                                'q': q,
                                'page': resources,
                                'total_results': paginator.count },
@@ -782,6 +790,8 @@ def resource_form_set_choices(form):
 def advanced_search_form_set_choices(form):
     for name, slug in settings.ADVANCED_SEARCH_CATEGORIES:
         form.fields[name].choices = [(t.id, t.name) for t in Tag.objects.filter(category__slug=slug, resourcetag__resource__status=Resource.APPROVED).distinct().order_by('order_by','name')]
+        
+    form.fields['license'].choices = [('ND','Derivatives allowed'), ('NC','Commerical use allowed')]
     return form 
 
 def resource_can_view(resource, user):

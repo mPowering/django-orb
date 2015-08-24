@@ -15,6 +15,12 @@
 		{{ tf.name }}{% if not forloop.last %}, {% endif %} 
 	{% endfor %}
 {% endif %}
+{% if q or filter_tags and license_tags %}, {% endif %}
+{% if license_tags %}
+	{% for lt in license_tags  %}
+		{% if lt == 'NC' %}Commerical use allowed{% endif %} {% if lt == 'ND' %}Derivatives allowed{% endif %}{% if not forloop.last %}, {% endif %} 
+	{% endfor %}
+{% endif %}
 </h3>
 {% include "orb/includes/page_navigator.html" %}
 
