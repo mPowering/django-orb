@@ -46,7 +46,7 @@ class TagAdmin(admin.ModelAdmin):
     search_fields = ['name','description']
     
 class TagPropertyAdmin(admin.ModelAdmin):
-    list_display = ('name', 'value')
+    list_display = ('tag', 'name', 'value')
     search_fields = ['name','value']
 
 class UserProfileAdmin(admin.ModelAdmin):

@@ -2,6 +2,7 @@
 {% load i18n %} 
 {% load thumbnail %}
 {% load display_functions %}
+{% load tag_props %}
 
 {% block extra_head_title %}{{ resource.title }}{% endblock extra_head_title %}
 
@@ -79,14 +80,16 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 
 {% include 'orb/includes/search_bar.html' %}
 
-<h3 style="text-align:center">{{ resource.title }}</h3>
+<div xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#"> 
+
+<h3 style="text-align:center"><span property="dct:title">{{ resource.title }}</span></h3>
 
 {% include "includes/messages.html" %}
 
 <p style="text-align:center">
 From:
 {% for o in resource.get_organisations %}
-	<a href="{% url 'orb_tags' o.slug %}">{{ o.name }} </a>
+	<a href="{% url 'orb_tags' o.slug %}" property="cc:attributionName" rel="cc:attributionURL dct:creator">{{ o.name }} </a>
 {% endfor %}
 </p>
 
@@ -250,18 +253,18 @@ From:
 {% endif %}
 
 {% if resource.get_license %}
-	
 		<hr/>
-		
 		<h4>{% trans 'License' %}</h4>
-		{% for l in resource.get_license %}
+		{% for l in resource.get_license %}		
 			<div class="row file-row">
 				<div class="col-md-2 col-xs-4 vcenter">
-					<a href="{% url 'orb_tags' l.slug %}">
-					{% thumbnail l.image "x30" padding=True format="PNG" upscale=False as im %}
-						<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-					{% endthumbnail %}
-					</a>
+					{% if l|tag_property:"url" %}
+						<a href="{{ l|tag_property:'url' }}" rel="license">
+						{% thumbnail l.image "x30" padding=True format="PNG" upscale=False as im %}
+							<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+						{% endthumbnail %}
+						</a>
+					{% endif %}
 				</div><!-- 
 			 --><div class="col-md-8 col-xs-8 vcenter">
 			 	<a href="{% url 'orb_tags' l.slug %}">{{ l.name }}</a>
@@ -272,6 +275,8 @@ From:
 			</div>
 		{% endfor %}
 {% endif %}
+
+</div> <!-- end CC div -->
 
 <hr/>
 <small>Resource uploaded by <a href="{% url 'profile_view' resource.create_user.id %}">{{ resource.create_user.first_name }} {{ resource.create_user.last_name }}</a> ({{ resource.create_date }})

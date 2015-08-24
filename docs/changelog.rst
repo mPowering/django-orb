@@ -9,6 +9,7 @@ v2.0.0 - not yet released
 * 101: After login/registration go back to original page - http://github.com/mPowering/django-orb/issues/issue/101
 * 311: Terms link on registration form not prominent - http://github.com/mPowering/django-orb/issues/issue/311
 * 322: Add page specifically for CRT members to review content - http://github.com/mPowering/django-orb/issues/issue/322
+* 305: Add CC REL markup - esp for search engines etc - http://github.com/mPowering/django-orb/issues/issue/305
 
 v1.1.0 - released 11th Aug 2015
 ---------------------------------

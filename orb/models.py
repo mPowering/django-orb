@@ -296,6 +296,10 @@ class Tag (models.Model):
     def image_filename(self):
         return os.path.basename(self.image.name)
  
+    def get_property(self, name):
+        props = TagProperty.objects.filter(tag=self,name=name)
+        return props
+        
 class TagProperty(models.Model):
     tag = models.ForeignKey(Tag)
     name = models.TextField(blank=False, null=False)
@@ -304,7 +308,7 @@ class TagProperty(models.Model):
     class Meta:
         verbose_name = _('Tag property')
         verbose_name_plural = _('Tag properties')
-        ordering = ('name', 'value')
+        ordering = ('tag', 'name', 'value')
         
     def __unicode__(self):
         return self.name
