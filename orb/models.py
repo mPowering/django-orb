@@ -295,7 +295,20 @@ class Tag (models.Model):
      
     def image_filename(self):
         return os.path.basename(self.image.name)
-       
+ 
+class TagProperty(models.Model):
+    tag = models.ForeignKey(Tag)
+    name = models.TextField(blank=False, null=False)
+    value = models.TextField(blank=False, null=False)
+    
+    class Meta:
+        verbose_name = _('Tag property')
+        verbose_name_plural = _('Tag properties')
+        ordering = ('name', 'value')
+        
+    def __unicode__(self):
+        return self.name
+             
 # Tag Owner
 class TagOwner(models.Model):
     user = models.ForeignKey(User)
