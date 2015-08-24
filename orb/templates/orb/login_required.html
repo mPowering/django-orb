@@ -11,7 +11,7 @@
 
 {% url 'profile_login' as login %}
 {% url 'profile_register' as register %}
-<p>{% blocktrans %}Please <a href="{{ login }}" class="alert-link">login</a> or <a href="{{ register }}" class="alert-link">register</a>{% endblocktrans %}</div>
+<p>{% blocktrans with request.path as nextpath %}Please <a href="{{ login }}?next={{ nextpath }}" class="alert-link">login</a> or <a href="{{ register }}" class="alert-link">register</a>{% endblocktrans %}</div>
 
 
 {% endblock %}

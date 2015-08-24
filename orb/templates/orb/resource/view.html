@@ -141,7 +141,7 @@ From:
 {% else %}
 	{% url 'profile_login' as login %}
 	{% url 'profile_register' as register %}
-	{% blocktrans %}Please <a href="{{ login }}">login</a> or <a href="{{ register }}">register</a> to rate this resource{% endblocktrans %}
+	{% blocktrans with request.path as nextpath %}Please <a href="{{ login }}?next={{ nextpath }}">login</a> or <a href="{{ register }}">register</a> to rate this resource{% endblocktrans %}
 {% endif %}
 
 {% if resource.get_files %}
