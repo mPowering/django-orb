@@ -12,10 +12,21 @@ def get_menu(request):
         tags = TagOwner.objects.filter(user=request.user)
     else:
         tags = None   
+    
+    if request.user.is_authenticated():
+        if (request.user.userprofile and (request.user.userprofile.crt_member == True or
+        request.user.userprofile.mep_member == True)):
+            reviewer = True
+        else:
+            reviewer = False 
+    else:
+        reviewer = False
         
+            
     return {'header_menu_categories': categories, 
             'header_owns_tags': tags,
-            'settings': settings,}
+            'settings': settings,
+            'reviewer': reviewer, }
     
 def get_version(request):
     version = "v" + str(orb.VERSION[0]) + "." + str(orb.VERSION[1]) + "." + str(orb.VERSION[2])

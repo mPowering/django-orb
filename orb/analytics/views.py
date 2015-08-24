@@ -377,6 +377,27 @@ def resource_view(request,id):
                                'page': trackers,
                                },
                               context_instance=RequestContext(request))
+
+def review_view(request):
+    
+    if request.user.is_anonymous():
+        return HttpResponse(status=401,content="Not Authorized")
+    elif (request.user.is_staff or 
+        (request.user.userprofile and (request.user.userprofile.crt_member == True or
+        request.user.userprofile.mep_member == True))):
+        pass 
+    else:
+        return HttpResponse(status=401,content="Not Authorized")
+    
+    pending_crt_resources = Resource.objects.filter(status=Resource.PENDING_CRT).order_by('create_date')
+    pending_mep_resources = Resource.objects.filter(status=Resource.PENDING_MRT).order_by('create_date')
+    
+    return render_to_response('orb/analytics/review.html',
+                              {'pending_crt_resources': pending_crt_resources,
+                               'pending_mep_resources': pending_mep_resources,
+                                },
+                              context_instance=RequestContext(request))
+    
        
 # Helper functions
 def is_tag_owner(request,id):

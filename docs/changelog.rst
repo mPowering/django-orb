@@ -8,6 +8,7 @@ v2.0.0 - not yet released
 * 86: UI to add multiple files to a resource - http://github.com/mPowering/django-orb/issues/issue/86
 * 101: After login/registration go back to original page - http://github.com/mPowering/django-orb/issues/issue/101
 * 311: Terms link on registration form not prominent - http://github.com/mPowering/django-orb/issues/issue/311
+* 322: Add page specifically for CRT members to review content - http://github.com/mPowering/django-orb/issues/issue/322
 
 v1.1.0 - released 11th Aug 2015
 ---------------------------------
