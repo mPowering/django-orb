@@ -24,7 +24,7 @@ def resource_rate_view(request):
             return HttpResponseBadRequest()
         
         try:
-            resource = Resource.objects.get(pk=resource_id, status=Resource.APPROVED)
+            resource = Resource.objects.get(pk=resource_id)
         except Resource.DoesNotExist:
             return HttpResponseBadRequest()
         

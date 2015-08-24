@@ -51,6 +51,10 @@
 
 {% crispy form %}
 
-<a href="{% url 'orb_resource_create_thanks' resource.id %}">Finished</a>
+<div class="col-lg-offset-2 col-lg-8">
+	<a href="{% url 'orb_resource_create_thanks' resource.id %}" class="btn btn-primary btn btn-default" >Finished</a>
+</div>
+
+
 
 {% endblock %}

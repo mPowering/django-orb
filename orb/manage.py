@@ -5,10 +5,6 @@ from django.template import RequestContext
 
 from orb.models import ResourceURL
 
-
-
-
-
 def check_urls_view(request):
     urls = ResourceURL.objects.all()
     output = []
