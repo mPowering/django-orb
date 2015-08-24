@@ -1,9 +1,13 @@
 Change log
 =====================================
 
+v2.0.0 - not yet released
+------------------------------------
 
-v1.1.0 - not yet released
-------------------------------
+* 212: On resource form allow specifying the title of file or url - http://github.com/mPowering/django-orb/issues/issue/212
+
+v1.1.0 - released 11th Aug 2015
+---------------------------------
 
 * 293: Add order by last updated to order options - http://github.com/mPowering/django-orb/issues/issue/293
 * 228: Allow ordering by rating - http://github.com/mpowering/django-orb/issues/issue/228
