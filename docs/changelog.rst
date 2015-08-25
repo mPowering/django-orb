@@ -12,6 +12,7 @@ v2.0.0 - not yet released
 * 305: Add CC REL markup - esp for search engines etc - http://github.com/mPowering/django-orb/issues/issue/305
 * 313: License options on the advanced search form - http://github.com/mPowering/django-orb/issues/issue/313
 * 324: Create fixture of all CC license variations and properties - http://github.com/mPowering/django-orb/issues/issue/324
+* 303: Country map - also show generic resources for continent - http://github.com/mPowering/django-orb/issues/issue/303
 
 v1.1.0 - released 11th Aug 2015
 ---------------------------------

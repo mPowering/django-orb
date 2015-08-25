@@ -35,11 +35,15 @@
       .addTo(map)
       .on('done', function(layer) {
     	  var sublayer = layer.getSubLayer(0);
-          sublayer.infowindow.set('template', $('#infowindow_template').html());
+          sublayer.infowindow.set('template', $('#infowindow_template_africa').html());
           sublayer.on('featureClick', function(e, latlng, pos, data) {
         });
           var sublayer1 = layer.getSubLayer(1);
-          sublayer1.infowindow.set('template', $('#infowindow_template_generic').html());
+          sublayer1.infowindow.set('template', $('#infowindow_template_africa_generic').html());
+          sublayer1.on('featureClick', function(e, latlng, pos, data) {
+        });
+          var sublayer1 = layer.getSubLayer(2);
+          sublayer1.infowindow.set('template', $('#infowindow_template_other').html());
           sublayer1.on('featureClick', function(e, latlng, pos, data) {
         });
       }).on('error', function() {
@@ -48,7 +52,7 @@
     }
   </script>
 
-	<script type="infowindow/html" id="infowindow_template">
+	<script type="infowindow/html" id="infowindow_template_africa">
   		<div class="cartodb-popup">
    			<a href="#close" class="cartodb-popup-close-button close">x</a>
      		<div class="cartodb-popup-content-wrapper">
@@ -56,21 +60,35 @@
          			<!-- content.data contains the field info -->
          			<h4>{% verbatim %}{{ content.data.name }}{% endverbatim %}</h4>
          			<p><a href="/tag/view/{% verbatim %}{{ content.data.slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_country_resources }}{% endverbatim %} resources for {% verbatim %}{{ content.data.name }}{% endverbatim %}</a></p>
-					<p><a href="/tag/view/{% verbatim %}{{ content.data.region_slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_continent_resources }}{% endverbatim %} generic resources</a></p>
+					<p><a href="/tag/view/{% verbatim %}{{ content.data.region_slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_continent_resources }}{% endverbatim %} resources for Africa</a></p>
        			</div>
      		</div>
      		<div class="cartodb-popup-tip-container"></div>
   		</div>
 	</script>
 	
-	<script type="infowindow/html" id="infowindow_template_generic">
+	<script type="infowindow/html" id="infowindow_template_africa_generic">
   		<div class="cartodb-popup">
    			<a href="#close" class="cartodb-popup-close-button close">x</a>
      		<div class="cartodb-popup-content-wrapper">
        			<div class="cartodb-popup-content">
          			<!-- content.data contains the field info -->
          			<h4>{% verbatim %}{{ content.data.name }}{% endverbatim %}</h4>
-         			<p><a href="/tag/view/{% verbatim %}{{ content.data.region_slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_continent_resources }}{% endverbatim %} generic resources</a></p>
+         			<p><a href="/tag/view/{% verbatim %}{{ content.data.region_slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_continent_resources }}{% endverbatim %} resources for Africa</a></p>
+       			</div>
+     		</div>
+     		<div class="cartodb-popup-tip-container"></div>
+  		</div>
+	</script>
+	
+	<script type="infowindow/html" id="infowindow_template_other">
+  		<div class="cartodb-popup">
+   			<a href="#close" class="cartodb-popup-close-button close">x</a>
+     		<div class="cartodb-popup-content-wrapper">
+       			<div class="cartodb-popup-content">
+         			<!-- content.data contains the field info -->
+         			<h4>{% verbatim %}{{ content.data.name }}{% endverbatim %}</h4>
+         			<p><a href="/tag/view/{% verbatim %}{{ content.data.slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_country_resources }}{% endverbatim %} resources for {% verbatim %}{{ content.data.name }}{% endverbatim %}</a></p>
        			</div>
      		</div>
      		<div class="cartodb-popup-tip-container"></div>
