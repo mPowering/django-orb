@@ -473,8 +473,8 @@ class Collection(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
-            unique_slugify(self, self.name)            
-        super(Tag, self).save(*args, **kwargs)
+            unique_slugify(self, self.title)            
+        super(Collection, self).save(*args, **kwargs)
      
     def image_filename(self):
         return os.path.basename(self.image.name)
