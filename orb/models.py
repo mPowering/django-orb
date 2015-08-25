@@ -444,3 +444,56 @@ class ResourceRating(models.Model):
     rating = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
     comments = models.TextField(blank=True, null=True, default=None)
     
+class Collection(models.Model):
+    PUBLIC = 'public'
+    PRIVATE = 'private'
+    VISIBILITY_TYPES = (
+        (PUBLIC, _(u'Public')),
+        (PRIVATE, _(u'Private')),
+    )
+    title = models.TextField(blank=False, null=False)
+    description = models.TextField(blank=True, null=True, default=None)
+    visibility = models.CharField(max_length=50,choices=VISIBILITY_TYPES, default=PRIVATE)
+    image = models.ImageField(upload_to='collection/%Y/%m/%d', null=True, blank=True)
+    slug = models.CharField(blank=True, null=True, max_length=500)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True) 
+    
+    class Meta:
+        verbose_name = _('Collection')
+        verbose_name_plural = _('Collections')
+        ordering = ('title',)
+        
+    def __unicode__(self):
+        return self.title
+    
+    def get_absolute_url(self):
+        pass
+        #return urlresolvers.reverse('orb_tags', args=[self.slug])
+    
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            unique_slugify(self, self.name)            
+        super(Tag, self).save(*args, **kwargs)
+     
+    def image_filename(self):
+        return os.path.basename(self.image.name)
+    
+class CollectionUser(models.Model):
+    user = models.ForeignKey(User, blank=False, null=False)
+    collection = models.ForeignKey(Collection, blank=False, null=False)
+    
+    class Meta:
+        verbose_name = _('Collection user')
+        verbose_name_plural = _('Collection users')
+        ordering = ('collection','user')
+    
+class CollectionResource(models.Model):
+    resource = models.ForeignKey(Resource, blank=False, null=False)
+    collection = models.ForeignKey(Collection, blank=False, null=False)
+    order_by = models.IntegerField(blank=False, null=False, default=0)
+    
+    class Meta:
+        verbose_name = _('Collection resource')
+        verbose_name_plural = _('Collection resources')
+        ordering = ('collection','order_by', 'resource')

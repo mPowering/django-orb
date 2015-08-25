@@ -3,8 +3,7 @@ from django.contrib import admin
 from orb.models import Category, Tag, Resource, ResourceURL, TagProperty
 from orb.models import ResourceFile, ResourceTag, UserProfile, ResourceCriteria
 from orb.models import ResourceTracker, SearchTracker, TagOwner, ResourceWorkflowTracker, ResourceRating
-# Register your models here.
-
+from orb.models import Collection, CollectionUser, CollectionResource
     
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name','top_level','slug','order_by')
@@ -54,6 +53,15 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 class TagOwnerAdmin(admin.ModelAdmin):
     list_display = ('user', 'tag')
+    
+class CollectionAdmin(admin.ModelAdmin):
+    list_display = ('title', 'description', 'visibility')
+    
+class CollectionResourceAdmin(admin.ModelAdmin):
+    list_display = ('collection', 'resource', 'order_by')
+    
+class CollectionUserAdmin(admin.ModelAdmin):
+    list_display = ('collection', 'user')
                  
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Tag, TagAdmin) 
@@ -69,3 +77,6 @@ admin.site.register(ResourceWorkflowTracker, ResourceWorkflowTrackerAdmin)
 admin.site.register(SearchTracker, SearchTrackerAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(ResourceRating, ResourceRatingAdmin)
+admin.site.register(Collection, CollectionAdmin)
+admin.site.register(CollectionResource, CollectionResourceAdmin)
+admin.site.register(CollectionUser, CollectionUserAdmin)
