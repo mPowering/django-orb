@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load i18n %} 
+{% load add_get_parameter %}
+{% load thumbnail %}
+
+{% block extra_head_title %}{{ collection.title }}{% endblock extra_head_title %}
+
+{% block content %}
+
+{% include 'orb/includes/search_bar.html' %}
+
+<h3 style="text-align:center">
+    {% thumbnail collection.image "70x70" format="PNG" padding=True as im %}
+		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+	{% endthumbnail %}{{ collection.title }}</h3>
+	
+{% if collection.description %}
+	<p>{{ collection.description|safe }}</p>
+{% endif %}
+
+{% if page.object_list %}
+
+	{% include "orb/includes/page_navigator.html" %}
+	
+	{% for resource in page.object_list %}
+		{% include "orb/includes/resource_row.html" %}
+	{% endfor %}
+	
+	{% include "orb/includes/page_navigator.html" %}
+{% else %}
+	<p>{% trans 'There are no resources in this collection.' %}</p>
+{% endif %}
+
+{% endblock %}

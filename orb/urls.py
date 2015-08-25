@@ -49,6 +49,7 @@ urlpatterns = patterns('',
     
     url(r'^resource/guidelines/$', 'orb.views.resource_guidelines_view', name="orb_guidelines"),
     
+    url(r'^collection/view/(?P<collection_slug>\w[\w/-]*)$', 'orb.views.collection_view', name="orb_collection"),
     
     url(r'^analytics/', include('orb.analytics.urls')),
     

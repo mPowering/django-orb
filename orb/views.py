@@ -20,6 +20,7 @@ from haystack.query import SearchQuerySet
 from orb.forms import ResourceStep1Form, ResourceStep2Form, SearchForm, ResourceRejectForm, AdvancedSearchForm
 from orb.models import Tag, Resource, ResourceURL , Category, TagOwner, TagTracker, SearchTracker
 from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria, ResourceRating
+from orb.models import Collection, CollectionResource, CollectionUser
 from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow, resource_submitted, tag_viewed
 
 from PIL import Image
@@ -776,6 +777,30 @@ def tag_link_view(request, id):
     except Tag.DoesNotExist:
         raise Http404()
 
+
+def collection_view(request,collection_slug):
+    collection = Collection.objects.get(slug=collection_slug,visibility=Collection.PUBLIC)
+    
+    data = Resource.objects.filter(collectionresource__collection=collection, status=Resource.APPROVED).order_by('collectionresource__order_by')
+    
+    paginator = Paginator(data, 20)
+
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+    
+    try:
+        resources = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        resources = paginator.page(paginator.num_pages)
+    
+    return render_to_response('orb/collection/view.html',
+                              { 'collection': collection,
+                               'page': resources,
+                               'total_results': paginator.count },
+                              context_instance=RequestContext(request))
+    
 ''' 
 Helper functions
 '''

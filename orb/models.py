@@ -468,8 +468,7 @@ class Collection(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        pass
-        #return urlresolvers.reverse('orb_tags', args=[self.slug])
+        return urlresolvers.reverse('orb_collection', args=[self.slug])
     
     def save(self, *args, **kwargs):
         if not self.slug:
