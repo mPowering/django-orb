@@ -207,8 +207,17 @@ From:
 			</div>	
 		</div>
 	{% endfor %}
-	
-	
+{% endif %}
+
+{% if collections %}
+<hr/>
+	<h4>{% trans 'Collections' %}</h4>
+	<p>{% trans 'This resource is included in the following collections:' %}</p>
+	<ul>
+	{% for c in collections %}
+		<li><a href="{% url 'orb_collection' c.slug %}" title="{{ c.description }}">{{ c.title }}</a></li>
+	{% endfor %}
+	</ul>
 {% endif %}
 
 {% if resource.study_time_number %}

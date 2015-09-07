@@ -180,11 +180,15 @@ def resource_view(request,resource_slug):
             user_rating = ResourceRating.objects.get(resource=resource,user=request.user).rating
         except ResourceRating.DoesNotExist:
             pass
+    
+    # get the collections for this resource
+    collections = Collection.objects.filter(collectionresource__resource=resource, visibility=Collection.PUBLIC)
         
     return render_to_response('orb/resource/view.html',
                               {'resource': resource, 
                                'options_menu': options_menu, 
-                               'user_rating': user_rating },
+                               'user_rating': user_rating,
+                               'collections': collections },
                               context_instance=RequestContext(request))  
     
 def resource_create_step1_view(request):
