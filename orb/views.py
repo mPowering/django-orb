@@ -82,7 +82,7 @@ def tag_view(request,tag_slug):
     else:
         data = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).order_by(order_by)
         
-    paginator = Paginator(data, 20)
+    paginator = Paginator(data, settings.ORB_PAGINATOR_DEFAULT)
     # Make sure page request is an int. If not, deliver first page.
     try:
         page = int(request.GET.get('page', '1'))
@@ -659,7 +659,7 @@ def search_view(request):
     data['q'] = search_query
     form = SearchForm(initial=data)
      
-    paginator = Paginator(search_results, 20)
+    paginator = Paginator(search_results, settings.ORB_PAGINATOR_DEFAULT)
     # Make sure page request is an int. If not, deliver first page.
     try:
         page = int(request.GET.get('page', '1'))
@@ -740,7 +740,7 @@ def search_advanced_results_view(request):
         elif q == '' and len(resource_tags) == 0 and len(licenses_exclude) > 0:
             results = Resource.objects.filter(status=Resource.APPROVED).exclude(pk__in=licenses_exclude)
             
-        paginator = Paginator(results, 20)
+        paginator = Paginator(results, settings.ORB_PAGINATOR_DEFAULT)
         # Make sure page request is an int. If not, deliver first page.
         try:
             page = int(request.GET.get('page', '1'))
@@ -758,7 +758,7 @@ def search_advanced_results_view(request):
     else:
         filter_tags = Tag.objects.filter(pk=None)
         resources = Resource.objects.filter(pk=None)
-        paginator = Paginator(resources, 20)
+        paginator = Paginator(resources, settings.ORB_PAGINATOR_DEFAULT)
         
     return render_to_response('orb/search_advanced_results.html',
                               { 'filter_tags': filter_tags,
@@ -783,7 +783,7 @@ def collection_view(request,collection_slug):
     
     data = Resource.objects.filter(collectionresource__collection=collection, status=Resource.APPROVED).order_by('collectionresource__order_by')
     
-    paginator = Paginator(data, 20)
+    paginator = Paginator(data, settings.ORB_PAGINATOR_DEFAULT)
 
     try:
         page = int(request.GET.get('page', '1'))

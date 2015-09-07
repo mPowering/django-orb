@@ -19,6 +19,8 @@ def modify(settings):
     
     settings['ORB_RESOURCE_DESCRIPTION_MAX_WORDS'] = 150
     
+    settings['ORB_PAGINATOR_DEFAULT'] = 20
+    
     settings['ORB_RESOURCE_MIN_RATINGS'] = 3
     
     settings['TASK_UPLOAD_FILE_TYPE_BLACKLIST'] = [u'application/vnd.android']
