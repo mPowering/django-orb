@@ -80,7 +80,7 @@
 
 {% if viewuser.id == user.id %}
 	<div class="col-lg-offset-2 col-lg-8">
-		<a href="{% url 'profile_edit' %}" class="btn btn-primary btn btn-default" >{% trans 'Edit' %}</a>
+		<a href="{% url 'my_profile_edit' %}" class="btn btn-primary btn btn-default" >{% trans 'Edit' %}</a>
 	</div>
 {% endif %}
 {% endblock %}

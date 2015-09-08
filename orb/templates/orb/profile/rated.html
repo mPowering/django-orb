@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% block extra_head_title %}{{ user.first_name }} {{ user.last_name }} - {% trans 'resources rated' %}{% endblock extra_head_title %}
+
+{% block content %}
+<h2>{% trans 'Resources Rated' %}</h2>
+
+
+
+{% if resources %}
+	{% blocktrans %}<p>You have rated the following resources:</p>{% endblocktrans %}
+	{% for r in resources %}
+		
+	{% endfor %}
+{% else %}
+	{% blocktrans %}<p>You haven't rated any resources yet.</p>{% endblocktrans %}
+{% endif %}
+
+{% endblock %}

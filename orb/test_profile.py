@@ -24,12 +24,12 @@ class ProfilePageTest(TestCase):
         response = self.client.get(reverse('profile_login'))
         self.assertEqual(response.status_code, 200) 
         
-        response = self.client.get(reverse('profile_edit'))
+        response = self.client.get(reverse('my_profile_edit'))
         #should redirect to login page if not logged in
         self.assertEqual(response.status_code, 302) 
         
         self.client.login(username='standarduser', password='password')
-        response = self.client.get(reverse('profile_edit'))
+        response = self.client.get(reverse('my_profile_edit'))
         self.assertEqual(response.status_code, 200) 
         self.client.logout()
         
@@ -114,7 +114,7 @@ class PasswordUpdateTest(TestCase):
         new_password= '123456'
         self.client.login(username='standarduser', password='password')
         data = {'password': new_password, 'password_again': new_password }
-        response = self.client.post(reverse('profile_edit'), data)
+        response = self.client.post(reverse('my_profile_edit'), data)
         self.assertEqual(response.status_code, 200)
         self.client.logout()
         self.client.login(username='standarduser', password=new_password)

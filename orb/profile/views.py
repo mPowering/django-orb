@@ -17,7 +17,7 @@ from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
-from orb.models import UserProfile, Tag, Category
+from orb.models import UserProfile, Tag, Category, Resource, ResourceRating
 from orb.profile.forms import LoginForm, RegisterForm, ResetForm, ProfileForm
 from orb.emailer import password_reset
 from orb.signals import user_registered
@@ -217,7 +217,7 @@ def edit(request):
                                     'photo': user_profile.photo })
         build_form_options(form, blank_options=False)
         
-    return render(request, 'orb/profile/profile.html', {'form': form,})
+    return render(request, 'orb/profile/edit.html', {'form': form,})
 
 def view_profile(request,id):
     try:
@@ -241,7 +241,13 @@ def view_my_profile(request):
         raise Http404()
 
 def view_my_ratings(request):    
-    raise Http404()
+    try:
+        user = User.objects.get(pk=request.user.id)
+    except User.DoesNotExist:
+        raise Http404()
+    
+    resources = Resource.objects.filter(status=Resource.APPROVED, resourcerating__user=user).order_by('title')
+    return render(request, 'orb/profile/rated.html', {'resources': resources })
 
 def view_my_bookmarks(request):    
     raise Http404()
