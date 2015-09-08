@@ -233,6 +233,19 @@ def view_profile(request,id):
     
     return render(request, 'orb/profile/view.html', {'viewuser': user, 'gravatar_url': gravatar_url })
 
+def view_my_profile(request):
+    try:
+        user = User.objects.get(pk=request.user.id)
+        return view_profile(request, user.id)
+    except User.DoesNotExist:
+        raise Http404()
+
+def view_my_ratings(request):    
+    raise Http404()
+
+def view_my_bookmarks(request):    
+    raise Http404()
+
 # Helper Methods
 def build_form_options(form, blank_options=True):
     # roles

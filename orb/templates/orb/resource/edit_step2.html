@@ -22,7 +22,7 @@
 		{% else %}
 			{{ rf.file }}
 		{% endif %}
-		 - <a href="{% url 'orb_resource_edit_delete_file' resource.id  rf.id %}">remove</a>
+		 - <a href="{% url 'orb_resource_edit_delete_file' resource.id  rf.id %}">{% trans 'remove' %}</a>
 		</li>
 	{% endfor %}
 	</ul>
@@ -40,7 +40,7 @@
 		{% else %}
 			{{ ru.url }}
 		{% endif %}
-		 - <a href="{% url 'orb_resource_edit_delete_url' resource.id  ru.id %}">remove</a>
+		 - <a href="{% url 'orb_resource_edit_delete_url' resource.id  ru.id %}">{% trans 'remove' %}</a>
 		</li>
 	{% endfor %}
 	</ul>
@@ -52,7 +52,7 @@
 {% crispy form %}
 
 <div class="col-lg-offset-2 col-lg-8">
-	<a href="{% url 'orb_resource_edit_thanks' resource.id %}" class="btn btn-primary btn btn-default" >Finished</a>
+	<a href="{% url 'orb_resource_edit_thanks' resource.id %}" class="btn btn-primary btn btn-default" >{% trans 'Finished' %}</a>
 </div>
 
 

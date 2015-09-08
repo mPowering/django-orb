@@ -11,6 +11,10 @@ urlpatterns = patterns('',
     url(r'^setlang/$', 'django.views.i18n.set_language', name="profile_set_language"),
     url(r'^reset/$', 'orb.profile.views.reset', name="profile_reset"),
     url(r'^reset/sent/$', TemplateView.as_view(template_name="orb/profile/reset-sent.html"), name="profile_reset_sent"),
-    url(r'^edit/$', 'orb.profile.views.edit', name="profile_edit"),
     url(r'^view/(?P<id>\d+)/$', 'orb.profile.views.view_profile', name="profile_view"),
+    
+    url(r'^edit/$', 'orb.profile.views.edit', name="profile_edit"),
+    url(r'^view/$', 'orb.profile.views.view_my_profile', name="my_profile_view"),
+    url(r'^view/bookmarks/$', 'orb.profile.views.view_my_bookmarks', name="my_bookmarks_view"),
+    url(r'^view/ratings/$', 'orb.profile.views.view_my_ratings', name="my_ratings_view"),
 )
