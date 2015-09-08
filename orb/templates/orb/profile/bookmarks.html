@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% block extra_head_title %}{{ user.first_name }} {{ user.last_name }} - {% trans 'bookmarks' %}{% endblock extra_head_title %}
+
+{% block content %}
+<h2>{% trans 'Bookmarks' %}</h2>
+
+{% if bookmarks %}
+	{% blocktrans %}<p>You have bookmarked the following resources:</p>{% endblocktrans %}
+	{% for resource in bookmarks %}
+		 {% include "orb/includes/resource_row.html" %}
+	{% endfor %}
+{% else %}
+	{% blocktrans %}<p>You haven't bookmarked any resources yet.</p>{% endblocktrans %}
+{% endif %}
+
+{% endblock %}

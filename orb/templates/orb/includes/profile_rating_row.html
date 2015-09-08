@@ -1,0 +1,29 @@
+{% load i18n %} 
+{% load thumbnail %}
+<div class="row"> 
+	<div class="col-md-2"  style="display: inline-block; vertical-align: middle; min-height:40px; padding-top:7px;">
+		{% for i in "xxxxx"%}
+			{% if forloop.counter <= rating.rating %}
+				<img src="{{ STATIC_URL }}orb/images/star-full-small.png"/>
+			{% else %}
+				<img src="{{ STATIC_URL }}orb/images/star-empty-small.png"/>
+			{% endif %}
+		{% endfor %}
+		
+	</div>
+	<div class="col-md-8">
+		<h4><a href="{% url 'orb_resource' rating.resource.slug %}">{{ rating.resource.title }}</a></h4>
+		<h4>
+		{% for t in rating.resource.get_type_tags %}
+			{{ t.name }}{% if not forloop.last %}, {% endif %}
+		{% endfor %}
+		{% trans 'from ' %}
+		{% for o in rating.resource.get_organisations %}
+			{{ o.name }}{% if not forloop.last %}, {% endif %}
+		{% endfor %}
+		</h4>
+		<p>{{ rating.resource.description|striptags|truncatewords:40|safe }}</p>
+	</div>
+	
+</div>
+<hr/>

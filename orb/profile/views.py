@@ -17,7 +17,7 @@ from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
-from orb.models import UserProfile, Tag, Category, Resource, ResourceRating
+from orb.models import UserProfile, Tag, Category, Resource, ResourceRating, Collection
 from orb.profile.forms import LoginForm, RegisterForm, ResetForm, ProfileForm
 from orb.emailer import password_reset
 from orb.signals import user_registered
@@ -246,11 +246,17 @@ def view_my_ratings(request):
     except User.DoesNotExist:
         raise Http404()
     
-    resources = Resource.objects.filter(status=Resource.APPROVED, resourcerating__user=user).order_by('title')
-    return render(request, 'orb/profile/rated.html', {'resources': resources })
+    ratings = ResourceRating.objects.filter(resource__status=Resource.APPROVED, user=user).order_by('resource__title')
+    return render(request, 'orb/profile/rated.html', {'ratings': ratings })
 
 def view_my_bookmarks(request):    
-    raise Http404()
+    try:
+        user = User.objects.get(pk=request.user.id)
+    except User.DoesNotExist:
+        raise Http404()
+
+    bookmarks = Resource.objects.filter(status=Resource.APPROVED, collectionresource__collection__visibility=Collection.PRIVATE, collectionresource__collection__collectionuser__user=user).order_by('title')
+    return render(request, 'orb/profile/bookmarks.html', {'bookmarks': bookmarks })
 
 # Helper Methods
 def build_form_options(form, blank_options=True):
