@@ -58,6 +58,14 @@ function rateResource(i){
 			}
 		});
 }
+
+function bookmarkResource(){
+	$.post("{% url 'orb_bookmark' %}", { resource_id: {{ resource.id }} },
+		    function(data) {
+				$("#bookmark_text").text("{% trans 'Bookmarked' %}");
+				$("#bookmark_image").attr('src', '{{ STATIC_URL }}orb/images/mono-bookmark.png');
+			});
+}
 </script>
 
 <script>(function(d, s, id) {
@@ -81,6 +89,14 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 {% include 'orb/includes/search_bar.html' %}
 
 <div xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#"> 
+
+{% if user.is_authenticated %}
+	{% if bookmarked %}
+		<span class="bookmark"><img id="bookmark_image" src="{{ STATIC_URL }}orb/images/mono-bookmark.png"" alt="{% trans 'Bookmarked' %}"/><span id="bookmark_text">{% trans 'Bookmarked' %}</span></span>
+	{% else %}
+		<span onclick="bookmarkResource()" class="bookmark"><img id="bookmark_image" src="{{ STATIC_URL }}orb/images/mono-bookmark-add.png"" alt="{% trans 'Bookmark this' %}"/><span id="bookmark_text">{% trans 'Bookmark this' %}</span></span>
+	{% endif %}
+{% endif %}
 
 <h3 style="text-align:center"><span property="dct:title">{{ resource.title }}</span></h3>
 

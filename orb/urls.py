@@ -62,7 +62,8 @@ urlpatterns = patterns('',
     
     url(r'^api/', include('orb.api.urls')),
     
-    url(r'^rate/', include('orb.rating.urls')),
+    url(r'^resource/rate/', include('orb.rating.urls')),
+    url(r'^resource/bookmark/', include('orb.bookmark.urls')),
     url(r'^viz/', include('orb.viz.urls')),
     
 )

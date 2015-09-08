@@ -26,14 +26,18 @@ h3.homepage {
     style: text-align:center;
 }
 
-a {
+a, span.bookmark {
     color: #033f62;
     text-decoration: none;
 }
 
-a:hover, a:focus {
+a:hover, a:focus, span.bookmark:hover, span.bookmark:focus {
     color: #EF485B;
     text-decoration: underline;
+}
+
+span.bookmark:hover, span.bookmark:focus {
+	cursor:pointer;
 }
 
 .bold {

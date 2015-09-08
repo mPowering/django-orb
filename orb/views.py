@@ -184,11 +184,19 @@ def resource_view(request,resource_slug):
     # get the collections for this resource
     collections = Collection.objects.filter(collectionresource__resource=resource, visibility=Collection.PUBLIC)
         
+    # See if bookmarked
+    bookmarks = Collection.objects.filter(collectionresource__resource=resource, visibility=Collection.PRIVATE, collectionuser__user__id=request.user.id).count()
+    if bookmarks > 0:
+        bookmarked = True
+    else:
+        bookmarked = False
+        
     return render_to_response('orb/resource/view.html',
                               {'resource': resource, 
                                'options_menu': options_menu, 
                                'user_rating': user_rating,
-                               'collections': collections },
+                               'collections': collections,
+                               'bookmarked': bookmarked },
                               context_instance=RequestContext(request))  
     
 def resource_create_step1_view(request):
