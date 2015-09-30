@@ -16,6 +16,8 @@ v2.0.0 - not yet released
 * 295: Create page to view map to browse country resources by - http://github.com/mPowering/django-orb/issues/issue/295
 * 332: Update "health domain" in menu to be "browse resources" - http://github.com/mPowering/django-orb/issues/issue/332
 * 331: Rename 'My Profile' in menu - http://github.com/mPowering/django-orb/issues/issue/331
+* 76: Ability to save/bookmark resources? - http://github.com/mPowering/django-orb/issues/issue/76
+* 325: Create collections of resources - http://github.com/mPowering/django-orb/issues/issue/325
 
 v1.1.0 - released 11th Aug 2015
 ---------------------------------
