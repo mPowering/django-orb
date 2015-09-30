@@ -9,7 +9,15 @@
 {% if bookmarks %}
 	{% blocktrans %}<p>You have bookmarked the following resources:</p>{% endblocktrans %}
 	{% for resource in bookmarks %}
-		 {% include "orb/includes/resource_row.html" %}
+		<div class="row"> 
+			
+			<div class="col-md-10">
+		 		{% include "orb/includes/resource_row.html" %}
+		 	</div>
+		 	<div class="col-md-1"> 
+				<a class="btn btn-primary btn-default" href="{% url 'orb_bookmark_remove'  resource.id %}">{% trans 'Remove<br/> Bookmark' %}</a>
+			</div>
+		</div> 
 	{% endfor %}
 {% else %}
 	{% blocktrans %}<p>You haven't bookmarked any resources yet.</p>{% endblocktrans %}

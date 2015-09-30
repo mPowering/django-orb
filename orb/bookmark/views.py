@@ -1,12 +1,11 @@
-# orb/rating/views.py
+# orb/bookmark/views.py
 import json
 
 from django.conf import settings
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.core.urlresolvers import reverse
+from django.http import Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 
 from orb.models import Resource, Collection, CollectionUser, CollectionResource
-
-
 
 def resource_bookmark_view(request):
     if request.user.is_anonymous():
@@ -47,4 +46,18 @@ def resource_bookmark_view(request):
         return HttpResponse(json.dumps(resp_obj),content_type="application/json; charset=utf-8")
     else:
         return HttpResponseBadRequest()   
+    
+def resource_bookmark_remove_view(request, resource_id):
+    if request.user.is_anonymous():
+        raise Http404()
+    # check the current user is the owner of this bookmark
+    try:
+        bookmark = CollectionResource.objects.get(resource__pk=resource_id, collection__visibility=Collection.PRIVATE, collection__collectionuser__user=request.user)
+    except CollectionResource.DoesNotExist:
+        return HttpResponseBadRequest() 
+    
+    bookmark.delete()
+    
+    return HttpResponseRedirect(reverse('my_bookmarks_view'))
+        
     
