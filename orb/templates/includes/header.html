@@ -45,15 +45,15 @@
 			{% endif %}
 			
 			{% if user.is_authenticated %}
-				<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">{% trans 'My Profile' %} <b class="caret"></b></a>
+				<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">{% trans 'My ORB' %} <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="{% url 'my_profile_view' %}">{% trans 'View' %}</a></li>
-						<li><a href="{% url 'my_profile_edit' %}">{% trans 'Edit' %}</a></li>
+						<li><a href="{% url 'my_profile_view' %}">{% trans 'View Profile' %}</a></li>
+						<li><a href="{% url 'my_profile_edit' %}">{% trans 'Edit Profile' %}</a></li>
 						<li><a href="{% url 'my_ratings_view' %}">{% trans 'Rated' %}</a></li>
 						<li><a href="{% url 'my_bookmarks_view' %}">{% trans 'Bookmarks' %}</a></li>
+						<li><a href="{% url 'django.contrib.auth.views.logout' %}">{% trans 'Logout' %}</a></li>
 					</ul>
 				</li>
-				<li><a href="{% url 'django.contrib.auth.views.logout' %}">{% trans 'Logout' %}</a></li>
 			{% else %}
 				<li><a href="{% url 'profile_login' %}">{% trans 'Login' %}</a></li>
 				<li><a href="{% url 'profile_register' %}">{% trans 'Register' %}</a></li>
