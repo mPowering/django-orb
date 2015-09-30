@@ -13,6 +13,8 @@ v2.0.0 - not yet released
 * 313: License options on the advanced search form - http://github.com/mPowering/django-orb/issues/issue/313
 * 324: Create fixture of all CC license variations and properties - http://github.com/mPowering/django-orb/issues/issue/324
 * 303: Country map - also show generic resources for continent - http://github.com/mPowering/django-orb/issues/issue/303
+* 295: Create page to view map to browse country resources by - http://github.com/mPowering/django-orb/issues/issue/295
+* 332: Update "health domain" in menu to be "browse resources" - http://github.com/mPowering/django-orb/issues/issue/332
 
 v1.1.0 - released 11th Aug 2015
 ---------------------------------

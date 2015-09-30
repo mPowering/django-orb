@@ -14,15 +14,16 @@
 		<ul class="nav navbar-nav navbar-right">
 			
 			<li><a href="{% url 'orb_home' %}">{% trans 'Home' %}</a></li>
-			{% for m in header_menu_categories %}
-				<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">{{ m.name }} <b class="caret"></b></a>
-					<ul class="dropdown-menu">
+			<li class="dropdown"><a href="#" data-toggle="dropdown" class="dropdown-toggle">{% trans 'Browse Resources' %} <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					{% for m in header_menu_categories %}
 						{% for t in m.tags %}
 							<li><a href="{% url 'orb_tags' t.slug %}">{{ t.name }}</a></li>
 						{% endfor %}
-					</ul>
-				</li>
-			{% endfor %}
+					{% endfor %}
+					<li><a href="{% url 'orb_country_map' %}">{% trans 'Country Map' %}</a></li>
+				</ul>
+			</li>
 			
 			<li><a href="{% url 'orb_resource_create' %}">{% trans 'Add Resource' %}</a></li>
 			
