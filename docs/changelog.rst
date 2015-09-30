@@ -19,6 +19,7 @@ v2.0.0 - not yet released
 * 76: Ability to save/bookmark resources? - http://github.com/mPowering/django-orb/issues/issue/76
 * 325: Create collections of resources - http://github.com/mPowering/django-orb/issues/issue/325
 * 328: Update upload step 2 with more explanation - http://github.com/mPowering/django-orb/issues/issue/328
+* 329: Update bookmarking icon and move to row with ratings - http://github.com/mPowering/django-orb/issues/issue/329
 
 v1.1.0 - released 11th Aug 2015
 ---------------------------------
