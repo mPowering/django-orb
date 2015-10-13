@@ -16,6 +16,7 @@ class CountryData(models.Model):
     no_childbearing_age = models.BigIntegerField(null=True, blank=True)
     fertility_rate  = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=2)
     under5_mortality = models.IntegerField(null=True, blank=True)
+    last_census_year = models.IntegerField(null=True, blank=True)
     create_date = models.DateTimeField(auto_now_add=True, default=timezone.now())
     update_date = models.DateTimeField(auto_now=True, default=timezone.now()) 
     

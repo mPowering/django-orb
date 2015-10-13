@@ -17,6 +17,7 @@ MAPPING = {
            'Total Fertility Rate': 'fertility_rate',
            'POSTAL': 'country_code',
            'Under 5 Mortality': 'under5_mortality',
+           'LASTCENSUS': 'last_census_year'
            }
 
 def run(): 

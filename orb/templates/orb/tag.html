@@ -44,6 +44,8 @@
 	<p>{% trans 'Email:' %} <a href="mailto:{{ tag.contact_email }}">{{ tag.contact_email }}</a></p>
 {% endif %}
 
+{% include 'orb/includes/country_key_facts.html' %}
+
 {% if page.object_list %}
 
 	<div class="orderby">

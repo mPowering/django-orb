@@ -9,7 +9,8 @@ def modify(settings):
                                    'haystack', 
                                    'sorl.thumbnail', 
                                    'orb.analytics', 
-                                   'orb.partners.OnemCHW')
+                                   'orb.partners.OnemCHW',
+                                   'django.contrib.humanize')
     settings['MIDDLEWARE_CLASSES'] += ('orb.middleware.SearchFormMiddleware',)
     settings['TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_menu',)
     settings['TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_version',)
