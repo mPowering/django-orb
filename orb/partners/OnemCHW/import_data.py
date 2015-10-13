@@ -21,17 +21,21 @@ MAPPING = {
 
 def run(): 
     
-    print BASE_DIR
-    print INFILE
+    from orb.partners.OnemCHW.models import CountryData
+    
     with open(INFILE, 'rb') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
+            country_data, result  = CountryData.objects.get_or_create(country_name=row['Country Name'])
             for k,v in row.iteritems():
                 try:
-                    print MAPPING[k],v
+                    setattr(country_data, MAPPING[k], v)
                 except KeyError:
                     pass # just ignore as not data we're using         
-    
+                
+            country_data.save()
+            print "saved: ", country_data
+            
 if __name__ == "__main__":
     import django
     django.setup()
