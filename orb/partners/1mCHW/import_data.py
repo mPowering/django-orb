@@ -17,7 +17,8 @@ def run():
     with open(INFILE, 'rb') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            print row
+            for k,v in row.iteritems():
+                print k,v
                         
     
 if __name__ == "__main__":
