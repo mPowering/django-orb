@@ -9,7 +9,7 @@ def modify(settings):
                                    'haystack', 
                                    'sorl.thumbnail', 
                                    'orb.analytics', 
-                                   'orb.partners.1mCHW')
+                                   'orb.partners.OnemCHW')
     settings['MIDDLEWARE_CLASSES'] += ('orb.middleware.SearchFormMiddleware',)
     settings['TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_menu',)
     settings['TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_version',)

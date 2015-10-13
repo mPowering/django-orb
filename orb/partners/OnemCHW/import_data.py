@@ -5,7 +5,7 @@ import json
 import os, sys
 
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))   
+BASE_DIR = os.path.dirname(__file__)  
 INFILE = os.path.join(BASE_DIR, '1mchw-data.csv')
 
 MAPPING = {
@@ -21,6 +21,8 @@ MAPPING = {
 
 def run(): 
     
+    print BASE_DIR
+    print INFILE
     with open(INFILE, 'rb') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
@@ -31,4 +33,6 @@ def run():
                     pass # just ignore as not data we're using         
     
 if __name__ == "__main__":
+    import django
+    django.setup()
     run()
