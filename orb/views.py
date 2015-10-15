@@ -770,6 +770,7 @@ def search_advanced_results_view(request):
     else:
         filter_tags = Tag.objects.filter(pk=None)
         resources = Resource.objects.filter(pk=None)
+        licenses = None
         paginator = Paginator(resources, settings.ORB_PAGINATOR_DEFAULT)
         
     return render_to_response('orb/search_advanced_results.html',

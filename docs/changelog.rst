@@ -1,7 +1,7 @@
 Change log
 =====================================
 
-v2.0.0 - not yet released
+v2.0.0 - released 14 Oct 2015
 ------------------------------------
 
 * 212: On resource form allow specifying the title of file or url - http://github.com/mPowering/django-orb/issues/issue/212
@@ -21,6 +21,7 @@ v2.0.0 - not yet released
 * 328: Update upload step 2 with more explanation - http://github.com/mPowering/django-orb/issues/issue/328
 * 329: Update bookmarking icon and move to row with ratings - http://github.com/mPowering/django-orb/issues/issue/329
 * 330: Allow removing of bookmark - http://github.com/mPowering/django-orb/issues/issues/issue/330
+* 337: Error on advanced search - http://github.com/mPowering/django-orb/issues/issues/issue/337
 
 v1.1.0 - released 11th Aug 2015
 ---------------------------------
