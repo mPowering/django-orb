@@ -2,6 +2,7 @@
 {% load humanize %}
 {% if country_key_facts %}
 <div id="country-key-facts">
+	<h4>{% trans 'Key Facts' %}</h4>
 	<ul>
 		<li>{% trans 'Population' %} ({{ country_key_facts.last_census_year }} {% trans 'census' %}): {{ country_key_facts.pop_est|intword }}</li>
 		<li>{% trans 'Number of women in childbearing age' %}: 

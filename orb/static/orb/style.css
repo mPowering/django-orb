@@ -350,3 +350,24 @@ div.profile {
 	margin-bottom:10px;
 	
 }
+
+#tag-description {
+	float: left;
+}
+
+/*
+ * for country key facts
+ */
+#country-key-facts {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 10px;
+	float: right;
+}
+
+#country-key-facts h4 {
+	padding-top: 0;
+	margin-top: 0;
+	text-align: center;
+
+}
