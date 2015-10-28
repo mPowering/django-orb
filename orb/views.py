@@ -102,10 +102,12 @@ def tag_view(request,tag_slug):
     tag_viewed.send(sender=tag, tag=tag, request=request)
       
     country_key_facts = None
-    try:
-        country_key_facts = CountryData.objects.get(slug=tag.slug)
-    except CountryData.DoesNotExist:
-        pass
+    
+    if settings.ORB_PARTNER_DATA_ENABLED:
+        try:
+            country_key_facts = CountryData.objects.get(slug=tag.slug)
+        except CountryData.DoesNotExist:
+            pass
         
     return render_to_response('orb/tag.html',
                               {
