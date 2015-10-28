@@ -17,8 +17,8 @@ class CountryData(models.Model):
     fertility_rate  = models.DecimalField(null=True, blank=True, max_digits=6, decimal_places=2)
     under5_mortality = models.IntegerField(null=True, blank=True)
     last_census_year = models.IntegerField(null=True, blank=True)
-    create_date = models.DateTimeField(auto_now_add=True, default=timezone.now())
-    update_date = models.DateTimeField(auto_now=True, default=timezone.now()) 
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True) 
     
     class Meta:
         verbose_name = _('CountryData')
