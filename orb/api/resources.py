@@ -320,5 +320,17 @@ class TagsResourceResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True  
         include_resource_uri = True
+        
+class CategoryResource(ModelResource):
+    
+    class Meta:
+        queryset = Category.objects.all()
+        resource_name = 'category'
+        allowed_methods = ['get']
+        authentication = ApiKeyAuthentication()
+        authorization = ORBAuthorization()
+        serializer = PrettyJSONSerializer()
+        always_return_data = True  
+        include_resource_uri = True
 
     

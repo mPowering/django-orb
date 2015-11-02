@@ -2,7 +2,7 @@
 from django.conf.urls import patterns, include, url
 from tastypie.api import Api
 
-from orb.api.resources import ResourceResource, TagResource, ResourceTagResource, ResourceFileResource, ResourceURLResource, TagsResource
+from orb.api.resources import ResourceResource, CategoryResource, TagResource, ResourceTagResource, ResourceFileResource, ResourceURLResource, TagsResource
 
 v1_api = Api(api_name='v1')
 v1_api.register(ResourceResource())
@@ -11,6 +11,7 @@ v1_api.register(ResourceTagResource())
 v1_api.register(ResourceURLResource())
 v1_api.register(ResourceFileResource())
 v1_api.register(TagsResource())
+v1_api.register(CategoryResource())
 
 urlpatterns = patterns('',
 
