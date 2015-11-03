@@ -2,7 +2,15 @@ from django.core.urlresolvers import reverse_lazy
 
 def modify(settings):
     
-    settings['INSTALLED_APPS'] += ('crispy_forms', 'tastypie', 'tinymce', 'django_wysiwyg', 'haystack', 'sorl.thumbnail', 'orb.analytics')
+    settings['INSTALLED_APPS'] += ('crispy_forms', 
+                                   'tastypie', 
+                                   'tinymce', 
+                                   'django_wysiwyg', 
+                                   'haystack', 
+                                   'sorl.thumbnail', 
+                                   'orb.analytics', 
+                                   'orb.partners.OnemCHW',
+                                   'django.contrib.humanize')
     settings['MIDDLEWARE_CLASSES'] += ('orb.middleware.SearchFormMiddleware',)
     settings['TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_menu',)
     settings['TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_version',)
@@ -22,6 +30,8 @@ def modify(settings):
     settings['ORB_PAGINATOR_DEFAULT'] = 20
     
     settings['ORB_RESOURCE_MIN_RATINGS'] = 3
+    
+    settings['ORB_PARTNER_DATA_ENABLED'] = False
     
     settings['TASK_UPLOAD_FILE_TYPE_BLACKLIST'] = [u'application/vnd.android']
     

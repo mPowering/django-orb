@@ -32,20 +32,26 @@
 		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
 	{% endthumbnail %}{{ tag.name }}</h3>
 	
-{% if tag.description %}
-	<p>{{ tag.description|safe }}</p>
-{% endif %}
+	
+<div id="tag-description">
+	{% if tag.description %}
+		<p>{{ tag.description|safe }}</p>
+	{% endif %}
+	
+	{% if tag.external_url %}
+		<p>{% trans 'Website:' %} <a href="{% url 'orb_tag_view_link' tag.id %}">{{ tag.external_url }}</a></p>
+	{% endif %}
+	
+	{% if tag.contact_email %}
+		<p>{% trans 'Email:' %} <a href="mailto:{{ tag.contact_email }}">{{ tag.contact_email }}</a></p>
+	{% endif %}
+</div>
 
-{% if tag.external_url %}
-	<p>{% trans 'Website:' %} <a href="{% url 'orb_tag_view_link' tag.id %}">{{ tag.external_url }}</a></p>
-{% endif %}
+{% include 'orb/includes/country_key_facts.html' %}
 
-{% if tag.contact_email %}
-	<p>{% trans 'Email:' %} <a href="mailto:{{ tag.contact_email }}">{{ tag.contact_email }}</a></p>
-{% endif %}
+<div style="clear:both;"></div>
 
 {% if page.object_list %}
-
 	<div class="orderby">
 		<form method="get">
 		{% trans 'Order by: ' %}

@@ -391,7 +391,7 @@ class ResourceTracker(models.Model):
     resource_file = models.ForeignKey(ResourceFile, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     resource_url = models.ForeignKey(ResourceURL, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     access_date = models.DateTimeField(auto_now_add=True)
-    ip = models.IPAddressField(blank=True, null=True, default=None)
+    ip = models.GenericIPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
     extra_data = models.TextField(blank=True, null=True, default=None)
     
@@ -414,7 +414,7 @@ class SearchTracker(models.Model):
     query = models.TextField(blank=True, null=True, default=None)
     no_results = models.IntegerField(blank=True, null=True, default=0)
     access_date = models.DateTimeField(auto_now_add=True)
-    ip = models.IPAddressField(blank=True, null=True, default=None)
+    ip = models.GenericIPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
     type = models.CharField(max_length=50,choices=SEARCH_TYPES, default=SEARCH)
     extra_data = models.TextField(blank=True, null=True, default=None)
@@ -432,7 +432,7 @@ class TagTracker(models.Model):
     type = models.CharField(max_length=50,choices=TRACKER_TYPES, default=VIEW)
     tag = models.ForeignKey(Tag, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     access_date = models.DateTimeField(auto_now_add=True)
-    ip = models.IPAddressField(blank=True, null=True, default=None)
+    ip = models.GenericIPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
     extra_data = models.TextField(blank=True, null=True, default=None)
        
