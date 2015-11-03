@@ -7,6 +7,6 @@ from django.views.generic import TemplateView
 urlpatterns = patterns('',
     
     
-    url(r'^$', 'orb.toolkit.views.toolkit_home_view', name="orb_toolkit_home"),
+    url(r'^$', 'orb.toolkits.views.toolkit_home_view', name="orb_toolkits_home"),
     
 )

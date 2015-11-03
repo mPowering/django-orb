@@ -7,7 +7,7 @@ from django.template import RequestContext
 def toolkit_home_view(request):
     
     
-    return render_to_response('orb/toolkit/home.html',
+    return render_to_response('orb/toolkits/home.html',
                               {
                                },
                               context_instance=RequestContext(request))

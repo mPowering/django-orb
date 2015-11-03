@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load i18n %} 
+
+{% block extra_head_title %}{% trans 'Toolkits' %}{% endblock extra_head_title %}
+
+{% block content %}
+<h2>{% trans 'Toolkits' %}</h2>
+
+
+
+<a href="">
+<img style="float: left; max-width:150px; margin: 0 20px 30px 0;" src="{{ STATIC_URL }}orb/images/toolkit/comm-health-frame.resized.png"/>
+<h3>{% trans 'Community Health Framework' %}</h3></a>
+
+<p>The Community Health Framework assists non-technical audiences in
+	understanding community health and how it can be strengthened. An
+	interactive power point, published under a Creative Commons license, it
+	depicts the community health ecosystem as heath-specific and
+	health-enabling actors and structures (formal and informal) working
+	together to ensure that each has the agency, access, and resources to
+	ensure the health of community members. It also includes a Toolkit with
+	models and case studies as examples of good practice.</p>
+
+<p>Download the <a href="">PDF version</a> [Mb] or <a href="">PPT version</a> [Mb] </p>
+<hr style="clear:both; padding: 10px 0"/>
+
+<a href="http://digitalprinciples.org/">
+<img style="float: left; max-width:150px; margin: 0 20px 30px 0;" src="{{ STATIC_URL }}orb/images/toolkit/digital-development.resized.png"/>
+<h3>{% trans 'Principles for Digital Development' %}</h3></a>
+
+<p>The Principles for Digital Development (in English, Español,
+	Français, or Português) find their roots in the efforts of individuals,
+	development organizations, and donors alike who have called for a more
+	concerted effort by donors and implementing partners to
+	institutionalize lessons learned in the use of information and
+	communication technologies (ICTs) in development projects. They were
+	written by and for international development donors and their
+	implementing partners, but are freely available for use by all. The
+	Principles are intended to serve as guidance rather than edict, and to
+	be updated and refined over time.</p>
+
+<hr style="clear:both; padding: 10px 0"/>
+
+<a href="https://www.usaid.gov/cii/financing-framework-end-preventable-child-and-maternal-deaths-epcmd">
+<img style="float: left; max-width:150px; margin: 0 20px 30px 0;" src="{{ STATIC_URL }}orb/images/toolkit/financing-framework-for-EPCMD.resized.jpg"/>
+<h3>{% trans 'Financing Framework to End Preventable Child and Maternal Deaths (EPCMD)' %}</h3></a>
+
+<p>The U.S. Government is committed to achieving the once
+	unimaginable goal of Ending Preventable Child and Maternal Deaths
+	(EPCMD) by 2035. Achieving this goal in a sustainable fashion implies a
+	gradual move toward solutions that mobilize both domestic and
+	international resources, with the objective of putting developing
+	country health systems on a trajectory toward financial sustainability.</p>
+
+<p>The Financing Framework is designed to outline ways in which
+	additional financial resources and tools can be utilized to support
+	sustainability. The Framework draws on inspiration from best practices
+	used throughout the U.S. Agency for International Development and with
+	our health partners around the world.</p>
+	
+<hr style="clear:both; padding: 10px 0"/>
+
+{% endblock %}
