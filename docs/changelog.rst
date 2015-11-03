@@ -1,6 +1,11 @@
 Change log
 =====================================
 
+v2.1.0 - released 4 Nov 2015
+------------------------------------
+* 342: Add area for toolkits - http://github.com/mPowering/django-orb/issues/issues/issue/342
+
+
 v2.0.0 - released 14 Oct 2015
 ------------------------------------
 

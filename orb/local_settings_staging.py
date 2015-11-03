@@ -31,7 +31,7 @@ def modify(settings):
     
     settings['ORB_RESOURCE_MIN_RATINGS'] = 3
     
-    settings['ORB_PARTNER_DATA_ENABLED'] = True
+    settings['ORB_PARTNER_DATA_ENABLED'] = False
     
     settings['TASK_UPLOAD_FILE_TYPE_BLACKLIST'] = [u'application/vnd.android']
     
