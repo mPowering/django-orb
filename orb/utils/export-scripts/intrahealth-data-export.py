@@ -6,7 +6,7 @@ def run():
     
     from orb.models import Tag, Resource
     
-    HEALTH_DOMAIN = 'Family Planning'
+    HEALTH_DOMAIN = 'Nutrition'
     
     tag = Tag.objects.get(name=HEALTH_DOMAIN)
     resources = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).order_by('title')
