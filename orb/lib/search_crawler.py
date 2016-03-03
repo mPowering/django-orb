@@ -27,6 +27,10 @@ def is_search_crawler(user_agent):
                'wbsearchbot',
                'dotbot',
                'betabot',
+               'Python-urllib',
+               'Twitterbot',
+               'YandexBot',
+               'Exabot',
                }
     for s in spiders:
         if s.lower() in user_agent.lower():
