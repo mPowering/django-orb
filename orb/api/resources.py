@@ -252,7 +252,7 @@ class TagResource(ModelResource):
     url = fields.CharField(readonly=True)
 
     class Meta:
-        queryset = Tag.objects.all()
+        queryset = Tag.active.all()
         resource_name = 'tag'
         allowed_methods = ['get', 'post']
         fields = ['id', 'name', 'image']
@@ -307,7 +307,7 @@ class TagsResource(ModelResource):
     url = fields.CharField(readonly=True)
 
     class Meta:
-        queryset = Tag.objects.all()
+        queryset = Tag.active.all()
         resource_name = 'tags'
         allowed_methods = ['get']
         fields = ['id', 'name', 'image']

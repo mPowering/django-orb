@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from tastypie.models import create_api_key
 from lib.unique_slugify import unique_slugify
 from orb.analytics.models import UserLocationVisualization
+from orb.tags.managers import ActiveTagManager
 
 models.signals.post_save.connect(create_api_key, sender=User)
 
@@ -302,6 +303,9 @@ class Tag (models.Model):
     description = models.TextField(blank=True, null=True, default=None)
     summary = models.CharField(blank=True, null=True, max_length=100)
     contact_email = models.CharField(blank=True, null=True, max_length=100)
+
+    objects = models.Manager()
+    active = ActiveTagManager()
 
     class Meta:
         verbose_name = _('Tag')
