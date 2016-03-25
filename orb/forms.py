@@ -1,3 +1,5 @@
+import logging
+
 from django import forms
 from django.conf import settings
 from django.core.validators import URLValidator
@@ -5,6 +7,7 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
+from django.template.defaultfilters import filesizeformat
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.bootstrap import FieldWithButtons
@@ -16,6 +19,9 @@ from crispy_forms.layout import Row
 from crispy_forms.layout import Submit
 
 from orb.models import Resource
+
+
+logger = logging.getLogger('orb')
 
 
 class ResourceStep1Form(forms.Form):
@@ -218,7 +224,7 @@ class ResourceStep2Form(forms.Form):
             raise forms.ValidationError(
                 _(u"Please correct the errors below and resubmit the form."))
 
-        if file == False and not url:
+        if not file and not url:
             raise forms.ValidationError(
                 _(u"Please submit a file and/or a url for this resource"))
 
@@ -227,7 +233,7 @@ class ResourceStep2Form(forms.Form):
     def clean_file(self):
         file = self.cleaned_data['file']
         if file:
-            print file.content_type
+            logger.debug(file.content_type)
             for blacklist in settings.TASK_UPLOAD_FILE_TYPE_BLACKLIST:
                 if file.content_type.startswith(blacklist):
                     raise forms.ValidationError(
