@@ -1,7 +1,7 @@
 from orb.models import Category
 
 
-def category_fixture(**kwargs):
+def category_factory(**kwargs):
     defaults = {
         "name": "Test category",
     }

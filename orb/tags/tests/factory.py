@@ -11,7 +11,7 @@ def tag_factory(**kwargs):
         })
 
     defaults = {
-        "category": category_fixture(),
+        "category": category_factory(),
         "name": "Test tag",
     }
     defaults.update(kwargs)
