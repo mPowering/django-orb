@@ -27,7 +27,11 @@ class ResourceManager(models.Manager):
         if user.is_staff:
             return qs
 
-        return qs.filter(models.Q(status=APPROVED) | models.Q(create_user=user))
+        return qs.filter(
+            models.Q(status=APPROVED) |
+            models.Q(create_user=user) |
+            models.Q(update_user=user)
+        )
 
 
 class ApprovedManager(models.Manager):
@@ -58,7 +62,11 @@ class ApprovedManager(models.Manager):
         if self.user.is_staff:
             return qs
 
-        return qs.filter(models.Q(status=APPROVED) | models.Q(create_user=self.user))
+        return qs.filter(
+            models.Q(status=APPROVED) |
+            models.Q(create_user=self.user) |
+            models.Q(update_user=self.user)
+        )
 
     def filter(self, **kwargs):
         user = kwargs.pop('user', AnonymousUser)

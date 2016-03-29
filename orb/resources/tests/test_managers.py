@@ -22,6 +22,7 @@ class ResourceTests(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.user = User.objects.create(username="tester")
+        cls.updater = User.objects.create(username="updater")
         cls.staff = User.objects.create(username="staff", is_staff=True)
 
         cls.resource = resource_factory(
@@ -31,7 +32,8 @@ class ResourceTests(TestCase):
             status=Resource.APPROVED,
         )
         cls.resource = resource_factory(
-            user=cls.user,
+            create_user=cls.user,
+            update_user=cls.updater,
             title=u"Unapproved resource",
             description=u"Unapproved, owned by user",
         )
@@ -59,9 +61,13 @@ class ResourceTests(TestCase):
         """Should be equal to default approved count"""
         self.assertEqual(Resource.objects.approved(user=AnonymousUser).count(), 1)
 
-    def test_approved_owner(self):
+    def test_approved_creator(self):
         """Should include resources created by user"""
         self.assertEqual(Resource.objects.approved(user=self.user).count(), 2)
+
+    def test_approved_updater(self):
+        """Should include resources updated by user"""
+        self.assertEqual(Resource.objects.approved(user=self.updater).count(), 2)
 
     def test_approved_staff(self):
         """Should include all resources regardless of status"""
