@@ -21,7 +21,7 @@ def approved_queryset(queryset, user=AnonymousUser, status="approved"):
         QuerySet: A queryset filtered by status and/or user
 
     """
-    if user == AnonymousUser:
+    if not user.is_authenticated():
         return queryset.filter(status=status)
     if user.is_staff:
         return queryset
@@ -40,7 +40,7 @@ def approved_queryset(queryset, user=AnonymousUser, status="approved"):
 
 class ResourceManager(models.Manager):
 
-    def approved(self, user=AnonymousUser):
+    def approved(self, user=None):
         """
         Queryset that includes only resources viewable by given user
 
@@ -52,13 +52,15 @@ class ResourceManager(models.Manager):
 
         """
         qs = super(ResourceManager, self).get_queryset()
+        if user is None:
+            user = AnonymousUser()
         return approved_queryset(qs, user)
 
 
 class ApprovedManager(models.Manager):
 
     def __init__(self, *args, **kwargs):
-        self.user = AnonymousUser
+        self.user = AnonymousUser()
         super(ApprovedManager, self).__init__(*args, **kwargs)
 
     def get_queryset(self, user=None):

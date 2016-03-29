@@ -64,7 +64,7 @@ class ResourceTests(TestCase):
 
     def test_approved_anon(self):
         """Should be equal to default approved count"""
-        self.assertEqual(Resource.objects.approved(user=AnonymousUser).count(), 1)
+        self.assertEqual(Resource.objects.approved(user=AnonymousUser()).count(), 1)
 
     def test_approved_creator(self):
         """Should include resources created by user"""
@@ -93,7 +93,7 @@ class ResourceTests(TestCase):
 
     def test_approved_anon(self):
         """Should be equal to default approved count"""
-        self.assertEqual(Resource.approved.filter(user=AnonymousUser).count(), 1)
+        self.assertEqual(Resource.approved.filter(user=AnonymousUser()).count(), 1)
 
     def test_approved_owner(self):
         """Should include resources created by user"""
