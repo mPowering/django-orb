@@ -6,11 +6,36 @@ from django.contrib.auth.models import AnonymousUser
 from django.db import models
 
 
+def approved_queryset(queryset, user=AnonymousUser, status="approved"):
+    """
+    Filters the given queryset based on the allowed status and user
+
+    Args:
+        queryset: the initial queryset
+        user: the accessing User
+        status: string matching the required status level
+
+    Returns:
+        QuerySet: A queryset filtered by status and/or user
+
+    """
+    if user == AnonymousUser:
+        return queryset.filter(status=status)
+    if user.is_staff:
+        return queryset
+
+    return queryset.filter(
+        models.Q(status=status) |
+        models.Q(create_user=user) |
+        models.Q(update_user=user)
+    )
+
+
 class ResourceManager(models.Manager):
 
     def approved(self, user=AnonymousUser):
         """
-        Queryset that includes
+        Queryset that includes only resources viewable by given user
 
         Args:
             user (auth.User): the user to check 'permission' against
@@ -19,19 +44,8 @@ class ResourceManager(models.Manager):
             QuerySet: A queryset filtered by status and/or user
 
         """
-        APPROVED = "approved"  # noqa; redefined to avoid circular import
         qs = super(ResourceManager, self).get_queryset()
-
-        if user == AnonymousUser:
-            return qs.filter(status=APPROVED)
-        if user.is_staff:
-            return qs
-
-        return qs.filter(
-            models.Q(status=APPROVED) |
-            models.Q(create_user=user) |
-            models.Q(update_user=user)
-        )
+        return approved_queryset(qs, user)
 
 
 class ApprovedManager(models.Manager):
@@ -42,7 +56,7 @@ class ApprovedManager(models.Manager):
 
     def get_queryset(self, user=None):
         """
-        Queryset that includes
+        Queryset that includes only resources viewable by given user
 
         Args:
             user (auth.User): the user to check 'permission' against
@@ -51,22 +65,11 @@ class ApprovedManager(models.Manager):
             QuerySet: A queryset filtered by status and/or user
 
         """
-        APPROVED = "approved"  # noqa; redefined to avoid circular import
         qs = super(ApprovedManager, self).get_queryset()
+        if user is None:
+            user = self.user
 
-        if user is not None:
-            self.user = user
-
-        if self.user == AnonymousUser:
-            return qs.filter(status=APPROVED)
-        if self.user.is_staff:
-            return qs
-
-        return qs.filter(
-            models.Q(status=APPROVED) |
-            models.Q(create_user=self.user) |
-            models.Q(update_user=self.user)
-        )
+        return approved_queryset(qs, user)
 
     def filter(self, **kwargs):
         user = kwargs.pop('user', AnonymousUser)
