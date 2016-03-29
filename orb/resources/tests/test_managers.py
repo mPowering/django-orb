@@ -7,7 +7,7 @@ Tests for ORB resource models
 from django.contrib.auth.models import User, AnonymousUser
 from django.test import TestCase
 
-from orb.models import Resource
+from orb.models import Resource, UserProfile
 from orb.resources.tests.factory import resource_factory
 
 
@@ -24,6 +24,11 @@ class ResourceTests(TestCase):
         cls.user = User.objects.create(username="tester")
         cls.updater = User.objects.create(username="updater")
         cls.staff = User.objects.create(username="staff", is_staff=True)
+        cls.mep_user = User.objects.create(username="mep")
+        UserProfile.objects.create(user=cls.mep_user, mep_member=True)
+        cls.crt_user = User.objects.create(username="crt")
+        UserProfile.objects.create(user=cls.crt_user, crt_member=True)
+
 
         cls.resource = resource_factory(
             user=cls.user,
@@ -70,8 +75,16 @@ class ResourceTests(TestCase):
         self.assertEqual(Resource.objects.approved(user=self.updater).count(), 2)
 
     def test_approved_staff(self):
-        """Should include all resources regardless of status"""
+        """Staff should include all resources regardless of status"""
         self.assertEqual(Resource.objects.approved(user=self.staff).count(), 3)
+
+    def test_approved_mep_reviewer(self):
+        """Reviewer should include all resources regardless of status"""
+        self.assertEqual(Resource.objects.approved(user=self.mep_user).count(), 3)
+
+    def test_approved_crt_reviewer(self):
+        """Reviewer should include all resources regardless of status"""
+        self.assertEqual(Resource.objects.approved(user=self.crt_user).count(), 3)
 
     # Tests for the ApprovalManager
 
@@ -92,6 +105,3 @@ class ResourceTests(TestCase):
 
     def test_get_approved(self):
         assert Resource.approved.get(user=self.user, title=u"Unapproved resource")
-
-    def test_get_missing_approved(self):
-        pass

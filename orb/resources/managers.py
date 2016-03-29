@@ -10,6 +10,8 @@ def approved_queryset(queryset, user=AnonymousUser, status="approved"):
     """
     Filters the given queryset based on the allowed status and user
 
+    This function is intended to be used via the interface of a Manager method
+
     Args:
         queryset: the initial queryset
         user: the accessing User
@@ -23,6 +25,11 @@ def approved_queryset(queryset, user=AnonymousUser, status="approved"):
         return queryset.filter(status=status)
     if user.is_staff:
         return queryset
+    try:
+        if user.userprofile.mep_member or user.userprofile.crt_member:
+            return queryset
+    except AttributeError:
+        pass
 
     return queryset.filter(
         models.Q(status=status) |
