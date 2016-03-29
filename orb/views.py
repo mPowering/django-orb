@@ -1,4 +1,3 @@
-# orb/views.py
 import os
 
 from django.conf import settings
@@ -8,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Max, Min, Q, Avg
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render, render_to_response
 from django.shortcuts import get_object_or_404
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -116,17 +115,18 @@ def tag_view(request, tag_slug):
         except CountryData.DoesNotExist:
             pass
 
-    return render_to_response('orb/tag.html',
-                              {
-                                  'tag': tag,
-                                  'child_tags': child_tags,
-                                  'page': resources,
-                                  'ordering': ORDER_OPTIONS,
-                                  'current_order': order_by,
-                                  'show_filter_link': show_filter_link,
-                                  'country_key_facts': country_key_facts,
-                              },
-                              context_instance=RequestContext(request))
+    is_geo_tag = tag.category.name == "Geography"
+
+    return render(request, 'orb/tag.html', {
+        'tag': tag,
+        'child_tags': child_tags,
+        'page': resources,
+        'ordering': ORDER_OPTIONS,
+        'current_order': order_by,
+        'show_filter_link': show_filter_link,
+        'country_key_facts': country_key_facts,
+        'is_geo_tag': is_geo_tag,
+    })
 
 
 def tag_cloud_view(request):

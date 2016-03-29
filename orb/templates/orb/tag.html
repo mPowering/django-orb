@@ -79,7 +79,15 @@
 
         {% include "orb/includes/page_navigator.html" %}
     {% else %}
-        <p>{% trans 'There are no resources tagged with ' %}{{ tag.name }}.</p>
+        {% if not is_geo_tag %}
+            <p>{% trans 'There are no resources tagged with ' %}{{ tag.name }}.</p>
+        {% else %}
+            {% url 'orb_resource_create' as add_resource_url %}
+            {% blocktrans with tag.name as name %}
+                <p>There are no resources yet for {{ name }}.</p>
+                <p>Add the first resource <a href="{{ add_resource_url }}">now</a>.</p>
+            {% endblocktrans %}
+        {% endif %}
     {% endif %}
 
 {% endblock %}
