@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from tastypie.models import create_api_key
 from lib.unique_slugify import unique_slugify
 from orb.analytics.models import UserLocationVisualization
+from orb.resources.managers import ResourceManager
 from orb.tags.managers import ActiveTagManager
 
 models.signals.post_save.connect(create_api_key, sender=User)
@@ -59,6 +60,8 @@ class Resource (models.Model):
         max_length=10, choices=STUDY_TIME_UNITS, blank=True, null=True)
     born_on = models.DateTimeField(blank=True, null=True, default=None)
     attribution = models.TextField(blank=True, null=True, default=None)
+
+    objects = ResourceManager()
 
     class Meta:
         verbose_name = _('Resource')
