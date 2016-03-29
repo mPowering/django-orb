@@ -159,17 +159,13 @@ def resource_permalink_view(request, id):
 
 
 def resource_view(request, resource_slug):
-    try:
-        resource = Resource.objects.get(slug=resource_slug)
-    except Resource.DoesNotExist:
-        raise Http404()
-
-    if not resource_can_view(resource, request.user):
-        raise Http404()
+    resource = get_object_or_404(
+        Resource.objects.approved(user=request.user), slug=resource_slug)
 
     if resource.status != Resource.APPROVED:
         messages.error(request, _(
-            u"This resource is not yet approved by the ORB Content Review Team, so is not yet available for all users to view"))
+            u"This resource is not yet approved by the ORB Content"
+            u" Review Team, so is not yet available for all users to view"))
 
     options_menu = []
     if resource_can_edit(resource, request.user):
