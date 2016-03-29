@@ -12,7 +12,12 @@ from orb.resources.tests.factory import resource_factory
 
 
 class ResourceTests(TestCase):
-    """Basic tests of the Resource model and its methods"""
+    """Tests for the managers associated with the Resource model.
+
+    Tests are consolidated because the returned ApprovedManager queryset should
+    be the same as the queryset for the ResourceManager.approved method. Same
+    data same tests.
+    """
 
     @classmethod
     def setUpClass(cls):
@@ -41,6 +46,7 @@ class ResourceTests(TestCase):
         User.objects.all().delete()
         Resource.objects.all().delete()
 
+    # Tests for the ResourceManager
 
     def test_default_manager(self):
         """Sanity check on defaults"""
@@ -60,3 +66,26 @@ class ResourceTests(TestCase):
     def test_approved_staff(self):
         """Should include all resources regardless of status"""
         self.assertEqual(Resource.objects.approved(user=self.staff).count(), 3)
+
+    # Tests for the ApprovalManager
+
+    def test_approval_manager(self):
+        self.assertEqual(Resource.approved.all().count(), 1)
+
+    def test_approved_anon(self):
+        """Should be equal to default approved count"""
+        self.assertEqual(Resource.approved.filter(user=AnonymousUser).count(), 1)
+
+    def test_approved_owner(self):
+        """Should include resources created by user"""
+        self.assertEqual(Resource.approved.filter(user=self.user).count(), 2)
+
+    def test_approved_staff(self):
+        """Should include all resources regardless of status"""
+        self.assertEqual(Resource.approved.filter(user=self.staff).count(), 3)
+
+    def test_get_approved(self):
+        assert Resource.approved.get(user=self.user, title=u"Unapproved resource")
+
+    def test_get_missing_approved(self):
+        pass
