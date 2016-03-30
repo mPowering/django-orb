@@ -27,16 +27,18 @@ TEMPLATE_CONTEXT_PROCESSORS
 Original version's URL: http://django.mar.lt/2010/07/add-get-parameter-tag.html
 """
 
+
 class AddGetParameter(Node):
+
     def __init__(self, values):
         self.values = values
-        
+
     def render(self, context):
         req = resolve_variable('request', context)
         params = req.GET.copy()
         for key, value in self.values.items():
             params[key] = value.resolve(context)
-        return '?%s' %  params.urlencode()
+        return '?%s' % params.urlencode()
 
 
 @register.tag

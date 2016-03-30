@@ -1,20 +1,16 @@
 # orb/profile/views.py
-import datetime
 import hashlib
-import json
 import urllib
 
-from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, views
+from django.contrib.auth import authenticate
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render, render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
 from orb.models import UserProfile, Tag, Category, Resource, ResourceRating, Collection
@@ -26,11 +22,11 @@ from tastypie.models import ApiKey
 
 def login_view(request):
     username = password = ''
-    
+
     # if already logged in
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('orb_home'))
-    
+
     if request.POST:
         form = LoginForm(request.POST)
         username = request.POST.get('username')
@@ -38,23 +34,24 @@ def login_view(request):
         next = request.POST.get('next')
         user = authenticate(username=username, password=password)
         if user is not None and user.is_active:
-            login(request,user)
+            login(request, user)
             if next is not None:
                 return HttpResponseRedirect(next)
             else:
                 return HttpResponseRedirect(reverse('orb_home'))
     else:
-        form = LoginForm(initial={'next':request.GET.get('next'),})
-        
-    return render(request, 'orb/form.html',{'username': username, 'form': form, 'title': _(u'Login')})
+        form = LoginForm(initial={'next': request.GET.get('next'), })
+
+    return render(request, 'orb/form.html', {'username': username, 'form': form, 'title': _(u'Login')})
+
 
 def register(request):
-    
-    if request.method == 'POST': # if form submitted...
+
+    if request.method == 'POST':  # if form submitted...
         form = RegisterForm(request.POST)
         build_form_options(form)
 
-        if form.is_valid(): # All validation rules pass
+        if form.is_valid():  # All validation rules pass
             # Create new user
             username = form.cleaned_data.get("username")
             email = form.cleaned_data.get("email")
@@ -75,11 +72,12 @@ def register(request):
                 role = Tag.objects.get(pk=form.cleaned_data.get("role"))
                 user_profile.role = role
             user_profile.role_other = form.cleaned_data.get("role_other")
-            
+
             if form.cleaned_data.get("organisation").strip() != '':
                 category = Category.objects.get(slug='organisation')
                 try:
-                    organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
+                    organisation = Tag.objects.get(
+                        name=form.cleaned_data.get("organisation"), category=category)
                 except Tag.DoesNotExist:
                     organisation = Tag()
                     organisation.name = form.cleaned_data.get("organisation")
@@ -88,28 +86,30 @@ def register(request):
                     organisation.update_user = user
                     organisation.save()
                 user_profile.organisation = organisation
-            
-            user_profile.mailing= form.cleaned_data.get("mailing")
-            
+
+            user_profile.mailing = form.cleaned_data.get("mailing")
+
             user_profile.save()
-            
+
             # send welcome email
-            user_registered.send(sender=user, user=user,request=request)
-            
+            user_registered.send(sender=user, user=user, request=request)
+
             u = authenticate(username=username, password=password)
             if u is not None:
                 if u.is_active:
                     login(request, u)
                     return HttpResponseRedirect('thanks/')
-            return HttpResponseRedirect('thanks/') # Redirect after POST
+            return HttpResponseRedirect('thanks/')  # Redirect after POST
     else:
-        form = RegisterForm(initial={'next':request.GET.get('next'), 'mailing':True })
+        form = RegisterForm(
+            initial={'next': request.GET.get('next'), 'mailing': True})
         build_form_options(form)
 
     return render(request, 'orb/form.html', {'form': form, 'title': _(u'Register')})
 
+
 def reset(request):
-    if request.method == 'POST': # if form submitted...
+    if request.method == 'POST':  # if form submitted...
         form = ResetForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get("username")
@@ -121,17 +121,18 @@ def reset(request):
             user.set_password(newpass)
             user.save()
 
-            password_reset(user,newpass)
+            password_reset(user, newpass)
 
             return HttpResponseRedirect('sent')
     else:
-        form = ResetForm() # An unbound form
+        form = ResetForm()  # An unbound form
 
-    return render(request, 'orb/form.html', {'form': form,'title': _(u'Reset password')})
+    return render(request, 'orb/form.html', {'form': form, 'title': _(u'Reset password')})
+
 
 @login_required
 def edit(request):
-    key = ApiKey.objects.get(user__id = request.user.id)
+    key = ApiKey.objects.get(user__id=request.user.id)
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)
         build_form_options(form, blank_options=False)
@@ -144,20 +145,21 @@ def edit(request):
             request.user.first_name = first_name
             request.user.last_name = last_name
             request.user.save()
-            
+
             try:
                 user_profile = UserProfile.objects.get(user=request.user)
             except UserProfile.DoesNotExist:
                 user_profile = UserProfile()
                 user_profile.user = request.user
-            
+
             if request.FILES.has_key('photo'):
                 user_profile.photo = request.FILES["photo"]
-              
-            if form.cleaned_data.get("organisation").strip() != '':  
+
+            if form.cleaned_data.get("organisation").strip() != '':
                 category = Category.objects.get(slug='organisation')
                 try:
-                    organisation = Tag.objects.get(name=form.cleaned_data.get("organisation"), category=category)
+                    organisation = Tag.objects.get(
+                        name=form.cleaned_data.get("organisation"), category=category)
                 except Tag.DoesNotExist:
                     organisation = Tag()
                     organisation.name = form.cleaned_data.get("organisation")
@@ -165,13 +167,13 @@ def edit(request):
                     organisation.create_user = request.user
                     organisation.update_user = request.user
                     organisation.save()
-                
+
                 user_profile.organisation = organisation
-                
+
             if form.cleaned_data.get("role") != '0':
                 role = Tag.objects.get(pk=form.cleaned_data.get("role"))
                 user_profile.role = role
-            else: 
+            else:
                 user_profile.role = None
             user_profile.role_other = form.cleaned_data.get("role_other")
             user_profile.gender = form.cleaned_data.get("gender")
@@ -181,9 +183,9 @@ def edit(request):
             user_profile.twitter = form.cleaned_data.get("twitter")
             user_profile.about = form.cleaned_data.get("about")
             user_profile.save()
-            
+
             messages.success(request, _(u"Profile updated"))
-            
+
             # if password should be changed
             password = form.cleaned_data.get("password")
             if password:
@@ -195,15 +197,15 @@ def edit(request):
             user_profile = UserProfile.objects.get(user=request.user)
         except UserProfile.DoesNotExist:
             user_profile = UserProfile()
-        
+
         if user_profile.role is not None:
             role = user_profile.role.id
         else:
             role = 0
-        form = ProfileForm(initial={'username':request.user.username,
-                                    'email':request.user.email,
-                                    'first_name':request.user.first_name,
-                                    'last_name':request.user.last_name,
+        form = ProfileForm(initial={'username': request.user.username,
+                                    'email': request.user.email,
+                                    'first_name': request.user.first_name,
+                                    'last_name': request.user.last_name,
                                     'api_key': key.key,
                                     'organisation': user_profile.organisation,
                                     'role': role,
@@ -214,24 +216,26 @@ def edit(request):
                                     'about': user_profile.about,
                                     'website': user_profile.website,
                                     'twitter': user_profile.twitter,
-                                    'photo': user_profile.photo })
+                                    'photo': user_profile.photo})
         build_form_options(form, blank_options=False)
-        
-    return render(request, 'orb/profile/edit.html', {'form': form,})
 
-def view_profile(request,id):
+    return render(request, 'orb/profile/edit.html', {'form': form, })
+
+
+def view_profile(request, id):
     try:
         user = User.objects.get(pk=id)
     except User.DoesNotExist:
         raise Http404()
-    
+
     gravatar_url = "https://www.gravatar.com/avatar.php?"
     gravatar_url += urllib.urlencode({
-        'gravatar_id':hashlib.md5(user.email).hexdigest(),
-        'size':64
+        'gravatar_id': hashlib.md5(user.email).hexdigest(),
+        'size': 64
     })
-    
-    return render(request, 'orb/profile/view.html', {'viewuser': user, 'gravatar_url': gravatar_url })
+
+    return render(request, 'orb/profile/view.html', {'viewuser': user, 'gravatar_url': gravatar_url})
+
 
 def view_my_profile(request):
     try:
@@ -240,43 +244,49 @@ def view_my_profile(request):
     except User.DoesNotExist:
         raise Http404()
 
-def view_my_ratings(request):    
-    try:
-        user = User.objects.get(pk=request.user.id)
-    except User.DoesNotExist:
-        raise Http404()
-    
-    ratings = ResourceRating.objects.filter(resource__status=Resource.APPROVED, user=user).order_by('resource__title')
-    return render(request, 'orb/profile/rated.html', {'ratings': ratings })
 
-def view_my_bookmarks(request):    
+def view_my_ratings(request):
     try:
         user = User.objects.get(pk=request.user.id)
     except User.DoesNotExist:
         raise Http404()
 
-    bookmarks = Resource.objects.filter(status=Resource.APPROVED, collectionresource__collection__visibility=Collection.PRIVATE, collectionresource__collection__collectionuser__user=user).order_by('title')
-    return render(request, 'orb/profile/bookmarks.html', {'bookmarks': bookmarks })
+    ratings = ResourceRating.objects.filter(
+        resource__status=Resource.APPROVED, user=user).order_by('resource__title')
+    return render(request, 'orb/profile/rated.html', {'ratings': ratings})
+
+
+def view_my_bookmarks(request):
+    try:
+        user = User.objects.get(pk=request.user.id)
+    except User.DoesNotExist:
+        raise Http404()
+
+    bookmarks = Resource.objects.filter(status=Resource.APPROVED, collectionresource__collection__visibility=Collection.PRIVATE,
+                                        collectionresource__collection__collectionuser__user=user).order_by('title')
+    return render(request, 'orb/profile/bookmarks.html', {'bookmarks': bookmarks})
 
 # Helper Methods
+
+
 def build_form_options(form, blank_options=True):
     # roles
-    form.fields['role'].choices = [('0','--')]    
-    for t in Tag.objects.filter(category__slug='audience').order_by('order_by','name'):
+    form.fields['role'].choices = [('0', '--')]
+    for t in Tag.objects.filter(category__slug='audience').order_by('order_by', 'name'):
         form.fields['role'].choices.append((t.id, t.name))
-     
-    if blank_options == True: 
-        form.fields['age_range'].choices = [('0','--')]
-        form.fields['gender'].choices = [('0','--')]
-    else: 
+
+    if blank_options == True:
+        form.fields['age_range'].choices = [('0', '--')]
+        form.fields['gender'].choices = [('0', '--')]
+    else:
         form.fields['age_range'].choices = []
         form.fields['gender'].choices = []
-           
+
     # age range
-    for x,y in UserProfile.AGE_RANGE:
+    for x, y in UserProfile.AGE_RANGE:
         form.fields['age_range'].choices.append((x, y))
 
     # gender
-    for x,y in UserProfile.GENDER:
+    for x, y in UserProfile.GENDER:
         form.fields['gender'].choices.append((x, y))
-    return 
+    return

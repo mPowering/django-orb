@@ -3,45 +3,49 @@ from django.conf import settings
 import orb
 from orb.models import Category, Tag, TagOwner
 
+
 def get_menu(request):
-    categories = Category.objects.filter(top_level=True).order_by('order_by') 
+    categories = Category.objects.filter(top_level=True).order_by('order_by')
     for c in categories:
-        c.tags = Tag.objects.filter(category=c,parent_tag=None).order_by('order_by') 
-    
+        c.tags = Tag.objects.filter(
+            category=c, parent_tag=None).order_by('order_by')
+
     if request.user.is_authenticated():
         tags = TagOwner.objects.filter(user=request.user)
     else:
-        tags = None   
-    
+        tags = None
+
     if request.user.is_authenticated():
         if (request.user.userprofile and (request.user.userprofile.crt_member == True or
-        request.user.userprofile.mep_member == True)):
+                                          request.user.userprofile.mep_member == True)):
             reviewer = True
         else:
-            reviewer = False 
+            reviewer = False
     else:
         reviewer = False
-        
-            
-    return {'header_menu_categories': categories, 
+
+    return {'header_menu_categories': categories,
             'header_owns_tags': tags,
             'settings': settings,
             'reviewer': reviewer, }
-    
+
+
 def get_version(request):
-    version = "v" + str(orb.VERSION[0]) + "." + str(orb.VERSION[1]) + "." + str(orb.VERSION[2])
-    
+    version = "v" + str(orb.VERSION[0]) + "." + \
+        str(orb.VERSION[1]) + "." + str(orb.VERSION[2])
+
     if getattr(settings, 'STAGING', False):
         staging = True
     else:
         staging = False
-        
+
     return {'version': version,
             'ORB_GOOGLE_ANALYTICS_CODE': settings.ORB_GOOGLE_ANALYTICS_CODE,
             'ORB_RESOURCE_MIN_RATINGS': settings.ORB_RESOURCE_MIN_RATINGS,
-            'STAGING': staging }
+            'STAGING': staging}
+
 
 def base_context_processor(request):
     return {
-         'BASE_URL': request.build_absolute_uri("/").rstrip("/")
-     }
+        'BASE_URL': request.build_absolute_uri("/").rstrip("/")
+    }

@@ -1,15 +1,12 @@
 
-import json
 import re
 
 from django.conf import settings
 from django.core.paginator import Paginator, InvalidPage
 from django.core.urlresolvers import reverse
 from django.conf.urls import url
-from django.http import HttpRequest, HttpResponse
 from django.http.response import Http404
 from django.utils.html import strip_tags
-from django.utils.translation import ugettext as _
 
 from haystack.query import SearchQuerySet
 
@@ -23,57 +20,62 @@ from orb.signals import resource_viewed, search
 from orb.views import resource_can_edit
 
 from tastypie import fields
-from tastypie.authentication import Authentication,ApiKeyAuthentication
-from tastypie.authorization import ReadOnlyAuthorization, Authorization
-from tastypie.exceptions import BadRequest, Unauthorized
-from tastypie.models import ApiKey
+from tastypie.authentication import ApiKeyAuthentication
+from tastypie.exceptions import Unauthorized
 from tastypie.resources import ModelResource
 from tastypie.throttle import CacheDBThrottle
 from tastypie.utils import trailing_slash
 
+
 class ResourceResource(ModelResource):
-    '''
+    """
     To get, post and pushing resources
-    '''
-    files = fields.ToManyField('orb.api.resources.ResourceFileResource', 'resourcefile_set', related_name='resource', full=True, null = True, use_in='detail')
-    urls = fields.ToManyField('orb.api.resources.ResourceURLResource', 'resourceurl_set', related_name='resource', full=True, null = True, use_in='detail')
-    tags = fields.ToManyField('orb.api.resources.ResourceTagResource', 'resourcetag_set', related_name='resource', full=True, null = True, use_in='detail')
+    """
+    files = fields.ToManyField('orb.api.resources.ResourceFileResource', 'resourcefile_set',
+                               related_name='resource', full=True, null=True, use_in='detail')
+    urls = fields.ToManyField('orb.api.resources.ResourceURLResource', 'resourceurl_set',
+                              related_name='resource', full=True, null=True, use_in='detail')
+    tags = fields.ToManyField('orb.api.resources.ResourceTagResource', 'resourcetag_set',
+                              related_name='resource', full=True, null=True, use_in='detail')
     url = fields.CharField(readonly=True)
-    
+
     class Meta:
         queryset = Resource.objects.all()
         resource_name = 'resource'
-        allowed_methods = ['get','post','put']
+        allowed_methods = ['get', 'post', 'put']
         authentication = ApiKeyAuthentication()
-        authorization = ORBResourceAuthorization() 
+        authorization = ORBResourceAuthorization()
         serializer = ResourceSerializer()
-        always_return_data = True 
+        always_return_data = True
         include_resource_uri = True
         throttle = CacheDBThrottle(throttle_at=1000, timeframe=3600)
 
-    def dehydrate_image(self,bundle):
+    def dehydrate_image(self, bundle):
         if bundle.obj.image:
             return bundle.request.build_absolute_uri(settings.MEDIA_URL + bundle.obj.image.name)
         else:
             return None
-    
-    def dehydrate_url(self,bundle):
-        url = bundle.request.build_absolute_uri(reverse('orb_resource', args=[bundle.obj.slug]))
+
+    def dehydrate_url(self, bundle):
+        url = bundle.request.build_absolute_uri(
+            reverse('orb_resource', args=[bundle.obj.slug]))
         return url
-    
+
     def authorized_read_detail(self, object_list, bundle):
         # add to ResourceTracker
         if bundle.obj.id:
-            resource_viewed.send(sender=bundle.obj, resource=bundle.obj, request=bundle.request, type=ResourceTracker.VIEW_API)
-    
+            resource_viewed.send(sender=bundle.obj, resource=bundle.obj,
+                                 request=bundle.request, type=ResourceTracker.VIEW_API)
+
     def prepend_urls(self):
-        '''
+        """
         for implementing a search API
-        '''
+        """
         return [
-            url(r"^(?P<resource_name>%s)/search%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_search'), name="api_get_search"),
+            url(r"^(?P<resource_name>%s)/search%s$" % (self._meta.resource_name,
+                                                       trailing_slash()), self.wrap_view('get_search'), name="api_get_search"),
         ]
-        
+
     def get_search(self, request, **kwargs):
         self.method_check(request, allowed=['get'])
         self.is_authenticated(request)
@@ -83,7 +85,7 @@ class ResourceResource(ModelResource):
         page_no = int(request.GET.get('page', 1))
         if q == '':
             raise ORBAPIBadRequest(ERROR_CODE_SEARCH_NO_QUERY)
-        
+
         # Do the query.
         sqs = SearchQuerySet().models(Resource).load_all().auto_query(q)
         paginator = Paginator(sqs, 20)
@@ -104,19 +106,20 @@ class ResourceResource(ModelResource):
         object_list = {
             'objects': objects,
         }
-        
-        search.send(sender=sqs, query=q, no_results=sqs.count(), request=request, page=page_no, type=SearchTracker.SEARCH_API)
-        
+
+        search.send(sender=sqs, query=q, no_results=sqs.count(),
+                    request=request, page=page_no, type=SearchTracker.SEARCH_API)
+
         self.log_throttled_access(request)
-        return self.create_response(request, object_list)    
-       
+        return self.create_response(request, object_list)
+
     def hydrate(self, bundle, request=None):
         bundle.obj.create_user_id = bundle.request.user.id
         bundle.obj.update_user_id = bundle.request.user.id
         if 'status' in bundle.data:
             del bundle.obj.status
             del bundle.data['status']
-            
+
         # check required fields
         if 'title' not in bundle.data or bundle.data['title'].strip() == '':
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_NO_TITLE)
@@ -125,204 +128,225 @@ class ResourceResource(ModelResource):
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_NO_DESCRIPTION)
 
         no_words = len(strip_tags(bundle.data['description']).split(' '))
-        if no_words > settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS :
+        if no_words > settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS:
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_DESCRIPTION_TOO_LONG)
-            
+
         request_method = bundle.request.META['REQUEST_METHOD']
-        
+
         # check that resource doesn't already exist for this user
         if request_method.lower() != 'put':
             try:
-                resource = Resource.objects.get(create_user=bundle.request.user,title =bundle.data['title'])
-                raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_EXISTS,pk=resource.id)
+                resource = Resource.objects.get(
+                    create_user=bundle.request.user, title=bundle.data['title'])
+                raise ORBAPIBadRequest(
+                    ERROR_CODE_RESOURCE_EXISTS, pk=resource.id)
             except Resource.DoesNotExist:
                 pass
-        
+
         return bundle
-    
-         
+
+
 class ResourceFileResource(ModelResource):
+
     class Meta:
         queryset = ResourceFile.objects.all()
         resource_name = 'resourcefile'
-        allowed_methods = ['get','delete']
-        fields = ['id', 'file', 'title', 'description', 'order_by', 'file_size']
+        allowed_methods = ['get', 'delete']
+        fields = ['id', 'file', 'title',
+                  'description', 'order_by', 'file_size']
         authentication = ApiKeyAuthentication()
-        authorization = ORBAuthorization() 
+        authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
-        always_return_data = True 
+        always_return_data = True
         include_resource_uri = True
-        
-    def dehydrate_file(self,bundle):
+
+    def dehydrate_file(self, bundle):
         if bundle.obj.file:
             return bundle.request.build_absolute_uri(settings.MEDIA_URL + bundle.obj.file.name)
         else:
             return None
-        
+
+
 class ResourceURLResource(ModelResource):
+
     class Meta:
         queryset = ResourceURL.objects.all()
         resource_name = 'resourceurl'
-        allowed_methods = ['get','post','delete']
+        allowed_methods = ['get', 'post', 'delete']
         fields = ['id', 'url', 'title', 'description', 'order_by', 'file_size']
         authentication = ApiKeyAuthentication()
-        authorization = ORBAuthorization() 
+        authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
-        always_return_data = True 
+        always_return_data = True
         include_resource_uri = True
-     
+
     def hydrate(self, bundle, request=None):
         # check that user has permissions on the resource
         resource = Resource.objects.get(pk=bundle.data['resource_id'])
         user = User.objects.get(pk=bundle.request.user.id)
         if not resource_can_edit(resource, user):
             raise Unauthorized("You do not have edit access for this resource")
-        
-        bundle.obj.create_user_id = bundle.request.user.id  
-        bundle.obj.update_user_id = bundle.request.user.id 
+
+        bundle.obj.create_user_id = bundle.request.user.id
+        bundle.obj.update_user_id = bundle.request.user.id
         bundle.obj.resource_id = bundle.data['resource_id']
-        
+
         if 'file_size' not in bundle.data:
             bundle.obj.file_size = 0
-            
-        return bundle   
-        
+
+        return bundle
+
+
 class ResourceTagResource(ModelResource):
     tag = fields.ToOneField('orb.api.resources.TagResource', 'tag', full=True)
+
     class Meta:
         queryset = ResourceTag.objects.all()
         resource_name = 'resourcetag'
-        allowed_methods = ['get','post','delete']
+        allowed_methods = ['get', 'post', 'delete']
         include_resource_uri = False
         authentication = ApiKeyAuthentication()
         authorization = ORBResourceTagAuthorization()
         serializer = PrettyJSONSerializer()
-        always_return_data = True  
+        always_return_data = True
         include_resource_uri = True
-    
+
     def hydrate(self, bundle, request=None):
-        
+
         if 'resource_id' not in bundle.data or not bundle.data['resource_id']:
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCETAG_NO_RESOURCE)
 
         if 'tag_id' not in bundle.data or not bundle.data['tag_id']:
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCETAG_NO_TAG)
-        
+
         # check resource exists
         try:
             resource = Resource.objects.get(pk=bundle.data['resource_id'])
         except Resource.DoesNotExist:
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCE_DOES_NOT_EXIST)
-        
+
         # check tag exists
         try:
             tag = Tag.objects.get(pk=bundle.data['tag_id'])
         except Tag.DoesNotExist:
             raise ORBAPIBadRequest(ERROR_CODE_TAG_DOES_NOT_EXIST)
-        
+
         # check that user has permissions on the resource
         user = User.objects.get(pk=bundle.request.user.id)
         if not resource_can_edit(resource, user):
             raise Unauthorized("You do not have edit access for this resource")
-        
+
         # check that tag not already added to resource
-        resource_tags = ResourceTag.objects.filter(resource=resource, tag=tag).count()
+        resource_tags = ResourceTag.objects.filter(
+            resource=resource, tag=tag).count()
         if resource_tags != 0:
             raise ORBAPIBadRequest(ERROR_CODE_RESOURCETAG_EXISTS)
-        
-        bundle.obj.create_user_id = bundle.request.user.id  
+
+        bundle.obj.create_user_id = bundle.request.user.id
         bundle.obj.resource_id = bundle.data['resource_id']
         bundle.obj.tag_id = bundle.data['tag_id']
-        return bundle  
-        
+        return bundle
+
+
 class TagResource(ModelResource):
     url = fields.CharField(readonly=True)
+
     class Meta:
-        queryset = Tag.objects.all()
+        queryset = Tag.active.all()
         resource_name = 'tag'
-        allowed_methods = ['get','post']
-        fields = ['id','name', 'image']
-        filtering = {"name": [ "exact" ]}
+        allowed_methods = ['get', 'post']
+        fields = ['id', 'name', 'image']
+        filtering = {"name": ["exact"]}
         authentication = ApiKeyAuthentication()
-        authorization = ORBAuthorization() 
+        authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
-        always_return_data = True 
+        always_return_data = True
         include_resource_uri = True
 
-    def dehydrate_url(self,bundle):
-        url = bundle.request.build_absolute_uri(reverse('orb_tags', args=[bundle.obj.slug]))
+    def dehydrate_url(self, bundle):
+        url = bundle.request.build_absolute_uri(
+            reverse('orb_tags', args=[bundle.obj.slug]))
         return url
- 
-    def dehydrate_image(self,bundle):
+
+    def dehydrate_image(self, bundle):
         if bundle.obj.image:
             return bundle.request.build_absolute_uri(settings.MEDIA_URL + bundle.obj.image.name)
         else:
             return None
-    
+
     def hydrate(self, bundle, request=None):
-        
+
         # check not empty
         if bundle.data['name'].strip() == '':
             raise ORBAPIBadRequest(ERROR_CODE_TAG_EMPTY)
-        
+
         # check not all non-word chars
         regex = re.compile('[,\.!?"\']')
         if regex.sub('', bundle.data['name'].strip()) == '':
             raise ORBAPIBadRequest(ERROR_CODE_TAG_EMPTY)
-        
+
         # check tag doesn't already exist
         try:
             tag = Tag.objects.get(name=bundle.data['name'])
             tr = TagResource()
-            bundle = tr.build_bundle(obj=tag,request=request)
+            bundle = tr.build_bundle(obj=tag, request=request)
             raise ORBAPIBadRequest(ERROR_CODE_TAG_EXISTS)
         except Tag.DoesNotExist:
             pass
-        
+
         category = Category.objects.get(slug='other')
-        bundle.obj.create_user_id = bundle.request.user.id  
+        bundle.obj.create_user_id = bundle.request.user.id
         bundle.obj.update_user_id = bundle.request.user.id
         bundle.obj.category_id = category.id
-        return bundle  
-          
+        return bundle
+
+
 class TagsResource(ModelResource):
-    resources = fields.ToManyField('orb.api.resources.TagsResourceResource', 'resourcetag_set', full=True, null=True, use_in='detail')
+    resources = fields.ToManyField('orb.api.resources.TagsResourceResource',
+                                   'resourcetag_set', full=True, null=True, use_in='detail')
     url = fields.CharField(readonly=True)
+
     class Meta:
-        queryset = Tag.objects.all()
+        queryset = Tag.active.all()
         resource_name = 'tags'
         allowed_methods = ['get']
-        fields = ['id','name', 'image']
+        fields = ['id', 'name', 'image']
         authentication = ApiKeyAuthentication()
-        authorization = ORBAuthorization() 
+        authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
-        always_return_data = True 
+        always_return_data = True
         include_resource_uri = True
-        
-    def dehydrate_url(self,bundle):
-        url = bundle.request.build_absolute_uri(reverse('orb_tags', args=[bundle.obj.slug]))
+
+    def dehydrate_url(self, bundle):
+        url = bundle.request.build_absolute_uri(
+            reverse('orb_tags', args=[bundle.obj.slug]))
         return url
- 
-    def dehydrate_image(self,bundle):
+
+    def dehydrate_image(self, bundle):
         if bundle.obj.image:
             return bundle.request.build_absolute_uri(settings.MEDIA_URL + bundle.obj.image.name)
         else:
             return None
-        
+
+
 class TagsResourceResource(ModelResource):
-    resource = fields.ToOneField('orb.api.resources.ResourceResource', 'resource', full=True)
+    resource = fields.ToOneField(
+        'orb.api.resources.ResourceResource', 'resource', full=True)
+
     class Meta:
-        queryset = ResourceTag.objects.filter(resource__status=Resource.APPROVED)
+        queryset = ResourceTag.objects.filter(
+            resource__status=Resource.APPROVED)
         resource_name = 'tagsresource'
         allowed_methods = ['get']
         authentication = ApiKeyAuthentication()
         authorization = ORBResourceTagAuthorization()
         serializer = PrettyJSONSerializer()
-        always_return_data = True  
+        always_return_data = True
         include_resource_uri = True
-        
+
+
 class CategoryResource(ModelResource):
-    
+
     class Meta:
         queryset = Category.objects.all()
         resource_name = 'category'
@@ -330,7 +354,5 @@ class CategoryResource(ModelResource):
         authentication = ApiKeyAuthentication()
         authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
-        always_return_data = True  
+        always_return_data = True
         include_resource_uri = True
-
-    

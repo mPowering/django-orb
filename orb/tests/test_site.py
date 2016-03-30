@@ -7,225 +7,234 @@ from django.test.client import Client
 
 from orb.models import Tag, Resource, TagOwner, TagTracker, ResourceTracker
 
+
 class SiteTest(TestCase):
     fixtures = ['user.json', 'orb.json']
-    
+
     def setUp(self):
         self.client = Client()
-    
+
     def test_pages(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
-        
+
         response = self.client.get(reverse('orb_home'))
         self.assertEqual(response.status_code, 200)
-        
+
         response = self.client.get(reverse('orb_about'))
         self.assertEqual(response.status_code, 200)
-        
+
         response = self.client.get(reverse('orb_developers'))
         self.assertEqual(response.status_code, 200)
-        
+
         response = self.client.get(reverse('orb_how_to'))
         self.assertEqual(response.status_code, 200)
-        
+
         response = self.client.get(reverse('orb_partners'))
-        self.assertEqual(response.status_code, 200)  
+        self.assertEqual(response.status_code, 200)
 
         response = self.client.get(reverse('orb_taxonomy'))
-        self.assertEqual(response.status_code, 200)  
+        self.assertEqual(response.status_code, 200)
 
         response = self.client.get(reverse('orb_terms'))
-        self.assertEqual(response.status_code, 200) 
-        
+        self.assertEqual(response.status_code, 200)
+
         response = self.client.get(reverse('orb_tag_cloud'))
         self.assertEqual(response.status_code, 200)
-        
+
         response = self.client.get(reverse('orb_resource_create'))
         self.assertEqual(response.status_code, 200)
-        
+
         response = self.client.get(reverse('orb_guidelines'))
         self.assertEqual(response.status_code, 200)
-        
+
         response = self.client.get(reverse('orb_search'))
         self.assertEqual(response.status_code, 200)
-        
+
         response = self.client.get(reverse('orb_search_advanced'))
         self.assertEqual(response.status_code, 200)
-        
+
         response = self.client.get(reverse('orb_opensearch'))
         self.assertEqual(response.status_code, 200)
-        
-    def test_tags(self):  
-         
+
+    def test_tags(self):
+
         tags = Tag.objects.all()
-        
+
         for t in tags:
-            
+
             # Anon user (not logged in)
             tracker_count_start = TagTracker.objects.all().count()
             response = self.client.get(reverse('orb_tags', args=[t.slug]))
             self.assertEqual(response.status_code, 200)
             tracker_count_end = TagTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
-            
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
             # Standard user
             self.client.login(username='standarduser', password='password')
             tracker_count_start = TagTracker.objects.all().count()
             response = self.client.get(reverse('orb_tags', args=[t.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = TagTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-            
+
             # api user
             self.client.login(username='apiuser', password='password')
             tracker_count_start = TagTracker.objects.all().count()
             response = self.client.get(reverse('orb_tags', args=[t.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = TagTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-            
+
             # superuser
             self.client.login(username='superuser', password='password')
             tracker_count_start = TagTracker.objects.all().count()
             response = self.client.get(reverse('orb_tags', args=[t.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = TagTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-            
+
             # staffuser
             self.client.login(username='staffuser', password='password')
             tracker_count_start = TagTracker.objects.all().count()
             response = self.client.get(reverse('orb_tags', args=[t.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = TagTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-            
+
             # orgowner
             self.client.login(username='orgowner', password='password')
             tracker_count_start = TagTracker.objects.all().count()
             response = self.client.get(reverse('orb_tags', args=[t.slug]))
             self.assertEqual(response.status_code, 200)
             tracker_count_end = TagTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-    
+
     def test_resources_approved(self):
-        
+
         approved_resources = Resource.objects.filter(status=Resource.APPROVED)
-        
+
         for r in approved_resources:
-            
+
             # Anon user (not logged in)
             tracker_count_start = ResourceTracker.objects.all().count()
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
-            
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
-            
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
             # Standard user
             self.client.login(username='standarduser', password='password')
             tracker_count_start = ResourceTracker.objects.all().count()
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
-            
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-            
+
             # api user
             self.client.login(username='apiuser', password='password')
             tracker_count_start = ResourceTracker.objects.all().count()
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
-            
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-            
+
             # superuser
             self.client.login(username='superuser', password='password')
             tracker_count_start = ResourceTracker.objects.all().count()
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
-            
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-            
+
             # staffuser
             self.client.login(username='staffuser', password='password')
             tracker_count_start = ResourceTracker.objects.all().count()
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
-            
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-            
+
             # orgowner
             self.client.login(username='orgowner', password='password')
             tracker_count_start = ResourceTracker.objects.all().count()
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
-            
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-    
-    def test_resources_pending_crt(self):    
-        pending_crt_resources = Resource.objects.filter(status=Resource.PENDING_CRT)
-        
+
+    def test_resources_pending_crt(self):
+        pending_crt_resources = Resource.objects.filter(
+            status=Resource.PENDING_CRT)
+
         for r in pending_crt_resources:
-            
+
             # Anon user (not logged in)
             tracker_count_start = ResourceTracker.objects.all().count()
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 404) 
+            self.assertEqual(response.status_code, 404)
             tracker_count_end = ResourceTracker.objects.all().count()
             self.assertEqual(tracker_count_start, tracker_count_end)
-            
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 404) 
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 404)
             tracker_count_end = ResourceTracker.objects.all().count()
             self.assertEqual(tracker_count_start, tracker_count_end)
-            
+
             # Standard user
             self.client.login(username='standarduser', password='password')
             self.user = User.objects.get(username='standarduser')
@@ -234,24 +243,25 @@ class SiteTest(TestCase):
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
                 tracker_count_end = ResourceTracker.objects.all().count()
-                self.assertEqual(tracker_count_start+1, tracker_count_end)
+                self.assertEqual(tracker_count_start + 1, tracker_count_end)
             else:
                 self.assertEqual(response.status_code, 404)
                 tracker_count_end = ResourceTracker.objects.all().count()
                 self.assertEqual(tracker_count_start, tracker_count_end)
-            
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
                 tracker_count_end = ResourceTracker.objects.all().count()
-                self.assertEqual(tracker_count_start+1, tracker_count_end)
+                self.assertEqual(tracker_count_start + 1, tracker_count_end)
             else:
-                self.assertEqual(response.status_code, 404) 
+                self.assertEqual(response.status_code, 404)
                 tracker_count_end = ResourceTracker.objects.all().count()
                 self.assertEqual(tracker_count_start, tracker_count_end)
             self.client.logout()
-            
+
             # api user
             self.client.login(username='apiuser', password='password')
             self.user = User.objects.get(username='apiuser')
@@ -260,54 +270,57 @@ class SiteTest(TestCase):
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
                 tracker_count_end = ResourceTracker.objects.all().count()
-                self.assertEqual(tracker_count_start+1, tracker_count_end)
+                self.assertEqual(tracker_count_start + 1, tracker_count_end)
             else:
                 self.assertEqual(response.status_code, 404)
                 tracker_count_end = ResourceTracker.objects.all().count()
                 self.assertEqual(tracker_count_start, tracker_count_end)
-            
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
                 tracker_count_end = ResourceTracker.objects.all().count()
-                self.assertEqual(tracker_count_start+1, tracker_count_end)
+                self.assertEqual(tracker_count_start + 1, tracker_count_end)
             else:
-                self.assertEqual(response.status_code, 404) 
+                self.assertEqual(response.status_code, 404)
                 tracker_count_end = ResourceTracker.objects.all().count()
                 self.assertEqual(tracker_count_start, tracker_count_end)
             self.client.logout()
-            
+
             # superuser
             self.client.login(username='superuser', password='password')
             tracker_count_start = ResourceTracker.objects.all().count()
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
-            
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-            
+
             # staffuser
             self.client.login(username='staffuser', password='password')
             tracker_count_start = ResourceTracker.objects.all().count()
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
-            
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             tracker_count_end = ResourceTracker.objects.all().count()
-            self.assertEqual(tracker_count_start+1, tracker_count_end)
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
             self.client.logout()
-            
+
             # orgowner
             self.client.login(username='orgowner', password='password')
             self.user = User.objects.get(username='orgowner')
@@ -316,36 +329,39 @@ class SiteTest(TestCase):
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
                 tracker_count_end = ResourceTracker.objects.all().count()
-                self.assertEqual(tracker_count_start+1, tracker_count_end)
+                self.assertEqual(tracker_count_start + 1, tracker_count_end)
             else:
                 self.assertEqual(response.status_code, 404)
                 tracker_count_end = ResourceTracker.objects.all().count()
                 self.assertEqual(tracker_count_start, tracker_count_end)
-            
+
             tracker_count_start = ResourceTracker.objects.all().count()
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
                 tracker_count_end = ResourceTracker.objects.all().count()
-                self.assertEqual(tracker_count_start+1, tracker_count_end)
+                self.assertEqual(tracker_count_start + 1, tracker_count_end)
             else:
                 self.assertEqual(response.status_code, 404)
                 tracker_count_end = ResourceTracker.objects.all().count()
                 self.assertEqual(tracker_count_start, tracker_count_end)
             self.client.logout()
-        
-    def test_resources_pending_mep(self): 
-        pending_mep_resources = Resource.objects.filter(status=Resource.PENDING_MRT)
-        
+
+    def test_resources_pending_mep(self):
+        pending_mep_resources = Resource.objects.filter(
+            status=Resource.PENDING_MRT)
+
         for r in pending_mep_resources:
-            
+
             # Anon user (not logged in)
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 404) 
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 404) 
-            
+            self.assertEqual(response.status_code, 404)
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 404)
+
             # Standard user
             self.client.login(username='standarduser', password='password')
             self.user = User.objects.get(username='standarduser')
@@ -354,14 +370,15 @@ class SiteTest(TestCase):
                 self.assertEqual(response.status_code, 200)
             else:
                 self.assertEqual(response.status_code, 404)
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
             else:
-                self.assertEqual(response.status_code, 404) 
+                self.assertEqual(response.status_code, 404)
             self.client.logout()
-            
+
             # api user
             self.client.login(username='apiuser', password='password')
             self.user = User.objects.get(username='apiuser')
@@ -370,32 +387,35 @@ class SiteTest(TestCase):
                 self.assertEqual(response.status_code, 200)
             else:
                 self.assertEqual(response.status_code, 404)
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
             else:
-                self.assertEqual(response.status_code, 404) 
+                self.assertEqual(response.status_code, 404)
             self.client.logout()
-            
+
             # superuser
             self.client.login(username='superuser', password='password')
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             self.client.logout()
-            
+
             # staffuser
             self.client.login(username='staffuser', password='password')
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             self.client.logout()
-            
+
             # orgowner
             self.client.login(username='orgowner', password='password')
             self.user = User.objects.get(username='orgowner')
@@ -404,27 +424,29 @@ class SiteTest(TestCase):
                 self.assertEqual(response.status_code, 200)
             else:
                 self.assertEqual(response.status_code, 404)
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
             else:
                 self.assertEqual(response.status_code, 404)
             self.client.logout()
-    
-    def test_resources_rejected(self): 
-            
+
+    def test_resources_rejected(self):
+
         rejected_resources = Resource.objects.filter(status=Resource.REJECTED)
-        
+
         for r in rejected_resources:
-            
+
             # Anon user (not logged in)
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 404) 
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 404) 
-            
+            self.assertEqual(response.status_code, 404)
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 404)
+
             # Standard user
             self.client.login(username='standarduser', password='password')
             self.user = User.objects.get(username='standarduser')
@@ -433,14 +455,15 @@ class SiteTest(TestCase):
                 self.assertEqual(response.status_code, 200)
             else:
                 self.assertEqual(response.status_code, 404)
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
             else:
-                self.assertEqual(response.status_code, 404) 
+                self.assertEqual(response.status_code, 404)
             self.client.logout()
-            
+
             # api user
             self.client.login(username='apiuser', password='password')
             self.user = User.objects.get(username='apiuser')
@@ -449,32 +472,35 @@ class SiteTest(TestCase):
                 self.assertEqual(response.status_code, 200)
             else:
                 self.assertEqual(response.status_code, 404)
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
             else:
-                self.assertEqual(response.status_code, 404) 
+                self.assertEqual(response.status_code, 404)
             self.client.logout()
-            
+
             # superuser
             self.client.login(username='superuser', password='password')
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             self.client.logout()
-            
+
             # staffuser
             self.client.login(username='staffuser', password='password')
             response = self.client.get(reverse('orb_resource', args=[r.slug]))
-            self.assertEqual(response.status_code, 200) 
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
-            self.assertEqual(response.status_code, 200) 
+            self.assertEqual(response.status_code, 200)
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
+            self.assertEqual(response.status_code, 200)
             self.client.logout()
-            
+
             # orgowner
             self.client.login(username='orgowner', password='password')
             self.user = User.objects.get(username='orgowner')
@@ -483,20 +509,19 @@ class SiteTest(TestCase):
                 self.assertEqual(response.status_code, 200)
             else:
                 self.assertEqual(response.status_code, 404)
-            
-            response = self.client.get(reverse('orb_resource_permalink', args=[r.id]))
+
+            response = self.client.get(
+                reverse('orb_resource_permalink', args=[r.id]))
             if r.create_user == self.user or r.update_user == self.user:
                 self.assertEqual(response.status_code, 200)
             else:
                 self.assertEqual(response.status_code, 404)
             self.client.logout()
-     
-        def test_tag_link(self): 
+
+        def test_tag_link(self):
             tag_links = Tag.objects.all().exclude(external_url=None).exclude(external_url='')
-            
-            
-        
-        '''
+
+        """
         orb_tags_filter_prefill
         orb_tags_filter_results
         orb_tag_view_link
@@ -514,127 +539,131 @@ class SiteTest(TestCase):
  
         check tracker objects added
  
-        '''
- 
+        """
 
- 
+
 class AnalyticsPageTest(TestCase):
     fixtures = ['user.json', 'orb.json']
-    
+
     def setUp(self):
         self.client = Client()
-        
-    def test_pages(self):   
-        
-        # for anon user    
+
+    def test_pages(self):
+
+        # for anon user
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 401) 
-        
+        self.assertEqual(response.status_code, 401)
+
         response = self.client.get(reverse('orb_analytics_map'))
-        self.assertEqual(response.status_code, 401) 
-        
+        self.assertEqual(response.status_code, 401)
+
         # Standard user
         self.client.login(username='standarduser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 401) 
-        
+        self.assertEqual(response.status_code, 401)
+
         response = self.client.get(reverse('orb_analytics_map'))
-        self.assertEqual(response.status_code, 401) 
+        self.assertEqual(response.status_code, 401)
         self.client.logout()
-        
+
         # api user
         self.client.login(username='apiuser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 401) 
-        
+        self.assertEqual(response.status_code, 401)
+
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 401)
         self.client.logout()
-        
+
         # superuser
         self.client.login(username='superuser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 200) 
-        
-        response = self.client.get(reverse('orb_analytics_map'))
-        self.assertEqual(response.status_code, 200) 
-        self.client.logout()
-        
-        # staffuser
-        self.client.login(username='staffuser', password='password')
-        response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 200) 
-        
+        self.assertEqual(response.status_code, 200)
+
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 200)
         self.client.logout()
-        
+
+        # staffuser
+        self.client.login(username='staffuser', password='password')
+        response = self.client.get(reverse('orb_analytics_home'))
+        self.assertEqual(response.status_code, 200)
+
+        response = self.client.get(reverse('orb_analytics_map'))
+        self.assertEqual(response.status_code, 200)
+        self.client.logout()
+
         # orgowner
         self.client.login(username='orgowner', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 401) 
-        
+        self.assertEqual(response.status_code, 401)
+
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 401)
         self.client.logout()
-    
-    
+
     def test_tags(self):
-            
+
         tags = Tag.objects.all()
         for t in tags:
-            # for anon user    
-            response = self.client.get(reverse('orb_analytics_tag',args=[t.id]))
+            # for anon user
+            response = self.client.get(
+                reverse('orb_analytics_tag', args=[t.id]))
             self.assertEqual(response.status_code, 401)
-        
+
             # Standard user
             self.client.login(username='standarduser', password='password')
-            response = self.client.get(reverse('orb_analytics_tag',args=[t.id]))
+            response = self.client.get(
+                reverse('orb_analytics_tag', args=[t.id]))
             self.assertEqual(response.status_code, 401)
             self.client.logout()
-            
+
             # api user
             self.client.login(username='apiuser', password='password')
-            response = self.client.get(reverse('orb_analytics_tag',args=[t.id]))
+            response = self.client.get(
+                reverse('orb_analytics_tag', args=[t.id]))
             self.assertEqual(response.status_code, 401)
             self.client.logout()
-            
+
             # superuser
             self.client.login(username='superuser', password='password')
-            response = self.client.get(reverse('orb_analytics_tag',args=[t.id]))
+            response = self.client.get(
+                reverse('orb_analytics_tag', args=[t.id]))
             self.assertEqual(response.status_code, 200)
             self.client.logout()
-            
+
             # staffuser
             self.client.login(username='staffuser', password='password')
-            response = self.client.get(reverse('orb_analytics_tag',args=[t.id]))
+            response = self.client.get(
+                reverse('orb_analytics_tag', args=[t.id]))
             self.assertEqual(response.status_code, 200)
             self.client.logout()
-            
+
             # orgowner
             self.client.login(username='orgowner', password='password')
             self.user = User.objects.get(username='orgowner')
-            tag_owner = TagOwner.objects.filter(tag=t,user=self.user).count()
-            response = self.client.get(reverse('orb_analytics_tag',args=[t.id]))
+            tag_owner = TagOwner.objects.filter(tag=t, user=self.user).count()
+            response = self.client.get(
+                reverse('orb_analytics_tag', args=[t.id]))
             if tag_owner > 0:
                 self.assertEqual(response.status_code, 200)
             else:
                 self.assertEqual(response.status_code, 401)
             self.client.logout()
-         
-        '''
+
+        """
         response = self.client.get(reverse('orb_analytics_download'))
         self.assertEqual(response.status_code, 401)     
-        '''
-                      
+        """
+
+
 class FeedTest(TestCase):
     fixtures = ['user.json', 'orb.json']
-    
+
     def setUp(self):
         self.client = Client()
-        
-        
-    '''
+
+    """
     orb_feed
     orb_tag_feed
-    '''
+    """

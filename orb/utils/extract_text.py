@@ -5,12 +5,14 @@ import textract
 from django.conf import settings
 from orb.models import ResourceFile
 
-def run(): 
+
+def run():
     files = ResourceFile.objects.filter(file_full_text=None)
     for f in files:
-        print os.path.join(settings.MEDIA_ROOT,f.file.name)
+        print os.path.join(settings.MEDIA_ROOT, f.file.name)
         try:
-            text = textract.process(os.path.join(settings.MEDIA_ROOT,f.file.name))
+            text = textract.process(os.path.join(
+                settings.MEDIA_ROOT, f.file.name))
             f.file_full_text = text
             f.save()
             # this just triggers the search indexing
@@ -18,7 +20,6 @@ def run():
         except textract.exceptions.ExtensionNotSupported:
             # do nothing
             print "File type not supported... yet!"
-
 
 
 if __name__ == "__main__":

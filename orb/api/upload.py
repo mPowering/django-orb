@@ -1,25 +1,19 @@
-import os
 
-from django.conf import settings
-from django.contrib.auth import authenticate
-from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import render,render_to_response
-from django.template import RequestContext
-from django.utils.translation import ugettext as _
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from orb.api.error_codes import *
 from orb.models import Resource, ResourceFile
 
 from tastypie.authentication import ApiKeyAuthentication
-from tastypie.exceptions import BadRequest
+
 
 @csrf_exempt
 def image_view(request):
-    
+
     if request.method != 'POST':
         return HttpResponse(status=HTML_METHOD_NOT_ALLOWED)
-    
+
     auth = ApiKeyAuthentication()
     auth_result = auth.is_authenticated(request)
     if auth_result == False:
@@ -28,25 +22,26 @@ def image_view(request):
         return auth_result
 
     required_params = ['resource_id']
-    
+
     for r in required_params:
         if r not in request.POST:
-            return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No '+r+' provided"}')
-     
+            return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No ' + r + ' provided"}')
+
     if 'image_file' not in request.FILES:
-       return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No image file provided"}')
-      
+        return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No image file provided"}')
+
     # check owner of resource
     resource_id = request.POST['resource_id']
     try:
-        resource = Resource.objects.get(create_user=request.user,pk=resource_id)
+        resource = Resource.objects.get(
+            create_user=request.user, pk=resource_id)
     except Resource.DoesNotExist:
         return HttpResponse(status=HTML_UNAUTHORIZED)
-    
+
     # handle file upload
     resource.image = request.FILES['image_file']
     resource.save()
-   
+
     return HttpResponse(status=HTML_CREATED)
 
 
@@ -54,7 +49,7 @@ def image_view(request):
 def file_view(request):
     if request.method != 'POST':
         return HttpResponse(status=HTML_METHOD_NOT_ALLOWED)
-    
+
     auth = ApiKeyAuthentication()
     auth_result = auth.is_authenticated(request)
     if auth_result == False:
@@ -62,22 +57,23 @@ def file_view(request):
     elif auth_result != True:
         return auth_result
 
-    required_params = ['resource_id','title', 'description', 'order_by']
-    
+    required_params = ['resource_id', 'title', 'description', 'order_by']
+
     for r in required_params:
         if r not in request.POST:
-            return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No '+r+' provided"}')
-     
+            return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No ' + r + ' provided"}')
+
     if 'resource_file' not in request.FILES:
-       return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No resource file provided"}')
-      
+        return HttpResponse(status=HTML_BADREQUEST, content='{ "error": "No resource file provided"}')
+
     # check owner of resource
     resource_id = request.POST['resource_id']
     try:
-        resource = Resource.objects.get(create_user=request.user,pk=resource_id)
+        resource = Resource.objects.get(
+            create_user=request.user, pk=resource_id)
     except Resource.DoesNotExist:
         return HttpResponse(status=HTML_UNAUTHORIZED)
-    
+
     rf = ResourceFile()
     rf.title = request.POST['title']
     rf.resource = resource
@@ -87,5 +83,5 @@ def file_view(request):
     rf.description = request.POST['description']
     rf.order_by = request.POST['order_by']
     rf.save()
-    
+
     return HttpResponse(status=HTML_CREATED)
