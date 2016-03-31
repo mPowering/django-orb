@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.db.models import Count
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -25,6 +26,7 @@ from orb.views import resource_can_edit
 def home_view(request):
     start_date = timezone.now() - datetime.timedelta(days=31)
     end_date = timezone.now()
+
     pending_crt_resources = Resource.objects.filter(
         status=Resource.PENDING_CRT).order_by('create_date')
     pending_mep_resources = Resource.objects.filter(
@@ -35,8 +37,15 @@ def home_view(request):
         'resource', 'resource__slug', 'resource__title', 'resource__id').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
     popular_tags = TagTracker.objects.filter(access_date__gte=start_date).values(
         'tag', 'tag__slug', 'tag__name').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
-    organisations = Tag.objects.filter(category__slug='organisation', resourcetag__isnull=False).annotate(
-        total_resources=Count('resourcetag__id')).order_by('name')
+
+    organisations_approved = Tag.objects.filter(
+        category__slug='organisation',
+        resourcetag__isnull=False,
+        resourcetag__resource__status='Approved').annotate(
+            total_resources=Count('resourcetag__id')).order_by('name')
+
+    organisations_unapproved = Tag.objects.filter(category__slug='organisation').exclude(
+        resourcetag__resource__status='Approved').order_by('name')
 
     snor = timezone.now() - datetime.timedelta(days=90)
     searches_no_results = SearchTracker.objects.filter(access_date__gte=snor, no_results=0).values(
@@ -92,7 +101,8 @@ def home_view(request):
                                'popular_searches': popular_searches,
                                'popular_tags': popular_tags,
                                'popular_resources': popular_resources,
-                               'organisations': organisations,
+                               'organisations_approved': organisations_approved,
+                               'organisations_unapproved': organisations_unapproved,
                                'recent_activity': recent_activity,
                                'searches_no_results': searches_no_results,
                                'user_registrations': user_registrations,

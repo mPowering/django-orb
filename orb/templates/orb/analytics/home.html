@@ -223,10 +223,18 @@
 
     <a name="o" class="named-anchor"></a>
     <h3>{% trans 'Organisations' %}</h3>
+    <h4>{% trans 'Organizations with Approved Resources' %}</h4>
+    <p>({% trans 'Approved content count in parentheses.' %})</p>
     <ul>
-        {% for o in organisations %}
+        {% for o in organisations_approved %}
             <li><a href="{% url 'orb_analytics_tag' o.id %}">{{ o.name }}
                 ({{ o.total_resources }})</a></li>
+        {% endfor %}
+    </ul>
+    <h4>{% trans 'Organizations without Approved Resources' %}</h4>
+    <ul>
+        {% for o in organisations_unapproved %}
+            <li><a href="{% url 'orb_analytics_tag' o.id %}">{{ o.name }}</a></li>
         {% endfor %}
     </ul>
 
