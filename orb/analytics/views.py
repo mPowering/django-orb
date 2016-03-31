@@ -1,13 +1,18 @@
+"""
+Views for rendering site usage analytics
+"""
 
 import datetime
+
 import dateutil.relativedelta
 import tablib
-
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.db.models import Count
 from django.http import HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils import timezone
 
@@ -15,12 +20,9 @@ from orb.analytics.models import UserLocationVisualization
 from orb.models import Resource, SearchTracker, ResourceTracker, Tag, TagOwner, TagTracker
 from orb.views import resource_can_edit
 
-# Create your views here.
 
-
+@staff_member_required
 def home_view(request):
-    if not request.user.is_staff:
-        return HttpResponse(status=401, content="Not Authorized")
     start_date = timezone.now() - datetime.timedelta(days=31)
     end_date = timezone.now()
     pending_crt_resources = Resource.objects.filter(
@@ -100,17 +102,15 @@ def home_view(request):
                               context_instance=RequestContext(request))
 
 
+@staff_member_required
 def map_view(request):
-    if not request.user.is_staff:
-        return HttpResponse(status=401, content="Not Authorized")
     return render_to_response('orb/analytics/map.html',
                               {},
                               context_instance=RequestContext(request))
 
 
+@staff_member_required
 def visitor_view(request, year=None, month=None):
-    if not request.user.is_staff:
-        return HttpResponse(status=401, content="Not Authorized")
 
     if year == None and month == None:
         today = timezone.now()
@@ -319,9 +319,8 @@ def tag_download(request, id, year, month):
     return response
 
 
+@staff_member_required
 def mailing_list_view(request):
-    if not request.user.is_staff:
-        return HttpResponse(status=401, content="Not Authorized")
 
     users = User.objects.filter(
         userprofile__mailing=True).order_by('first_name')
@@ -362,15 +361,10 @@ def mailing_list_view(request):
 
 
 def resource_view(request, id):
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        return Http404()
+    resource = get_object_or_404(Resource, pk=id)
 
     if not resource_can_edit(resource, request.user):
         return HttpResponse(status=401, content="Not Authorized")
-
-    resource = Resource.objects.get(pk=id)
 
     start_date = timezone.now() - datetime.timedelta(days=31)
     end_date = timezone.now()
@@ -422,11 +416,10 @@ def resource_view(request, id):
                               context_instance=RequestContext(request))
 
 
+@login_required
 def review_view(request):
 
-    if request.user.is_anonymous():
-        return HttpResponse(status=401, content="Not Authorized")
-    elif (request.user.is_staff or
+    if (request.user.is_staff or
           (request.user.userprofile and (request.user.userprofile.crt_member == True or
                                          request.user.userprofile.mep_member == True))):
         pass
@@ -445,9 +438,11 @@ def review_view(request):
                               context_instance=RequestContext(request))
 
 
-# Helper functions
 def is_tag_owner(request, id):
-    if not request.user.is_authenticated:
+    """
+    Permission helper for tag related analytics views
+    """
+    if not request.user.is_authenticated():
         return False
 
     if request.user.is_staff:
@@ -455,6 +450,7 @@ def is_tag_owner(request, id):
 
     try:
         TagOwner.objects.get(tag__pk=id, user__id=request.user.id)
-        return True
     except TagOwner.DoesNotExist:
         return False
+    else:
+        return True
