@@ -11,10 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.db.models import Count
-from django.db.models import Q
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
 from orb.analytics.models import UserLocationVisualization
@@ -95,28 +93,25 @@ def home_view(request):
     countries = UserLocationVisualization.objects.exclude(country_name='').values_list(
         'country_name', flat=True).distinct().order_by('country_name')
 
-    return render_to_response('orb/analytics/home.html',
-                              {'pending_crt_resources': pending_crt_resources,
-                               'pending_mep_resources': pending_mep_resources,
-                               'popular_searches': popular_searches,
-                               'popular_tags': popular_tags,
-                               'popular_resources': popular_resources,
-                               'organisations_approved': organisations_approved,
-                               'organisations_unapproved': organisations_unapproved,
-                               'recent_activity': recent_activity,
-                               'searches_no_results': searches_no_results,
-                               'user_registrations': user_registrations,
-                               'total_user_registrations': total_user_registrations,
-                               'countries': countries,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/analytics/home.html', {
+        'pending_crt_resources': pending_crt_resources,
+        'pending_mep_resources': pending_mep_resources,
+        'popular_searches': popular_searches,
+        'popular_tags': popular_tags,
+        'popular_resources': popular_resources,
+        'organisations_approved': organisations_approved,
+        'organisations_unapproved': organisations_unapproved,
+        'recent_activity': recent_activity,
+        'searches_no_results': searches_no_results,
+        'user_registrations': user_registrations,
+        'total_user_registrations': total_user_registrations,
+        'countries': countries,
+    })
 
 
 @staff_member_required
 def map_view(request):
-    return render_to_response('orb/analytics/map.html',
-                              {},
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/analytics/map.html', {})
 
 
 @staff_member_required
@@ -197,13 +192,11 @@ def visitor_view(request, year=None, month=None):
     month_views = ResourceTracker.objects.all().datetimes(
         'access_date', 'month', 'DESC')
 
-    return render_to_response('orb/analytics/visitor.html',
-                              {
-                                  'archive_month': archive_month,
-                                  'stats': stats,
-                                  'month_views': month_views,
-                              },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/analytics/visitor.html', {
+        'archive_month': archive_month,
+        'stats': stats,
+        'month_views': month_views,
+    })
 
 
 def tag_view(request, id):
@@ -262,13 +255,13 @@ def tag_view(request, id):
     resources = Resource.objects.filter(
         resourcetag__tag=tag).distinct().order_by('title')
 
-    return render_to_response('orb/analytics/tag.html',
-                              {'tag': tag,
-                               'recent_activity': recent_activity,
-                               'page': trackers,
-                               'export': export,
-                               'resources': resources},
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/analytics/tag.html', {
+        'tag': tag,
+        'recent_activity': recent_activity,
+        'page': trackers,
+        'export': export,
+        'resources': resources,
+    })
 
 
 def tag_download(request, id, year, month):
@@ -418,12 +411,11 @@ def resource_view(request, id):
     except (EmptyPage, InvalidPage):
         trackers = paginator.page(paginator.num_pages)
 
-    return render_to_response('orb/analytics/resource.html',
-                              {'resource': resource,
-                               'recent_activity': recent_activity,
-                               'page': trackers,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/analytics/resource.html', {
+        'resource': resource,
+        'recent_activity': recent_activity,
+        'page': trackers,
+    })
 
 
 @login_required
@@ -441,11 +433,10 @@ def review_view(request):
     pending_mep_resources = Resource.objects.filter(
         status=Resource.PENDING_MRT).order_by('create_date')
 
-    return render_to_response('orb/analytics/review.html',
-                              {'pending_crt_resources': pending_crt_resources,
-                               'pending_mep_resources': pending_mep_resources,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/analytics/review.html', {
+        'pending_crt_resources': pending_crt_resources,
+        'pending_mep_resources': pending_mep_resources,
+    })
 
 
 def is_tag_owner(request, id):
