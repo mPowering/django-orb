@@ -1,21 +1,23 @@
 /*
  * Base structure
- 
+
  #2596b4 - light blue - r37 g150 b180
  #2a6083 - mid blue - r42 g96 b131
  #033f62 - dark blue - r3 g63 b98
  #ff0054 - pink/red - r255 g0 b84
  #EF485B
- 
+
  */
 
 /* Move down content because we have a fixed navbar that is 50px tall */
 body {
-  padding-top: 72px;
+    padding-top: 72px;
 }
+
 .navbar-fixed-top {
-    min-height: 72px; 
+    min-height: 72px;
 }
+
 .container > .navbar-header, .container-fluid > .navbar-header, .container > .navbar-collapse, .container-fluid > .navbar-collapse {
     padding-top: 10px;
 }
@@ -23,7 +25,7 @@ body {
 h3.homepage {
     margin-bottom: 5px;
     margin-top: 10px;
-    style: text-align:center;
+    style: text-align: center;
 }
 
 a, span.bookmark {
@@ -37,19 +39,20 @@ a:hover, a:focus, span.bookmark:hover, span.bookmark:focus {
 }
 
 span.bookmark:hover, span.bookmark:focus {
-	cursor:pointer;
+    cursor: pointer;
 }
 
 .bold {
-	font-weight: bold;
+    font-weight: bold;
 }
+
 /*
  * Global add-ons
  */
 
 .sub-header {
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
 }
 
 .navbar-inverse {
@@ -63,8 +66,9 @@ span.bookmark:hover, span.bookmark:focus {
 }
 
 .navbar-header > a > img {
-	margin-right: 5px;
+    margin-right: 5px;
 }
+
 .navbar-inverse .navbar-nav > li > a {
     color: #fff;
     border: 1px solid #033f62;
@@ -86,16 +90,15 @@ span.bookmark:hover, span.bookmark:focus {
 
 .navbar-inverse .form-horizontal {
     text-align: right;
-    padding-top:10px;
-    padding-bottom:0;
-    margin:0;
+    padding-top: 10px;
+    padding-bottom: 0;
+    margin: 0;
 }
 
 .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
-	background-color: #033f62;
-	border: 1px dotted #fff	;
+    background-color: #033f62;
+    border: 1px dotted #fff;
 }
-
 
 /*
  * Sidebar
@@ -103,52 +106,56 @@ span.bookmark:hover, span.bookmark:focus {
 
 /* Hide for mobile, show later */
 .sidebar {
-  display: none;
+    display: none;
 }
+
 @media (min-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 51px;
-    bottom: 0;
-    left: 0;
-    z-index: 1000;
-    display: block;
-    padding: 20px;
-    overflow-x: hidden;
-    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-    background-color: #f5f5f5;
-    border-right: 1px solid #eee;
-  }
+    .sidebar {
+        position: fixed;
+        top: 51px;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        padding: 20px;
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+        background-color: #f5f5f5;
+        border-right: 1px solid #eee;
+    }
 }
 
 /* Sidebar navigation */
 .nav-sidebar {
-  margin-right: -21px; /* 20px padding + 1px border */
-  margin-bottom: 20px;
-  margin-left: -20px;
+    margin-right: -21px; /* 20px padding + 1px border */
+    margin-bottom: 20px;
+    margin-left: -20px;
 }
+
 .nav-sidebar > li > a {
-  padding-right: 20px;
-  padding-left: 20px;
-  color: #495525;
+    padding-right: 20px;
+    padding-left: 20px;
+    color: #495525;
 }
+
 .nav-sidebar > .text {
-  color: #495525;
-  padding: 10px 20px;
+    color: #495525;
+    padding: 10px 20px;
 }
 
 .nav-sidebar > .active > a {
-  color: #fff;
-  background-color: #2a6083;
+    color: #fff;
+    background-color: #2a6083;
 }
 
 .nav > li > a:hover {
-  background-color: #2a6083;
-  color: #fff;
+    background-color: #2a6083;
+    color: #fff;
 }
+
 .nav > li > a:focus {
-  background-color: #2a6083;
-  color: #fff;
+    background-color: #2a6083;
+    color: #fff;
 }
 
 /*
@@ -156,20 +163,22 @@ span.bookmark:hover, span.bookmark:focus {
  */
 
 .main {
-  padding: 0;
+    padding: 0;
 }
+
 @media (min-width: 768px) {
-  .main {
-    padding-right: 0;
-    padding-left: 0;
-  }
+    .main {
+        padding-right: 0;
+        padding-left: 0;
+    }
 }
+
 .main .page-header {
-  margin-top: 0;
+    margin-top: 0;
 }
 
 .row {
-	margin: 0;
+    margin: 0;
 }
 
 /*
@@ -177,38 +186,41 @@ span.bookmark:hover, span.bookmark:focus {
  */
 
 .placeholders {
-  margin-bottom: 30px;
-  text-align: center;
+    margin-bottom: 30px;
+    text-align: center;
 }
+
 .placeholders h4 {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
+
 .placeholder {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
+
 .placeholder img {
-  display: inline-block;
-  border-radius: 50%;
+    display: inline-block;
+    border-radius: 50%;
 }
 
 /*
  * Share buttons
  */
- 
+
 .share-button {
-	margin-top:20px;
-	float: left; 
-	width: 100px;
+    margin-top: 20px;
+    float: left;
+    width: 100px;
 }
- 
+
 /*
  * Forms
  */
- 
+
 .form-control:focus {
-	border-color: #2596b4;
-	box-shadow: 0 1px 1px rgba(0,0,0,0.075) inset, 0 0 8px rgba(37,150,180,0.6);
-	outline: 0 none;
+    border-color: #2596b4;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(37, 150, 180, 0.6);
+    outline: 0 none;
 }
 
 .btn-primary {
@@ -218,7 +230,7 @@ span.bookmark:hover, span.bookmark:focus {
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active,
-	.btn-primary.active, .open .dropdown-toggle.btn-primary {
+.btn-primary.active, .open .dropdown-toggle.btn-primary {
     background-color: #033f62;
     border-color: #033f62;
     color: #FFFFFF;
@@ -237,13 +249,13 @@ span.bookmark:hover, span.bookmark:focus {
 /*
  * Footer
  */
- 
+
 #footer {
-	border-top: 1px solid #EF485B;
-	margin-top:50px;
-	padding: 20px 0;
-	text-align:right;
-	padding-right:20px;
+    border-top: 1px solid #EF485B;
+    margin-top: 50px;
+    padding: 20px 0;
+    text-align: right;
+    padding-right: 20px;
 }
 
 tr.hover:hover {
@@ -252,7 +264,7 @@ tr.hover:hover {
 }
 
 div.date-picker-row-fluid {
-	float:left;
+    float: left;
 }
 
 .vertical-align {
@@ -261,24 +273,24 @@ div.date-picker-row-fluid {
 }
 
 .page_navigator, .orderby {
-	padding:10px 0;
+    padding: 10px 0;
 }
 
 div.category {
-	padding-bottom:10px;
+    padding-bottom: 10px;
 }
 
 div.resourcetag {
-	display:inline-block; 
-	width:120px; 
-	min-height:100px; 
-	text-align:center; 
-	margin: auto;
-	vertical-align:top;
+    display: inline-block;
+    width: 120px;
+    min-height: 100px;
+    text-align: center;
+    margin: auto;
+    vertical-align: top;
 }
 
 .file-row {
-	padding-bottom: 10px;
+    padding-bottom: 10px;
 }
 
 .vcenter {
@@ -288,86 +300,89 @@ div.resourcetag {
 }
 
 img.resource-row-icon {
-	opacity: .6;
-	margin-bottom: 10px;
+    opacity: .6;
+    margin-bottom: 10px;
 }
 
 img.resource-row-icon:hover {
-	opacity: 1;
+    opacity: 1;
 }
 
 .advanced-search-link {
-	text-align:right;
-	margin-top:-10px;
+    text-align: right;
+    margin-top: -10px;
 }
 
 .resource-row-study-time {
-	display: inline-block; 
-	background-color: #033f62;
-	opacity: .6;
-	color: #fff;
-	padding: 0 8px 0 0;
-	vertical-align: bottom;
-	margin-bottom: 10px;
+    display: inline-block;
+    background-color: #033f62;
+    opacity: .6;
+    color: #fff;
+    padding: 0 8px 0 0;
+    vertical-align: bottom;
+    margin-bottom: 10px;
 }
 
 .resource-image {
-	display:block; 
-	margin: 20px auto; 
-	max-width: 250px
+    display: block;
+    margin: 20px auto;
+    max-width: 250px
 }
 
 .resource-image-default {
-	opacity: .5;
+    opacity: .5;
 }
 
 .resource-row-thumbnail {
-	display: block; 
-	margin: 0 auto;
+    display: block;
+    margin: 0 auto;
 }
 
 .resource-row-thumbnail-default {
-	opacity: .5;
+    opacity: .5;
 }
 
 .resource-row-study-time:hover {
-	opacity: 1;
+    opacity: 1;
 }
 
 a.named-anchor {
-	display: block; position: relative; top: -80px; visibility: hidden;
+    display: block;
+    position: relative;
+    top: -80px;
+    visibility: hidden;
 }
 
 a.prominent {
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .rating-star:hover {
-	cursor:pointer;
+    cursor: pointer;
 }
 
 div.profile {
-	margin-bottom:10px;
-	
+    margin-bottom: 10px;
+
 }
 
 #tag-description {
-	float: left;
+    float: left;
 }
 
 /*
  * for country key facts
  */
 #country-key-facts {
-	border: 1px solid #ccc;
-	border-radius: 5px;
-	padding: 10px;
-	float: right;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    float: right;
 }
 
 #country-key-facts h4 {
-	padding-top: 0;
-	margin-top: 0;
-	text-align: center;
+    padding-top: 0;
+    margin-top: 0;
+    text-align: center;
 
 }
