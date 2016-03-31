@@ -38,7 +38,6 @@ def home_view(request):
 
     organisations_approved = Tag.objects.filter(
         category__slug='organisation',
-        resourcetag__isnull=False,
         resourcetag__resource__status='Approved').annotate(
             total_resources=Count('resourcetag__id')).order_by('name')
 
