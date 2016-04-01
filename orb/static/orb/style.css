@@ -396,3 +396,16 @@ div.profile {
     text-align: center;
 
 }
+
+/*
+ * Tags
+ */
+.tags-empty {
+    max-width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.tags-empty p {
+    font-size: 1.5rem;
+    margin: 1.5rem 0 1.5rem 0;
+}
