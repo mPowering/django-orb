@@ -20,12 +20,14 @@ class ActiveManagerTests(TestCase):
     @classmethod
     def setUpClass(cls):
         user = User.objects.create(username="McTester")
-        resource = resource_factory(user=user)
-        second_resource= resource_factory(user=user)
+        resource = resource_factory(user=user, status='approved')
+        second_resource= resource_factory(user=user, status='pending_crt')
         used_tag = tag_factory(user=user)
+        second_tag = tag_factory(user=user)
         unused_tag = tag_factory(user=user)  # noqa
         ResourceTag.objects.create(create_user=user, tag=used_tag, resource=resource)
         ResourceTag.objects.create(create_user=user, tag=used_tag, resource=second_resource)
+        ResourceTag.objects.create(create_user=user, tag=second_tag, resource=second_resource)
 
     @classmethod
     def tearDownClass(cls):
@@ -35,9 +37,11 @@ class ActiveManagerTests(TestCase):
         User.objects.all().delete()
 
     def test_default_manager(self):
-        self.assertEqual(Tag.objects.all().count(), 2)
+        self.assertEqual(Tag.objects.all().count(), 3)
 
     def test_active_manager(self):
-        self.assertEqual(Tag.active.all().count(), 1)
+        self.assertEqual(Tag.active.all().count(), 2)
 
-
+    def test_approved_method(self):
+        """Approved method only returns tags with approved resources"""
+        self.assertEqual(Tag.active.approved().count(), 1)
