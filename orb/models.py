@@ -12,7 +12,7 @@ from tastypie.models import create_api_key
 from lib.unique_slugify import unique_slugify
 from orb.analytics.models import UserLocationVisualization
 from orb.resources.managers import ResourceManager, ApprovedManager
-from orb.tags.managers import ActiveTagManager
+from orb.tags.managers import ActiveTagManager, ResourceTagManager
 
 models.signals.post_save.connect(create_api_key, sender=User)
 
@@ -376,6 +376,8 @@ class ResourceTag (models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(
         User, related_name='resourcetag_create_user')
+
+    objects = ResourceTagManager()
 
     class Meta:
         unique_together = ("resource", "tag")

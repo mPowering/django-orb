@@ -10,24 +10,19 @@ from orb.resources.tests.factory import resource_factory
 from orb.tags.tests.factory import tag_factory
 
 
-class ActiveManagerTests(TestCase):
-    """
-    Tests for the active manager class.
-
-    The active manager only returns tags with associated resources
-    """
+class FixtureBase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        user = User.objects.create(username="McTester")
-        resource = resource_factory(user=user, status='approved')
-        second_resource= resource_factory(user=user, status='pending_crt')
-        used_tag = tag_factory(user=user)
-        second_tag = tag_factory(user=user)
-        unused_tag = tag_factory(user=user)  # noqa
-        ResourceTag.objects.create(create_user=user, tag=used_tag, resource=resource)
-        ResourceTag.objects.create(create_user=user, tag=used_tag, resource=second_resource)
-        ResourceTag.objects.create(create_user=user, tag=second_tag, resource=second_resource)
+        cls.user = User.objects.create(username="McTester")
+        resource = resource_factory(user=cls.user, status='approved')
+        second_resource= resource_factory(user=cls.user, status='pending_crt')
+        used_tag = tag_factory(user=cls.user)
+        second_tag = tag_factory(user=cls.user)
+        unused_tag = tag_factory(user=cls.user)  # noqa
+        ResourceTag.objects.create(create_user=cls.user, tag=used_tag, resource=resource)
+        ResourceTag.objects.create(create_user=cls.user, tag=used_tag, resource=second_resource)
+        ResourceTag.objects.create(create_user=cls.user, tag=second_tag, resource=second_resource)
 
     @classmethod
     def tearDownClass(cls):
@@ -36,6 +31,13 @@ class ActiveManagerTests(TestCase):
         Tag.objects.all().delete()
         User.objects.all().delete()
 
+
+class ActiveManagerTests(FixtureBase):
+    """
+    Tests for the active manager class.
+
+    The active manager only returns tags with associated resources
+    """
     def test_default_manager(self):
         self.assertEqual(Tag.objects.all().count(), 3)
 
@@ -45,3 +47,17 @@ class ActiveManagerTests(TestCase):
     def test_approved_method(self):
         """Approved method only returns tags with approved resources"""
         self.assertEqual(Tag.active.approved().count(), 1)
+
+
+class ResourceTagManagerTests(FixtureBase):
+    """
+    Tests for the ResourceTagManager
+    """
+
+    def test_default_queryset(self):
+        self.assertEqual(ResourceTag.objects.all().count(), 3)
+
+    def test_approved_method(self):
+        """Approved method only returns tags with approved resources"""
+        self.assertEqual(ResourceTag.objects.approved().count(), 1)
+        self.assertEqual(ResourceTag.objects.approved(self.user).count(), 3)

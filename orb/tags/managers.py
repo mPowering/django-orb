@@ -31,3 +31,24 @@ class ActiveTagManager(models.Manager):
         if user is None:
             user = AnonymousUser()
         return approved_queryset(qs, user, relation="resourcetag__resource__")
+
+
+class ResourceTagManager(models.Manager):
+    """Manager for the ResourceTag linking model"""
+
+    def approved(self, user=None):
+        """
+        Queryset that includes only resource tags with resources viewable by
+        given user based on approval state.
+
+        Args:
+            user (auth.User): the user to check 'permission' against
+
+        Returns:
+            QuerySet: A queryset filtered by status and/or user
+
+        """
+        qs = super(ResourceTagManager, self).get_queryset()
+        if user is None:
+            user = AnonymousUser()
+        return approved_queryset(qs, user, relation="resource__")
