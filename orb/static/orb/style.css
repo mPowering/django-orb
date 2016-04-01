@@ -31,7 +31,7 @@ body {
 h3.homepage {
     margin-bottom: 5px;
     margin-top: 10px;
-    style: text-align: center;
+    text-align: center;
 }
 
 a, span.bookmark {
