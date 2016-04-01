@@ -20,6 +20,7 @@ from orb.signals import resource_viewed, search
 from orb.views import resource_can_edit
 
 from tastypie import fields
+from tastypie.constants import ALL
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.exceptions import Unauthorized
 from tastypie.resources import ModelResource
@@ -250,6 +251,7 @@ class ResourceTagResource(ModelResource):
 
 class TagResource(ModelResource):
     url = fields.CharField(readonly=True)
+    category = fields.CharField(attribute="category")
 
     class Meta:
         queryset = Tag.active.all()
@@ -262,6 +264,35 @@ class TagResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True
         include_resource_uri = True
+        filtering = {"category": ('exact',)}
+
+    def build_filters(self, filters=None):
+        """
+        Creates additional filters for a querylist of Tag resources
+
+        Args:
+            filters: QueryDict of all URL param based filters
+
+        Returns:
+            dict of queryset filters
+
+        """
+        if filters is None:
+            filters = {}
+
+        orm_filters = super(TagResource, self).build_filters(filters)
+
+        # What's wanted is in an iexact search but for the sake of the API
+        # filter parameters it needs to be configured as an exact search
+        if "category" in filters:
+            orm_filters["category__name__iexact"] = filters["category"]
+            del orm_filters["category__exact"]
+
+        return orm_filters
+
+    def dehydrate_category(self, bundle):
+        """Return the name of the tag's category"""
+        return bundle.obj.category.name
 
     def dehydrate_url(self, bundle):
         url = bundle.request.build_absolute_uri(
@@ -305,6 +336,7 @@ class TagsResource(ModelResource):
     resources = fields.ToManyField('orb.api.resources.TagsResourceResource',
                                    'resourcetag_set', full=True, null=True, use_in='detail')
     url = fields.CharField(readonly=True)
+    category = fields.CharField(attribute="category")
 
     class Meta:
         queryset = Tag.active.all()
@@ -316,6 +348,35 @@ class TagsResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True
         include_resource_uri = True
+        filtering = {"category": ('exact',)}
+
+    def build_filters(self, filters=None):
+        """
+        Creates additional filters for a querylist of Tag resources
+
+        Args:
+            filters: QueryDict of all URL param based filters
+
+        Returns:
+            dict of queryset filters
+
+        """
+        if filters is None:
+            filters = {}
+
+        orm_filters = super(TagsResource, self).build_filters(filters)
+
+        # What's wanted is in an iexact search but for the sake of the API
+        # filter parameters it needs to be configured as an exact search
+        if "category" in filters:
+            orm_filters["category__name__iexact"] = filters["category"]
+            del orm_filters["category__exact"]
+
+        return orm_filters
+
+    def dehydrate_category(self, bundle):
+        """Return the name of the tag's category"""
+        return bundle.obj.category.name
 
     def dehydrate_url(self, bundle):
         url = bundle.request.build_absolute_uri(
