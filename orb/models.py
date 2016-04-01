@@ -429,6 +429,10 @@ class UserProfile (models.Model):
         else:
             return None
 
+    @property
+    def is_reviewer(self):
+        return self.crt_member or self.mep_member
+
 
 class ResourceTracker(models.Model):
     VIEW = 'view'
