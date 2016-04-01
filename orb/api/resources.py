@@ -264,7 +264,10 @@ class TagResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True
         include_resource_uri = True
-        filtering = {"category": ('exact',)}
+        filtering = {
+            "category": ('exact',),
+            "name": ALL,
+        }
 
     def build_filters(self, filters=None):
         """
@@ -348,7 +351,10 @@ class TagsResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True
         include_resource_uri = True
-        filtering = {"category": ('exact',)}
+        filtering = {
+            "category": ('exact',),
+            "name": ALL,
+        }
 
     def build_filters(self, filters=None):
         """
