@@ -536,70 +536,82 @@ class SiteTest(TestCase):
         orb_resource_reject_sent
         orb_search_advanced_results
         search results
- 
+
         check tracker objects added
- 
+
         """
 
 
 class AnalyticsPageTest(TestCase):
     fixtures = ['user.json', 'orb.json']
 
-    def setUp(self):
-        self.client = Client()
-
-    def test_pages(self):
-
-        # for anon user
+    def test_anon_analytics_home(self):
+        """User should be redirected to login page"""
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
 
+    def test_anon_analytics_map(self):
         response = self.client.get(reverse('orb_analytics_map'))
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
 
-        # Standard user
+    def test_standard_user_analytics_home(self):
         self.client.login(username='standarduser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 401)
-
-        response = self.client.get(reverse('orb_analytics_map'))
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
         self.client.logout()
 
-        # api user
+    def test_standard_user_analytics_map(self):
+        self.client.login(username='standarduser', password='password')
+        response = self.client.get(reverse('orb_analytics_map'))
+        self.assertEqual(response.status_code, 302)
+        self.client.logout()
+
+    def test_api_user_analytics_home(self):
         self.client.login(username='apiuser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 401)
-
-        response = self.client.get(reverse('orb_analytics_map'))
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
         self.client.logout()
 
-        # superuser
+    def test_api_user_analytics_map(self):
+        self.client.login(username='apiuser', password='password')
+        response = self.client.get(reverse('orb_analytics_map'))
+        self.assertEqual(response.status_code, 302)
+        self.client.logout()
+
+    def test_superuser_analytics_home(self):
         self.client.login(username='superuser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
         self.assertEqual(response.status_code, 200)
+        self.client.logout()
 
+    def test_superuser_analytics_map(self):
+        self.client.login(username='superuser', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 200)
         self.client.logout()
 
-        # staffuser
+    def test_staff_user_analytics_home(self):
         self.client.login(username='staffuser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
         self.assertEqual(response.status_code, 200)
+        self.client.logout()
 
+    def test_staff_user_analytics_map(self):
+        self.client.login(username='staffuser', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 200)
         self.client.logout()
 
-        # orgowner
+    def test_org_owner_analytics_home(self):
         self.client.login(username='orgowner', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
+        self.client.logout()
 
+    def test_org_owner_analytics_map(self):
+        self.client.login(username='orgowner', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 302)
         self.client.logout()
 
     def test_tags(self):
@@ -653,7 +665,7 @@ class AnalyticsPageTest(TestCase):
 
         """
         response = self.client.get(reverse('orb_analytics_download'))
-        self.assertEqual(response.status_code, 401)     
+        self.assertEqual(response.status_code, 401)
         """
 
 
