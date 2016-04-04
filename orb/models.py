@@ -11,14 +11,10 @@ from django.utils.translation import ugettext_lazy as _
 from tastypie.models import create_api_key
 from lib.unique_slugify import unique_slugify
 from orb.analytics.models import UserLocationVisualization
-from orb.resources.managers import ResourceManager, ApprovedManager
+from orb.resources.managers import ResourceManager, ResourceURLManager, ApprovedManager
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
 
 models.signals.post_save.connect(create_api_key, sender=User)
-
-# Create your models here.
-
-# Resource
 
 
 class Resource (models.Model):
@@ -175,8 +171,6 @@ class ResourceWorkflowTracker(models.Model):
     notes = models.TextField(blank=True, null=True)
     owner_email_sent = models.BooleanField(default=False, blank=False)
 
-# ResourceURL
-
 
 class ResourceURL (models.Model):
     url = models.URLField(blank=False, null=False, max_length=500)
@@ -194,10 +188,10 @@ class ResourceURL (models.Model):
     update_user = models.ForeignKey(
         User, related_name='resource_url_update_user')
 
+    objects = ResourceURLManager()
+
     def __unicode__(self):
         return self.url
-
-# ResourceFile
 
 
 class ResourceFile (models.Model):
@@ -263,8 +257,6 @@ class ResourceCriteria(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORIES)
     category_order_by = models.IntegerField(default=0)
 
-# Category
-
 
 class Category (models.Model):
     name = models.CharField(blank=False, null=False, max_length=100)
@@ -290,7 +282,6 @@ class Category (models.Model):
         super(Category, self).save(*args, **kwargs)
 
 
-# Tag
 class Tag (models.Model):
     category = models.ForeignKey(Category)
     parent_tag = models.ForeignKey('self', blank=True, null=True, default=None)
@@ -357,8 +348,6 @@ class TagProperty(models.Model):
     def __unicode__(self):
         return self.name
 
-# Tag Owner
-
 
 class TagOwner(models.Model):
     user = models.ForeignKey(User)
@@ -366,8 +355,6 @@ class TagOwner(models.Model):
 
     class Meta:
         unique_together = ("user", "tag")
-
-# ResourceTag
 
 
 class ResourceTag (models.Model):
@@ -381,8 +368,6 @@ class ResourceTag (models.Model):
 
     class Meta:
         unique_together = ("resource", "tag")
-
-# UserProfile
 
 
 class UserProfile (models.Model):

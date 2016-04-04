@@ -7,8 +7,8 @@ Tests for ORB resource models
 from django.contrib.auth.models import User, AnonymousUser
 from django.test import TestCase
 
-from orb.models import Resource, UserProfile
-from orb.resources.tests.factory import resource_factory
+from orb.models import Resource, ResourceURL, UserProfile
+from orb.resources.tests.factory import resource_factory, resource_url_factory
 
 
 class ResourceTests(TestCase):
@@ -29,24 +29,27 @@ class ResourceTests(TestCase):
         cls.crt_user = User.objects.create(username="crt")
         UserProfile.objects.create(user=cls.crt_user, crt_member=True)
 
-
-        cls.resource = resource_factory(
+        approved = resource_factory(
             user=cls.user,
             title=u"Básica salud del recién nacido",
             description=u"Básica salud del recién nacido",
             status=Resource.APPROVED,
         )
-        cls.resource = resource_factory(
+        unapproved_user = resource_factory(
             create_user=cls.user,
             update_user=cls.updater,
             title=u"Unapproved resource",
             description=u"Unapproved, owned by user",
         )
-        cls.resource = resource_factory(
+        unapproved_staff = resource_factory(
             user=cls.staff,
             title=u"Staff resource",
             description=u"Unapproved, owned by staff user",
         )
+
+        resource_url_factory(resource=approved, user=cls.user)
+        resource_url_factory(resource=unapproved_user, user=cls.user)
+
 
     @classmethod
     def tearDownClass(cls):
@@ -105,3 +108,13 @@ class ResourceTests(TestCase):
 
     def test_get_approved(self):
         assert Resource.approved.get(user=self.user, title=u"Unapproved resource")
+
+    # Tests for ResourceURL
+
+    def test_approved_urls(self):
+        """Only one resource URL should be returned for anon user"""
+        self.assertEqual(ResourceURL.objects.approved(user=AnonymousUser()).count(), 1)
+
+    def test_staff_urls(self):
+        """All ResourceURLs should be returned for staff user"""
+        self.assertEqual(ResourceURL.objects.approved(user=self.staff).count(), 2)

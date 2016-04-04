@@ -65,6 +65,26 @@ class ResourceManager(models.Manager):
         return approved_queryset(qs, user)
 
 
+class ResourceURLManager(models.Manager):
+
+    def approved(self, user=None):
+        """
+        Queryset that includes only resource URLs viewable by given user
+        based on approval state.
+
+        Args:
+            user (auth.User): the user to check 'permission' against
+
+        Returns:
+            QuerySet: A queryset filtered by status and/or user
+
+        """
+        qs = super(ResourceURLManager, self).get_queryset()
+        if user is None:
+            user = AnonymousUser()
+        return approved_queryset(qs, user, relation="resource__")
+
+
 class ApprovedManager(models.Manager):
 
     def __init__(self, *args, **kwargs):

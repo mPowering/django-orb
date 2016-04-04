@@ -7,7 +7,7 @@ Tests for ORB resource models
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from orb.models import ResourceURL
+from orb.models import Resource, ResourceURL
 from orb.resources.tests.factory import resource_factory
 
 
@@ -25,8 +25,8 @@ class ResourceTests(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.user.delete()
-        cls.resource.delete()
+        User.objects.all().delete()
+        Resource.objects.all().delete()
 
     def test_absolute_url(self):
         """URL is returned with slug"""
@@ -79,9 +79,8 @@ class ResourceURLTests(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.user.delete()
-        cls.resource.delete()
-        cls.resource_url.delete()
+        User.objects.all().delete()
+        Resource.objects.all().delete()
 
     def test_unicode_display(self):
         """Unicode value of URL is returned"""
