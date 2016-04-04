@@ -184,6 +184,9 @@ class ResourceURLResource(ModelResource):
         always_return_data = True
         include_resource_uri = True
 
+    def get_object_list(self, request):
+        return ResourceURL.objects.approved(request.user)
+
     def hydrate(self, bundle, request=None):
         # check that user has permissions on the resource
         resource = Resource.objects.get(pk=bundle.data['resource_id'])
@@ -214,6 +217,9 @@ class ResourceTagResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True
         include_resource_uri = True
+
+    def get_object_list(self, request):
+        return ResourceTag.objects.approved(request.user)
 
     def hydrate(self, bundle, request=None):
 
