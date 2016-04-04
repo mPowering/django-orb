@@ -6,7 +6,6 @@ import datetime
 
 import dateutil.relativedelta
 import tablib
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
@@ -16,11 +15,12 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 
 from orb.analytics.models import UserLocationVisualization
+from orb.decorators import staff_required
 from orb.models import Resource, SearchTracker, ResourceTracker, Tag, TagOwner, TagTracker
 from orb.views import resource_can_edit
 
 
-@staff_member_required
+@staff_required
 def home_view(request):
     start_date = timezone.now() - datetime.timedelta(days=31)
     end_date = timezone.now()
@@ -108,12 +108,12 @@ def home_view(request):
     })
 
 
-@staff_member_required
+@staff_required
 def map_view(request):
     return render(request, 'orb/analytics/map.html', {})
 
 
-@staff_member_required
+@staff_required
 def visitor_view(request, year=None, month=None):
 
     if year == None and month == None:
@@ -321,7 +321,7 @@ def tag_download(request, id, year, month):
     return response
 
 
-@staff_member_required
+@staff_required
 def mailing_list_view(request):
 
     users = User.objects.filter(

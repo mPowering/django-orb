@@ -557,25 +557,25 @@ class AnalyticsPageTest(TestCase):
     def test_standard_user_analytics_home(self):
         self.client.login(username='standarduser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.client.logout()
 
     def test_standard_user_analytics_map(self):
         self.client.login(username='standarduser', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.client.logout()
 
     def test_api_user_analytics_home(self):
         self.client.login(username='apiuser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.client.logout()
 
     def test_api_user_analytics_map(self):
         self.client.login(username='apiuser', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.client.logout()
 
     def test_superuser_analytics_home(self):
@@ -605,13 +605,13 @@ class AnalyticsPageTest(TestCase):
     def test_org_owner_analytics_home(self):
         self.client.login(username='orgowner', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.client.logout()
 
     def test_org_owner_analytics_map(self):
         self.client.login(username='orgowner', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.client.logout()
 
     def test_tags(self):
