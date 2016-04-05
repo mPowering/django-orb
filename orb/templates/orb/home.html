@@ -22,6 +22,7 @@
 <div style="position: relative; margin: 20px auto; overflow: hidden; text-align: center;">
 {% for t in topics %}
 	<div style="display:inline-block; min-width:270px; min-height:240px; text-align:center; margin: auto;">
+		{% if not t.custom %}
 		<a href="{% url 'orb_tags' t.tag.slug %}">
 			{% thumbnail t.tag.image "220x150" crop="center" as im %}
 				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
@@ -31,6 +32,13 @@
 			<h3 class="homepage">{{ t.tag.name }}</h3>
 			{{ t.resource_count }} resource{{ t.resource_count|pluralize }}
 		</a> 
+		{% else %}
+		<a href="{{ t.url }}">
+			<img src="{{ STATIC_URL }}orb/images/{{ t.image }}" width="220" height="150">
+			<h3 class="homepage">{{ t.title }}</h3>
+			{{ t.resource_count }} resource{{ t.resource_count|pluralize }}
+		</a> 
+		{% endif %}
 	</div>
 {% endfor %}
 	<div style="clear:both"></div>

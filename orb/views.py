@@ -38,6 +38,14 @@ def home_view(request):
         data['resource_count'] = resource_count
         data['tag'] = t
         topics.append(data)
+        
+    data = {}
+    data['resource_count'] = 3
+    data['custom'] = True
+    data['url'] = reverse('orb_toolkits_home')
+    data['title'] = _(u'Toolkits')
+    data['image'] = 'toolkit.png'
+    topics.append(data)
 
     return render_to_response('orb/home.html',
                               {'topics': topics,
