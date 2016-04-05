@@ -51,6 +51,9 @@ class ResourceResource(ModelResource):
         include_resource_uri = True
         throttle = CacheDBThrottle(throttle_at=1000, timeframe=3600)
 
+    def get_object_list(self, request):
+        return Resource.objects.approved(request.user)
+
     def dehydrate_image(self, bundle):
         if bundle.obj.image:
             return bundle.request.build_absolute_uri(settings.MEDIA_URL + bundle.obj.image.name)
@@ -181,6 +184,9 @@ class ResourceURLResource(ModelResource):
         always_return_data = True
         include_resource_uri = True
 
+    def get_object_list(self, request):
+        return ResourceURL.objects.approved(request.user)
+
     def hydrate(self, bundle, request=None):
         # check that user has permissions on the resource
         resource = Resource.objects.get(pk=bundle.data['resource_id'])
@@ -211,6 +217,9 @@ class ResourceTagResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True
         include_resource_uri = True
+
+    def get_object_list(self, request):
+        return ResourceTag.objects.approved(request.user)
 
     def hydrate(self, bundle, request=None):
 

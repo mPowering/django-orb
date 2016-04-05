@@ -11,13 +11,10 @@ from django.utils.translation import ugettext_lazy as _
 from tastypie.models import create_api_key
 from lib.unique_slugify import unique_slugify
 from orb.analytics.models import UserLocationVisualization
-from orb.tags.managers import ActiveTagManager
+from orb.resources.managers import ResourceManager, ResourceURLManager, ApprovedManager
+from orb.tags.managers import ActiveTagManager, ResourceTagManager
 
 models.signals.post_save.connect(create_api_key, sender=User)
-
-# Create your models here.
-
-# Resource
 
 
 class Resource (models.Model):
@@ -59,6 +56,9 @@ class Resource (models.Model):
         max_length=10, choices=STUDY_TIME_UNITS, blank=True, null=True)
     born_on = models.DateTimeField(blank=True, null=True, default=None)
     attribution = models.TextField(blank=True, null=True, default=None)
+
+    objects = ResourceManager()
+    approved = ApprovedManager()
 
     class Meta:
         verbose_name = _('Resource')
@@ -171,8 +171,6 @@ class ResourceWorkflowTracker(models.Model):
     notes = models.TextField(blank=True, null=True)
     owner_email_sent = models.BooleanField(default=False, blank=False)
 
-# ResourceURL
-
 
 class ResourceURL (models.Model):
     url = models.URLField(blank=False, null=False, max_length=500)
@@ -190,10 +188,10 @@ class ResourceURL (models.Model):
     update_user = models.ForeignKey(
         User, related_name='resource_url_update_user')
 
+    objects = ResourceURLManager()
+
     def __unicode__(self):
         return self.url
-
-# ResourceFile
 
 
 class ResourceFile (models.Model):
@@ -259,8 +257,6 @@ class ResourceCriteria(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORIES)
     category_order_by = models.IntegerField(default=0)
 
-# Category
-
 
 class Category (models.Model):
     name = models.CharField(blank=False, null=False, max_length=100)
@@ -286,7 +282,6 @@ class Category (models.Model):
         super(Category, self).save(*args, **kwargs)
 
 
-# Tag
 class Tag (models.Model):
     category = models.ForeignKey(Category)
     parent_tag = models.ForeignKey('self', blank=True, null=True, default=None)
@@ -353,8 +348,6 @@ class TagProperty(models.Model):
     def __unicode__(self):
         return self.name
 
-# Tag Owner
-
 
 class TagOwner(models.Model):
     user = models.ForeignKey(User)
@@ -362,8 +355,6 @@ class TagOwner(models.Model):
 
     class Meta:
         unique_together = ("user", "tag")
-
-# ResourceTag
 
 
 class ResourceTag (models.Model):
@@ -373,10 +364,10 @@ class ResourceTag (models.Model):
     create_user = models.ForeignKey(
         User, related_name='resourcetag_create_user')
 
+    objects = ResourceTagManager()
+
     class Meta:
         unique_together = ("resource", "tag")
-
-# UserProfile
 
 
 class UserProfile (models.Model):
@@ -424,6 +415,10 @@ class UserProfile (models.Model):
             return "https://twitter.com/" + self.twitter.replace('@', '')
         else:
             return None
+
+    @property
+    def is_reviewer(self):
+        return self.crt_member or self.mep_member
 
 
 class ResourceTracker(models.Model):

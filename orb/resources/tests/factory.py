@@ -1,4 +1,4 @@
-from orb.models import Resource
+from orb.models import Resource, ResourceURL
 
 
 def resource_factory(**kwargs):
@@ -15,3 +15,18 @@ def resource_factory(**kwargs):
     }
     defaults.update(kwargs)
     return Resource.objects.create(**defaults)
+
+
+def resource_url_factory(**kwargs):
+    user = kwargs.pop("user", None)
+    if user:
+        kwargs.update({
+            "create_user": user,
+            "update_user": user,
+        })
+
+    defaults = {
+        "url": "http://www.example.com",
+    }
+    defaults.update(kwargs)
+    return ResourceURL.objects.create(**defaults)

@@ -185,11 +185,18 @@ class ResourceResourceTest(ResourceTestCase):
 
     def test_get_unapproved_resource(self):
         unapproved_resource_url = self.url + str(125) + "/"
-        for u in self.user_set:
+        user_assertions = [(self.api_user, 404),
+                    (self.standard_user, 404),
+                    (self.super_user, 200),
+                    (self.staff_user, 200),
+                    (self.orgowner_user, 404)]
+
+        for user_assertion in user_assertions:
             resp = self.api_client.get(
-                unapproved_resource_url, format='json', data=u)
-            self.assertHttpOK(resp)
-            self.assertValidJSON(resp.content)
+                unapproved_resource_url, format='json', data=user_assertion[0])
+            self.assertEqual(resp.status_code, user_assertion[1])
+            if resp.status_code < 400:
+                self.assertValidJSON(resp.content)
 
     def test_get_unknown_resource(self):
         unknown_resource_url = self.url + str(12345) + "/"
