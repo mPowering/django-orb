@@ -31,7 +31,7 @@ body {
 h3.homepage {
     margin-bottom: 5px;
     margin-top: 10px;
-    style: text-align: center;
+    text-align: center;
 }
 
 a, span.bookmark {
@@ -395,4 +395,17 @@ div.profile {
     margin-top: 0;
     text-align: center;
 
+}
+
+/*
+ * Tags
+ */
+.tags-empty {
+    max-width: 600px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.tags-empty p {
+    font-size: 1.5rem;
+    margin: 1.5rem 0 1.5rem 0;
 }

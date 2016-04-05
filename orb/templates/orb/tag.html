@@ -1,82 +1,102 @@
 {% extends "base.html" %}
-{% load i18n %} 
+{% load i18n %}
 {% load add_get_parameter %}
 {% load thumbnail %}
 
 {% block extra_head_title %}{{ tag.name }}{% endblock extra_head_title %}
 {% block extra_head_feed %}
-<link rel="alternate" type="application/rss+xml" title="RSS"
-      href="{% url 'orb_tag_feed' tag.slug %}">
+    <link rel="alternate" type="application/rss+xml" title="RSS"
+          href="{% url 'orb_tag_feed' tag.slug %}">
 {% endblock extra_head_feed %}
 
 {% block extra_scripts %}
-	<script type="text/javascript">
-		function OnOrderChange(dropdown) {
-		    var myindex  = dropdown.selectedIndex;
-		    var selValue = dropdown.options[myindex].value;
-		    top.location.href = selValue;
-		    return true;
-		}
-	</script>
+    <script type="text/javascript">
+        function OnOrderChange(dropdown) {
+            var myindex = dropdown.selectedIndex;
+            var selValue = dropdown.options[myindex].value;
+            top.location.href = selValue;
+            return true;
+        }
+    </script>
 {% endblock extra_scripts %}
 
 {% block content %}
 
-{% include 'orb/includes/search_bar.html' %}
+    {% include 'orb/includes/search_bar.html' %}
 
-<h3 style="text-align:center">
-	{% if tag.parent_tag %}
-		<a href="{% url 'orb_tags' tag.parent_tag.slug %}">{{ tag.parent_tag.name}}</a>: 
-	{% endif %}
-    {% thumbnail tag.image "70x70" format="PNG" padding=True as im %}
-		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-	{% endthumbnail %}{{ tag.name }}</h3>
-	
-	
-<div id="tag-description">
-	{% if tag.description %}
-		<p>{{ tag.description|safe }}</p>
-	{% endif %}
-	
-	{% if tag.external_url %}
-		<p>{% trans 'Website:' %} <a href="{% url 'orb_tag_view_link' tag.id %}">{{ tag.external_url }}</a></p>
-	{% endif %}
-	
-	{% if tag.contact_email %}
-		<p>{% trans 'Email:' %} <a href="mailto:{{ tag.contact_email }}">{{ tag.contact_email }}</a></p>
-	{% endif %}
-</div>
+    <h3 style="text-align:center">
+        {% if tag.parent_tag %}
+            <a href="{% url 'orb_tags' tag.parent_tag.slug %}">{{ tag.parent_tag.name }}</a>:
+        {% endif %}
+        {% thumbnail tag.image "70x70" format="PNG" padding=True as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+        {% endthumbnail %}{{ tag.name }}</h3>
 
-{% include 'orb/includes/country_key_facts.html' %}
 
-<div style="clear:both;"></div>
+    <div id="tag-description">
+        {% if tag.description %}
+            <p>{{ tag.description|safe }}</p>
+        {% endif %}
 
-{% if page.object_list %}
-	<div class="orderby">
-		<form method="get">
-		{% trans 'Order by: ' %}
-			<select name="order" onchange="OnOrderChange(this.form.order);">
-				{% for k,v in ordering %}
-				 		<option value="{% add_get order=k %}" {% if k == current_order %}selected="selected" {% endif %}>
-				 			{{ v }}
-				 		</option>
-				{% endfor %}
-			</select>
-		
-		{% if show_filter_link == True %}
-			<a href="{% url 'orb_search_advanced_prefill' tag.id %}">{% trans 'Advanced search & filter' %}</a>
-		{% endif %}
-		</form>
-	</div>
-	{% include "orb/includes/page_navigator.html" %}
-	
-	{% for resource in page.object_list %}
-		{% include "orb/includes/resource_row.html" %}
-	{% endfor %}
-	
-	{% include "orb/includes/page_navigator.html" %}
-{% else %}
-	<p>{% trans 'There are no resources tagged with ' %}{{ tag.name }}.</p>
-{% endif %}
+        {% if tag.external_url %}
+            <p>{% trans 'Website:' %} <a
+                    href="{% url 'orb_tag_view_link' tag.id %}">{{ tag.external_url }}</a></p>
+        {% endif %}
+
+        {% if tag.contact_email %}
+            <p>{% trans 'Email:' %} <a
+                    href="mailto:{{ tag.contact_email }}">{{ tag.contact_email }}</a></p>
+        {% endif %}
+    </div>
+
+    {% include 'orb/includes/country_key_facts.html' %}
+
+    <div style="clear:both;"></div>
+
+    {% if page.object_list %}
+        <div class="orderby">
+            <form method="get">
+                {% trans 'Order by: ' %}
+                <select name="order" onchange="OnOrderChange(this.form.order);">
+                    {% for k,v in ordering %}
+                        <option value="{% add_get order=k %}"
+                                {% if k == current_order %}selected="selected" {% endif %}>
+                            {{ v }}
+                        </option>
+                    {% endfor %}
+                </select>
+
+                {% if show_filter_link == True %}
+                    <a href="{% url 'orb_search_advanced_prefill' tag.id %}">{% trans 'Advanced search & filter' %}</a>
+                {% endif %}
+            </form>
+        </div>
+        {% include "orb/includes/page_navigator.html" %}
+
+        {% for resource in page.object_list %}
+            {% include "orb/includes/resource_row.html" %}
+        {% endfor %}
+
+        {% include "orb/includes/page_navigator.html" %}
+    {% else %}
+        <div class="well tags-empty">
+        {% if not is_geo_tag %}
+            <p>{% trans 'There are no resources tagged with ' %}{{ tag.name }}.</p>
+        {% else %}
+            {% url 'orb_resource_create' as add_resource_url %}
+            {% url 'profile_register' as registration_url %}
+            {% blocktrans with tag.name as name %}
+                <p>There are no resources yet for {{ name }}.</p>
+                <p>Do you have resources relevant to {{ name }}?
+                    You can <a href="{{ add_resource_url }}">add openly licensed content resources</a> and improve
+                    the knowledge base for frontline health workers.</p>
+                <a href="{{ add_resource_url }}">
+                    <button type="button" class="btn btn-primary">Add your resource &raquo;</button>
+                </a>
+                <p>If you have not yet registered, please <a href="{{ registration_url }}">take a moment to do so</a> first.</p>
+            {% endblocktrans %}
+        {% endif %}
+        </div>
+    {% endif %}
 
 {% endblock %}
