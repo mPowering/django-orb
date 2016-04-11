@@ -9,7 +9,7 @@ v2.2.0 - not yet released
 * 340: API - add category to the tags - http://github.com/mPowering/django-orb/issues/issues/issue/340
 * 339: API - allow fetching of content by health domain or other tag - http://github.com/mPowering/django-orb/issues/issues/issue/339
 * 255: Menu bar & drop down - http://github.com/mPowering/django-orb/issues/issues/issue/255
-
+* 232: Add all ISO 639.2 standard languages as tags - http://github.com/mPowering/django-orb/issues/issues/issue/232
 
 
 v2.1.0 - released 4 Nov 2015
