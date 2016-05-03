@@ -16,7 +16,7 @@ from orb.models import Tag, Category, Resource
 
 def run(cartodb_account, cartodb_key):
 
-    cartodb_table = "orbcountries"
+    cartodb_table = "orbcountries_v2"
 
     category = Category.objects.get(slug='geography')
     countries = Tag.objects.filter(
@@ -46,13 +46,13 @@ def run(cartodb_account, cartodb_key):
 
     cont_countries = Tag.objects.filter(
         category=category, parent_tag__isnull=False).distinct()
-
+    
     for cc in cont_countries:
         no_cont_resources = Resource.objects.filter(
             resourcetag__tag=cc.parent_tag, status=Resource.APPROVED).count()
         if no_cont_resources != 0:
-            sql = "UPDATE %s SET display=True, slug='%s', no_continent_resources=%d, region_slug='%s' WHERE name = '%s'" % (
-                cartodb_table, cc.slug, no_cont_resources, cc.parent_tag.slug, cc.name)
+            sql = "UPDATE %s SET display=True, slug='%s', no_continent_resources=%d, region_slug='%s', region_name='%s' WHERE name = '%s'" % (
+                cartodb_table, cc.slug, no_cont_resources, cc.parent_tag.slug, cc.parent_tag.name, cc.name)
             url = "http://%s.cartodb.com/api/v2/sql?q=%s&api_key=%s" % (
                 cartodb_account, sql, cartodb_key)
             u = urllib.urlopen(url)

@@ -24,8 +24,7 @@
         center: [0,30],
         zoom: 3
       })
-      
-      var layerUrl = 'https://mpowering.cartodb.com/api/v2/viz/3f25287c-08b2-11e5-86ac-0e9d821ea90d/viz.json';
+      var layerUrl = 'https://mpowering.cartodb.com/api/v2/viz/8f8c38be-1130-11e6-9e24-0ecd1babdde5/viz.json';
       
       L.tileLayer('http://a.basemaps.cartocdn.com/light_all//{z}/{x}/{y}.png', {
     	  attribution: 'Map tiles by CartoDB, under CC BY 3.0. Data by OpenStreetMap, under ODbL.'
@@ -34,17 +33,17 @@
       cartodb.createLayer(map, layerUrl)
       .addTo(map)
       .on('done', function(layer) {
-    	  var sublayer = layer.getSubLayer(0);
-          sublayer.infowindow.set('template', $('#infowindow_template_africa').html());
-          sublayer.on('featureClick', function(e, latlng, pos, data) {
-        });
-          var sublayer1 = layer.getSubLayer(1);
-          sublayer1.infowindow.set('template', $('#infowindow_template_africa_generic').html());
+    	  var sublayer1 = layer.getSubLayer(0);
+          sublayer1.infowindow.set('template', $('#iw_templ_country1_continent0').html());
           sublayer1.on('featureClick', function(e, latlng, pos, data) {
         });
-          var sublayer1 = layer.getSubLayer(2);
-          sublayer1.infowindow.set('template', $('#infowindow_template_other').html());
-          sublayer1.on('featureClick', function(e, latlng, pos, data) {
+          var sublayer2 = layer.getSubLayer(1);
+          sublayer2.infowindow.set('template', $('#iw_templ_country0_continent1').html());
+          sublayer2.on('featureClick', function(e, latlng, pos, data) {
+        });
+          var sublayer3 = layer.getSubLayer(2);
+          sublayer3.infowindow.set('template', $('#iw_templ_country1_continent1').html());
+          sublayer3.on('featureClick', function(e, latlng, pos, data) {
         });
       }).on('error', function() {
     	  console.log("Error occurred");
@@ -52,43 +51,43 @@
     }
   </script>
 
-	<script type="infowindow/html" id="infowindow_template_africa">
+	
+	
+	
+	<script type="infowindow/html" id="iw_templ_country1_continent0">
   		<div class="cartodb-popup">
    			<a href="#close" class="cartodb-popup-close-button close">x</a>
      		<div class="cartodb-popup-content-wrapper">
        			<div class="cartodb-popup-content">
-         			<!-- content.data contains the field info -->
          			<h4>{% verbatim %}{{ content.data.name }}{% endverbatim %}</h4>
          			<p><a href="/tag/view/{% verbatim %}{{ content.data.slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_country_resources }}{% endverbatim %} resources for {% verbatim %}{{ content.data.name }}{% endverbatim %}</a></p>
-					<p><a href="/tag/view/{% verbatim %}{{ content.data.region_slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_continent_resources }}{% endverbatim %} resources for Africa</a></p>
        			</div>
      		</div>
      		<div class="cartodb-popup-tip-container"></div>
   		</div>
 	</script>
 	
-	<script type="infowindow/html" id="infowindow_template_africa_generic">
+	<script type="infowindow/html" id="iw_templ_country0_continent1">
   		<div class="cartodb-popup">
    			<a href="#close" class="cartodb-popup-close-button close">x</a>
      		<div class="cartodb-popup-content-wrapper">
        			<div class="cartodb-popup-content">
-         			<!-- content.data contains the field info -->
          			<h4>{% verbatim %}{{ content.data.name }}{% endverbatim %}</h4>
-         			<p><a href="/tag/view/{% verbatim %}{{ content.data.region_slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_continent_resources }}{% endverbatim %} resources for Africa</a></p>
+         			<p><a href="/tag/view/{% verbatim %}{{ content.data.region_slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_continent_resources }}{% endverbatim %} resources for {% verbatim %}{{ content.data.region_name }}{% endverbatim %}</a></p>
        			</div>
      		</div>
      		<div class="cartodb-popup-tip-container"></div>
   		</div>
 	</script>
 	
-	<script type="infowindow/html" id="infowindow_template_other">
+	<script type="infowindow/html" id="iw_templ_country1_continent1">
   		<div class="cartodb-popup">
    			<a href="#close" class="cartodb-popup-close-button close">x</a>
      		<div class="cartodb-popup-content-wrapper">
        			<div class="cartodb-popup-content">
-         			<!-- content.data contains the field info -->
          			<h4>{% verbatim %}{{ content.data.name }}{% endverbatim %}</h4>
          			<p><a href="/tag/view/{% verbatim %}{{ content.data.slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_country_resources }}{% endverbatim %} resources for {% verbatim %}{{ content.data.name }}{% endverbatim %}</a></p>
+					<p><a href="/tag/view/{% verbatim %}{{ content.data.region_slug }}{% endverbatim %}">View {% verbatim %}{{ content.data.no_continent_resources }}{% endverbatim %} resources for {% verbatim %}{{ content.data.region_name }}{% endverbatim %} </a></p>
        			</div>
      		</div>
      		<div class="cartodb-popup-tip-container"></div>
