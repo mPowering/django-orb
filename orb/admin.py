@@ -55,7 +55,7 @@ class SearchTrackerAdmin(admin.ModelAdmin):
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'external_url',
-                    'slug', 'order_by', 'image')
+                    'slug', 'parent_tag', 'order_by', 'image')
     search_fields = ['name', 'description']
 
 
