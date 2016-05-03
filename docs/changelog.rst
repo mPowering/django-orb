@@ -2,7 +2,12 @@ Change log
 =====================================
 
 
-v2.2.0 - not yet released
+v2.2.1 - released 3 May 2016
+---------------------------------
+
+* 344: Country map - update to show content we have for latin/south america - http://github.com/mPowering/django-orb/issues/issues/issue/344
+
+v2.2.0 - released 23 Apr 2016
 ---------------------------------
 
 * 343: On analytics page split out orgs with approved content vs those without - http://github.com/mPowering/django-orb/issues/issues/issue/343
