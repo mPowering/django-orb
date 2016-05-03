@@ -1,1 +1,1 @@
-VERSION = (2, 1, 1, 'beta', 0)
+VERSION = (2, 2, 1, 'beta', 0)
