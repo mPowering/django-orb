@@ -1,15 +1,12 @@
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
-from orb.lib.unique_slugify import unique_slugify
-
-# CountryData
+from orb.fields import AutoSlugField
 
 
 class CountryData(models.Model):
     country_name = models.TextField(blank=False, null=False)
-    slug = models.CharField(blank=True, null=True, max_length=100)
+    slug = AutoSlugField(populate_from='country_name', max_length=100, blank=True, null=True)
     country_code = models.TextField(blank=False, null=False)
     no_children_under5 = models.BigIntegerField(null=True, blank=True)
     no_chw = models.BigIntegerField(null=True, blank=True)
@@ -29,8 +26,3 @@ class CountryData(models.Model):
 
     def __unicode__(self):
         return self.country_name
-
-    def save(self, *args, **kwargs):
-        self.country_name = self.country_name.strip()
-        unique_slugify(self, self.country_name)
-        super(CountryData, self).save(*args, **kwargs)
