@@ -38,7 +38,8 @@ def home_view(request):
         data['resource_count'] = resource_count
         data['tag'] = t
         topics.append(data)
-        
+     
+    '''   
     data = {}
     data['resource_count'] = 3
     data['custom'] = True
@@ -46,7 +47,8 @@ def home_view(request):
     data['title'] = _(u'Toolkits')
     data['image'] = 'toolkit.png'
     topics.append(data)
-
+    '''
+        
     return render_to_response('orb/home.html',
                               {'topics': topics,
                                'page_title': _(u'ORB by mPowering')},
