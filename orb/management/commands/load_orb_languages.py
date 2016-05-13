@@ -50,7 +50,7 @@ class Command(BaseCommand):
             dest="iso6392",
             default=False,
             help="Flag for including all ISO 639.2 (only ISO 639.1 included by default)"),
-        )
+    )
 
     def handle(self, *args, **options):
 
@@ -77,4 +77,3 @@ class Command(BaseCommand):
                     "category": category,
                     "image": options["image"],
                 })
-
