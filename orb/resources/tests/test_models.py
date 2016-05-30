@@ -58,6 +58,22 @@ class ResourceTests(TestCase):
             "basica-salud-del-recien-nacido-2"
         )
 
+    def test_non_latin_slugification(self):
+        """Non-latin characters should be transliterated"""
+        cyrillic_resource= resource_factory(
+            user=self.user,
+            title=u"Санкт-Петербург Питоны",  # Saint Petersburg Pythons
+            description=u"Some resource",
+        )
+        self.assertEqual(cyrillic_resource.slug, u"sankt-peterburg-pitony")
+
+        chinese_resource= resource_factory(
+            user=self.user,
+            title=u"北京蟒蛇",  # Beijing Pythons
+            description=u"Some resource",
+        )
+        self.assertEqual(chinese_resource.slug, u"bei-jing-mang-she")
+
 
 class ResourceURLTests(TestCase):
     """Basic tests of the ResourceURL model and its methods"""

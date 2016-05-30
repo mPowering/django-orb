@@ -9,10 +9,10 @@ from django.db.models import Avg, Count
 from django.utils.translation import ugettext_lazy as _
 
 from tastypie.models import create_api_key
-from lib.unique_slugify import unique_slugify
 from orb.analytics.models import UserLocationVisualization
 from orb.resources.managers import ResourceManager, ResourceURLManager, ApprovedManager
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
+from .fields import AutoSlugField
 
 models.signals.post_save.connect(create_api_key, sender=User)
 
@@ -50,7 +50,7 @@ class Resource (models.Model):
     create_user = models.ForeignKey(User, related_name='resource_create_user')
     update_date = models.DateTimeField(auto_now=True)
     update_user = models.ForeignKey(User, related_name='resource_update_user')
-    slug = models.CharField(blank=True, null=True, max_length=100)
+    slug = AutoSlugField(populate_from='title', max_length=100, blank=True, null=True)
     study_time_number = models.IntegerField(default=0, null=True, blank=True)
     study_time_unit = models.CharField(
         max_length=10, choices=STUDY_TIME_UNITS, blank=True, null=True)
@@ -67,11 +67,6 @@ class Resource (models.Model):
 
     def __unicode__(self):
         return self.title
-
-    def save(self, *args, **kwargs):
-        unique_slugify(self, self.title)
-        self.title = self.title.strip()
-        super(Resource, self).save(*args, **kwargs)
 
     def get_organisations(self):
         return Tag.objects.filter(resourcetag__resource=self, category__slug='organisation')
@@ -261,7 +256,7 @@ class ResourceCriteria(models.Model):
 class Category (models.Model):
     name = models.CharField(blank=False, null=False, max_length=100)
     top_level = models.BooleanField(null=False, default=False)
-    slug = models.CharField(blank=True, null=True, max_length=100)
+    slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
     order_by = models.IntegerField(default=0)
 
     class Meta:
@@ -271,15 +266,6 @@ class Category (models.Model):
 
     def __unicode__(self):
         return self.name
-
-    def save(self, *args, **kwargs):
-        # If there is not already a slug in place...
-        if not self.slug:
-            # Call this slug function on the field you want the slug to be made
-            # of
-            unique_slugify(self, self.name)
-        # Call the rest of the old save() method
-        super(Category, self).save(*args, **kwargs)
 
 
 class Tag (models.Model):
@@ -291,7 +277,7 @@ class Tag (models.Model):
     update_date = models.DateTimeField(auto_now=True)
     update_user = models.ForeignKey(User, related_name='tag_update_user')
     image = models.ImageField(upload_to='tag/%Y/%m/%d', null=True, blank=True)
-    slug = models.CharField(blank=True, null=True, max_length=100)
+    slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
     order_by = models.IntegerField(default=0)
     external_url = models.URLField(
         blank=True, null=True, default=None, max_length=500)
@@ -314,9 +300,6 @@ class Tag (models.Model):
         return urlresolvers.reverse('orb_tags', args=[self.slug])
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            unique_slugify(self, self.name)
-
         # add generic geography icon if not specified
         if self.category.slug == 'geography' and not self.image:
             self.image = 'tag/geography_default.png'
@@ -519,7 +502,7 @@ class Collection(models.Model):
         max_length=50, choices=VISIBILITY_TYPES, default=PRIVATE)
     image = models.ImageField(
         upload_to='collection/%Y/%m/%d', null=True, blank=True)
-    slug = models.CharField(blank=True, null=True, max_length=500)
+    slug = AutoSlugField(populate_from='title', max_length=255, blank=True, null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
 
@@ -533,11 +516,6 @@ class Collection(models.Model):
 
     def get_absolute_url(self):
         return urlresolvers.reverse('orb_collection', args=[self.slug])
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            unique_slugify(self, self.title)
-        super(Collection, self).save(*args, **kwargs)
 
     def image_filename(self):
         return os.path.basename(self.image.name)
