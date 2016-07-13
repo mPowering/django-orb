@@ -17,9 +17,19 @@ from .fields import AutoSlugField
 models.signals.post_save.connect(create_api_key, sender=User)
 
 
-class Resource (models.Model):
+class TimestampBase(models.Model):
+    """Base class for adding create and update timestamp fields to models"""
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Resource(TimestampBase):
     REJECTED = 'rejected'
     PENDING_CRT = 'pending_crt'
+    PENDING = PENDING_CRT
     PENDING_MRT = 'pending_mrt'
     APPROVED = 'approved'
     STATUS_TYPES = (
@@ -46,9 +56,7 @@ class Resource (models.Model):
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
     status = models.CharField(
         max_length=50, choices=STATUS_TYPES, default=PENDING_CRT)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User, related_name='resource_create_user')
-    update_date = models.DateTimeField(auto_now=True)
     update_user = models.ForeignKey(User, related_name='resource_update_user')
     slug = AutoSlugField(populate_from='title', max_length=100, blank=True, null=True)
     study_time_number = models.IntegerField(default=0, null=True, blank=True)
@@ -147,9 +155,8 @@ class Resource (models.Model):
         return rating
 
 
-class ResourceWorkflowTracker(models.Model):
+class ResourceWorkflowTracker(TimestampBase):
     resource = models.ForeignKey(Resource, blank=True, null=True)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User)
     status = models.CharField(
         max_length=50, choices=Resource.STATUS_TYPES, default=Resource.PENDING_CRT)
@@ -157,7 +164,7 @@ class ResourceWorkflowTracker(models.Model):
     owner_email_sent = models.BooleanField(default=False, blank=False)
 
 
-class ResourceURL (models.Model):
+class ResourceURL(TimestampBase):
     url = models.URLField(blank=False, null=False, max_length=500)
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
@@ -166,10 +173,8 @@ class ResourceURL (models.Model):
     file_size = models.IntegerField(default=0)
     image = models.ImageField(
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(
         User, related_name='resource_url_create_user')
-    update_date = models.DateTimeField(auto_now=True)
     update_user = models.ForeignKey(
         User, related_name='resource_url_update_user')
 
@@ -179,7 +184,7 @@ class ResourceURL (models.Model):
         return self.url
 
 
-class ResourceFile (models.Model):
+class ResourceFile(TimestampBase):
     file = models.FileField(upload_to='resource/%Y/%m/%d', max_length=200)
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
@@ -187,10 +192,8 @@ class ResourceFile (models.Model):
     order_by = models.IntegerField(default=0)
     image = models.ImageField(
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(
         User, related_name='resource_file_create_user')
-    update_date = models.DateTimeField(auto_now=True)
     update_user = models.ForeignKey(
         User, related_name='resource_file_update_user')
     file_full_text = models.TextField(blank=True, null=True, default=None)
@@ -207,7 +210,7 @@ class ResourceFile (models.Model):
 # ResourceRelationship
 
 
-class ResourceRelationship (models.Model):
+class ResourceRelationship(TimestampBase):
     RELATIONSHIP_TYPES = (
         ('is_translation_of', _('is translation of')),
         ('is_derivative_of', _('is derivative of')),
@@ -220,10 +223,8 @@ class ResourceRelationship (models.Model):
     relationship_type = models.CharField(
         max_length=50, choices=RELATIONSHIP_TYPES)
     description = models.TextField(blank=False, null=False)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(
         User, related_name='resource_relationship_create_user')
-    update_date = models.DateTimeField(auto_now=True)
     update_user = models.ForeignKey(
         User, related_name='resource_relationship_update_user')
 
@@ -243,7 +244,7 @@ class ResourceCriteria(models.Model):
     category_order_by = models.IntegerField(default=0)
 
 
-class Category (models.Model):
+class Category(models.Model):
     name = models.CharField(blank=False, null=False, max_length=100)
     top_level = models.BooleanField(null=False, default=False)
     slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
@@ -258,13 +259,11 @@ class Category (models.Model):
         return self.name
 
 
-class Tag (models.Model):
+class Tag(TimestampBase):
     category = models.ForeignKey(Category)
     parent_tag = models.ForeignKey('self', blank=True, null=True, default=None)
     name = models.CharField(blank=False, null=False, max_length=100)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User, related_name='tag_create_user')
-    update_date = models.DateTimeField(auto_now=True)
     update_user = models.ForeignKey(User, related_name='tag_update_user')
     image = models.ImageField(upload_to='tag/%Y/%m/%d', null=True, blank=True)
     slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
@@ -330,10 +329,9 @@ class TagOwner(models.Model):
         unique_together = ("user", "tag")
 
 
-class ResourceTag (models.Model):
+class ResourceTag(TimestampBase):
     resource = models.ForeignKey(Resource)
     tag = models.ForeignKey(Tag)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(
         User, related_name='resourcetag_create_user')
 
@@ -343,7 +341,7 @@ class ResourceTag (models.Model):
         unique_together = ("resource", "tag")
 
 
-class UserProfile (models.Model):
+class UserProfile(TimestampBase):
     AGE_RANGE = (
         ('under_18', _('under 18')),
         ('18_25', _('18-24')),
@@ -378,8 +376,6 @@ class UserProfile (models.Model):
     age_range = models.CharField(
         max_length=50, choices=AGE_RANGE, default='none')
     mailing = models.BooleanField(default=False, blank=False)
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
     crt_member = models.BooleanField(default=False, blank=False)
     mep_member = models.BooleanField(default=False, blank=False)
 
@@ -472,17 +468,15 @@ class TagTracker(models.Model):
     extra_data = models.TextField(blank=True, null=True, default=None)
 
 
-class ResourceRating(models.Model):
+class ResourceRating(TimestampBase):
     user = models.ForeignKey(User, blank=False, null=False)
     resource = models.ForeignKey(Resource, blank=False, null=False)
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
     rating = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)])
     comments = models.TextField(blank=True, null=True, default=None)
 
 
-class Collection(models.Model):
+class Collection(TimestampBase):
     PUBLIC = 'public'
     PRIVATE = 'private'
     VISIBILITY_TYPES = (
@@ -496,8 +490,6 @@ class Collection(models.Model):
     image = models.ImageField(
         upload_to='collection/%Y/%m/%d', null=True, blank=True)
     slug = AutoSlugField(populate_from='title', max_length=255, blank=True, null=True)
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = _('Collection')
