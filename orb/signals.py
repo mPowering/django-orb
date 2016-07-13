@@ -3,9 +3,12 @@ import json
 from django.db.models.signals import post_save
 from django.dispatch import Signal
 
-from orb.emailer import first_resource, resource_approved, resource_rejected, user_welcome, new_resource_submitted
-from orb.models import Resource, ResourceTracker, SearchTracker, ResourceWorkflowTracker, ResourceCriteria, TagTracker
+from orb.emailer import (first_resource, resource_approved, resource_rejected,
+                         user_welcome, new_resource_submitted)
 from orb.lib.search_crawler import is_search_crawler
+from orb.models import (Resource, ResourceTracker, SearchTracker,
+                        ResourceWorkflowTracker, ResourceCriteria, TagTracker)
+
 
 resource_viewed = Signal(providing_args=["resource", "request", "type"])
 resource_workflow = Signal(
@@ -66,7 +69,7 @@ def resource_workflow_callback(sender, **kwargs):
     email_sent = False
     # if status is pending CRT (i.e new) and owner hasn't submitted before
     # then send email
-    if status == ResourceWorkflowTracker.PENDING_CRT:
+    if status == Resource.PENDING_CRT:
         no_previous_resources = ResourceWorkflowTracker.objects.filter(
             create_user=request.user).count()
         if no_previous_resources == 0:
@@ -74,16 +77,16 @@ def resource_workflow_callback(sender, **kwargs):
             email_sent = True
 
     # if approved
-    if status == ResourceWorkflowTracker.APPROVED:
+    if status == Resource.APPROVED:
         resource_approved(request, resource.create_user, resource)
         email_sent = True
 
     # if passed to MEP
-    if status == ResourceWorkflowTracker.PENDING_MEP:
+    if status == Resource.PENDING_MEP:
         pass
 
     # if rejected
-    if status == ResourceWorkflowTracker.REJECTED:
+    if status == Resource.REJECTED:
         resource_rejected(resource.create_user, resource, criteria, notes)
         email_sent = True
         rejection_criteria = ResourceCriteria.objects.filter(

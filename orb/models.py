@@ -148,21 +148,11 @@ class Resource (models.Model):
 
 
 class ResourceWorkflowTracker(models.Model):
-    REJECTED = 'rejected'
-    PENDING_CRT = 'pending_crt'
-    PENDING_MEP = 'pending_mep'
-    APPROVED = 'approved'
-    STATUS_TYPES = (
-        (REJECTED, _('Rejected')),
-        (PENDING_CRT, _('Pending CRT')),
-        (PENDING_MEP, _('Pending MEP')),
-        (APPROVED, _('Approved')),
-    )
     resource = models.ForeignKey(Resource, blank=True, null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(User)
     status = models.CharField(
-        max_length=50, choices=STATUS_TYPES, default=PENDING_CRT)
+        max_length=50, choices=Resource.STATUS_TYPES, default=Resource.PENDING_CRT)
     notes = models.TextField(blank=True, null=True)
     owner_email_sent = models.BooleanField(default=False, blank=False)
 

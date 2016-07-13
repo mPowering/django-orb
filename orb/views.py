@@ -7,21 +7,20 @@ from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Max, Min, Q, Avg
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import render, render_to_response
 from django.shortcuts import get_object_or_404
+from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
-
 from haystack.query import SearchQuerySet
 
-from orb.forms import ResourceStep1Form, ResourceStep2Form, SearchForm, ResourceRejectForm, AdvancedSearchForm
-from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, TagTracker, SearchTracker
-from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria, ResourceRating
+from orb.forms import (ResourceStep1Form, ResourceStep2Form, SearchForm,
+                       ResourceRejectForm, AdvancedSearchForm)
 from orb.models import Collection
-from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow, resource_submitted, tag_viewed
-
-
+from orb.models import ResourceFile, ResourceTag, ResourceCriteria, ResourceRating
+from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, TagTracker, SearchTracker
 from orb.partners.OnemCHW.models import CountryData
+from orb.signals import (resource_viewed, resource_url_viewed, resource_file_viewed,
+                         search, resource_workflow, resource_submitted, tag_viewed)
 
 
 def home_view(request):
@@ -38,8 +37,8 @@ def home_view(request):
         data['resource_count'] = resource_count
         data['tag'] = t
         topics.append(data)
-     
-    '''   
+
+    '''
     data = {}
     data['resource_count'] = 3
     data['custom'] = True
@@ -48,7 +47,7 @@ def home_view(request):
     data['image'] = 'toolkit.png'
     topics.append(data)
     '''
-        
+
     return render_to_response('orb/home.html',
                               {'topics': topics,
                                'page_title': _(u'ORB by mPowering')},
@@ -272,7 +271,7 @@ def resource_create_step1_view(request):
 
             # see if email needs to be sent
             resource_workflow.send(sender=resource, resource=resource, request=request,
-                                   status=ResourceWorkflowTracker.PENDING_CRT, notes="")
+                                   status=Resource.PENDING_CRT, notes="")
             resource_submitted.send(
                 sender=resource, resource=resource, request=request)
 
@@ -460,7 +459,7 @@ def resource_approve_view(request, id):
     resource.save()
 
     resource_workflow.send(sender=resource, resource=resource,
-                           request=request, status=ResourceWorkflowTracker.APPROVED, notes="")
+                           request=request, status=Resource.APPROVED, notes="")
     return render_to_response('orb/resource/status_updated.html',
                               {'resource': resource, },
                               context_instance=RequestContext(request))
@@ -483,7 +482,7 @@ def resource_reject_view(request, id):
             notes = form.cleaned_data.get("notes")
             criteria = form.cleaned_data.get("criteria")
             resource_workflow.send(sender=resource, resource=resource, request=request,
-                                   status=ResourceWorkflowTracker.REJECTED, notes=notes, criteria=criteria)
+                                   status=Resource.REJECTED, notes=notes, criteria=criteria)
             return HttpResponseRedirect(reverse('orb_resource_reject_sent', args=[resource.id]))
     else:
         form = ResourceRejectForm()
@@ -516,7 +515,7 @@ def resource_pending_mep_view(request, id):
     resource.save()
 
     resource_workflow.send(sender=resource, resource=resource, request=request,
-                           status=ResourceWorkflowTracker.PENDING_MEP, notes="")
+                           status=Resource.PENDING_MEP, notes="")
     return render_to_response('orb/resource/status_updated.html',
                               {'resource': resource, },
                               context_instance=RequestContext(request))
