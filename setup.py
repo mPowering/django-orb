@@ -16,7 +16,7 @@ setup(
         'orb.migrations',
         'orb.fixtures',
         'orb.utils',
-        'orb.profile',
+        'orb.profiles',
     ],
     include_package_data=True,
     license='GNU GPL v3 License',

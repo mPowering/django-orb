@@ -17,7 +17,7 @@ urlpatterns = patterns('',
     url(r'^taxonomy/$', 'orb.views.taxonomy_view', name="orb_taxonomy"),
     url(r'^terms/$', TemplateView.as_view(template_name="orb/terms.html"), name="orb_terms"),
 
-    url(r'^profile/', include('orb.profile.urls')),
+    url(r'^profile/', include('orb.profiles.urls')),
 
     url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', 'orb.views.tag_view', name="orb_tags"),
     url(r'^tag/cloud/$', 'orb.views.tag_cloud_view', name="orb_tag_cloud"),

@@ -383,6 +383,9 @@ class UserProfile (models.Model):
     crt_member = models.BooleanField(default=False, blank=False)
     mep_member = models.BooleanField(default=False, blank=False)
 
+    class Meta:
+        db_table = "orb_userprofile"
+
     def get_twitter_url(self):
         if self.twitter is not None:
             return "https://twitter.com/" + self.twitter.replace('@', '')
