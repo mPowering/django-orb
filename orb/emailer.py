@@ -29,8 +29,6 @@ def user_welcome(to_user):
               fail_silently=False,
               html_message=html_content)
 
-    return
-
 
 def password_reset(to_user, new_password):
     template_html = 'orb/email/password_reset.html'
@@ -50,8 +48,6 @@ def password_reset(to_user, new_password):
               [to_user.email],
               fail_silently=False,
               html_message=html_content)
-
-    return
 
 
 def first_resource(to_user, resource):
@@ -77,8 +73,6 @@ def first_resource(to_user, resource):
               fail_silently=False,
               html_message=html_content)
 
-    return
-
 
 def resource_approved(request, to_user, resource):
     template_html = 'orb/email/resource_approved.html'
@@ -103,8 +97,6 @@ def resource_approved(request, to_user, resource):
               [to_user.email],
               fail_silently=False,
               html_message=html_content)
-
-    return
 
 
 def resource_rejected(to_user, resource, criteria, notes):
@@ -133,8 +125,6 @@ def resource_rejected(to_user, resource, criteria, notes):
               fail_silently=False,
               html_message=html_content)
 
-    return
-
 
 def new_resource_submitted(request, resource):
     template_html = 'orb/email/resource_submitted.html'
@@ -160,8 +150,6 @@ def new_resource_submitted(request, resource):
               fail_silently=False,
               html_message=html_content)
 
-    return
-
 
 def link_checker_results(resource_urls, tags):
     template_html = 'orb/email/link_checker_results.html'
@@ -184,5 +172,3 @@ def link_checker_results(resource_urls, tags):
               [email for name, email in settings.ADMINS],
               fail_silently=False,
               html_message=html_content)
-
-    return
