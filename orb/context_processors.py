@@ -16,8 +16,7 @@ def get_menu(request):
         tags = None
 
     if request.user.is_authenticated():
-        if (request.user.userprofile and (request.user.userprofile.crt_member == True or
-                                          request.user.userprofile.mep_member == True)):
+        if request.user.userprofile and request.user.userprofile.is_reviewer:
             reviewer = True
         else:
             reviewer = False
