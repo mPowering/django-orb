@@ -14,6 +14,7 @@ class ResourceStep2FormTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(ResourceStep2FormTests, cls).setUpClass()
         cls.uploaded_file = MagicMock()
         cls.uploaded_file.content_type = "application/pdf"
         cls.uploaded_file.size = 100
@@ -61,3 +62,28 @@ class ResourceStep2FormTests(TestCase):
         from orb.forms import ResourceStep2Form
         form = ResourceStep2Form(files={"file": self.uploaded_file})
         self.assertFalse(form.is_valid())
+
+
+class ReviewFormTests(TestCase):
+    """
+    Tests for the reviewer's review entry form
+    """
+    def test_accept_form(self):
+        """Form should not require reason if resource approved"""
+        from orb.resources.forms import ReviewForm
+        form = ReviewForm(data={'approved': True})
+        self.assertTrue(form.is_valid())
+
+    def test_reject_no_reason(self):
+        """Form should require reason if resource rejected"""
+        from orb.resources.forms import ReviewForm
+        form = ReviewForm(data={'approved': False})
+        self.assertFalse(form.is_valid())
+        form = ReviewForm(data={'approved': False, 'reason': ''})
+        self.assertFalse(form.is_valid())
+
+    def test_reject_with_reason(self):
+        """Form should require reason if resource rejected"""
+        from orb.resources.forms import ReviewForm
+        form = ReviewForm(data={'approved': False, 'reason': u"¡Olé!"})
+        self.assertTrue(form.is_valid())

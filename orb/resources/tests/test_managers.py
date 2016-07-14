@@ -21,6 +21,7 @@ class ResourceTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(ResourceTests, cls).setUpClass()
         cls.user = User.objects.create(username="tester")
         cls.updater = User.objects.create(username="updater")
         cls.staff = User.objects.create(username="staff", is_staff=True)
@@ -53,6 +54,7 @@ class ResourceTests(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super(ResourceTests, cls).tearDownClass()
         User.objects.all().delete()
         Resource.objects.all().delete()
 

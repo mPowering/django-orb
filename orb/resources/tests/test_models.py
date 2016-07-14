@@ -16,6 +16,7 @@ class ResourceTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(ResourceTests, cls).setUpClass()
         cls.user = User.objects.create(username="tester")
         cls.resource = resource_factory(
             user=cls.user,
@@ -25,6 +26,7 @@ class ResourceTests(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super(ResourceTests, cls).tearDownClass()
         User.objects.all().delete()
         Resource.objects.all().delete()
 
@@ -80,6 +82,7 @@ class ResourceURLTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(ResourceURLTests, cls).setUpClass()
         cls.user = User.objects.create(username="tester")
         cls.resource = resource_factory(
             user=cls.user,
@@ -95,6 +98,7 @@ class ResourceURLTests(TestCase):
 
     @classmethod
     def tearDownClass(cls):
+        super(ResourceURLTests, cls).tearDownClass()
         User.objects.all().delete()
         Resource.objects.all().delete()
 

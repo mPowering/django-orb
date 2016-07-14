@@ -59,10 +59,10 @@ urlpatterns = patterns('',
 
     url(r'^api/', include('orb.api.urls')),
 
+    url(r'^resource/', include('orb.resources.urls')),
     url(r'^resource/rate/', include('orb.rating.urls')),
     url(r'^resource/bookmark/', include('orb.bookmark.urls')),
     url(r'^viz/', include('orb.viz.urls')),
     url(r'^toolkits/', include('orb.toolkits.urls')),
-
     url(r'^i18n/', include('django.conf.urls.i18n')),
 )

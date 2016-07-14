@@ -19,6 +19,15 @@ def staff_test(user):
     raise PermissionDenied
 
 
+def content_reviewer(user):
+    if not user.is_authenticated():
+        return False
+    if user.is_active and user.userprofile.is_reviewer:
+        return True
+    print(user.is_active, user.userprofile.is_reviewer)
+    raise PermissionDenied
+
+
 def staff_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None):
     """
     Decorator for views that checks that the user is logged in and a staff member.
@@ -35,3 +44,20 @@ def staff_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login
     if function:
         return actual_decorator(function)
     return actual_decorator
+
+
+def reviewer_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None):
+    """
+    Decorator for views that checks that the user is logged in and either a
+    staff member or a content reviewer.
+    """
+    actual_decorator = user_passes_test(
+        lambda u: content_reviewer(u),
+        login_url=login_url,
+        redirect_field_name=redirect_field_name
+    )
+    if function:
+        return actual_decorator(function)
+    return actual_decorator
+
+
