@@ -56,8 +56,8 @@ class Resource(TimestampBase):
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
     status = models.CharField(
         max_length=50, choices=STATUS_TYPES, default=PENDING_CRT)
-    create_user = models.ForeignKey(User, related_name='resource_create_user')
-    update_user = models.ForeignKey(User, related_name='resource_update_user')
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_create_user')
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_update_user')
     slug = AutoSlugField(populate_from='title', max_length=100, blank=True, null=True)
     study_time_number = models.IntegerField(default=0, null=True, blank=True)
     study_time_unit = models.CharField(
@@ -155,9 +155,10 @@ class Resource(TimestampBase):
         return rating
 
 
-class ResourceWorkflowTracker(TimestampBase):
+class ResourceWorkflowTracker(models.Model):
+    create_date = models.DateTimeField(auto_now_add=True)
     resource = models.ForeignKey(Resource, blank=True, null=True)
-    create_user = models.ForeignKey(User)
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL)
     status = models.CharField(
         max_length=50, choices=Resource.STATUS_TYPES, default=Resource.PENDING_CRT)
     notes = models.TextField(blank=True, null=True)
@@ -263,8 +264,8 @@ class Tag(TimestampBase):
     category = models.ForeignKey(Category)
     parent_tag = models.ForeignKey('self', blank=True, null=True, default=None)
     name = models.CharField(blank=False, null=False, max_length=100)
-    create_user = models.ForeignKey(User, related_name='tag_create_user')
-    update_user = models.ForeignKey(User, related_name='tag_update_user')
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_create_user')
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_update_user')
     image = models.ImageField(upload_to='tag/%Y/%m/%d', null=True, blank=True)
     slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
     order_by = models.IntegerField(default=0)
@@ -322,14 +323,15 @@ class TagProperty(models.Model):
 
 
 class TagOwner(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     tag = models.ForeignKey(Tag)
 
     class Meta:
         unique_together = ("user", "tag")
 
 
-class ResourceTag(TimestampBase):
+class ResourceTag(models.Model):
+    create_date = models.DateTimeField(auto_now_add=True)
     resource = models.ForeignKey(Resource)
     tag = models.ForeignKey(Tag)
     create_user = models.ForeignKey(
@@ -406,7 +408,7 @@ class ResourceTracker(models.Model):
         (DOWNLOAD, _(u'Download')),
         (CREATE, _(u'Create')),
     )
-    user = models.ForeignKey(User, blank=True, null=True,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
                              default=None, on_delete=models.SET_NULL)
     type = models.CharField(max_length=50, choices=TRACKER_TYPES, default=VIEW)
     resource = models.ForeignKey(
@@ -436,7 +438,7 @@ class SearchTracker(models.Model):
         (SEARCH_API, _(u'search-api')),
         (SEARCH_ADV, _(u'search-adv')),
     )
-    user = models.ForeignKey(User, blank=True, null=True,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
                              default=None, on_delete=models.SET_NULL)
     query = models.TextField(blank=True, null=True, default=None)
     no_results = models.IntegerField(blank=True, null=True, default=0)
@@ -457,7 +459,7 @@ class TagTracker(models.Model):
         (VIEW_API, _(u'View-API')),
         (VIEW_URL, _(u'View-URL')),
     )
-    user = models.ForeignKey(User, blank=True, null=True,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
                              default=None, on_delete=models.SET_NULL)
     type = models.CharField(max_length=50, choices=TRACKER_TYPES, default=VIEW)
     tag = models.ForeignKey(Tag, blank=True, null=True,
@@ -469,7 +471,7 @@ class TagTracker(models.Model):
 
 
 class ResourceRating(TimestampBase):
-    user = models.ForeignKey(User, blank=False, null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, null=False)
     resource = models.ForeignKey(Resource, blank=False, null=False)
     rating = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)])
@@ -507,7 +509,7 @@ class Collection(TimestampBase):
 
 
 class CollectionUser(models.Model):
-    user = models.ForeignKey(User, blank=False, null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, null=False)
     collection = models.ForeignKey(Collection, blank=False, null=False)
 
     class Meta:
