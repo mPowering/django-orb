@@ -2,8 +2,6 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import model_utils.fields
-import django.utils.timezone
 from django.conf import settings
 import django_fsm
 
@@ -11,7 +9,7 @@ import django_fsm
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('orb', '0025_specify_profile_db_table'),
+        ('orb', '0026_auto_20160719_2027'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
@@ -20,16 +18,15 @@ class Migration(migrations.Migration):
             name='ContentReview',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created', model_utils.fields.AutoCreatedField(default=django.utils.timezone.now, verbose_name='created', editable=False)),
-                ('modified', model_utils.fields.AutoLastModifiedField(default=django.utils.timezone.now, verbose_name='modified', editable=False)),
+                ('create_date', models.DateTimeField(auto_now_add=True)),
+                ('update_date', models.DateTimeField(auto_now=True)),
                 ('status', django_fsm.FSMField(default=b'pending_crt', max_length=50)),
                 ('notes', models.TextField(blank=True)),
-                ('role', models.CharField(max_length=10, choices=[(b'medical', 'Medical'), (b'technical', 'Technical'), (b'other', 'Other')])),
                 ('resource', models.ForeignKey(related_name='content_reviews', to='orb.Resource')),
                 ('reviewer', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('role', models.ForeignKey(related_name='reviews', to='orb.ReviewerRole')),
             ],
             options={
-                'abstract': False,
             },
             bases=(models.Model,),
         ),
@@ -37,14 +34,19 @@ class Migration(migrations.Migration):
             name='ReviewLogEntry',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('created', model_utils.fields.AutoCreatedField(default=django.utils.timezone.now, verbose_name='created', editable=False)),
-                ('modified', model_utils.fields.AutoLastModifiedField(default=django.utils.timezone.now, verbose_name='modified', editable=False)),
+                ('create_date', models.DateTimeField(auto_now_add=True)),
+                ('update_date', models.DateTimeField(auto_now=True)),
                 ('review_status', models.CharField(max_length=20, editable=False)),
+                ('action', models.CharField(max_length=200)),
                 ('review', models.ForeignKey(related_name='log_entries', to='resources.ContentReview')),
             ],
             options={
                 'abstract': False,
             },
             bases=(models.Model,),
+        ),
+        migrations.AlterUniqueTogether(
+            name='contentreview',
+            unique_together=set([('resource', 'role'), ('resource', 'reviewer')]),
         ),
     ]

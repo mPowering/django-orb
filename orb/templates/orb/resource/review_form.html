@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% load i18n %}
+{% block extra_head_title %}{% trans 'Content Review' %}{% endblock extra_head_title %}
+{% block content %}
 
-</body>
-</html>
+<h3>{% trans 'Content Review' %}</h3>
+
+<div class="alert alert-success">
+'{{ resource.title }}' has been updated to be '{{ resource.status }}'
+</div>
+{% endblock %}

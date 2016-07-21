@@ -380,6 +380,7 @@ class UserProfile(TimestampBase):
     mailing = models.BooleanField(default=False, blank=False)
     crt_member = models.BooleanField(default=False, blank=False)
     mep_member = models.BooleanField(default=False, blank=False)
+    reviewer_role = models.ForeignKey('ReviewerRole', blank=True, null=True)
 
     class Meta:
         db_table = "orb_userprofile"
@@ -527,3 +528,18 @@ class CollectionResource(models.Model):
         verbose_name = _('Collection resource')
         verbose_name_plural = _('Collection resources')
         ordering = ('collection', 'order_by', 'resource')
+
+
+class ReviewerRole(models.Model):
+    """
+    Models the different roles a content review might fulfill
+
+    Set up with choices to start with.
+    """
+    ROLE_CHOICES = [
+        ('medical', _('Medical')),
+        ('technical', _('Technical')),
+        ('other', _('Other')),
+    ]
+
+    name = models.CharField(max_length=100, choices=ROLE_CHOICES, unique=True)
