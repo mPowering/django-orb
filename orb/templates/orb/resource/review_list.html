@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block extra_head_title %}{% trans 'Pending Resources' %}{% endblock extra_head_title %}
+
+{% block content %}
+
+    <h2>{% trans 'Pending Resources' %}</h2>
+
+    <a name="all" class="named-anchor"></a>
+    <h3>{% trans 'All Resources' %}</h3>
+
+    {% if pending_resources %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>{% trans 'Submitted' %}</th>
+                    <th>{% trans 'Title' %}</th>
+                    <th>{% trans 'Organisation' %}</th>
+                    <th>{% trans 'Options' %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for resource in pending_resources %}
+                    <tr>
+                        <td>{{ resource.create_date }}</td>
+                        <td>{{ resource.title }}</td>
+                        <td>
+                            {% for organisation in resource.get_organisations %}
+                                {{ organisation.name }}
+
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a target="_blank"
+                               href="{% url 'orb_resource' resource.slug %}">{% trans 'Preview' %}</a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>{% trans 'No resources pending review' %}</p>
+    {% endif %}
+
+
+{% endblock %}

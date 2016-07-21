@@ -2,6 +2,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import render, get_object_or_404
 
 from orb.decorators import reviewer_required
+from orb.models import Resource
 from orb.resources.models import ContentReview
 
 
@@ -26,3 +27,14 @@ def review_resource(request, resource_id, review_id):
         raise PermissionDenied
 
     return render(request, "orb/resource/review_form.html", {})
+
+
+@reviewer_required
+def resource_review_list(request):
+    """
+    View that lists resources that are pending review
+    """
+    pending_resources = Resource.resources.pending()
+    return render(request, "orb/resource/review_list.html",{
+        'pending_resources': pending_resources,
+    })
