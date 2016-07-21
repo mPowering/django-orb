@@ -24,6 +24,8 @@ def approved_queryset(queryset, user=AnonymousUser, status="approved", relation=
         QuerySet: A queryset filtered by status and/or user
 
     """
+    queryset = queryset.exclude(**{"{0}status".format(relation): "rejected"})
+
     status_filter = {"{0}status".format(relation): status}
     creator_filter = {"{0}create_user".format(relation): user}
     updater_filter = {"{0}update_user".format(relation): user}
@@ -63,6 +65,12 @@ class ResourceManager(models.Manager):
         if user is None:
             user = AnonymousUser()
         return approved_queryset(qs, user)
+
+    def pending(self):
+        return self.get_queryset().exclude(
+            models.Q(status="approved") |
+            models.Q(status="rejected")
+        )
 
 
 class ResourceURLManager(models.Manager):

@@ -65,7 +65,8 @@ class Resource(TimestampBase):
     born_on = models.DateTimeField(blank=True, null=True, default=None)
     attribution = models.TextField(blank=True, null=True, default=None)
 
-    objects = ResourceManager()
+    resources = ResourceManager()
+    objects = resources  # alias
     approved = ApprovedManager()
 
     class Meta:
@@ -542,4 +543,4 @@ class ReviewerRole(models.Model):
         ('other', _('Other')),
     ]
 
-    name = models.CharField(max_length=100, choices=ROLE_CHOICES, unique=True)
+    name = models.CharField(max_length=100, choices=ROLE_CHOICES, unique=True, default='medical')

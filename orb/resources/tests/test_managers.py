@@ -41,55 +41,62 @@ class ResourceTests(TestCase):
             update_user=cls.updater,
             title=u"Unapproved resource",
             description=u"Unapproved, owned by user",
+            status=Resource.PENDING,
         )
         unapproved_staff = resource_factory(
             user=cls.staff,
             title=u"Staff resource",
             description=u"Unapproved, owned by staff user",
+            status=Resource.PENDING,
+        )
+        unapproved_staff = resource_factory(
+            user=cls.staff,
+            title=u"Staff resource",
+            description=u"Unapproved, owned by staff user",
+            status=Resource.REJECTED,
         )
 
         resource_url_factory(resource=approved, user=cls.user)
         resource_url_factory(resource=unapproved_user, user=cls.user)
 
-
     @classmethod
     def tearDownClass(cls):
         super(ResourceTests, cls).tearDownClass()
         User.objects.all().delete()
-        Resource.objects.all().delete()
+        Resource.resources.all().delete()
 
     # Tests for the ResourceManager
 
     def test_default_manager(self):
         """Sanity check on defaults"""
-        self.assertEqual(Resource.objects.all().count(), 3)
+        self.assertEqual(Resource.resources.all().count(), 4)
 
     def test_approved(self):
-        self.assertEqual(Resource.objects.approved().count(), 1)
+        self.assertEqual(Resource.resources.approved().count(), 1)
 
     def test_approved_anon(self):
         """Should be equal to default approved count"""
-        self.assertEqual(Resource.objects.approved(user=AnonymousUser()).count(), 1)
+        self.assertEqual(Resource.resources.approved(user=AnonymousUser()).count(), 1)
 
     def test_approved_creator(self):
         """Should include resources created by user"""
-        self.assertEqual(Resource.objects.approved(user=self.user).count(), 2)
+        self.assertEqual(Resource.resources.approved(user=self.user).count(), 2)
 
     def test_approved_updater(self):
         """Should include resources updated by user"""
-        self.assertEqual(Resource.objects.approved(user=self.updater).count(), 2)
+        self.assertEqual(Resource.resources.approved(user=self.updater).count(), 2)
 
     def test_approved_staff(self):
         """Staff should include all resources regardless of status"""
-        self.assertEqual(Resource.objects.approved(user=self.staff).count(), 3)
+        self.assertEqual(Resource.resources.approved(user=self.staff).count(), 3)
 
     def test_approved_mep_reviewer(self):
-        """Reviewer should include all resources regardless of status"""
-        self.assertEqual(Resource.objects.approved(user=self.mep_user).count(), 3)
+        """Reviewer should include all non-rejected resources regardless of status"""
+        self.assertEqual(Resource.resources.approved(user=self.mep_user).count(), 3)
 
     def test_approved_crt_reviewer(self):
-        """Reviewer should include all resources regardless of status"""
-        self.assertEqual(Resource.objects.approved(user=self.crt_user).count(), 3)
+        """Reviewer should include all non-ejected resources regardless of status"""
+        self.assertEqual(Resource.resources.approved(user=self.crt_user).count(), 3)
 
     # Tests for the ApprovalManager
 
@@ -105,11 +112,15 @@ class ResourceTests(TestCase):
         self.assertEqual(Resource.approved.filter(user=self.user).count(), 2)
 
     def test_approved_staff(self):
-        """Should include all resources regardless of status"""
+        """Should include all non-rejected resources regardless of status"""
         self.assertEqual(Resource.approved.filter(user=self.staff).count(), 3)
 
     def test_get_approved(self):
         assert Resource.approved.get(user=self.user, title=u"Unapproved resource")
+
+    def test_pending_resources(self):
+        """Pending should return only resources that are pending review"""
+        self.assertEqual(Resource.resources.pending().count(), 2)
 
     # Tests for ResourceURL
 
