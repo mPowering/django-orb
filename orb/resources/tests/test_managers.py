@@ -91,12 +91,12 @@ class ResourceTests(TestCase):
         self.assertEqual(Resource.resources.approved(user=self.staff).count(), 3)
 
     def test_approved_mep_reviewer(self):
-        """Reviewer should include all non-rejected resources regardless of status"""
-        self.assertEqual(Resource.resources.approved(user=self.mep_user).count(), 3)
+        """Reviewer should include all resources regardless of status"""
+        self.assertEqual(Resource.resources.approved(user=self.mep_user).count(), 4)
 
     def test_approved_crt_reviewer(self):
-        """Reviewer should include all non-ejected resources regardless of status"""
-        self.assertEqual(Resource.resources.approved(user=self.crt_user).count(), 3)
+        """Reviewer should include all resources regardless of status"""
+        self.assertEqual(Resource.resources.approved(user=self.crt_user).count(), 4)
 
     # Tests for the ApprovalManager
 
@@ -112,8 +112,8 @@ class ResourceTests(TestCase):
         self.assertEqual(Resource.approved.filter(user=self.user).count(), 2)
 
     def test_approved_staff(self):
-        """Should include all non-rejected resources regardless of status"""
-        self.assertEqual(Resource.approved.filter(user=self.staff).count(), 3)
+        """Should include all resources regardless of status"""
+        self.assertEqual(Resource.approved.filter(user=self.staff).count(), 4)
 
     def test_get_approved(self):
         assert Resource.approved.get(user=self.user, title=u"Unapproved resource")

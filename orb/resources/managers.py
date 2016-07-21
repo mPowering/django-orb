@@ -24,8 +24,6 @@ def approved_queryset(queryset, user=AnonymousUser, status="approved", relation=
         QuerySet: A queryset filtered by status and/or user
 
     """
-    queryset = queryset.exclude(**{"{0}status".format(relation): "rejected"})
-
     status_filter = {"{0}status".format(relation): status}
     creator_filter = {"{0}create_user".format(relation): user}
     updater_filter = {"{0}update_user".format(relation): user}
