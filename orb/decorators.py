@@ -8,7 +8,8 @@ from django.core.exceptions import PermissionDenied
 
 
 def staff_test(user):
-    """Tests that raises an exception for logged in, non-staff users
+    """
+    Tests that raises an exception for logged in, non-staff users
 
     PermissionDenied excpetion is returned as an HTTP 403 response
     """
@@ -20,11 +21,23 @@ def staff_test(user):
 
 
 def content_reviewer(user):
+    """
+    Tests that user is content reviewer (or superuser)
+
+    Args:
+        user: the User object
+
+    Returns:
+        Boolean
+
+    Raises:
+        PermissionDenied
+
+    """
     if not user.is_authenticated():
         return False
-    if user.is_active and user.userprofile.is_reviewer:
+    if user.is_active and (user.userprofile.is_reviewer or user.is_superuser):
         return True
-    print(user.is_active, user.userprofile.is_reviewer)
     raise PermissionDenied
 
 
