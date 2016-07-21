@@ -421,8 +421,7 @@ def resource_view(request, id):
 def review_view(request):
 
     if (request.user.is_staff or
-          (request.user.userprofile and (request.user.userprofile.crt_member == True or
-                                         request.user.userprofile.mep_member == True))):
+          (request.user.userprofile and request.user.userprofile.is_reviewer)):
         pass
     else:
         return HttpResponse(status=401, content="Not Authorized")

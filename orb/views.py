@@ -945,8 +945,7 @@ def resource_can_view(resource, user):
     elif ((user.is_staff or
            user == resource.create_user or
            user == resource.update_user) or
-          (user.userprofile and (user.userprofile.crt_member == True or
-                                 user.userprofile.mep_member == True))):
+          (user.userprofile and (user.userprofile.is_reviewer))):
         return True
     else:
         return False
