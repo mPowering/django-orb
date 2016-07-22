@@ -15,15 +15,6 @@ class RatingForm(forms.ModelForm):
         fields = '__all__'
         model = ResourceRating
 
-    def save(self, commit=True):
-        if not getattr(self.instance, 'pk'):
-            try:
-                self.instance = ResourceRating.objects.get(**self.cleaned_data)
-            except ResourceRating.DoesNotExist:
-                pass
-        print(self.instance)
-        super(RatingForm, self).save(commit=commit)
-
 
 @login_required
 @require_POST
@@ -36,8 +27,16 @@ def resource_rate_view(request):
     if not form.is_valid():
         return HttpResponseBadRequest()
 
-    form.save()
+    rating = form.cleaned_data['rating']
     resource = form.cleaned_data['resource']
+
+    user_rating, created = ResourceRating.objects.get_or_create(
+        user=request.user,
+        resource=form.cleaned_data['resource'],
+        defaults={'rating': rating},
+    )
+    if not created:
+        user_rating.rating = rating
 
     return JsonResponse({
         'no_ratings': ResourceRating.objects.filter(resource=resource).count(),
