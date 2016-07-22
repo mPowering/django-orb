@@ -1,19 +1,10 @@
-from django import forms
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseBadRequest, JsonResponse
 from django.views.decorators.http import require_POST
 
 from orb.models import ResourceRating
-
-
-class RatingForm(forms.ModelForm):
-
-    rating = forms.IntegerField(min_value=1, max_value=5)
-
-    class Meta:
-        fields = '__all__'
-        model = ResourceRating
+from .forms import RatingForm
 
 
 @login_required
@@ -27,16 +18,9 @@ def resource_rate_view(request):
     if not form.is_valid():
         return HttpResponseBadRequest()
 
-    rating = form.cleaned_data['rating']
-    resource = form.cleaned_data['resource']
+    form.save()
 
-    user_rating, created = ResourceRating.objects.get_or_create(
-        user=request.user,
-        resource=form.cleaned_data['resource'],
-        defaults={'rating': rating},
-    )
-    if not created:
-        user_rating.rating = rating
+    resource = form.cleaned_data['resource']
 
     return JsonResponse({
         'no_ratings': ResourceRating.objects.filter(resource=resource).count(),
