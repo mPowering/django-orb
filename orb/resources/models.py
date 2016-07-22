@@ -24,6 +24,17 @@ from django_fsm import FSMField, transition
 from orb.models import TimestampBase, Resource, ReviewerRole
 
 
+class ReviewLogEntry(TimestampBase):
+    """
+    Model class used to track individual actions made with regard
+    to a resource's content review.
+
+    """
+    review = models.ForeignKey('ContentReview', related_name="log_entries")
+    review_status = models.CharField(editable=False, max_length=20)
+    action = models.CharField(max_length=200)
+
+
 class ReviewQueryset(models.QuerySet):
 
     def pending(self):
@@ -31,6 +42,27 @@ class ReviewQueryset(models.QuerySet):
 
     def for_user(self, user):
         return self.filter(reviewer=user)
+
+    def assign(self, assigned_by=None, **kwargs):
+        """
+        Extended alias of `create` to create new review and log
+        assignment in one step.
+
+        Args:
+            assigned_by: a User instance
+            **kwargs: QuerySet.create ready kwargs
+
+        Returns:
+            a new model instance
+
+        """
+        review = self.create(**kwargs)
+        ReviewLogEntry.objects.create(
+            review=review,
+            review_status=review.status,
+            action="Assigned by {0}".format(assigned_by or review.reviewer),
+        )
+        return review
 
 
 class ContentReview(TimestampBase):
@@ -65,16 +97,5 @@ class ContentReview(TimestampBase):
     @property
     def is_pending(self):
         return self.status == Resource.PENDING
-
-
-class ReviewLogEntry(TimestampBase):
-    """
-    Model class used to track individual actions made with regard
-    to a resource's content review.
-
-    """
-    review = models.ForeignKey(ContentReview, related_name="log_entries")
-    review_status = models.CharField(editable=False, max_length=20)
-    action = models.CharField(max_length=200)
 
 

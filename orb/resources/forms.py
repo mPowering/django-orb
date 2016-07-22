@@ -8,6 +8,7 @@ from django import forms
 from django.utils.translation import ugettext as _
 
 from orb.models import ResourceCriteria
+from .models import ContentReview
 
 
 class ReviewForm(forms.Form):
@@ -35,7 +36,7 @@ class ReviewForm(forms.Form):
         return data
 
 
-class RejectionForm(forms.Form):
+class RejectionForm(forms.ModelForm):
     criteria = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
         queryset=ResourceCriteria.objects.all().order_by('category_order_by', 'order_by'),
@@ -51,6 +52,10 @@ class RejectionForm(forms.Form):
             'resource, so please bear this in mind when explaining your reasoning.'),
         label=_(u"Reason for rejection")
     )
+
+    class Meta:
+        model = ContentReview
+        fields = ('criteria', 'notes')
 
     def __init__(self, *args, **kwargs):
         super(RejectionForm, self).__init__(*args, **kwargs)

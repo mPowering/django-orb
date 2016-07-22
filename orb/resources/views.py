@@ -72,12 +72,20 @@ def reject_resource(request, resource_id, review_id):
         messages.info(request, _("You cannot review this content again."))
         return redirect("orb_pending_resources")
 
-    form = RejectionForm()
+    if request.method == 'POST':
+        form = RejectionForm(request.POST, instance=review)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.reject()
+            review.save()
+            messages.success(request, _("Thank you for reviewing this content"))
+            return redirect("orb_pending_resources")
+    else:
+        form = RejectionForm()
     return render(request, "orb/resource/reject_form.html", {
         'form': form,
         'resource': review.resource,
     })
-
 
 
 @reviewer_required
