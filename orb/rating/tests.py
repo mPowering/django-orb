@@ -16,7 +16,7 @@ def login_client(username, password):
     A decorator for test methods that logs in a user and logs out for
     the duration of the test method.
 
-    Ought to be a context manager (too)!
+    Ought to be a context manager, too!
     """
     def decorator(test_method):
         @wraps(test_method)
@@ -69,41 +69,25 @@ class RatingTest(TestCase):
     @login_client(username='rating_user', password='password')
     def test_missing_data(self):
         """check both resource and rating are required"""
-        rating = {'resource': self.resource.pk}
-        response = self.client.post(reverse('orb_rate'), rating)
-        self.assertEqual(response.status_code, 400)
-
-        rating = {'resource': self.resource.pk}
-        response = self.client.post(reverse('orb_rate'), rating)
-        self.assertEqual(response.status_code, 400)
-
-        response = self.client.post(reverse('orb_rate'), {})
-        self.assertEqual(response.status_code, 400)
-
-        response = self.client.post(reverse('orb_rate'), None)
-        self.assertEqual(response.status_code, 400)
+        for rating in [{'resource': self.resource.pk}, {}, None]:
+            response = self.client.post(reverse('orb_rate'), rating)
+            self.assertEqual(response.status_code, 400)
 
     @login_client(username='rating_user', password='password')
     def test_missing_resource(self):
-        # check invalid resource
+        """check invalid resource"""
         rating = {'resource': 5555, 'rating': 5}
         response = self.client.post(reverse('orb_rate'), rating)
         self.assertEqual(response.status_code, 400)
 
     @login_client(username='rating_user', password='password')
     def test_invalid_score(self):
-        # check invalid rating score
-        rating = {'resource': self.resource.pk, 'rating': 6}
-        response = self.client.post(reverse('orb_rate'), rating)
-        self.assertEqual(response.status_code, 400)
-
-        rating = {'resource': self.resource.pk, 'rating': 0}
-        response = self.client.post(reverse('orb_rate'), rating)
-        self.assertEqual(response.status_code, 400)
-
-        rating = {'resource': self.resource.pk, 'rating': -1}
-        response = self.client.post(reverse('orb_rate'), rating)
-        self.assertEqual(response.status_code, 400)
+        """check invalid rating score"""
+        for rating in [{'resource': self.resource.pk, 'rating': 6},
+                        {'resource': self.resource.pk, 'rating': 0},
+                        {'resource': self.resource.pk, 'rating': -1}]:
+            response = self.client.post(reverse('orb_rate'), rating)
+            self.assertEqual(response.status_code, 400)
 
     @login_client(username='rating_user', password='password')
     def test_rating_updated(self):
