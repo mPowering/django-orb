@@ -27,6 +27,7 @@ def resource_rate_view(request):
         except Resource.DoesNotExist:
             return HttpResponseBadRequest()
 
+        # TODO replace with get_or_create
         # check if an update or new rating
         try:
             user_rated = ResourceRating.objects.get(
@@ -40,6 +41,7 @@ def resource_rate_view(request):
             rating_obj.user = request.user
             rating_obj.save()
 
+        # TODO consolidate as one dict initialization
         resp_obj = {}
         resp_obj['no_ratings'] = ResourceRating.objects.filter(
             resource=resource).count()
