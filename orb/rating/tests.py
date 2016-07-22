@@ -100,8 +100,18 @@ class RatingTest(TestCase):
         ratings_count_end = ResourceRating.objects.all().count()
         self.assertEqual(ratings_count_start + 1, ratings_count_end)
 
+        self.assertEqual(
+            3,
+            ResourceRating.objects.get(user=self.rating_user, resource=self.resource).rating,
+        )
+
         rating = {'resource': self.resource.pk, 'rating': 5}
         ratings_count_start = ResourceRating.objects.all().count()
         response = self.client.post(reverse('orb_rate'), rating)
         ratings_count_end = ResourceRating.objects.all().count()
         self.assertEqual(ratings_count_start, ratings_count_end)
+
+        self.assertEqual(
+            5,
+            ResourceRating.objects.get(user=self.rating_user, resource=self.resource).rating,
+        )

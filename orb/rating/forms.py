@@ -18,5 +18,7 @@ class RatingForm(forms.ModelForm):
             )
         except ResourceRating.DoesNotExist:
             pass
+        else:
+            self.instance.rating = self.cleaned_data['rating']
 
         super(RatingForm, self).save()
