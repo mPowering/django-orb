@@ -245,6 +245,9 @@ class ResourceCriteria(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORIES)
     category_order_by = models.IntegerField(default=0)
 
+    def __unicode__(self):
+        return self.description
+
 
 class Category(models.Model):
     name = models.CharField(blank=False, null=False, max_length=100)
