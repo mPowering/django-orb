@@ -13,20 +13,23 @@ class RatingTest(TestCase):
     def setUp(self):
         self.client = Client()
 
-    def test_ratings(self):
+    def test_get_requests(self):
         # check can't do a get request
         response = self.client.get(reverse('orb_rate'))
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 405)
 
+    def test_anon_users(self):
         # check anon user can't post
         response = self.client.post(reverse('orb_rate'), None)
         self.assertEqual(response.status_code, 404)
 
+    def test_ratings(self):
         rating = {'resource_id': 5, 'rating': 5}
         response = self.client.post(reverse('orb_rate'), rating)
         self.assertEqual(response.status_code, 404)
 
-        # check both resource_id and rating are required
+    def test_missing_data(self):
+        """check both resource_id and rating are required"""
         self.client.login(username='standarduser', password='password')
         rating = {'resource_id': 5}
         response = self.client.post(reverse('orb_rate'), rating)
@@ -43,13 +46,20 @@ class RatingTest(TestCase):
         rating = {}
         response = self.client.post(reverse('orb_rate'), None)
         self.assertEqual(response.status_code, 400)
+        self.client.logout()
 
+    def test_missing_resource(self):
         # check invalid resource_id
+        self.client.login(username='standarduser', password='password')
+        self.client.login(username='standarduser', password='password')
         rating = {'resource_id': 5555, 'rating': 5}
         response = self.client.post(reverse('orb_rate'), rating)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
+        self.client.logout()
 
+    def test_invalid_score(self):
         # check invalid rating score
+        self.client.login(username='standarduser', password='password')
         rating = {'resource_id': 5, 'rating': 6}
         response = self.client.post(reverse('orb_rate'), rating)
         self.assertEqual(response.status_code, 400)
@@ -61,8 +71,11 @@ class RatingTest(TestCase):
         rating = {'resource_id': 5, 'rating': -1}
         response = self.client.post(reverse('orb_rate'), rating)
         self.assertEqual(response.status_code, 400)
+        self.client.logout()
 
-        # check rating gets updated rather than as new
+    def test_rating_updated(self):
+        """check rating gets updated rather than as new"""
+        self.client.login(username='standarduser', password='password')
         rating = {'resource_id': 5, 'rating': 3}
         ratings_count_start = ResourceRating.objects.all().count()
         response = self.client.post(reverse('orb_rate'), rating)
