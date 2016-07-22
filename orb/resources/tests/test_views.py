@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import mock
+
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, resolve
@@ -9,7 +11,7 @@ from django.test import TestCase
 from orb.models import UserProfile, ReviewerRole
 from orb.resources.models import ContentReview
 from orb.resources.tests.factory import resource_factory
-from orb.resources.views import review_resource, resource_review_list
+from orb.resources import views
 from orb.tests.utils import request_factory, mocked_model
 
 
@@ -41,6 +43,39 @@ class ReviewBase(TestCase):
         User.objects.all().delete()
 
 
+class ReviewListTests(ReviewBase):
+
+    def test_url(self):
+        url = reverse("orb_pending_resources")
+        resolution = resolve(url)
+        self.assertEqual(resolution.func, views.resource_review_list)
+
+    def test_anon_users_only(self):
+        """Anon users should be redirected"""
+        request = request_factory()
+        response = views.resource_review_list(request)
+        self.assertEqual(response.status_code, 302)
+
+    def test_regular_users(self):
+        """Non-reviewers should not be permitted"""
+        mock_profile = mocked_model(UserProfile)
+        mock_profile.is_reviewer = False
+        request = request_factory(user=self.nonreviewer, userprofile=mock_profile)
+        self.assertRaises(
+            PermissionDenied,
+            views.resource_review_list,
+            request,
+        )
+
+    def test_reviewer_users(self):
+        """Reviewer users should be able to see the page"""
+        mock_profile = mocked_model(UserProfile)
+        mock_profile.is_reviewer = True
+        request = request_factory(user=self.reviewer, userprofile=mock_profile)
+        response = views.resource_review_list(request)
+        self.assertEqual(response.status_code, 200)
+
+
 class ReviewViewTests(ReviewBase):
 
     def test_url(self):
@@ -50,7 +85,7 @@ class ReviewViewTests(ReviewBase):
     def test_anonymous_user(self):
         """Anon users should not be permitted to view this"""
         request = request_factory()
-        response = review_resource(request, 123, 123)
+        response = views.review_resource(request, 123, 123)
         self.assertEqual(response.status_code, 302)
 
     def test_missing_review(self):
@@ -60,7 +95,7 @@ class ReviewViewTests(ReviewBase):
         request = request_factory(user=self.reviewer, userprofile=mock_profile)
         self.assertRaises(
             Http404,
-            review_resource,
+            views.review_resource,
             request,
             123,
             123,
@@ -73,7 +108,7 @@ class ReviewViewTests(ReviewBase):
         request = request_factory(user=self.nonreviewer, userprofile=mock_profile)
         self.assertRaises(
             PermissionDenied,
-            review_resource,
+            views.review_resource,
             request,
             self.resource.pk,
             self.review.pk,
@@ -84,38 +119,65 @@ class ReviewViewTests(ReviewBase):
         mock_profile = mocked_model(UserProfile)
         mock_profile.is_reviewer = True
         request = request_factory(user=self.reviewer, userprofile=mock_profile)
-        response = review_resource(request, self.resource.pk, self.review.pk)
+        response = views.review_resource(request, self.resource.pk, self.review.pk)
         self.assertEqual(response.status_code, 200)
 
 
-class ReviewListTests(ReviewBase):
+class RejectReviewTests(ReviewBase):
+    """Tests for the reject_review view"""
 
     def test_url(self):
-        url = reverse("orb_pending_resources")
-        resolution = resolve(url)
-        self.assertEqual(resolution.func, resource_review_list)
+        reverse("orb_reject_resource",
+                kwargs={'resource_id': 123, 'review_id': 123})
 
-    def test_anon_users_only(self):
-        """Anon users should be redirected"""
+    def test_anonymous_user(self):
+        """Anon users should not be permitted to view this"""
         request = request_factory()
-        response = resource_review_list(request)
+        response = views.reject_resource(request, 123, 123)
         self.assertEqual(response.status_code, 302)
 
-    def test_regular_users(self):
-        """Non-reviewers should not be permitted"""
-        mock_profile = mocked_model(UserProfile)
-        mock_profile.is_reviewer = False
-        request = request_factory(user=self.nonreviewer, userprofile=mock_profile)
-        self.assertRaises(
-            PermissionDenied,
-            resource_review_list,
-            request,
-        )
-
-    def test_reviewer_users(self):
-        """Reviewer users should be able to see the page"""
+    def test_missing_review(self):
+        """A 404 should be raised for a reviewer if Resource is missing"""
         mock_profile = mocked_model(UserProfile)
         mock_profile.is_reviewer = True
         request = request_factory(user=self.reviewer, userprofile=mock_profile)
-        response = resource_review_list(request)
+        self.assertRaises(
+            Http404,
+            views.reject_resource,
+            request,
+            123,
+            123,
+        )
+
+    def test_unassigned_content_reviewer(self):
+        """An unassigned content review should not be able to access the view"""
+        mock_profile = mocked_model(UserProfile)
+        mock_profile.is_reviewer = True
+        request = request_factory(user=self.nonreviewer, userprofile=mock_profile)
+        self.assertRaises(
+            PermissionDenied,
+            views.reject_resource,
+            request,
+            self.resource.pk,
+            self.review.pk,
+        )
+
+    def test_assigned_content_reviewer(self):
+        """The assigned content review should be able to access the view"""
+        mock_profile = mocked_model(UserProfile)
+        mock_profile.is_reviewer = True
+        request = request_factory(user=self.reviewer, userprofile=mock_profile)
+        response = views.reject_resource(request, self.resource.pk, self.review.pk)
         self.assertEqual(response.status_code, 200)
+
+    @mock.patch('orb.resources.views.messages')
+    def test_previously_rejected_content(self, messages):
+        """Should redirect if content has already been rejected"""
+        self.review.status = 'rejected'
+        self.review.save()
+
+        mock_profile = mocked_model(UserProfile)
+        mock_profile.is_reviewer = True
+        request = request_factory(user=self.reviewer, userprofile=mock_profile)
+        response = views.reject_resource(request, self.resource.pk, self.review.pk)
+        self.assertEqual(response.status_code, 302)

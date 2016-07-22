@@ -42,6 +42,7 @@ class ContentReview(TimestampBase):
     status = FSMField(default=Resource.PENDING)
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL)
     notes = models.TextField(blank=True)
+    criteria = models.ManyToManyField('orb.ResourceCriteria', blank=True)
     role = models.ForeignKey(ReviewerRole, related_name="reviews")
 
     reviews = ReviewQueryset.as_manager()
@@ -60,6 +61,10 @@ class ContentReview(TimestampBase):
     @transition(field=status, source=Resource.PENDING, target=Resource.REJECTED)
     def reject(self):
         return None
+
+    @property
+    def is_pending(self):
+        return self.status == Resource.PENDING
 
 
 class ReviewLogEntry(TimestampBase):

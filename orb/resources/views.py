@@ -1,9 +1,13 @@
+from django.contrib import messages
 from django.core.exceptions import PermissionDenied
+from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 
 from orb.decorators import reviewer_required
 from orb.models import Resource
-from orb.resources.models import ContentReview
+from .forms import ReviewForm, RejectionForm
+from .models import ContentReview
 
 
 @reviewer_required
@@ -22,11 +26,58 @@ def review_resource(request, resource_id, review_id):
         HttpResponse
 
     """
-    review = get_object_or_404(ContentReview, pk=review_id, resource__pk=resource_id)
+    review = get_object_or_404(
+        ContentReview.objects.select_related(),
+        pk=review_id,
+        resource__pk=resource_id,
+    )
+
     if request.user != review.reviewer:
         raise PermissionDenied
 
-    return render(request, "orb/resource/review_form.html", {})
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            approved = form.cleaned_data['approved']
+            if approved:
+                review.approve()
+                review.save()
+                messages.success(request, _("Thank you for reviewing this content"))
+            else:
+                review.reject()
+                review.save()
+                messages.success(request, _("Thank you for reviewing this content"))
+            return redirect("orb_pending_resources")
+    else:
+        form = ReviewForm()
+
+    return render(request, "orb/resource/review_form.html", {
+        'review': review,
+        'form': form,
+    })
+
+
+@reviewer_required
+def reject_resource(request, resource_id, review_id):
+    review = get_object_or_404(
+        ContentReview.objects.select_related(),
+        pk=review_id,
+        resource__pk=resource_id,
+    )
+
+    if request.user != review.reviewer:
+        raise PermissionDenied
+
+    if not review.is_pending:
+        messages.info(request, _("You cannot review this content again."))
+        return redirect("orb_pending_resources")
+
+    form = RejectionForm()
+    return render(request, "orb/resource/reject_form.html", {
+        'form': form,
+        'resource': review.resource,
+    })
+
 
 
 @reviewer_required
