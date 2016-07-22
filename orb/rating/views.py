@@ -10,7 +10,9 @@ from .forms import RatingForm
 @login_required
 @require_POST
 def resource_rate_view(request):
-
+    """
+    View that allows a user to add or update a rating for a resource.
+    """
     form_data = request.POST.copy()
     form_data.update({"user": request.user.pk})
     form = RatingForm(data=form_data)
