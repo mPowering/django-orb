@@ -3,7 +3,12 @@ from django.contrib import admin
 from orb.models import Category, Tag, Resource, ResourceURL, TagProperty
 from orb.models import ResourceFile, ResourceTag, UserProfile, ResourceCriteria
 from orb.models import ResourceTracker, SearchTracker, TagOwner, ResourceWorkflowTracker, ResourceRating
-from orb.models import Collection, CollectionUser, CollectionResource
+from orb.models import Collection, CollectionUser, CollectionResource, ReviewerRole
+
+
+@admin.register(ReviewerRole)
+class ReviewerRoleAdmin(admin.ModelAdmin):
+    pass
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -80,6 +85,7 @@ class CollectionResourceAdmin(admin.ModelAdmin):
     list_display = ('collection', 'resource', 'order_by')
 
 
+@admin.register(CollectionUser)
 class CollectionUserAdmin(admin.ModelAdmin):
     list_display = ('collection', 'user')
 
@@ -99,4 +105,3 @@ admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(ResourceRating, ResourceRatingAdmin)
 admin.site.register(Collection, CollectionAdmin)
 admin.site.register(CollectionResource, CollectionResourceAdmin)
-admin.site.register(CollectionUser, CollectionUserAdmin)

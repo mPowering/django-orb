@@ -35,6 +35,9 @@ def resource_review_list(request):
     View that lists resources that are pending review
     """
     pending_resources = Resource.resources.pending()
+    review_assignments = ContentReview.reviews.pending().for_user(request.user)
+
     return render(request, "orb/resource/review_list.html",{
         'pending_resources': pending_resources,
+        'review_assignments': review_assignments,
     })

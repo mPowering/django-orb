@@ -24,6 +24,15 @@ from django_fsm import FSMField, transition
 from orb.models import TimestampBase, Resource, ReviewerRole
 
 
+class ReviewQueryset(models.QuerySet):
+
+    def pending(self):
+        return self.filter(status=Resource.PENDING)
+
+    def for_user(self, user):
+        return self.filter(reviewer=user)
+
+
 class ContentReview(TimestampBase):
     """
     Model class used to assign a content review for a resource to
@@ -34,6 +43,9 @@ class ContentReview(TimestampBase):
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL)
     notes = models.TextField(blank=True)
     role = models.ForeignKey(ReviewerRole, related_name="reviews")
+
+    reviews = ReviewQueryset.as_manager()
+    objects = reviews
 
     class Meta:
         unique_together = (
