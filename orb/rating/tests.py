@@ -50,6 +50,10 @@ class RatingTest(TestCase):
             update_user=cls.rating_user,
         )
 
+    @classmethod
+    def tearDownClass(cls):
+        User.objects.all().delete()
+
     @login_client(username='rating_user', password='password')
     def test_get_requests(self):
         """check can't do a get request"""
