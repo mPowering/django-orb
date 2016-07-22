@@ -1,44 +1,39 @@
-# orb/rating/views.py
 import json
 
+from django import forms
 from django.conf import settings
-from django.http import Http404, HttpResponse, HttpResponseBadRequest
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseBadRequest
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 
 from orb.models import Resource, ResourceRating
 
 
+class RatingForm(forms.ModelForm):
+
+    rating = forms.IntegerField(min_value=1, max_value=5)
+
+    class Meta:
+        fields = '__all__'
+        model = ResourceRating
+
+
+@login_required
 @require_POST
 def resource_rate_view(request):
-    if request.user.is_anonymous():
-        raise Http404()
 
-    resource_id = request.POST.get('resource_id')
-    rating = request.POST.get('rating')
+    form = RatingForm(data=request.POST)
 
-    if resource_id is None or rating is None:
+    if not form.is_valid():
         return HttpResponseBadRequest()
 
-    rating = int(rating)
-    if rating > 5 or rating < 1:
-        return HttpResponseBadRequest()
-
-    try:
-        resource = Resource.objects.get(pk=resource_id)
-    except Resource.DoesNotExist:
-        return HttpResponseBadRequest()
-
-    user_rating, created = ResourceRating.objects.get_or_create(
-        resource=resource,
-        user=request.user,
-        defaults={'rating': rating},
-    )
-    if not created:
-        user_rating.rating = rating
-        user_rating.save()
+    form.save()
+    resource = form.cleaned_data['resource']
 
     resp_obj = {
         'no_ratings': ResourceRating.objects.filter(resource=resource).count(),
         'ratings_required': settings.ORB_RESOURCE_MIN_RATINGS,
     }
+
     return HttpResponse(json.dumps(resp_obj), content_type="application/json; charset=utf-8")
