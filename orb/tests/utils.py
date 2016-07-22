@@ -7,7 +7,7 @@ from django.test import RequestFactory
 from django.utils.importlib import import_module
 
 
-def request_factory(factory=None, user=None, userprofile=None, REQUEST_METHOD='GET', **kwargs):
+def request_factory(factory=None, user=None, userprofile=None, method='GET', **kwargs):
     """A function that returns a request object configured with a user (either
     a provided user or an anonymous user) as well as a session attribute.
     Useful anywhere testing against user state of any kind is required in a
@@ -18,7 +18,7 @@ def request_factory(factory=None, user=None, userprofile=None, REQUEST_METHOD='G
     if factory is None:
         factory = RequestFactory()
     engine = import_module(settings.SESSION_ENGINE)
-    request = factory.request(REQUEST_METHOD=REQUEST_METHOD)
+    request = factory.request(REQUEST_METHOD=method)
     request.session = engine.SessionStore()
     request.session[SESSION_KEY] = getattr(user, 'id', 12)
     request.features = kwargs.get('features', {})
