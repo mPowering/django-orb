@@ -20,8 +20,11 @@ side effects of changing the status.
 from django.conf import settings
 from django.db import models
 from django_fsm import FSMField, transition
+from django.dispatch import receiver
+
 
 from orb.models import TimestampBase, Resource, ReviewerRole
+from orb.resources import signals
 
 
 class ReviewLogEntry(TimestampBase):
@@ -33,6 +36,13 @@ class ReviewLogEntry(TimestampBase):
     review = models.ForeignKey('ContentReview', related_name="log_entries")
     review_status = models.CharField(editable=False, max_length=20)
     action = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = "Review log entry"
+        verbose_name_plural = "Review log entries"
+
+    def __unicode__(self):
+        return u"{0}: {1}".format(self.review, self.review_status)
 
 
 class ReviewQueryset(models.QuerySet):
@@ -57,11 +67,8 @@ class ReviewQueryset(models.QuerySet):
 
         """
         review = self.create(**kwargs)
-        ReviewLogEntry.objects.create(
-            review=review,
-            review_status=review.status,
-            action="Assigned by {0}".format(assigned_by or review.reviewer),
-        )
+        signals.review_assigned.send(review.__class__, review,
+                                     assigned_by=assigned_by or review.reviewer)
         return review
 
 
@@ -86,16 +93,105 @@ class ContentReview(TimestampBase):
             ('resource', 'role'),
         )
 
+    def __unicode__(self):
+        return u"{0}: {1}".format(self.reviewer, self.resource)
+
     @transition(field=status, source=Resource.PENDING, target=Resource.APPROVED)
     def approve(self):
+        signals.review_approved.send(self.__class__, review=self)
         return None
 
     @transition(field=status, source=Resource.PENDING, target=Resource.REJECTED)
     def reject(self):
+        signals.review_rejected.send(self.__class__, review=self)
         return None
 
     @property
     def is_pending(self):
         return self.status == Resource.PENDING
+
+
+def process_resource_reviews(resource):
+    """
+    Checks on the status of a resource's reviews and possibly updates
+    the status of that resource based on the reviews.
+
+    Args:
+        resource: a Resource instance
+
+    Returns:
+
+    """
+    roles_count = ReviewerRole.roles.all().count()
+    reviews_count = resource.content_reviews.all().count()
+    if roles_count != reviews_count:
+        return resource.status
+
+    review_status = set(resource.content_reviews.all().values_list('status', flat=True))
+
+    if review_status == {Resource.APPROVED}:
+        return 'approved'
+    if Resource.PENDING not in review_status:
+        return 'rejected'
+
+    return resource.status
+
+
+@receiver(signals.review_assigned)
+def review_assigned(sender, review, assigned_by, **kwargs):
+    """
+    Handles the behavior after a review is assigned
+
+    Args:
+        review: the assigned review
+        assigned_by: user who initiated assignment
+
+    Returns:
+        None
+
+    """
+    ReviewLogEntry.objects.create(
+        review=sender,
+        review_status=review.status,
+        action="Assigned to {0} by {1}".format(review.reviewer, assigned_by),
+    )
+
+
+@receiver(signals.review_rejected)
+def review_rejected(sender, review, **kwargs):
+    """
+    Handles the behavior after a resource is rejected by a reviewer
+
+    Args:
+        review: the assigned review
+
+    Returns:
+        None
+
+    """
+    ReviewLogEntry.objects.create(
+        review=review,
+        review_status=review.status,
+        action="Rejected by {0}".format(review.reviewer),
+    )
+
+
+@receiver(signals.review_approved)
+def review_approved(sender, review, **kwargs):
+    """
+    Handles the behavior after a resource is approved by a reviewer
+
+    Args:
+        review: the assigned review
+
+    Returns:
+        None
+
+    """
+    ReviewLogEntry.objects.create(
+        review=review,
+        review_status=review.status,
+        action="Approved by {0}".format(review.reviewer),
+    )
 
 

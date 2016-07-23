@@ -548,5 +548,8 @@ class ReviewerRole(models.Model):
 
     name = models.CharField(max_length=100, choices=ROLE_CHOICES, unique=True, default='medical')
 
+    roles = models.Manager()
+    objects = roles
+
     def __unicode__(self):
         return self.get_name_display()
