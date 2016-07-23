@@ -77,6 +77,9 @@ class Resource(TimestampBase):
     def __unicode__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return urlresolvers.reverse('orb_resource', args=[self.slug])
+
     def get_organisations(self):
         return Tag.objects.filter(resourcetag__resource=self, category__slug='organisation')
 
@@ -109,9 +112,6 @@ class Resource(TimestampBase):
         tags = Tag.objects.filter(
             resourcetag__resource=self, category__slug='type')
         return tags
-
-    def get_absolute_url(self):
-        return urlresolvers.reverse('orb_resource', args=[self.slug])
 
     def tags(self):
         return Tag.objects.filter(resourcetag__resource=self)
