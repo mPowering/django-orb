@@ -21,7 +21,7 @@ from django.conf import settings
 from django.db import models
 from django_fsm import FSMField, transition
 from django.dispatch import receiver
-
+from django.utils.translation import ugettext_lazy as _
 
 from orb.models import TimestampBase, Resource, ReviewerRole
 from orb.resources import signals
@@ -38,8 +38,8 @@ class ReviewLogEntry(TimestampBase):
     action = models.CharField(max_length=200)
 
     class Meta:
-        verbose_name = "Review log entry"
-        verbose_name_plural = "Review log entries"
+        verbose_name = _("review log entry")
+        verbose_name_plural = _("review log entries")
 
     def __unicode__(self):
         return u"{0}: {1}".format(self.review, self.review_status)
@@ -88,6 +88,8 @@ class ContentReview(TimestampBase):
     objects = reviews
 
     class Meta:
+        verbose_name = _("content review")
+        verbose_name_plural = _("content reviews")
         unique_together = (
             ('resource', 'reviewer'),
             ('resource', 'role'),
@@ -116,10 +118,19 @@ def process_resource_reviews(resource):
     Checks on the status of a resource's reviews and possibly updates
     the status of that resource based on the reviews.
 
+    If *all* roles have been assigned content reviews and *all* reviews
+    are approved, then the resource is approved.
+
+    If *all* roles have been assigned content reviews and *all* have been
+    reviewed and *at least one* is rejected, the resource is rejected.
+
+    Otherwise no action is taken.
+
     Args:
         resource: a Resource instance
 
     Returns:
+        the resource status
 
     """
     roles_count = ReviewerRole.roles.all().count()
@@ -130,9 +141,15 @@ def process_resource_reviews(resource):
     review_status = set(resource.content_reviews.all().values_list('status', flat=True))
 
     if review_status == {Resource.APPROVED}:
-        return 'approved'
+        resource.approve()
+        resource.save()
+        signals.resource_approved.send(sender=resource.__class__, resource=resource)
+        return resource.status
     if Resource.PENDING not in review_status:
-        return 'rejected'
+        resource.reject()
+        resource.save()
+        signals.resource_rejected.send(sender=resource.__class__, resource=resource)
+        return resource.status
 
     return resource.status
 
@@ -163,6 +180,7 @@ def review_rejected(sender, review, **kwargs):
     Handles the behavior after a resource is rejected by a reviewer
 
     Args:
+        sender: sending class
         review: the assigned review
 
     Returns:
@@ -174,6 +192,7 @@ def review_rejected(sender, review, **kwargs):
         review_status=review.status,
         action="Rejected by {0}".format(review.reviewer),
     )
+    process_resource_reviews(review.resource)
 
 
 @receiver(signals.review_approved)
@@ -182,6 +201,7 @@ def review_approved(sender, review, **kwargs):
     Handles the behavior after a resource is approved by a reviewer
 
     Args:
+        sender: sending class
         review: the assigned review
 
     Returns:
@@ -193,5 +213,34 @@ def review_approved(sender, review, **kwargs):
         review_status=review.status,
         action="Approved by {0}".format(review.reviewer),
     )
+    process_resource_reviews(review.resource)
 
 
+@receiver(signals.resource_rejected)
+def resource_rejected(sender, resource, **kwargs):
+    """
+    Handles actions after a resource has been finally rejected
+
+    Args:
+        sender: sending class
+        resource: rejected resource
+
+    Returns:
+
+    """
+    # TODO send email
+
+
+@receiver(signals.resource_approved)
+def resource_approved(sender, resource, **kwargs):
+    """
+    Handles actions after a resource has been finally approved
+
+    Args:
+        sender: sending class
+        resource: approved resource
+
+    Returns:
+
+    """
+    # TODO send email

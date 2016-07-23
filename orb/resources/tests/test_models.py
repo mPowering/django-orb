@@ -141,6 +141,7 @@ class ResourceStatusTests(TestCase):
                                      resource=self.resource, status='approved')
         ContentReview.objects.create(role=self.technical, reviewer=self.other_user,
                                      resource=self.resource, status='approved')
+        self.resource.status = Resource.PENDING
         result = process_resource_reviews(self.resource)
         self.assertEqual(result, Resource.APPROVED)
 
@@ -150,6 +151,7 @@ class ResourceStatusTests(TestCase):
                                      resource=self.resource, status='approved')
         ContentReview.objects.create(role=self.technical, reviewer=self.other_user,
                                      resource=self.resource, status='rejected')
+        self.resource.status = Resource.PENDING
         result = process_resource_reviews(self.resource)
         self.assertEqual(result, Resource.REJECTED)
 
@@ -157,6 +159,7 @@ class ResourceStatusTests(TestCase):
         """Should not change status on rejection if reviews incomplete"""
         ContentReview.objects.create(role=self.technical, reviewer=self.other_user,
                                      resource=self.resource, status='rejected')
+        self.resource.status = Resource.PENDING
         result = process_resource_reviews(self.resource)
         self.assertEqual(result, Resource.PENDING)
 
@@ -164,5 +167,6 @@ class ResourceStatusTests(TestCase):
         """Should not change status on approval if reviews incomplete"""
         ContentReview.objects.create(role=self.technical, reviewer=self.other_user,
                                      resource=self.resource, status='approved')
+        self.resource.status = Resource.PENDING
         result = process_resource_reviews(self.resource)
         self.assertEqual(result, Resource.PENDING)
