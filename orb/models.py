@@ -80,6 +80,12 @@ class Resource(TimestampBase):
     def get_absolute_url(self):
         return urlresolvers.reverse('orb_resource', args=[self.slug])
 
+    def approve(self):
+        self.status = self.APPROVED
+
+    def reject(self):
+        self.status = self.REJECTED
+
     def get_organisations(self):
         return Tag.objects.filter(resourcetag__resource=self, category__slug='organisation')
 
