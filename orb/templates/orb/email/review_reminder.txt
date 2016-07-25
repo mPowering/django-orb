@@ -1,0 +1,8 @@
+{% load i18n %}
+{% blocktrans %}
+This is a reminder that you a content resource awaiting your review.
+
+You can access the content and make your review on the content dashboard: {% url 'orb_resource_review' review.resource.pk review.pk %}
+
+{% endblocktrans %}
+{% include 'orb/email/footer.txt' %}
