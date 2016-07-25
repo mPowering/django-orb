@@ -1,3 +1,5 @@
+from functools import wraps
+
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
@@ -10,31 +12,35 @@ from .forms import ReviewForm, RejectionForm
 from .models import ContentReview
 
 
+def resource_review(func):
+    """View decorator that gets the matching review"""
+    @wraps(func)
+    def decorator(request, resource_id, review_id):
+        review = get_object_or_404(
+            ContentReview.objects.select_related(),
+            pk=review_id,
+            resource__pk=resource_id,
+        )
+        if request.user != review.reviewer:
+            raise PermissionDenied
+        return func(request, review)
+    return decorator
+
+
 @reviewer_required
-def review_resource(request, resource_id, review_id):
+@resource_review
+def review_resource(request, review):
     """
     Renders/processes the form for adding a resource review.
 
-    This view is restricted to the user assigned to the specific review.
-
     Args:
-        request: HttpRequest
-        resource_id: pk of the Resource
-        review_id: pk of the ContentReview
+        request: the HttpRequest
+        review: the selected review instance
 
     Returns:
         HttpResponse
 
     """
-    review = get_object_or_404(
-        ContentReview.objects.select_related(),
-        pk=review_id,
-        resource__pk=resource_id,
-    )
-
-    if request.user != review.reviewer:
-        raise PermissionDenied
-
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -42,11 +48,11 @@ def review_resource(request, resource_id, review_id):
             if approved:
                 review.approve()
                 review.save()
-                messages.success(request, _("Thank you for reviewing this content"))
+                messages.success(request, _(u"Thank you for reviewing this content"))
             else:
                 review.reject()
                 review.save()
-                messages.success(request, _("Thank you for reviewing this content"))
+                messages.success(request, _(u"Thank you for reviewing this content"))
             return redirect("orb_pending_resources")
     else:
         form = ReviewForm()
@@ -58,18 +64,21 @@ def review_resource(request, resource_id, review_id):
 
 
 @reviewer_required
-def reject_resource(request, resource_id, review_id):
-    review = get_object_or_404(
-        ContentReview.objects.select_related(),
-        pk=review_id,
-        resource__pk=resource_id,
-    )
+@resource_review
+def reject_resource(request, review):
+    """
+    View that handles
 
-    if request.user != review.reviewer:
-        raise PermissionDenied
+    Args:
+        request: the HttpRequest
+        review: the selected review instance
 
+    Returns:
+        HttpResponse
+
+    """
     if not review.is_pending:
-        messages.info(request, _("You cannot review this content again."))
+        messages.info(request, _(u"You cannot review this content again."))
         return redirect("orb_pending_resources")
 
     if request.method == 'POST':
@@ -78,7 +87,7 @@ def reject_resource(request, resource_id, review_id):
             review = form.save(commit=False)
             review.reject()
             review.save()
-            messages.success(request, _("Thank you for reviewing this content"))
+            messages.success(request, _(u"Thank you for reviewing this content"))
             return redirect("orb_pending_resources")
     else:
         form = RejectionForm()
@@ -99,4 +108,12 @@ def resource_review_list(request):
     return render(request, "orb/resource/review_list.html",{
         'pending_resources': pending_resources,
         'review_assignments': review_assignments,
+    })
+
+
+@reviewer_required
+def assign_review(request, resource_id):
+    resource = get_object_or_404(Resource, pk=resource_id)
+    return render(request, "orb/resource/assign_review.html",{
+        'resource': resource,
     })

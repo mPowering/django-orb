@@ -23,6 +23,7 @@ class ReviewBase(TestCase):
     @classmethod
     def setUpClass(cls):
         super(ReviewBase, cls).setUpClass()
+        cls.staff_user, _ = User.objects.get_or_create(username="staff", is_staff=True)
         cls.role, _ = ReviewerRole.objects.get_or_create(name='medical')
         cls.reviewer, _ = User.objects.get_or_create(username="reviewer")
         cls.nonreviewer, _ = User.objects.get_or_create(username="nonreviewer")
@@ -181,3 +182,64 @@ class RejectReviewTests(ReviewBase):
         request = request_factory(user=self.reviewer, userprofile=mock_profile)
         response = views.reject_resource(request, self.resource.pk, self.review.pk)
         self.assertEqual(response.status_code, 302)
+
+
+class CreateAssignmentTests(ReviewBase):
+
+    def test_url(self):
+        """Review assignment URL should be configured"""
+        reverse("orb_assign_review", kwargs={'resource_id': 123})
+
+    def test_anonymous_user(self):
+        """Anon users should not be permitted to view this"""
+        request = request_factory()
+        response = views.assign_review(request, 123)
+        self.assertEqual(response.status_code, 302)
+
+    def test_staff_user(self):
+        """A staff user should be allowed"""
+        mock_profile = mocked_model(UserProfile)
+        mock_profile.is_reviewer = False
+        request = request_factory(user=self.staff_user, userprofile=mock_profile)
+        response = views.assign_review(request, self.resource.pk)
+        self.assertEqual(response.status_code, 200)
+
+    def test_nonstaff_no_role(self):
+        """A user w/o matching role should no be allowed to access"""
+
+    def test_nonstaff_has_role(self):
+        """A user with matching role should be allowed to access"""
+
+    def test_missing_review(self):
+        """A 404 should be raised for a staff user if Resource is missing"""
+        mock_profile = mocked_model(UserProfile)
+        mock_profile.is_reviewer = True
+        request = request_factory(user=self.staff_user, userprofile=mock_profile)
+        self.assertRaises(
+            Http404,
+            views.assign_review,
+            request,
+            12313,
+        )
+
+    def test_existing_assignment(self):
+        """Assignment should fail if existing assignment for same role"""
+
+
+class UpdateAssignmentTests(TestCase):
+
+    def test_url(self):
+        """Review assignment URL should be configured"""
+
+    def test_anonymous_user(self):
+        """Anon users should not be permitted to view this"""
+
+    def test_staff_user(self):
+        """A staff user should be allowed"""
+
+    def test_missing_review(self):
+        """A 404 should be raised for a staff user if Resource is missing"""
+
+    def test_existing_assignment(self):
+        """Assignment should fail if existing assignment for same role"""
+

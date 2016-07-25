@@ -36,7 +36,7 @@ def content_reviewer(user):
     """
     if not user.is_authenticated():
         return False
-    if user.is_active and (user.userprofile.is_reviewer or user.is_superuser):
+    if user.is_active and (user.userprofile.is_reviewer or user.is_staff):
         return True
     raise PermissionDenied
 
