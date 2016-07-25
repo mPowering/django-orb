@@ -1,3 +1,8 @@
+"""
+Utility functions for enhancing the reusability and readability of test code
+"""
+
+from functools import wraps
 
 import mock
 from django.conf import settings
@@ -57,3 +62,30 @@ def mocked_model(spec_model):
     mock_profile = mock.MagicMock(spec=spec_model)
     mock_profile._state = model_state
     return mock_profile
+
+
+def login_client(username, password):
+    """
+    A decorator for test methods that logs in a user and logs out for
+    the duration of the test method. Should be used on TestCase test
+    methods.
+
+        class SomeTests(TestCase):
+
+            @login_client(username="bob", password="pass")
+            def test_api(self):
+                self.assertEqual(
+                        self.client.get("/admin/").status_code,
+                        200,
+                )
+
+    Ought to be a context manager, too!
+    """
+    def decorator(test_method):
+        @wraps(test_method)
+        def inner(test_class_instance, *args, **kwargs):
+            test_class_instance.client.login(username=username, password=password)
+            test_method(test_class_instance, *args, **kwargs)
+            test_class_instance.client.logout()
+        return inner
+    return decorator

@@ -1,31 +1,10 @@
-from functools import wraps
-from contextlib import contextmanager
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
-from django.test.client import Client, RequestFactory
 
 from orb.models import ResourceRating, Resource
-from orb.tests.utils import request_factory
-
-
-def login_client(username, password):
-    """
-    A decorator for test methods that logs in a user and logs out for
-    the duration of the test method.
-
-    Ought to be a context manager, too!
-    """
-    def decorator(test_method):
-        @wraps(test_method)
-        def inner(test_class_instance, *args, **kwargs):
-            test_class_instance.client.login(username=username, password=password)
-            test_method(test_class_instance, *args, **kwargs)
-            test_class_instance.client.logout()
-        return inner
-    return decorator
+from orb.tests.utils import login_client
 
 
 class RatingTest(TestCase):

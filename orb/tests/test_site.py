@@ -1,4 +1,6 @@
-# orb.test_site.py
+# -*- coding: utf-8 -*-
+
+import unittest
 
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -6,6 +8,7 @@ from django.test import TestCase
 from django.test.client import Client
 
 from orb.models import Tag, Resource, TagOwner, TagTracker, ResourceTracker
+from orb.tests.utils import login_client
 
 
 class SiteTest(TestCase):
@@ -15,47 +18,13 @@ class SiteTest(TestCase):
         self.client = Client()
 
     def test_pages(self):
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_home'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_about'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_developers'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_how_to'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_partners'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_taxonomy'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_terms'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_tag_cloud'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_resource_create'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_guidelines'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_search'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_search_advanced'))
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.get(reverse('orb_opensearch'))
-        self.assertEqual(response.status_code, 200)
+        url_names = [
+            'orb_home', 'orb_about', 'orb_developers', 'orb_how_to', 'orb_partners',
+            'orb_taxonomy', 'orb_terms', 'orb_tag_cloud', 'orb_resource_create',
+            'orb_guidelines', 'orb_search', 'orb_search_advanced', 'orb_opensearch',
+        ]
+        for url_name in url_names:
+            self.assertEqual(self.client.get(reverse(url_name)).status_code, 200)
 
     def test_tags(self):
 
@@ -554,53 +523,45 @@ class AnalyticsPageTest(TestCase):
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 302)
 
+    @login_client(username='standarduser', password='password')
     def test_standard_user_analytics_home(self):
-        self.client.login(username='standarduser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
         self.assertEqual(response.status_code, 403)
-        self.client.logout()
 
+    @login_client(username='standarduser', password='password')
     def test_standard_user_analytics_map(self):
-        self.client.login(username='standarduser', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 403)
-        self.client.logout()
 
+    @login_client(username='apiuser', password='password')
     def test_api_user_analytics_home(self):
-        self.client.login(username='apiuser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
         self.assertEqual(response.status_code, 403)
-        self.client.logout()
 
+    @login_client(username='apiuser', password='password')
     def test_api_user_analytics_map(self):
-        self.client.login(username='apiuser', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 403)
-        self.client.logout()
 
+    @login_client(username='superuser', password='password')
     def test_superuser_analytics_home(self):
-        self.client.login(username='superuser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
         self.assertEqual(response.status_code, 200)
-        self.client.logout()
 
+    @login_client(username='superuser', password='password')
     def test_superuser_analytics_map(self):
-        self.client.login(username='superuser', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 200)
-        self.client.logout()
 
+    @login_client(username='staffuser', password='password')
     def test_staff_user_analytics_home(self):
-        self.client.login(username='staffuser', password='password')
         response = self.client.get(reverse('orb_analytics_home'))
         self.assertEqual(response.status_code, 200)
-        self.client.logout()
 
+    @login_client(username='staffuser', password='password')
     def test_staff_user_analytics_map(self):
-        self.client.login(username='staffuser', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 200)
-        self.client.logout()
 
     def test_org_owner_analytics_home(self):
         self.client.login(username='orgowner', password='password')
@@ -608,11 +569,10 @@ class AnalyticsPageTest(TestCase):
         self.assertEqual(response.status_code, 403)
         self.client.logout()
 
+    @login_client(username='orgowner', password='password')
     def test_org_owner_analytics_map(self):
-        self.client.login(username='orgowner', password='password')
         response = self.client.get(reverse('orb_analytics_map'))
         self.assertEqual(response.status_code, 403)
-        self.client.logout()
 
     def test_tags(self):
 
@@ -669,6 +629,7 @@ class AnalyticsPageTest(TestCase):
         """
 
 
+@unittest.skip("Incomplete TestCase")
 class FeedTest(TestCase):
     fixtures = ['user.json', 'orb.json']
 
