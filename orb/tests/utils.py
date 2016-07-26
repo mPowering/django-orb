@@ -64,28 +64,57 @@ def mocked_model(spec_model):
     return mock_profile
 
 
-def login_client(username, password):
+class LoginClient(object):
     """
-    A decorator for test methods that logs in a user and logs out for
-    the duration of the test method. Should be used on TestCase test
-    methods.
+    A context manager and decorator for test methods that logs in a
+    user and logs out for the duration of the block/test method.
+
+    As a decorator, should be used on TestCase test methods.
 
         class SomeTests(TestCase):
 
-            @login_client(username="bob", password="pass")
+            @LoginClient(username="bob", password="pass")
             def test_api(self):
                 self.assertEqual(
-                        self.client.get("/admin/").status_code,
-                        200,
+                    self.client.get("/admin/").status_code,
+                    200,
                 )
 
-    Ought to be a context manager, too!
+    As a context manager the TestCase must be passed explicitly
+
+        class SomeTests(TestCase):
+            def test_something(self):
+                with LoginClient(self, username="bob", password="pass"):
+                    self.assertEqual(
+                        self.client.get("/admin/").status_code,
+                        200,
+                    )
+
     """
-    def decorator(test_method):
-        @wraps(test_method)
-        def inner(test_class_instance, *args, **kwargs):
-            test_class_instance.client.login(username=username, password=password)
-            test_method(test_class_instance, *args, **kwargs)
-            test_class_instance.client.logout()
-        return inner
-    return decorator
+
+
+    def __init__(self, test_case=None, username=None, password=None):
+        self.test_case = test_case
+        self.username = username
+        self.password = password
+
+    def __enter__(self):
+        self.test_case.client.login(username=self.username, password=self.password)
+        return self
+
+    def __exit__(self, *args):
+        self.test_case.client.logout()
+
+    def __call__(self, method):
+        @wraps(method)
+        def wrapper(*args, **kw):
+            if self.test_case is None:
+                try:
+                    self.test_case = args[0]
+                except IndexError:
+                    raise TypeError("Missing the TestCase instance argument")
+            with self:
+                return method(*args, **kw)
+        return wrapper
+
+login_client = LoginClient  # friendly alias
