@@ -159,11 +159,7 @@ def taxonomy_view(request):
 
 
 def resource_permalink_view(request, id):
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
-
+    resource = get_object_or_404(Resource, pk=id)
     return resource_view(request, resource.slug)
 
 
@@ -301,10 +297,7 @@ def resource_create_step2_view(request, id):
                                       u'You need to be logged in to add a resource.')},
                                   context_instance=RequestContext(request))
 
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
 
     # check if owner of this resource
     if not resource_can_edit(resource, request.user):
@@ -350,10 +343,7 @@ def resource_create_step2_view(request, id):
 
 def resource_create_file_delete_view(request, id, file_id):
     # check ownership
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
 
@@ -367,10 +357,7 @@ def resource_create_file_delete_view(request, id, file_id):
 
 def resource_create_url_delete_view(request, id, url_id):
     # check ownership
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
 
@@ -384,10 +371,7 @@ def resource_create_url_delete_view(request, id, url_id):
 
 def resource_edit_file_delete_view(request, id, file_id):
     # check ownership
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
 
@@ -401,10 +385,7 @@ def resource_edit_file_delete_view(request, id, file_id):
 
 def resource_edit_url_delete_view(request, id, url_id):
     # check ownership
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
 
@@ -417,10 +398,7 @@ def resource_edit_url_delete_view(request, id, url_id):
 
 
 def resource_create_thanks_view(request, id):
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
     return render_to_response('orb/resource/create_thanks.html',
@@ -522,32 +500,26 @@ def resource_pending_mep_view(request, id):
 
 
 def resource_link_view(request, id):
-    try:
-        url = ResourceURL.objects.get(pk=id)
+    url = get_object_or_404(ResourceURL, pk=id)
 
-        if not resource_can_view(url.resource, request.user):
-            raise Http404()
-
-        resource_url_viewed.send(sender=url, resource_url=url, request=request)
-        return HttpResponseRedirect(url.url)
-    except ResourceURL.DoesNotExist:
+    if not resource_can_view(url.resource, request.user):
         raise Http404()
+
+    resource_url_viewed.send(sender=url, resource_url=url, request=request)
+    return HttpResponseRedirect(url.url)
 
 
 def resource_file_view(request, id):
-    try:
-        file = ResourceFile.objects.get(pk=id)
+    file = get_object_or_404(ResourceFile, pk=id)
 
-        if not resource_can_view(file.resource, request.user):
-            raise Http404()
+    if not resource_can_view(file.resource, request.user):
+        raise Http404()
 
-        if os.path.isfile(os.path.join(settings.MEDIA_ROOT, file.file.name)):
-            resource_file_viewed.send(
-                sender=file, resource_file=file, request=request)
-            return HttpResponseRedirect(settings.MEDIA_URL + file.file.name)
-        else:
-            raise Http404()
-    except ResourceFile.DoesNotExist:
+    if os.path.isfile(os.path.join(settings.MEDIA_ROOT, file.file.name)):
+        resource_file_viewed.send(
+            sender=file, resource_file=file, request=request)
+        return HttpResponseRedirect(settings.MEDIA_URL + file.file.name)
+    else:
         raise Http404()
 
     return render_to_response('orb/resource/file.html',
@@ -555,7 +527,7 @@ def resource_file_view(request, id):
 
 
 def resource_edit_view(request, resource_id):
-    resource = Resource.objects.get(pk=resource_id)
+    resource = get_object_or_404(Resource, pk=resource_id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
 
@@ -680,10 +652,7 @@ def resource_edit_step2_view(request, resource_id):
                                       u'You need to be logged in to add a resource.')},
                                   context_instance=RequestContext(request))
 
-    try:
-        resource = Resource.objects.get(pk=resource_id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=resource_id)
 
     # check if owner of this resource
     if not resource_can_edit(resource, request.user):
@@ -728,10 +697,7 @@ def resource_edit_step2_view(request, resource_id):
 
 
 def resource_edit_thanks_view(request, id):
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=resource_id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
     return render_to_response('orb/resource/edit_thanks.html',
@@ -875,14 +841,11 @@ def search_advanced_results_view(request):
 
 
 def tag_link_view(request, id):
-    try:
-        tag = Tag.objects.get(pk=id)
+    tag = get_object_or_404(Tag, pk=id)
 
-        tag_viewed.send(sender=tag, tag=tag, request=request,
-                        data=tag.external_url, type=TagTracker.VIEW_URL)
-        return HttpResponseRedirect(tag.external_url)
-    except Tag.DoesNotExist:
-        raise Http404()
+    tag_viewed.send(sender=tag, tag=tag, request=request,
+                    data=tag.external_url, type=TagTracker.VIEW_URL)
+    return HttpResponseRedirect(tag.external_url)
 
 
 def collection_view(request, collection_slug):
