@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'haystack',
     'sorl.thumbnail',
     'orb',
-    'orb.resources',
+    'orb.review',
     'orb.analytics',
     'orb.partners.OnemCHW',
 ]

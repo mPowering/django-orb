@@ -9,7 +9,7 @@ The command should be run once per day.
 
 from django.core.management.base import BaseCommand
 
-from orb.resources.tasks import remind_reviewers
+from orb.review.tasks import remind_reviewers
 
 
 class Command(BaseCommand):

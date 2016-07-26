@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from orb.resources.views import (review_resource, resource_review_list, reject_resource,
+from orb.review.views import (review_resource, resource_review_list, reject_resource,
                                  assign_review)
 
 

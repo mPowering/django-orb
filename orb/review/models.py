@@ -24,7 +24,7 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from orb.models import TimestampBase, Resource, ReviewerRole
-from orb.resources import signals
+from orb.review import signals
 
 
 class ReviewLogEntry(TimestampBase):

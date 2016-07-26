@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import mock
-
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, resolve
@@ -9,9 +8,9 @@ from django.http import Http404
 from django.test import TestCase
 
 from orb.models import UserProfile, ReviewerRole
-from orb.resources.models import ContentReview
 from orb.resources.tests.factory import resource_factory
-from orb.resources import views
+from orb.review import views
+from orb.review.models import ContentReview
 from orb.tests.utils import request_factory, mocked_model
 
 
@@ -171,7 +170,7 @@ class RejectReviewTests(ReviewBase):
         response = views.reject_resource(request, self.resource.pk, self.review.pk)
         self.assertEqual(response.status_code, 200)
 
-    @mock.patch('orb.resources.views.messages')
+    @mock.patch('orb.review.views.messages')
     def test_previously_rejected_content(self, messages):
         """Should redirect if content has already been rejected"""
         self.review.status = 'rejected'

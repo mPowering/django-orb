@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from django.utils.translation import ugettext as _
 
 from orb.emailer import send_orb_email
-from orb.resources.models import ContentReview
+from orb.review.models import ContentReview
 
 
 def send_review_reminder_email(review):
