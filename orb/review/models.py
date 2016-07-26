@@ -19,7 +19,7 @@ side effects of changing the status.
 
 from django.conf import settings
 from django.db import models
-from django_fsm import FSMField, transition
+from django_fsm import FSMField, transition, TransitionNotAllowed
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
@@ -111,6 +111,26 @@ class ContentReview(TimestampBase):
     @property
     def is_pending(self):
         return self.status == Resource.PENDING
+
+    def reassign(self, new_user):
+        """
+
+        Args:
+            new_user:
+
+        Returns:
+
+        """
+        if self.status != Resource.PENDING:
+            raise TransitionNotAllowed("Cannot reassign a completed review")
+        old_reviewer = self.reviewer
+        self.reviewer = new_user
+        # TODO send email
+        ReviewLogEntry.objects.create(
+            review=self,
+            review_status=self.status,
+            action="Reassigned from {0} to {1}".format(old_reviewer, new_user),
+        )
 
 
 def process_resource_reviews(resource):

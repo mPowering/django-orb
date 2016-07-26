@@ -394,6 +394,11 @@ class UserProfile(TimestampBase):
 
     class Meta:
         db_table = "orb_userprofile"
+        verbose_name = _("user profile")
+        verbose_name_plural = _("user profiles")
+
+    def __unicode__(self):
+        return self.user.get_full_name()
 
     def get_twitter_url(self):
         if self.twitter is not None:

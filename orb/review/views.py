@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from orb.decorators import reviewer_required
 from orb.models import Resource
-from .forms import ReviewForm, RejectionForm
+from .forms import ReviewForm, RejectionForm, AssignmentForm
 from .models import ContentReview
 
 
@@ -113,7 +113,19 @@ def resource_review_list(request):
 
 @reviewer_required
 def assign_review(request, resource_id):
+
     resource = get_object_or_404(Resource, pk=resource_id)
+    if request.method == 'POST':
+        form = AssignmentForm(resource=resource, data=request.POST)
+        if form.is_valid():
+            form.save()
+        else:
+            print("Errors", form.errors)
+
+    else:
+        form = AssignmentForm(resource=resource)
+
     return render(request, "orb/resource/assign_review.html",{
         'resource': resource,
+        'form': form,
     })

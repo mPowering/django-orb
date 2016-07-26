@@ -8,7 +8,13 @@
 <h3>{{ resource.title }} (<a href="{% url 'orb_resource' resource.slug %}"
                                     target="_blank" class="preview">{% trans 'Preview' %}</a>)</h3>
 
-<form method="POST" action=".">{% csrf_token %}</form>
-<a href="{% url 'orb_pending_resources' %}">{% trans 'Return to pending content.' %}</a></p>
+    <div>
+<form method="POST" action=".">{% csrf_token %}
+    {% crispy form %}
+</form>
+        </div>
+    <div>
+<a href="{% url 'orb_pending_resources' %}">{% trans 'Return to pending content.' %}</a>
+    </div>
 
 {% endblock %}
