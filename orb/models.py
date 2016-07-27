@@ -554,7 +554,7 @@ class ReviewerRole(models.Model):
     ROLE_CHOICES = [
         ('medical', _('Medical')),
         ('technical', _('Technical')),
-        ('other', _('Other')),
+        ('training', _('Training')),
     ]
 
     name = models.CharField(max_length=100, choices=ROLE_CHOICES, unique=True, default='medical')
