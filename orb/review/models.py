@@ -19,9 +19,9 @@ side effects of changing the status.
 
 from django.conf import settings
 from django.db import models
-from django_fsm import FSMField, transition, TransitionNotAllowed
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from django_fsm import FSMField, transition, TransitionNotAllowed
 
 from orb.models import TimestampBase, Resource, ReviewerRole
 from orb.review import signals
@@ -129,7 +129,7 @@ class ContentReview(TimestampBase):
 
         if self.status != Resource.PENDING:
             raise TransitionNotAllowed("Cannot reassign a completed review")
-        
+
         old_reviewer = self.reviewer
         self.reviewer = new_user
         # TODO send email

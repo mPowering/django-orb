@@ -6,6 +6,7 @@ Tests for ORB resource models
 
 from django.contrib.auth.models import User
 from django.test import TestCase
+from django_fsm import TransitionNotAllowed
 
 from orb.models import Resource, ReviewerRole
 from orb.resources.tests.factory import resource_factory
@@ -71,3 +72,24 @@ class ResourceStatusTests(TestCase):
         self.resource.status = Resource.PENDING
         result = process_resource_reviews(self.resource)
         self.assertEqual(result, Resource.PENDING)
+
+    def test_reassign_self(self):
+        """Reassignment to self should do nothing"""
+        review = ContentReview.objects.create(
+            role=self.technical,
+            reviewer=self.other_user,
+            resource=self.resource, status='approved',
+        )
+        self.assertIsNone(review.reassign(self.other_user))
+
+    def test_reassign_completed(self):
+        review = ContentReview.objects.create(
+            role=self.technical,
+            reviewer=self.other_user,
+            resource=self.resource, status='approved',
+        )
+        self.assertRaises(
+            TransitionNotAllowed,
+            review.reassign,
+            self.user,
+        )
