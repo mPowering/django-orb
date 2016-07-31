@@ -8,7 +8,12 @@
 <h3>{{ review.resource.title }} (<a href="{% url 'orb_resource' review.resource.slug %}"
                                     target="_blank" class="preview">{% trans 'Preview' %}</a>)</h3>
 
-<div class="well">{{ review.resource.description|safe }}</div>
+<div class="well">
+<p>{% trans 'Consider the following criteria in your review.' %}</p>
+{% for criterion in criteria %}
+<li>{{ criterion }}</li>
+{% endfor %}
+</div>
 
     {% if review.is_pending %}
 <form method="POST" action=".">{% csrf_token %}

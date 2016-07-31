@@ -7,7 +7,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from orb.decorators import reviewer_required
-from orb.models import Resource
+from orb.models import Resource, ResourceCriteria
 from .forms import ReviewForm, RejectionForm, AssignmentForm, AssignmentFormSet
 from .models import ContentReview
 
@@ -57,9 +57,10 @@ def review_resource(request, review):
     else:
         form = ReviewForm()
 
-    return render(request, "orb/resource/review_form.html", {
+    return render(request, "orb/review/review_form.html", {
         'review': review,
         'form': form,
+        'criteria': ResourceCriteria.objects.all(),
     })
 
 
@@ -91,7 +92,7 @@ def reject_resource(request, review):
             return redirect("orb_pending_resources")
     else:
         form = RejectionForm()
-    return render(request, "orb/resource/reject_form.html", {
+    return render(request, "orb/review/reject_form.html", {
         'form': form,
         'resource': review.resource,
     })
@@ -105,7 +106,7 @@ def resource_review_list(request):
     pending_resources = Resource.resources.pending()
     review_assignments = ContentReview.reviews.pending().for_user(request.user)
 
-    return render(request, "orb/resource/review_list.html",{
+    return render(request, "orb/review/review_list.html",{
         'pending_resources': pending_resources,
         'review_assignments': review_assignments,
     })
@@ -123,7 +124,7 @@ def assign_review(request, resource_id):
     else:
         form = AssignmentForm(resource=resource)
 
-    return render(request, "orb/resource/assign_review.html",{
+    return render(request, "orb/review/assign_review.html",{
         'resource': resource,
         'form': form,
     })
