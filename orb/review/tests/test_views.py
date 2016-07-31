@@ -16,7 +16,7 @@ from orb.tests.utils import request_factory, mocked_model
 
 class ReviewBase(TestCase):
     """
-    Sets up some common data for testing resource review related views
+    Base class for setting up common data for testing resource review related views
     """
 
     @classmethod
@@ -54,6 +54,9 @@ class ReviewBase(TestCase):
 
 
 class ReviewListTests(ReviewBase):
+    """
+    Tests for the view showing pending reviews
+    """
 
     def test_url(self):
         url = reverse("orb_pending_resources")
@@ -87,6 +90,9 @@ class ReviewListTests(ReviewBase):
 
 
 class ReviewViewTests(ReviewBase):
+    """
+    Tests for the view showing an individual review/review form
+    """
 
     def test_url(self):
         reverse("orb_resource_review",
