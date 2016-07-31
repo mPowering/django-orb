@@ -26,6 +26,16 @@ class ReviewBase(TestCase):
         cls.role, _ = ReviewerRole.objects.get_or_create(name='medical')
         cls.reviewer, _ = User.objects.get_or_create(username="reviewer")
         cls.nonreviewer, _ = User.objects.get_or_create(username="nonreviewer")
+
+        cls.profile_one, _ = UserProfile.objects.get_or_create(
+            user=cls.staff_user,
+            reviewer_role=cls.role,
+        )
+        cls.profile_two, _ = UserProfile.objects.get_or_create(
+            user=cls.reviewer,
+            reviewer_role=cls.role,
+        )
+
         cls.resource = resource_factory(
             user=cls.reviewer,
             title=u"Básica salud del recién nacido",

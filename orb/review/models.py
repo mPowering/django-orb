@@ -50,6 +50,9 @@ class ReviewQueryset(models.QuerySet):
     def pending(self):
         return self.filter(status=Resource.PENDING)
 
+    def complete(self):
+        return self.exclude(status=Resource.PENDING)
+
     def for_user(self, user):
         return self.filter(reviewer=user)
 
@@ -121,8 +124,12 @@ class ContentReview(TimestampBase):
         Returns:
 
         """
+        if new_user == self.reviewer:
+            return None
+
         if self.status != Resource.PENDING:
             raise TransitionNotAllowed("Cannot reassign a completed review")
+        
         old_reviewer = self.reviewer
         self.reviewer = new_user
         # TODO send email

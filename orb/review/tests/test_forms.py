@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 from orb.review.forms import ReviewForm
 from orb.models import UserProfile, ReviewerRole
 
+from orb.models import Resource
 from orb.resources.tests.factory import resource_factory
 from orb.review.forms import AssignmentForm
 from orb.review.models import ContentReview
@@ -87,22 +88,41 @@ class AssignmentFormTests(TestCase):
 
     def test_has_assignments(self):
         """If assignments, should have initial values"""
-        review = ContentReview.objects.create(
+        review = ContentReview.reviews.create(
             resource=self.resource,
             reviewer=self.user_one,
             role=self.medical_role,
         )
 
         form = AssignmentForm(resource=self.resource)
-        self.assertEqual("Blah", form.initial)
         self.assertEqual(
-            form.initial[self.medical_role.name],
-            'kjdkj',
+            {"technical": None, "medical": self.profile_one},
+            form.initial,
         )
-        review.delete()
+        ContentReview.reviews.all().delete()
 
     def test_review_completed(self):
         """Field should not be changable if review completed"""
+        ContentReview.reviews.create(
+            resource=self.resource,
+            reviewer=self.user_two,
+            role=self.technical_role,
+            status=Resource.APPROVED,
+        )
+
+        form = AssignmentForm(resource=self.resource, data={
+            'technical': self.profile_three.pk,
+        })
+        self.assertFalse(form.is_valid())
+        ContentReview.reviews.all().delete()
 
     def test_save_reviews(self):
         """Save should create new assignments"""
+        count = ContentReview.reviews.all().count()
+        form = AssignmentForm(resource=self.resource, data={
+            'medical': self.profile_one.pk,
+        })
+        self.assertTrue(form.is_valid())
+        form.save()
+        self.assertEqual(count + 1, ContentReview.reviews.all().count())
+        ContentReview.reviews.all().delete()

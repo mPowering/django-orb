@@ -10,8 +10,11 @@ from django import forms
 from django.utils.translation import ugettext as _
 from django.utils.functional import cached_property
 
-from orb.models import ResourceCriteria, ReviewerRole
+from orb.models import Resource, ResourceCriteria, ReviewerRole
 from .models import ContentReview
+from django.forms import inlineformset_factory
+
+
 
 
 class ReviewForm(forms.Form):
@@ -83,12 +86,16 @@ class RejectionForm(forms.ModelForm):
 class AssignmentForm(forms.Form):
     """
     Form class for assigning reviews
-
-    Builds a dynamic set of fields based on the available roles, populating
-    the choices from users who have these roles associate with them.
     """
     def __init__(self, *args, **kwargs):
         self.resource = kwargs.pop('resource')
+        for role in self.roles:
+            self.declared_fields[role.name] = forms.ModelChoiceField(
+                queryset=UserProfile.objects.filter(reviewer_role=role),
+                required=False,
+            )
+            self.declared_fields[role.name].initial = self.assignments.get(role.name)
+
         super(AssignmentForm, self).__init__(*args, **kwargs)
 
         for role in self.roles:
@@ -96,7 +103,10 @@ class AssignmentForm(forms.Form):
                 queryset=UserProfile.objects.filter(reviewer_role=role),
                 required=False,
             )
+            self.declared_fields[role.name] = self.fields[role.name]
+            self.initial[role.name] = self.assignments.get(role.name)
             self.fields[role.name].initial = self.assignments.get(role.name)
+            self.declared_fields[role.name].initial = self.fields[role.name].initial
 
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
@@ -125,13 +135,18 @@ class AssignmentForm(forms.Form):
 
     @cached_property
     def assignments(self):
-        return {
-            review.role.name: review
+        x = {
+            review.role.name: review.reviewer.userprofile
             for review in ContentReview.objects.filter(resource=self.resource)
         }
+        return x
 
     def clean(self):
         data = self.cleaned_data
+        complete_reviews = self.resource.content_reviews.complete()
+        for review in complete_reviews:
+            if data[review.role.name] != review.reviewer.userprofile:
+                self.add_error(review.role.name, _("Cannot reassign a completed review."))
         return data
 
     def save(self):
@@ -148,10 +163,11 @@ class AssignmentForm(forms.Form):
                 if not created:
                     review.reassign(assigned.user)
                     review.save()
-                    print("Not created", review)
-                else:
-                    print("Created", review)
-        print(self.cleaned_data)
 
-
-
+AssignmentFormSet = inlineformset_factory(
+    Resource,
+    ContentReview,
+    can_delete=False,
+    extra=0,
+    fields=('reviewer', 'role'),
+)

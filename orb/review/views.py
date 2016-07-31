@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from orb.decorators import reviewer_required
 from orb.models import Resource
-from .forms import ReviewForm, RejectionForm, AssignmentForm
+from .forms import ReviewForm, RejectionForm, AssignmentForm, AssignmentFormSet
 from .models import ContentReview
 
 
@@ -119,8 +119,6 @@ def assign_review(request, resource_id):
         form = AssignmentForm(resource=resource, data=request.POST)
         if form.is_valid():
             form.save()
-        else:
-            print("Errors", form.errors)
 
     else:
         form = AssignmentForm(resource=resource)
