@@ -1,7 +1,6 @@
-from django.conf.urls import patterns
 from django.conf.urls import url
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', 'orb.rating.views.resource_rate_view', name="orb_rate"),
-)
+]

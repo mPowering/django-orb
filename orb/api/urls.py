@@ -1,5 +1,4 @@
-
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from tastypie.api import Api
 
 from orb.api.resources import (ResourceResource, CategoryResource, TagResource,
@@ -15,8 +14,8 @@ v1_api.register(ResourceFileResource())
 v1_api.register(TagsResource())
 v1_api.register(CategoryResource())
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^', include(v1_api.urls)),
     url(r'^upload/image/$', 'orb.api.upload.image_view', name="orb_image_upload"),
     url(r'^upload/file/$', 'orb.api.upload.file_view', name="orb_file_upload"),
-)
+]

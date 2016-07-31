@@ -1,11 +1,10 @@
 # orb/urls.py
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
 from orb.feeds import LatestTagEntries, LatestEntries
 
-urlpatterns = patterns('',
-
+urlpatterns = [
     url(r'^$', 'orb.views.home_view', name="orb_home"),
     url(r'^robots.txt$', TemplateView.as_view(template_name="orb/robots.txt")),
     url(r'^about/$', TemplateView.as_view(template_name="orb/about.html"), name="orb_about"),
@@ -66,4 +65,4 @@ urlpatterns = patterns('',
     url(r'^viz/', include('orb.viz.urls')),
     url(r'^toolkits/', include('orb.toolkits.urls')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
-)
+]

@@ -1,9 +1,8 @@
-from django.conf.urls import patterns
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^register/$', 'orb.profiles.views.register', name="profile_register"),
     url(r'^register/thanks/$', TemplateView.as_view(template_name="orb/thanks.html"), name="profile_register_thanks"),
     url(r'^login/$', 'orb.profiles.views.login_view', name="profile_login"),
@@ -16,4 +15,4 @@ urlpatterns = patterns('',
     url(r'^view/$', 'orb.profiles.views.view_my_profile', name="my_profile_view"),
     url(r'^view/bookmarks/$', 'orb.profiles.views.view_my_bookmarks', name="my_bookmarks_view"),
     url(r'^view/ratings/$', 'orb.profiles.views.view_my_ratings', name="my_ratings_view"),
-)
+]
