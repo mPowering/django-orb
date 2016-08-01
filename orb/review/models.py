@@ -25,6 +25,7 @@ from django_fsm import FSMField, transition, TransitionNotAllowed
 
 from orb.models import TimestampBase, Resource, ReviewerRole
 from orb.review import signals
+from orb.review import tasks
 
 
 class ReviewLogEntry(TimestampBase):
@@ -70,8 +71,11 @@ class ReviewQueryset(models.QuerySet):
 
         """
         review = self.create(**kwargs)
-        signals.review_assigned.send(review.__class__, review,
-                                     assigned_by=assigned_by or review.reviewer)
+        signals.review_assigned.send(
+            sender=review.__class__,
+            review=review,
+            assigned_by=assigned_by or review.reviewer,
+        )
         return review
 
 
@@ -195,10 +199,11 @@ def review_assigned(sender, review, assigned_by, **kwargs):
 
     """
     ReviewLogEntry.objects.create(
-        review=sender,
+        review=review,
         review_status=review.status,
         action="Assigned to {0} by {1}".format(review.reviewer, assigned_by),
     )
+    tasks.send_review_assignment_email(review)
 
 
 @receiver(signals.review_rejected)
@@ -255,7 +260,7 @@ def resource_rejected(sender, resource, **kwargs):
     Returns:
 
     """
-    # TODO send email
+    tasks.send_resource_rejected_email(resource)
 
 
 @receiver(signals.resource_approved)
@@ -270,4 +275,4 @@ def resource_approved(sender, resource, **kwargs):
     Returns:
 
     """
-    # TODO send email
+    tasks.send_resource_approved_email(resource)

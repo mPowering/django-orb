@@ -45,7 +45,6 @@ def send_orb_email(
     )
 
 
-
 def user_welcome(to_user):
     template_html = 'orb/email/welcome.html'
     template_text = 'orb/email/welcome.txt'
