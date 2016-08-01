@@ -4,37 +4,12 @@
 Tests for ORB resource models
 """
 
-from django.contrib.auth.models import User
-from django.test import TestCase
-from django_fsm import TransitionNotAllowed
 from django.core import mail
+from django_fsm import TransitionNotAllowed
 
-from orb.models import Resource, ReviewerRole
-from orb.resources.tests.factory import resource_factory
+from orb.models import Resource
 from orb.review.models import ContentReview, process_resource_reviews
-
-
-class ReviewBase(TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        super(ReviewBase, cls).setUpClass()
-        cls.user = User.objects.create(username="tester", email="tester@acme.org")
-        cls.other_user = User.objects.create(username="milton", email="milton@acme.org")
-        cls.resource = resource_factory(
-            user=cls.user,
-            title=u"Básica salud del recién nacido",
-            description=u"Básica salud del recién nacido",
-        )
-        cls.medical = ReviewerRole.objects.create(name='medical')
-        cls.technical = ReviewerRole.objects.create(name='technical')
-
-    @classmethod
-    def tearDownClass(cls):
-        super(ReviewBase, cls).tearDownClass()
-        User.objects.all().delete()
-        ReviewerRole.objects.all().delete()
-        Resource.objects.all().delete()
+from orb.review.tests.base import ReviewBase
 
 
 class ProcessReviewsTests(ReviewBase):
@@ -44,9 +19,9 @@ class ProcessReviewsTests(ReviewBase):
 
     def test_process_all_approved(self):
         """Resource should be approved when all reviews are approved"""
-        ContentReview.objects.create(role=self.medical, reviewer=self.user,
+        ContentReview.objects.create(role=self.medical_role, reviewer=self.staff_user,
                                      resource=self.resource, status='approved')
-        ContentReview.objects.create(role=self.technical, reviewer=self.other_user,
+        ContentReview.objects.create(role=self.technical_role, reviewer=self.reviewer,
                                      resource=self.resource, status='approved')
         self.resource.status = Resource.PENDING
         result = process_resource_reviews(self.resource)
@@ -54,9 +29,9 @@ class ProcessReviewsTests(ReviewBase):
 
     def test_process_any_rejected(self):
         """Resource should be rejected if any review is rejected"""
-        ContentReview.objects.create(role=self.medical, reviewer=self.user,
+        ContentReview.objects.create(role=self.medical_role, reviewer=self.staff_user,
                                      resource=self.resource, status='approved')
-        ContentReview.objects.create(role=self.technical, reviewer=self.other_user,
+        ContentReview.objects.create(role=self.technical_role, reviewer=self.reviewer,
                                      resource=self.resource, status='rejected')
         self.resource.status = Resource.PENDING
         result = process_resource_reviews(self.resource)
@@ -64,7 +39,7 @@ class ProcessReviewsTests(ReviewBase):
 
     def test_process_incomplete_rejection(self):
         """Should not change status on rejection if reviews incomplete"""
-        ContentReview.objects.create(role=self.technical, reviewer=self.other_user,
+        ContentReview.objects.create(role=self.technical_role, reviewer=self.reviewer,
                                      resource=self.resource, status='rejected')
         self.resource.status = Resource.PENDING
         result = process_resource_reviews(self.resource)
@@ -72,7 +47,7 @@ class ProcessReviewsTests(ReviewBase):
 
     def test_process_incomplete_approval(self):
         """Should not change status on approval if reviews incomplete"""
-        ContentReview.objects.create(role=self.technical, reviewer=self.other_user,
+        ContentReview.objects.create(role=self.technical_role, reviewer=self.reviewer,
                                      resource=self.resource, status='approved')
         self.resource.status = Resource.PENDING
         result = process_resource_reviews(self.resource)
@@ -89,8 +64,8 @@ class AssignmentTests(ReviewBase):
         ContentReview.reviews.all().delete()
         inbox_count = len(mail.outbox)
         review = ContentReview.reviews.assign(
-            role=self.medical,
-            reviewer=self.other_user,
+            role=self.medical_role,
+            reviewer=self.staff_user,
             resource=self.resource, status='approved',
         )
         self.assertEqual(inbox_count + 1, len(mail.outbox))
@@ -98,23 +73,23 @@ class AssignmentTests(ReviewBase):
     def test_reassign_self(self):
         """Reassignment to self should do nothing"""
         review = ContentReview.objects.create(
-            role=self.technical,
-            reviewer=self.other_user,
+            role=self.technical_role,
+            reviewer=self.reviewer,
             resource=self.resource,
         )
-        self.assertIsNone(review.reassign(self.other_user))
+        self.assertIsNone(review.reassign(self.reviewer))
 
     def test_reassign_completed(self):
         review = ContentReview.objects.create(
-            role=self.technical,
-            reviewer=self.other_user,
+            role=self.technical_role,
+            reviewer=self.reviewer,
             resource=self.resource,
             status='approved',
         )
         self.assertRaises(
             TransitionNotAllowed,
             review.reassign,
-            self.user,
+            self.staff_user,
         )
 
 
@@ -122,4 +97,20 @@ class ReviewIntegrationTests(ReviewBase):
     """
     Tests that when the last review is finally rejected or approved, the
     resource status changes and emails sent out as necessary
+
+    This tests from the point a review is changed up to what this does to the resrouce
     """
+
+    def test_rejected_resource(self):
+        """Final rejection review changes status and send reject email"""
+        self.assertEqual(self.resource.status, Resource.PENDING)  # sanity check
+        ContentReview.objects.create(
+            role=self.technical_role,
+            reviewer=self.reviewer,
+            resource=self.resource,
+            status='approved',
+        )
+
+    def test_approved_resource(self):
+        """Final approved review change status and send approve email"""
+        self.assertEqual(self.resource.status, Resource.PENDING)  # sanity check

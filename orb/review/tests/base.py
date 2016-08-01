@@ -16,11 +16,11 @@ class ReviewBase(TestCase):
     @classmethod
     def setUpClass(cls):
         super(ReviewBase, cls).setUpClass()
-        cls.staff_user, _ = User.objects.get_or_create(username="staff", is_staff=True)
 
         cls.medical_role, _ = ReviewerRole.objects.get_or_create(name='medical')
         cls.technical_role, _ = ReviewerRole.objects.get_or_create(name='technical')
 
+        cls.staff_user, _ = User.objects.get_or_create(username="staff", is_staff=True)
         cls.reviewer, _ = User.objects.get_or_create(username="reviewer")
         cls.nonreviewer, _ = User.objects.get_or_create(username="nonreviewer")
 
