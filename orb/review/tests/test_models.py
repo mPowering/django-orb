@@ -101,16 +101,38 @@ class ReviewIntegrationTests(ReviewBase):
     This tests from the point a review is changed up to what this does to the resrouce
     """
 
-    def test_rejected_resource(self):
-        """Final rejection review changes status and send reject email"""
+    def test_approved_resource(self):
+        """Final approved review change status and send approve email"""
+        email_count = len(mail.outbox)
+
         self.assertEqual(self.resource.status, Resource.PENDING)  # sanity check
         ContentReview.objects.create(
             role=self.technical_role,
             reviewer=self.reviewer,
             resource=self.resource,
-            status='approved',
+            status=Resource.APPROVED,
         )
+        review = ContentReview.objects.create(
+            role=self.medical_role,
+            reviewer=self.staff_user,
+            resource=self.resource,
+            status=Resource.PENDING,
+        )
+        review.approve()
+        review.save()
 
-    def test_approved_resource(self):
-        """Final approved review change status and send approve email"""
+        # Force refresh from the DB - TestCase attribute will be stale
+        resource = Resource.objects.get(pk=self.resource.pk)
+
+        # Ensure status is changed
+        self.assertEqual(resource.status, Resource.APPROVED)
+
+        # Ensure email is sent to the submitter
+        self.assertEqual(email_count + 1, len(mail.outbox))
+
+
+    def test_rejected_resource(self):
+        """Final rejection review changes status and send reject email"""
+        self.resource.status = Resource.PENDING
+        self.resource.save()
         self.assertEqual(self.resource.status, Resource.PENDING)  # sanity check

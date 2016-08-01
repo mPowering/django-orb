@@ -94,6 +94,8 @@ class ContentReview(TimestampBase):
     reviews = ReviewQueryset.as_manager()
     objects = reviews
 
+    _status_changed = False
+
     class Meta:
         verbose_name = _("content review")
         verbose_name_plural = _("content reviews")
@@ -105,13 +107,20 @@ class ContentReview(TimestampBase):
     def __unicode__(self):
         return u"{0}: {1}".format(self.reviewer, self.resource)
 
+    def save(self, **kwargs):
+        super(ContentReview, self).save(**kwargs)
+        if self._status_changed:
+            process_resource_reviews(self.resource)
+
     @transition(field=status, source=Resource.PENDING, target=Resource.APPROVED)
     def approve(self):
+        self._status_changed = True
         signals.review_approved.send(self.__class__, review=self)
         return None
 
     @transition(field=status, source=Resource.PENDING, target=Resource.REJECTED)
     def reject(self):
+        self._status_changed = True
         signals.review_rejected.send(self.__class__, review=self)
         return None
 
@@ -134,6 +143,7 @@ class ContentReview(TimestampBase):
         if self.status != Resource.PENDING:
             raise TransitionNotAllowed("Cannot reassign a completed review")
 
+        self._status_changed = True
         old_reviewer = self.reviewer
         self.reviewer = new_user
         # TODO send email
@@ -176,6 +186,7 @@ def process_resource_reviews(resource):
         resource.save()
         signals.resource_approved.send(sender=resource.__class__, resource=resource)
         return resource.status
+
     if Resource.PENDING not in review_status:
         resource.reject()
         resource.save()
