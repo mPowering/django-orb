@@ -1,56 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import mock
-from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse, resolve
 from django.http import Http404
 from django.test import TestCase
 
-from orb.models import UserProfile, ReviewerRole
-from orb.resources.tests.factory import resource_factory
+from orb.models import UserProfile
 from orb.review import views
 from orb.review.models import ContentReview
+from orb.review.tests.base import ReviewBase
 from orb.tests.utils import request_factory, mocked_model
-
-
-class ReviewBase(TestCase):
-    """
-    Base class for setting up common data for testing resource review related views
-    """
-
-    @classmethod
-    def setUpClass(cls):
-        super(ReviewBase, cls).setUpClass()
-        cls.staff_user, _ = User.objects.get_or_create(username="staff", is_staff=True)
-        cls.role, _ = ReviewerRole.objects.get_or_create(name='medical')
-        cls.reviewer, _ = User.objects.get_or_create(username="reviewer")
-        cls.nonreviewer, _ = User.objects.get_or_create(username="nonreviewer")
-
-        cls.profile_one, _ = UserProfile.objects.get_or_create(
-            user=cls.staff_user,
-            reviewer_role=cls.role,
-        )
-        cls.profile_two, _ = UserProfile.objects.get_or_create(
-            user=cls.reviewer,
-            reviewer_role=cls.role,
-        )
-
-        cls.resource = resource_factory(
-            user=cls.reviewer,
-            title=u"Básica salud del recién nacido",
-            description=u"Básica salud del recién nacido",
-        )
-        cls.review = ContentReview.objects.create(
-            resource=cls.resource,
-            reviewer=cls.reviewer,
-            role=cls.role,
-        )
-
-    @classmethod
-    def tearDownClass(cls):
-        super(ReviewBase, cls).tearDownClass()
-        User.objects.all().delete()
 
 
 class ReviewListTests(ReviewBase):
@@ -93,6 +53,14 @@ class ReviewViewTests(ReviewBase):
     """
     Tests for the view showing an individual review/review form
     """
+    @classmethod
+    def setUpClass(cls):
+        super(ReviewViewTests, cls).setUpClass()
+        cls.review = ContentReview.objects.create(
+            resource=cls.resource,
+            reviewer=cls.reviewer,
+            role=cls.medical_role,
+        )
 
     def test_url(self):
         reverse("orb_resource_review",
@@ -141,6 +109,15 @@ class ReviewViewTests(ReviewBase):
 
 class RejectReviewTests(ReviewBase):
     """Tests for the reject_review view"""
+
+    @classmethod
+    def setUpClass(cls):
+        super(RejectReviewTests, cls).setUpClass()
+        cls.review = ContentReview.objects.create(
+            resource=cls.resource,
+            reviewer=cls.reviewer,
+            role=cls.medical_role,
+        )
 
     def test_url(self):
         reverse("orb_reject_resource",
