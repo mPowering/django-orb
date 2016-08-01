@@ -4,7 +4,7 @@ Signal receiver function definitions
 
 import json
 
-from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from orb.emailer import (first_resource, resource_approved, resource_rejected,
                          user_welcome, new_resource_submitted)
@@ -15,6 +15,7 @@ from orb.signals import resource_viewed, resource_workflow, resource_url_viewed,
     resource_file_viewed, search, tag_viewed, user_registered, resource_submitted
 
 
+@receiver(user_registered)
 def user_registered_callback(sender, **kwargs):
     request = kwargs.get('request')
     user = kwargs.get('user')
@@ -22,6 +23,7 @@ def user_registered_callback(sender, **kwargs):
     return
 
 
+@receiver(resource_viewed)
 def resource_viewed_callback(sender, **kwargs):
     request = kwargs.get('request')
     resource = kwargs.get('resource')
@@ -43,6 +45,7 @@ def resource_viewed_callback(sender, **kwargs):
     return
 
 
+@receiver(resource_submitted)
 def resource_submitted_callback(sender, **kwargs):
     request = kwargs.get('request')
     resource = kwargs.get('instance')
@@ -52,6 +55,7 @@ def resource_submitted_callback(sender, **kwargs):
     return
 
 
+@receiver(resource_workflow)
 def resource_workflow_callback(sender, **kwargs):
     request = kwargs.get('request')
     resource = kwargs.get('resource')
@@ -98,6 +102,7 @@ def resource_workflow_callback(sender, **kwargs):
     return
 
 
+@receiver(resource_url_viewed)
 def resource_url_viewed_callback(sender, **kwargs):
     request = kwargs.get('request')
     resource_url = kwargs.get('resource_url')
@@ -116,6 +121,7 @@ def resource_url_viewed_callback(sender, **kwargs):
     return
 
 
+@receiver(resource_file_viewed)
 def resource_file_viewed_callback(sender, **kwargs):
     request = kwargs.get('request')
     resource_file = kwargs.get('resource_file')
@@ -135,6 +141,7 @@ def resource_file_viewed_callback(sender, **kwargs):
     return
 
 
+@receiver(tag_viewed)
 def tag_viewed_callback(sender, **kwargs):
     request = kwargs.get('request')
     tag = kwargs.get('tag')
@@ -156,6 +163,7 @@ def tag_viewed_callback(sender, **kwargs):
     return
 
 
+@receiver(search)
 def search_callback(sender, **kwargs):
     request = kwargs.get('request')
     query = kwargs.get('query')
@@ -183,13 +191,3 @@ def search_callback(sender, **kwargs):
     tracker.extra_data = json.dumps(extra_data)
     tracker.save()
     return
-
-resource_viewed.connect(resource_viewed_callback)
-resource_workflow.connect(resource_workflow_callback)
-resource_url_viewed.connect(resource_url_viewed_callback)
-resource_file_viewed.connect(resource_file_viewed_callback)
-tag_viewed.connect(tag_viewed_callback)
-search.connect(search_callback)
-user_registered.connect(user_registered_callback)
-resource_submitted.connect(resource_submitted_callback)
-post_save.connect(resource_submitted_callback, sender=Resource)
