@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load i18n review_tags %}
 
 {% block extra_head_title %}{% trans 'Pending Resources' %}{% endblock extra_head_title %}
 
@@ -7,14 +7,14 @@
 
     <h2>{% trans 'Pending Resources' %}</h2>
 
-    <h3>{% trans 'My Assigned Resources' %}</h3>
+    <h3>{% trans 'My Reviews' %}</h3>
 
     {% if review_assignments %}
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
                 <tr>
-                    <th>{% trans 'Submitted' %}</th>
+                    <th>{% trans 'Assigned' %}</th>
                     <th>{% trans 'Title' %}</th>
                     <th>{% trans 'Organisation' %}</th>
                     <th colspan="2">{% trans 'Options' %}</th>
@@ -23,7 +23,7 @@
                 <tbody>
                 {% for review in review_assignments %}
                     <tr>
-                        <td>{{ review.resource.create_date }}</td>
+                        <td>{{ review.update_date|date }}</td>
                         <td>{{ review.resource.title }}</td>
                         <td>
                             {% for organisation in review.resource.get_organisations %}
@@ -48,6 +48,82 @@
     <p>{% trans 'No resources assigned for your review' %}</p>
     {% endif %}
 
+
+    {% if overdue_reviews %}
+    <h3>{% trans 'Overdue Reviews' %}</h3>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>{% trans 'Assigned' %}</th>
+                    <th>{% trans 'Title' %}</th>
+                    <th>{% trans 'Reviewer' %}</th>
+                    <th>{% trans 'Role' %}</th>
+                    <th colspan="1">{% trans 'Options' %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for review in overdue_reviews %}
+                    <tr>
+                        <td>{{ review.update_date|date }}</td>
+                        <td>{{ review.resource.title }}</td>
+                        <td>{{ review.reviewer.userprofile }}</td>
+                        <td>{{ review.role }}</td>
+                        <td>
+                            <a href="{% url 'orb_assign_review' review.resource.pk %}">{% trans 'Assignments' %}</a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+
+
+    <a name="unassigned" class="named-anchor"></a>
+    <h3>{% trans 'Resources Requiring Review Assignment' %}</h3>
+
+    {% if unassigned_resources %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>{% trans 'Submitted' %}</th>
+                    <th>{% trans 'Title' %}</th>
+                    <th>{% trans 'Organisation' %}</th>
+                    <th colspan="2">{% trans 'Options' %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for resource in unassigned_resources %}
+                    <tr>
+                        <td>{{ resource.create_date }}</td>
+                        <td>{{ resource.title }}</td>
+                        <td>
+                            {% for organisation in resource.get_organisations %}
+                                {{ organisation.name }}
+
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a target="_blank"
+                               href="{% url 'orb_resource' resource.slug %}">{% trans 'Preview' %}</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'orb_assign_review' resource.pk %}">{% trans 'Assignments' %}</a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>{% trans 'No resources pending review' %}</p>
+    {% endif %}
+
     <a name="all" class="named-anchor"></a>
     <h3>{% trans 'All Resources' %}</h3>
 
@@ -66,7 +142,7 @@
                 {% for resource in pending_resources %}
                     <tr>
                         <td>{{ resource.create_date }}</td>
-                        <td>{{ resource.title }}</td>
+                        <td>{{ resource.title }}{% status_labels resource %}</td>
                         <td>
                             {% for organisation in resource.get_organisations %}
                                 {{ organisation.name }}

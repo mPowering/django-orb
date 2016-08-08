@@ -8,14 +8,14 @@ from orb.resources.tests.factory import resource_factory
 from orb.review.models import ContentReview
 
 
-class ReviewBase(TestCase):
+class ReviewTestCase(TestCase):
     """
     Base class for setting up common data for testing resource review related views
     """
 
     @classmethod
     def setUpClass(cls):
-        super(ReviewBase, cls).setUpClass()
+        super(ReviewTestCase, cls).setUpClass()
 
         cls.medical_role, _ = ReviewerRole.objects.get_or_create(name='medical')
         cls.technical_role, _ = ReviewerRole.objects.get_or_create(name='technical')
@@ -44,5 +44,5 @@ class ReviewBase(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        super(ReviewBase, cls).tearDownClass()
+        super(ReviewTestCase, cls).tearDownClass()
         User.objects.all().delete()

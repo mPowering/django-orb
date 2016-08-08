@@ -17,15 +17,20 @@ an interface for managing the state of the review as well as associated
 side effects of changing the status.
 """
 
+from datetime import date, timedelta
+
 from django.conf import settings
 from django.db import models
 from django.dispatch import receiver
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django_fsm import FSMField, transition, TransitionNotAllowed
 
 from orb.models import TimestampBase, Resource, ReviewerRole
-from orb.review import signals
-from orb.review import tasks
+from orb.review import signals, tasks
+
+
+REVIEW_OVERDUE = 10
 
 
 class ReviewLogEntry(TimestampBase):
@@ -53,6 +58,9 @@ class ReviewQueryset(models.QuerySet):
 
     def complete(self):
         return self.exclude(status=Resource.PENDING)
+
+    def overdue(self):
+        return self.pending().filter(update_date__lte=date.today() - timedelta(days=REVIEW_OVERDUE))
 
     def for_user(self, user):
         return self.filter(reviewer=user)
@@ -128,13 +136,21 @@ class ContentReview(TimestampBase):
     def is_pending(self):
         return self.status == Resource.PENDING
 
+    @property
+    def is_overdue(self):
+        return self.is_pending and (now() - self.update_date) > timedelta(days=REVIEW_OVERDUE)
+
     def reassign(self, new_user):
         """
+        Reasignment method. Encapsulates any business rules for sending
+        signals or issuing new commands that may be associated with a new
+        assignment.
 
         Args:
-            new_user:
+            new_user: the new assigned reviewer
 
         Returns:
+            None
 
         """
         if new_user == self.reviewer:

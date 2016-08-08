@@ -9,10 +9,10 @@ from django_fsm import TransitionNotAllowed
 
 from orb.models import Resource
 from orb.review.models import ContentReview, process_resource_reviews
-from orb.review.tests.base import ReviewBase
+from orb.review.tests.base import ReviewTestCase
 
 
-class ProcessReviewsTests(ReviewBase):
+class ProcessReviewsTests(ReviewTestCase):
     """
     Tests for processing a change in a review
     """
@@ -54,7 +54,7 @@ class ProcessReviewsTests(ReviewBase):
         self.assertEqual(result, Resource.PENDING)
 
 
-class AssignmentTests(ReviewBase):
+class AssignmentTests(ReviewTestCase):
     """
     Test assignment functionality
     """
@@ -93,7 +93,7 @@ class AssignmentTests(ReviewBase):
         )
 
 
-class ReviewIntegrationTests(ReviewBase):
+class ReviewIntegrationTests(ReviewTestCase):
     """
     Tests that when the last review is finally rejected or approved, the
     resource status changes and emails sent out as necessary
@@ -129,7 +129,6 @@ class ReviewIntegrationTests(ReviewBase):
 
         # Ensure email is sent to the submitter
         self.assertEqual(email_count + 1, len(mail.outbox))
-
 
     def test_rejected_resource(self):
         """Final rejection review changes status and send reject email"""

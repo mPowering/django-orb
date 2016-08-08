@@ -1,13 +1,15 @@
 from functools import wraps
+from datetime import date, timedelta
 
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
+from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
 from orb.decorators import reviewer_required
-from orb.models import Resource, ResourceCriteria
+from orb.models import Resource, ResourceCriteria, ReviewerRole
 from .forms import ReviewForm, RejectionForm, AssignmentForm, AssignmentFormSet
 from .models import ContentReview
 
@@ -103,12 +105,32 @@ def resource_review_list(request):
     """
     View that lists resources that are pending review
     """
+
+    role_queries = [
+        Q(content_reviews__status=Resource.PENDING) & Q(content_reviews__role=role)
+        for role in ReviewerRole.roles.all()
+    ]
+    query = Q()
+    for role_query in role_queries:
+        query = query | role_query
+
+    overdue_resources = Resource.resources.pending().filter(
+        content_reviews__status=Resource.PENDING,
+        content_reviews__update_date__lte=date.today() - timedelta(days=7),
+    )
+
+    unassigned_resources = Resource.resources.pending().exclude(*(query,))
     pending_resources = Resource.resources.pending()
     review_assignments = ContentReview.reviews.pending().for_user(request.user)
 
+    overdue_reviews = ContentReview.reviews.overdue()
+
     return render(request, "orb/review/review_list.html",{
         'pending_resources': pending_resources,
+        'unassigned_resources': unassigned_resources,
         'review_assignments': review_assignments,
+        'overdue_resources': overdue_resources,
+        'overdue_reviews': overdue_reviews,
     })
 
 

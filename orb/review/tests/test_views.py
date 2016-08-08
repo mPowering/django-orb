@@ -9,11 +9,11 @@ from django.test import TestCase
 from orb.models import UserProfile
 from orb.review import views
 from orb.review.models import ContentReview
-from orb.review.tests.base import ReviewBase
+from orb.review.tests.base import ReviewTestCase
 from orb.tests.utils import request_factory, mocked_model
 
 
-class ReviewListTests(ReviewBase):
+class ReviewListTests(ReviewTestCase):
     """
     Tests for the view showing pending reviews
     """
@@ -49,7 +49,7 @@ class ReviewListTests(ReviewBase):
         self.assertEqual(response.status_code, 200)
 
 
-class ReviewViewTests(ReviewBase):
+class ReviewViewTests(ReviewTestCase):
     """
     Tests for the view showing an individual review/review form
     """
@@ -107,7 +107,7 @@ class ReviewViewTests(ReviewBase):
         self.assertEqual(response.status_code, 200)
 
 
-class RejectReviewTests(ReviewBase):
+class RejectReviewTests(ReviewTestCase):
     """Tests for the reject_review view"""
 
     @classmethod
@@ -176,7 +176,7 @@ class RejectReviewTests(ReviewBase):
         self.assertEqual(response.status_code, 302)
 
 
-class CreateAssignmentTests(ReviewBase):
+class CreateAssignmentTests(ReviewTestCase):
 
     def test_url(self):
         """Review assignment URL should be configured"""

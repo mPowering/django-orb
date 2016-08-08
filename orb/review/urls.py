@@ -4,7 +4,8 @@ from orb.review.views import (review_resource, resource_review_list, reject_reso
 
 
 urlpatterns = [
-    url(r'^(?P<resource_id>\d+)/assignment/$', view=assign_review, name="orb_assign_review"),
+    url(r'^(?P<resource_id>\d+)/assignment/$',
+        view=assign_review, name="orb_assign_review"),
     url(r'^(?P<resource_id>\d+)/assignment/(?P<review_id>\d+)/$',
         view=review_resource, name="orb_resource_review"),
     url(r'^(?P<resource_id>\d+)/assignment/(?P<review_id>\d+)/reject/$',
