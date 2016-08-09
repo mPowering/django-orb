@@ -612,7 +612,7 @@ def resource_edit_view(request, resource_id):
         form = ResourceStep1Form(initial=data)
         resource_form_set_choices(form)
 
-    return request(request, 'orb/resource/edit.html', {'form': form})
+    return render(request, 'orb/resource/edit.html', {'form': form})
 
 
 def resource_edit_step2_view(request, resource_id):
