@@ -254,6 +254,10 @@ class ResourceCriteria(models.Model):
     def __unicode__(self):
         return self.description
 
+    class Meta:
+        verbose_name = _("resource criterion")
+        verbose_name_plural = _("resource criteria")
+
 
 class Category(models.Model):
     name = models.CharField(blank=False, null=False, max_length=100)
