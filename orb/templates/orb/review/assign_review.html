@@ -3,18 +3,15 @@
 {% block extra_head_title %}{% trans 'Assign Content Review' %}{% endblock extra_head_title %}
 {% block content %}
 
-<h2>{% trans 'Assign Content Review' %}</h2>
+    <h2>{% trans 'Assign Content Review' %}</h2>
 
-<h3>{{ resource.title }} (<a href="{% url 'orb_resource' resource.slug %}"
-                                    target="_blank" class="preview">{% trans 'Preview' %}</a>)</h3>
+    <h3>{{ resource.title }} (<a href="{% url 'orb_resource' resource.slug %}"
+                                 target="_blank" class="preview">{% trans 'Preview' %}</a>)</h3>
 
     <div>
-<form method="POST" action=".">{% csrf_token %}
-    {% crispy form %}
-</form>
-        </div>
-    <div>
-<a href="{% url 'orb_pending_resources' %}">{% trans 'Return to pending content.' %}</a>
+        <form method="POST" class="form-horizontal" action=".">{% csrf_token %}
+            {% crispy form %}
+        </form>
     </div>
 
 {% endblock %}

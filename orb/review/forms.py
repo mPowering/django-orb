@@ -2,19 +2,17 @@
 Forms for resources - primarily for content review
 """
 
-from django.contrib.auth import get_user_model
 from crispy_forms.helper import FormHelper
-from orb.models import UserProfile
-from crispy_forms.layout import Div, Layout, Submit
+from crispy_forms.layout import Div, Layout, Submit, HTML
 from django import forms
-from django.utils.translation import ugettext as _
+from django.core.urlresolvers import reverse
+from django.forms import inlineformset_factory
 from django.utils.functional import cached_property
+from django.utils.translation import ugettext as _
 
 from orb.models import Resource, ResourceCriteria, ReviewerRole
+from orb.models import UserProfile
 from .models import ContentReview
-from django.forms import inlineformset_factory
-
-
 
 
 class ReviewForm(forms.Form):
@@ -126,6 +124,10 @@ class AssignmentForm(forms.Form):
         yield Div(
             Submit('submit', _(u'Assign'),
                    css_class='btn btn-default'),
+            HTML("<a href='{0}'>{1}</a>".format(
+                reverse("orb_pending_resources"),
+                _("Return to pending list"),
+            )),
             css_class='col-lg-offset-2 col-lg-8',
         )
 
