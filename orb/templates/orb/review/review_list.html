@@ -59,7 +59,7 @@
                     <tbody>
                     {% for resource in unassigned_resources %}
                         <tr>
-                            <td>{{ resource.create_date }}</td>
+                            <td>{{ resource.create_date|date }}</td>
                             <td>{{ resource.title }}</td>
                             <td>
                                 {% for organisation in resource.get_organisations %}
@@ -103,6 +103,11 @@
     <h3>{% trans 'All Resources' %}</h3>
 
     {% if pending_resources %}
+        <div>
+        {% blocktrans %}To start a review that does not have an assignment matching your
+            content review role, click the 'Start a review' link next to the resource title.
+        {% endblocktrans %}
+        </div>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -110,13 +115,13 @@
                     <th>{% trans 'Submitted' %}</th>
                     <th>{% trans 'Title' %}</th>
                     <th>{% trans 'Organisation' %}</th>
-                    <th colspan="2">{% trans 'Options' %}</th>
+                    <th colspan="{% if user.is_staff %}3{% else %}2{% endif %}">{% trans 'Options' %}</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for resource in pending_resources %}
                     <tr>
-                        <td>{{ resource.create_date }}</td>
+                        <td>{{ resource.create_date|date }}</td>
                         <td>{{ resource.title }}{% status_labels resource %}</td>
                         <td>
                             {% for organisation in resource.get_organisations %}
@@ -132,9 +137,16 @@
                         </td>
                         {% can_start_review resource as can_review %}
                         {% if can_review %}
-                            <td><a href="{% url 'orb_start_review' resource.pk %}">{% trans 'Review this resource' %}</a></td>
+                            <td><a href="{% url 'orb_start_review' resource.pk %}">{% trans 'Start a review' %}</a></td>
                         {% else %}
                             <td></td>
+                        {% endif %}
+                        {% if user.is_staff %}
+                        <td>
+                            <a href="{% url 'orb_assign_review' resource.pk %}">
+                                <span class="glyphicon glyphicon-user" aria-hidden="true" title="{% trans 'Assignments' %}"></span>
+                                <span class="sr-only">{% trans 'Assignments' %}</a></span>
+                        </td>
                         {% endif %}
                     </tr>
                 {% endfor %}
