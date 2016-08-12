@@ -412,7 +412,7 @@ class UserProfile(TimestampBase):
 
     @property
     def is_reviewer(self):
-        return self.crt_member or self.mep_member
+        return bool(self.reviewer_role)
 
 
 class ResourceTracker(models.Model):
