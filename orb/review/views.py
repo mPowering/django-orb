@@ -11,7 +11,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from orb.decorators import reviewer_required
 from orb.models import Resource, ResourceCriteria, ReviewerRole
-from .forms import ReviewForm, RejectionForm, AssignmentForm, AssignmentFormSet
+from .forms import ReviewForm, RejectionForm, AssignmentForm, AssignmentFormSet, StaffReviewForm
 from .models import ContentReview
 
 
@@ -155,6 +155,15 @@ def assign_review(request, resource_id):
 
 @staff_member_required
 def delete_resource(request, resource_id):
+    """
+
+    Args:
+        request: HttpRequest object
+        resource_id: the primary key of the Resource
+
+    Returns:
+
+    """
     resource = get_object_or_404(Resource, pk=resource_id)
     if request.method in ['POST', 'DELETE']:
         if not resource.is_pending():
@@ -168,3 +177,33 @@ def delete_resource(request, resource_id):
         messages.success(request, _(u"The resource was deleted"))
         return redirect("orb_pending_resources")
     return render(request, "orb/resource/confirm_delete.html", {'resource': resource})
+
+
+@staff_member_required
+def staff_review(request, resource_id):
+    """
+    Allows a staff user to quickly approve/reject a resource, short
+    circuiting the complete review process.
+
+    Args:
+        request: HttpRequest object
+        resource_id: the primary key of the Resource
+
+    Returns:
+        HttpResponse
+
+    """
+    resource = get_object_or_404(Resource, pk=resource_id)
+    if request.method == 'POST':
+        form = StaffReviewForm(resource=resource, data=request.POST)
+        if form.is_valid():
+            message_level, message = form.save()
+            messages.add_message(request, message_level, message)
+            return redirect("orb_pending_resources")
+    else:
+        form = StaffReviewForm(resource=resource)
+    return render(request, "orb/review/staff_review.html", {
+        'resource': resource,
+        'form': form,
+        'criteria': ResourceCriteria.objects.all(),
+    })

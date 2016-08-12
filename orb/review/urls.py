@@ -1,9 +1,11 @@
 from django.conf.urls import url
 from orb.review.views import (review_resource, resource_review_list, reject_resource,
-                             assign_review, delete_resource)
+                             assign_review, delete_resource, staff_review)
 
 
 urlpatterns = [
+    url(r'^(?P<resource_id>\d+)/$',
+        view=staff_review, name="orb_staff_review"),
     url(r'^(?P<resource_id>\d+)/assignment/$',
         view=assign_review, name="orb_assign_review"),
     url(r'^(?P<resource_id>\d+)/delete/$',

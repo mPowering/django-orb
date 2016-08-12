@@ -8,7 +8,6 @@
     <h2>{% trans 'Pending Resources' %}</h2>
 
     <h3>{% trans 'My Reviews' %}</h3>
-
     {% if review_assignments %}
         <div class="table-responsive">
             <table class="table table-striped">
@@ -49,7 +48,7 @@
     {% endif %}
 
 
-    {% if overdue_reviews %}
+    {% if user.is_staff and overdue_reviews %}
     <h3>{% trans 'Overdue Reviews' %}</h3>
         <div class="table-responsive">
             <table class="table table-striped">
@@ -70,7 +69,9 @@
                         <td>{{ review.reviewer.userprofile }}</td>
                         <td>{{ review.role }}</td>
                         <td>
-                            <a href="{% url 'orb_assign_review' review.resource.pk %}">{% trans 'Assignments' %}</a>
+                            <a href="{% url 'orb_assign_review' review.resource.pk %}">
+                                <span class="glyphicon glyphicon-user" aria-hidden="true" title="{% trans 'Assignments' %}"></span>
+                                <span class="sr-only">{% trans 'Assignments' %}</a></span>
                         </td>
 
                     </tr>
@@ -81,47 +82,60 @@
     {% endif %}
 
 
+    {% if user.is_staff %}
+        <a name="unassigned" class="named-anchor"></a>
+        <h3>{% trans 'Resources Requiring Review Assignment' %}</h3>
 
-    <a name="unassigned" class="named-anchor"></a>
-    <h3>{% trans 'Resources Requiring Review Assignment' %}</h3>
-
-    {% if unassigned_resources %}
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>{% trans 'Submitted' %}</th>
-                    <th>{% trans 'Title' %}</th>
-                    <th>{% trans 'Organisation' %}</th>
-                    <th colspan="2">{% trans 'Options' %}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for resource in unassigned_resources %}
+        {% if unassigned_resources %}
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
                     <tr>
-                        <td>{{ resource.create_date }}</td>
-                        <td>{{ resource.title }}</td>
-                        <td>
-                            {% for organisation in resource.get_organisations %}
-                                {{ organisation.name }}
-
-                            {% endfor %}
-                        </td>
-                        <td>
-                            <a target="_blank"
-                               href="{% url 'orb_resource' resource.slug %}">{% trans 'Preview' %}</a>
-                        </td>
-                        <td>
-                            <a href="{% url 'orb_assign_review' resource.pk %}">{% trans 'Assignments' %}</a>
-                        </td>
-
+                        <th>{% trans 'Submitted' %}</th>
+                        <th>{% trans 'Title' %}</th>
+                        <th>{% trans 'Organisation' %}</th>
+                        <th colspan="3">{% trans 'Options' %}</th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <p>{% trans 'No resources pending review' %}</p>
+                    </thead>
+                    <tbody>
+                    {% for resource in unassigned_resources %}
+                        <tr>
+                            <td>{{ resource.create_date }}</td>
+                            <td>{{ resource.title }}</td>
+                            <td>
+                                {% for organisation in resource.get_organisations %}
+                                    {{ organisation.name }}
+
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <a target="_blank" href="{% url 'orb_resource' resource.slug %}">
+                                    <span class="glyphicon glyphicon-eye-open" aria-hidden="true" title="{% trans 'Preview' %}"></span>
+                                    <span class="sr-only">{% trans 'Preview' %}</span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'orb_assign_review' resource.pk %}">
+                                    <span class="glyphicon glyphicon-user" aria-hidden="true" title="{% trans 'Assignments' %}"></span>
+                                    <span class="sr-only">{% trans 'Assignments' %}</span>
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{% url 'orb_staff_review' resource.pk %}">
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true" title="{% trans 'Review' %}"></span>
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true" title="{% trans 'Review' %}"></span>
+                                    <span class="sr-only">{% trans 'Review' %}</span>
+                                </a>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p>{% trans 'No resources pending review' %}</p>
+        {% endif %}
     {% endif %}
 
     <a name="all" class="named-anchor"></a>
@@ -150,8 +164,10 @@
                             {% endfor %}
                         </td>
                         <td>
-                            <a target="_blank"
-                               href="{% url 'orb_resource' resource.slug %}">{% trans 'Preview' %}</a>
+                            <a target="_blank" href="{% url 'orb_resource' resource.slug %}">
+                                <span class="glyphicon glyphicon-eye-open" aria-hidden="true" title="{% trans 'Preview' %}"></span>
+                                <span class="sr-only">{% trans 'Preview' %}</span>
+                            </a>
                         </td>
 
                     </tr>

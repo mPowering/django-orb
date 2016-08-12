@@ -82,9 +82,11 @@ class Resource(TimestampBase):
 
     def approve(self):
         self.status = self.APPROVED
+        self.content_reviews.all().update(status=self.APPROVED)
 
     def reject(self):
         self.status = self.REJECTED
+        self.content_reviews.all().update(status=self.REJECTED)
 
     def is_pending(self):
         return self.status not in [self.REJECTED, self.APPROVED]

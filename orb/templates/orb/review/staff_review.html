@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n crispy_forms_tags %}
+{% block extra_head_title %}{% trans 'Content Review' %}{% endblock extra_head_title %}
+{% block content %}
+
+<h2>{% trans 'Staff Content Review' %}</h2>
+
+<h3>{{ resource.title }} (<a href="{% url 'orb_resource' resource.slug %}"
+                                    target="_blank" class="preview">{% trans 'Preview' %}</a>)</h3>
+
+<div class="well">
+<p>{% trans 'Consider the following criteria in your review.' %}</p>
+{% for criterion in criteria %}
+<li>{{ criterion }}</li>
+{% endfor %}
+</div>
+
+<form method="POST" action=".">{% csrf_token %}
+<button class="btn btn-success" name="approved" value="1">Approve</button>
+<button class="btn btn-warning" name="approved">Reject</button>
+<a class="btn btn-danger" href="{% url 'orb_delete_resource' resource.pk %}">Delete</a>
+</form>
+
+{% endblock %}

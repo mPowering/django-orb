@@ -6,6 +6,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit, HTML
 from django import forms
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.forms import inlineformset_factory
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _
@@ -38,6 +39,31 @@ class ReviewForm(forms.Form):
         if not data.get('approved') and not data.get('reason'):
             raise forms.ValidationError(_("Please provide a reason for rejecting this content."))
         return data
+
+
+class StaffReviewForm(forms.Form):
+    """
+    Form for allowing a staff user to quickly approve or reject content
+    """
+    approved = forms.BooleanField(required=False)
+
+    def __init__(self, resource=None, *args, **kwargs):
+        self.resource = resource
+        super(StaffReviewForm, self).__init__(*args, **kwargs)
+
+    def save(self):
+        """
+        Handles logic of either approving or rejecting the resource
+        """
+        approved = self.cleaned_data['approved']
+        if approved:
+            self.resource.approve()
+            self.resource.save()
+            return messages.SUCCESS, _("The resource has been approved")
+        self.resource.reject()
+        self.resource.save()
+        return messages.SUCCESS, _("The resource has been rejected")
+
 
 
 class RejectionForm(forms.ModelForm):
