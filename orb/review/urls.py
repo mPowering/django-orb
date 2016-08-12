@@ -1,6 +1,7 @@
 from django.conf.urls import url
 from orb.review.views import (review_resource, resource_review_list, reject_resource,
-                              assign_review, delete_resource, staff_review, start_assignment)
+                              assign_review, delete_resource, staff_review, start_assignment,
+                              user_review_list)
 
 
 urlpatterns = [
@@ -17,4 +18,5 @@ urlpatterns = [
     url(r'^(?P<resource_id>\d+)/assignment/(?P<review_id>\d+)/reject/$',
         view=reject_resource, name="orb_reject_resource"),
     url(r'^$', view=resource_review_list, name="orb_pending_resources"),
+    url(r'^my-reviews/$', view=user_review_list, name="orb_user_reviews"),
 ]

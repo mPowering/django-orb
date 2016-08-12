@@ -136,6 +136,18 @@ def resource_review_list(request):
 
 
 @reviewer_required
+def user_review_list(request):
+    """
+    View that lists reviews for the active user
+    """
+    review_assignments = ContentReview.reviews.pending().for_user(request.user)
+
+    return render(request, "orb/review/user_review_list.html",{
+        'review_assignments': review_assignments,
+    })
+
+
+@reviewer_required
 def assign_review(request, resource_id):
 
     resource = get_object_or_404(Resource, pk=resource_id)
