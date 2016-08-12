@@ -86,6 +86,13 @@ class Resource(TimestampBase):
     def reject(self):
         self.status = self.REJECTED
 
+    def is_pending(self):
+        return self.status not in [self.REJECTED, self.APPROVED]
+
+    def has_assignments(self):
+        """Returns whether there are *any* reivew assignments"""
+        return self.content_reviews.all().exists()
+
     def get_organisations(self):
         return Tag.objects.filter(resourcetag__resource=self, category__slug='organisation')
 

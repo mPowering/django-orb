@@ -7,6 +7,7 @@ from django.shortcuts import redirect
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.admin.views.decorators import staff_member_required
 
 from orb.decorators import reviewer_required
 from orb.models import Resource, ResourceCriteria, ReviewerRole
@@ -150,3 +151,20 @@ def assign_review(request, resource_id):
         'resource': resource,
         'form': form,
     })
+
+
+@staff_member_required
+def delete_resource(request, resource_id):
+    resource = get_object_or_404(Resource, pk=resource_id)
+    if request.method in ['POST', 'DELETE']:
+        if not resource.is_pending():
+            messages.error(request, _(u"You cannot delete non-pending resources"))
+            return redirect("orb_pending_resources")
+        if resource.has_assignments():
+            messages.error(
+                request, _(u"You cannot delete resources with existing review assignemnts"))
+            return redirect("orb_pending_resources")
+        resource.delete()
+        messages.success(request, _(u"The resource was deleted"))
+        return redirect("orb_pending_resources")
+    return render(request, "orb/resource/confirm_delete.html", {'resource': resource})
