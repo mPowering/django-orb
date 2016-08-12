@@ -55,3 +55,22 @@ def status_labels(resource):
     return {
         'assignments': assignments,
     }
+
+
+@register.assignment_tag(takes_context=True)
+def can_start_review(context, resource):
+    """
+    Returns a boolean value for whether the user in the context
+    is a reviewer for one of the unassigned roles for the given
+    resource
+
+    Args:
+        context: the template context
+        resource: an orb.Resource instance
+
+    Returns:
+        Boolean value
+
+    """
+    profile = context['user'].userprofile
+    return not resource.content_reviews.filter(role=profile.reviewer_role).exists()

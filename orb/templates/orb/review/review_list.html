@@ -151,7 +151,7 @@
                     <th>{% trans 'Submitted' %}</th>
                     <th>{% trans 'Title' %}</th>
                     <th>{% trans 'Organisation' %}</th>
-                    <th>{% trans 'Options' %}</th>
+                    <th colspan="2">{% trans 'Options' %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -171,7 +171,12 @@
                                 <span class="sr-only">{% trans 'Preview' %}</span>
                             </a>
                         </td>
-
+                        {% can_start_review resource as can_review %}
+                        {% if can_review %}
+                            <td><a href="{% url 'orb_start_review' resource.pk %}">{% trans 'Review this resource' %}</a></td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>

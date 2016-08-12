@@ -1,17 +1,17 @@
-from functools import wraps
 from datetime import date, timedelta
+from functools import wraps
 
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
-from django.shortcuts import redirect
-from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.admin.views.decorators import staff_member_required
+from django.core.exceptions import PermissionDenied
+from django.db import IntegrityError
+from django.db.models import Q
+from django.shortcuts import redirect, render, get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 
 from orb.decorators import reviewer_required
 from orb.models import Resource, ResourceCriteria, ReviewerRole
-from .forms import ReviewForm, RejectionForm, AssignmentForm, AssignmentFormSet, StaffReviewForm
+from .forms import ReviewForm, RejectionForm, AssignmentForm, StaffReviewForm
 from .models import ContentReview
 
 
@@ -206,4 +206,37 @@ def staff_review(request, resource_id):
         'resource': resource,
         'form': form,
         'criteria': ResourceCriteria.objects.all(),
+    })
+
+
+@reviewer_required
+def start_assignment(request, resource_id):
+    """
+    View function that allows a user to assign themselves to review a resource
+    for an otherwise unassigned role.
+
+    Args:
+        request: HttpRequest object
+        resource_id: the primary key of the Resource
+
+    Returns:
+        HttpResponse
+
+    """
+    resource = get_object_or_404(Resource, pk=resource_id)
+    if request.method == 'POST':
+        try:
+            review = ContentReview.reviews.create(
+                resource=resource,
+                role=request.user.userprofile.reviewer_role,
+                reviewer=request.user,
+            )
+        except IntegrityError:
+            messages.error(request, _("There was an error starting the review."))
+            return redirect("orb_pending_resources")
+        return redirect(review.get_absolute_url())
+
+    return render(request, "orb/review/start_review.html", {
+        'resource': resource,
+        'role': request.user.userprofile.reviewer_role,
     })

@@ -65,7 +65,6 @@ class StaffReviewForm(forms.Form):
         return messages.SUCCESS, _("The resource has been rejected")
 
 
-
 class RejectionForm(forms.ModelForm):
     """
     Form class for capturing the explanation for rejecting a submitted resource

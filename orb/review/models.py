@@ -20,6 +20,7 @@ side effects of changing the status.
 from datetime import date, timedelta
 
 from django.conf import settings
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.dispatch import receiver
 from django.utils.timezone import now
@@ -119,6 +120,12 @@ class ContentReview(TimestampBase):
         super(ContentReview, self).save(**kwargs)
         if self._status_changed:
             process_resource_reviews(self.resource)
+
+    def get_absolute_url(self):
+        return reverse("orb_resource_review", kwargs={
+            'resource_id': self.resource.pk,
+            'review_id': self.pk,
+        })
 
     @transition(field=status, source=Resource.PENDING, target=Resource.APPROVED)
     def approve(self):
