@@ -5,6 +5,9 @@ Tests for orb.review managers and querysets
 """
 
 from datetime import date, timedelta
+
+from freezegun import freeze_time
+
 from orb.models import Resource
 from orb.resources.tests.factory import resource_factory
 from orb.review.models import ContentReview
@@ -66,13 +69,13 @@ class ReviewQuerysetTests(ReviewTestCase):
             status=Resource.PENDING,
         )
 
-        overdue = ContentReview.objects.create(
-            update_date=date.today() - timedelta(days=15),
-            role=cls.technical_role,
-            reviewer=cls.reviewer,
-            resource=cls.resource_three,
-            status=Resource.PENDING,
-        )
+        with freeze_time(date.today() - timedelta(days=15)):
+            cls.overdue = ContentReview.objects.create(
+                role=cls.technical_role,
+                reviewer=cls.reviewer,
+                resource=cls.resource_three,
+                status=Resource.PENDING,
+            )
 
     def test_pending_qs(self):
         """Returns only reviews that are pending"""

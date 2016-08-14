@@ -42,9 +42,7 @@ class ReviewListTests(ReviewTestCase):
 
     def test_reviewer_users(self):
         """Reviewer users should be able to see the page"""
-        mock_profile = mocked_model(UserProfile)
-        mock_profile.is_reviewer = True
-        request = request_factory(user=self.reviewer, userprofile=mock_profile)
+        request = request_factory(user=self.reviewer)
         response = views.resource_review_list(request)
         self.assertEqual(response.status_code, 200)
 
