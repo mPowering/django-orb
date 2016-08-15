@@ -10,6 +10,7 @@ def modify(settings):
                                    'haystack',
                                    'sorl.thumbnail',
                                    'orb.analytics',
+                                   'orb.review',
                                    'orb.partners.OnemCHW',
                                    'django.contrib.humanize')
     settings['MIDDLEWARE_CLASSES'] += ('orb.middleware.SearchFormMiddleware',)
