@@ -58,7 +58,7 @@
                         {% endif %}
                         {% if user.is_staff or reviewer %}
                             <li>
-                                <a href="{% url 'orb_analytics_review' %}">{% trans 'Pending Resources' %}</a>
+                                <a href="{% url 'orb_pending_resources' %}">{% trans 'Pending Resources' %}</a>
                             </li>
                         {% endif %}
                     </ul>
@@ -74,6 +74,10 @@
                             <li><a href="{% url 'my_profile_edit' %}">{% trans 'Edit Profile' %}</a>
                             </li>
                             <li><a href="{% url 'my_ratings_view' %}">{% trans 'Rated' %}</a></li>
+                            {% if user.userprofile.is_reviewer %}
+                                <li><a href="{% url 'orb_user_reviews' %}">{% trans 'Resource Reviews' %}</a>
+                                </li>
+                            {% endif %}
                             <li><a href="{% url 'my_bookmarks_view' %}">{% trans 'Bookmarks' %}</a>
                             </li>
                             <li>

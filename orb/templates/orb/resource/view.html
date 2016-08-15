@@ -46,7 +46,7 @@ function ratingOffHover(i){
 }
 
 function rateResource(i){
-	$.post("{% url 'orb_rate' %}", { rating: i, resource_id: {{ resource.id }} },
+	$.post("{% url 'orb_rate' %}", { rating: i, resource: {{ resource.id }} },
 	    function(data) {
 			USER_RATING = i;
 			if (data.no_ratings < data.ratings_required) {

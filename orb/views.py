@@ -7,21 +7,18 @@ from django.core.urlresolvers import reverse
 from django.db import IntegrityError
 from django.db.models import Count, Max, Min, Q, Avg
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import render, render_to_response
-from django.shortcuts import get_object_or_404
-from django.template import RequestContext
+from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _
-
 from haystack.query import SearchQuerySet
 
-from orb.forms import ResourceStep1Form, ResourceStep2Form, SearchForm, ResourceRejectForm, AdvancedSearchForm
-from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, TagTracker, SearchTracker
-from orb.models import ResourceFile, ResourceTag, ResourceWorkflowTracker, ResourceCriteria, ResourceRating
+from orb.forms import (ResourceStep1Form, ResourceStep2Form, SearchForm,
+                       ResourceRejectForm, AdvancedSearchForm)
 from orb.models import Collection
-from orb.signals import resource_viewed, resource_url_viewed, resource_file_viewed, search, resource_workflow, resource_submitted, tag_viewed
-
-
+from orb.models import ResourceFile, ResourceTag, ResourceCriteria, ResourceRating
+from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, TagTracker, SearchTracker
 from orb.partners.OnemCHW.models import CountryData
+from orb.signals import (resource_viewed, resource_url_viewed, resource_file_viewed,
+                         search, resource_workflow, resource_submitted, tag_viewed)
 
 
 def home_view(request):
@@ -38,8 +35,8 @@ def home_view(request):
         data['resource_count'] = resource_count
         data['tag'] = t
         topics.append(data)
-     
-    '''   
+
+    '''
     data = {}
     data['resource_count'] = 3
     data['custom'] = True
@@ -48,11 +45,11 @@ def home_view(request):
     data['image'] = 'toolkit.png'
     topics.append(data)
     '''
-        
-    return render_to_response('orb/home.html',
-                              {'topics': topics,
-                               'page_title': _(u'ORB by mPowering')},
-                              context_instance=RequestContext(request))
+
+    return render(request, 'orb/home.html', {
+        'topics': topics,
+        'page_title': _(u'ORB by mPowering'),
+    })
 
 
 def partner_view(request):
@@ -60,9 +57,7 @@ def partner_view(request):
                 'global-health-media-project', 'medical-aid-films', 'zinc-ors']
     partners = Tag.objects.filter(
         category__slug='organisation', slug__in=PARTNERS).order_by('name')
-    return render_to_response('orb/partners.html',
-                              {'partners': partners, },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/partners.html', {'partners': partners})
 
 
 def tag_view(request, tag_slug):
@@ -146,25 +141,15 @@ def tag_cloud_view(request):
     max = tags.aggregate(max=Max('dcount'))
     min = tags.aggregate(min=Min('dcount'))
     diff = max['max'] - min['min']
-    return render_to_response('orb/tag_cloud.html',
-                              {'tags': tags,
-                               'diff': diff
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/tag_cloud.html', {'tags': tags, 'diff': diff})
 
 
 def taxonomy_view(request):
-    return render_to_response('orb/taxonomy.html',
-                              {},
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/taxonomy.html')
 
 
 def resource_permalink_view(request, id):
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
-
+    resource = get_object_or_404(Resource, pk=id)
     return resource_view(request, resource.slug)
 
 
@@ -223,21 +208,21 @@ def resource_view(request, resource_slug):
     else:
         bookmarked = False
 
-    return render_to_response('orb/resource/view.html',
-                              {'resource': resource,
-                               'options_menu': options_menu,
-                               'user_rating': user_rating,
-                               'collections': collections,
-                               'bookmarked': bookmarked},
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/resource/view.html', {
+        'resource': resource,
+        'options_menu': options_menu,
+        'user_rating': user_rating,
+        'collections': collections,
+        'bookmarked': bookmarked,
+    })
 
 
 def resource_create_step1_view(request):
     if request.user.is_anonymous():
-        return render_to_response('orb/login_required.html',
-                                  {'message': _(
-                                      u'You need to be logged in to add a resource.')},
-                                  context_instance=RequestContext(request))
+        return render(request, 'orb/login_required.html', {
+            'message': _(u'You need to be logged in to add a resource.'),
+        })
+
     if request.method == 'POST':
         form = ResourceStep1Form(request.POST, request.FILES, request=request)
         resource_form_set_choices(form)
@@ -272,7 +257,7 @@ def resource_create_step1_view(request):
 
             # see if email needs to be sent
             resource_workflow.send(sender=resource, resource=resource, request=request,
-                                   status=ResourceWorkflowTracker.PENDING_CRT, notes="")
+                                   status=Resource.PENDING_CRT, notes="")
             resource_submitted.send(
                 sender=resource, resource=resource, request=request)
 
@@ -289,23 +274,17 @@ def resource_create_step1_view(request):
         form = ResourceStep1Form(initial=initial, request=request)
         resource_form_set_choices(form)
 
-    return render_to_response('orb/resource/create_step1.html',
-                              {'form': form,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/resource/create_step1.html', {'form': form})
 
 
 def resource_create_step2_view(request, id):
     if request.user.is_anonymous():
-        return render_to_response('orb/login_required.html',
-                                  {'message': _(
-                                      u'You need to be logged in to add a resource.')},
-                                  context_instance=RequestContext(request))
+        # TODO use contrib.messages
+        return render(request, 'orb/login_required.html', {
+            'message': _(u'You need to be logged in to add a resource.'),
+        })
 
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
 
     # check if owner of this resource
     if not resource_can_edit(resource, request.user):
@@ -340,21 +319,17 @@ def resource_create_step2_view(request, id):
     resource_files = ResourceFile.objects.filter(resource=resource)
     resource_urls = ResourceURL.objects.filter(resource=resource)
 
-    return render_to_response('orb/resource/create_step2.html',
-                              {'form': form,
-                               'resource': resource,
-                               'resource_files': resource_files,
-                               'resource_urls': resource_urls,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/resource/create_step2.html', {
+        'form': form,
+        'resource': resource,
+        'resource_files': resource_files,
+        'resource_urls': resource_urls,
+    })
 
 
 def resource_create_file_delete_view(request, id, file_id):
     # check ownership
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
 
@@ -368,10 +343,7 @@ def resource_create_file_delete_view(request, id, file_id):
 
 def resource_create_url_delete_view(request, id, url_id):
     # check ownership
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
 
@@ -385,10 +357,7 @@ def resource_create_url_delete_view(request, id, url_id):
 
 def resource_edit_file_delete_view(request, id, file_id):
     # check ownership
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
 
@@ -402,10 +371,7 @@ def resource_edit_file_delete_view(request, id, file_id):
 
 def resource_edit_url_delete_view(request, id, url_id):
     # check ownership
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
 
@@ -418,16 +384,10 @@ def resource_edit_url_delete_view(request, id, url_id):
 
 
 def resource_create_thanks_view(request, id):
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
-    return render_to_response('orb/resource/create_thanks.html',
-                              {'resource': resource,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/resource/create_thanks.html', {'resource': resource})
 
 
 def resource_guidelines_view(request):
@@ -446,10 +406,7 @@ def resource_guidelines_view(request):
 
         criteria.append(obj)
 
-    return render_to_response('orb/resource/guidelines.html',
-                              {'criteria_categories': criteria,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/resource/guidelines.html', {'criteria_categories': criteria})
 
 
 def resource_approve_view(request, id):
@@ -460,10 +417,8 @@ def resource_approve_view(request, id):
     resource.save()
 
     resource_workflow.send(sender=resource, resource=resource,
-                           request=request, status=ResourceWorkflowTracker.APPROVED, notes="")
-    return render_to_response('orb/resource/status_updated.html',
-                              {'resource': resource, },
-                              context_instance=RequestContext(request))
+                           request=request, status=Resource.APPROVED, notes="")
+    return render(request, 'orb/resource/status_updated.html', {'resource': resource})
 
 
 def resource_reject_view(request, id):
@@ -483,17 +438,17 @@ def resource_reject_view(request, id):
             notes = form.cleaned_data.get("notes")
             criteria = form.cleaned_data.get("criteria")
             resource_workflow.send(sender=resource, resource=resource, request=request,
-                                   status=ResourceWorkflowTracker.REJECTED, notes=notes, criteria=criteria)
+                                   status=Resource.REJECTED, notes=notes, criteria=criteria)
             return HttpResponseRedirect(reverse('orb_resource_reject_sent', args=[resource.id]))
     else:
         form = ResourceRejectForm()
         form.fields['criteria'].choices = [(t.id, t.description) for t in ResourceCriteria.objects.all(
         ).order_by('category_order_by', 'order_by')]
 
-    return render_to_response('orb/resource/reject_form.html',
-                              {'resource': resource,
-                               'form': form},
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/resource/reject_form.html', {
+        'resource': resource,
+        'form': form,
+    })
 
 
 def resource_reject_sent_view(request, id):
@@ -502,9 +457,7 @@ def resource_reject_sent_view(request, id):
 
     resource = Resource.objects.get(pk=id)
 
-    return render_to_response('orb/resource/status_updated.html',
-                              {'resource': resource, },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/resource/status_updated.html', {'resource': resource, })
 
 
 def resource_pending_mep_view(request, id):
@@ -516,47 +469,38 @@ def resource_pending_mep_view(request, id):
     resource.save()
 
     resource_workflow.send(sender=resource, resource=resource, request=request,
-                           status=ResourceWorkflowTracker.PENDING_MEP, notes="")
-    return render_to_response('orb/resource/status_updated.html',
-                              {'resource': resource, },
-                              context_instance=RequestContext(request))
+                           status=Resource.PENDING_MEP, notes="")
+    return render(request, 'orb/resource/status_updated.html', {'resource': resource})
 
 
 def resource_link_view(request, id):
-    try:
-        url = ResourceURL.objects.get(pk=id)
+    url = get_object_or_404(ResourceURL, pk=id)
 
-        if not resource_can_view(url.resource, request.user):
-            raise Http404()
-
-        resource_url_viewed.send(sender=url, resource_url=url, request=request)
-        return HttpResponseRedirect(url.url)
-    except ResourceURL.DoesNotExist:
+    if not resource_can_view(url.resource, request.user):
         raise Http404()
+
+    resource_url_viewed.send(sender=url, resource_url=url, request=request)
+    return HttpResponseRedirect(url.url)
 
 
 def resource_file_view(request, id):
-    try:
-        file = ResourceFile.objects.get(pk=id)
+    file = get_object_or_404(ResourceFile, pk=id)
 
-        if not resource_can_view(file.resource, request.user):
-            raise Http404()
-
-        if os.path.isfile(os.path.join(settings.MEDIA_ROOT, file.file.name)):
-            resource_file_viewed.send(
-                sender=file, resource_file=file, request=request)
-            return HttpResponseRedirect(settings.MEDIA_URL + file.file.name)
-        else:
-            raise Http404()
-    except ResourceFile.DoesNotExist:
+    if not resource_can_view(file.resource, request.user):
         raise Http404()
 
-    return render_to_response('orb/resource/file.html',
-                              context_instance=RequestContext(request))
+    if os.path.isfile(os.path.join(settings.MEDIA_ROOT, file.file.name)):
+        resource_file_viewed.send(
+            sender=file, resource_file=file, request=request)
+        return HttpResponseRedirect(settings.MEDIA_URL + file.file.name)
+    else:
+        raise Http404()
+
+    return render(request, 'orb/resource/file.html')
 
 
 def resource_edit_view(request, resource_id):
-    resource = Resource.objects.get(pk=resource_id)
+    resource = get_object_or_404(Resource, pk=resource_id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
 
@@ -668,23 +612,17 @@ def resource_edit_view(request, resource_id):
         form = ResourceStep1Form(initial=data)
         resource_form_set_choices(form)
 
-    return render_to_response('orb/resource/edit.html',
-                              {'form': form,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/resource/edit.html', {'form': form})
 
 
 def resource_edit_step2_view(request, resource_id):
     if request.user.is_anonymous():
-        return render_to_response('orb/login_required.html',
-                                  {'message': _(
-                                      u'You need to be logged in to add a resource.')},
-                                  context_instance=RequestContext(request))
+        # TODO use contrib.messages
+        return render(request, 'orb/login_required.html', {
+            'message': _(u'You need to be logged in to add a resource.'),
+        })
 
-    try:
-        resource = Resource.objects.get(pk=resource_id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=resource_id)
 
     # check if owner of this resource
     if not resource_can_edit(resource, request.user):
@@ -719,26 +657,19 @@ def resource_edit_step2_view(request, resource_id):
     resource_files = ResourceFile.objects.filter(resource=resource)
     resource_urls = ResourceURL.objects.filter(resource=resource)
 
-    return render_to_response('orb/resource/edit_step2.html',
-                              {'form': form,
-                               'resource': resource,
-                               'resource_files': resource_files,
-                               'resource_urls': resource_urls,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/resource/edit_step2.html', {
+        'form': form,
+        'resource': resource,
+        'resource_files': resource_files,
+        'resource_urls': resource_urls,
+    })
 
 
 def resource_edit_thanks_view(request, id):
-    try:
-        resource = Resource.objects.get(pk=id)
-    except Resource.DoesNotExist:
-        raise Http404()
+    resource = get_object_or_404(Resource, pk=resource_id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
-    return render_to_response('orb/resource/edit_thanks.html',
-                              {'resource': resource,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/resource/edit_thanks.html', {'resource': resource})
 
 
 def search_view(request):
@@ -770,12 +701,12 @@ def search_view(request):
         search.send(sender=search_results, query=search_query,
                     no_results=search_results.count(), request=request, page=page)
 
-    return render_to_response('orb/search.html',
-                              {'form': form,
-                               'query': search_query,
-                               'page': results,
-                               'total_results': paginator.count},
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/search.html', {
+        'form': form,
+        'query': search_query,
+        'page': results,
+        'total_results': paginator.count,
+    })
 
 
 def search_advanced_view(request, tag_id=None):
@@ -799,10 +730,7 @@ def search_advanced_view(request, tag_id=None):
         form = AdvancedSearchForm(initial=data)
         advanced_search_form_set_choices(form)
 
-    return render_to_response('orb/search_advanced.html',
-                              {'form': form,
-                               },
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/search_advanced.html', {'form': form})
 
 
 def search_advanced_results_view(request):
@@ -866,28 +794,25 @@ def search_advanced_results_view(request):
         licenses = None
         paginator = Paginator(resources, settings.ORB_PAGINATOR_DEFAULT)
 
-    return render_to_response('orb/search_advanced_results.html',
-                              {'filter_tags': filter_tags,
-                               'license_tags': licenses,
-                               'q': q,
-                               'page': resources,
-                               'total_results': paginator.count},
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/search_advanced_results.html', {
+        'filter_tags': filter_tags,
+        'license_tags': licenses,
+        'q': q,
+        'page': resources,
+        'total_results': paginator.count,
+    })
 
 
 def tag_link_view(request, id):
-    try:
-        tag = Tag.objects.get(pk=id)
+    tag = get_object_or_404(Tag, pk=id)
 
-        tag_viewed.send(sender=tag, tag=tag, request=request,
-                        data=tag.external_url, type=TagTracker.VIEW_URL)
-        return HttpResponseRedirect(tag.external_url)
-    except Tag.DoesNotExist:
-        raise Http404()
+    tag_viewed.send(sender=tag, tag=tag, request=request,
+                    data=tag.external_url, type=TagTracker.VIEW_URL)
+    return HttpResponseRedirect(tag.external_url)
 
 
 def collection_view(request, collection_slug):
-    collection = Collection.objects.get(
+    collection = get_object_or_404(Collection,
         slug=collection_slug, visibility=Collection.PUBLIC)
 
     data = Resource.objects.filter(collectionresource__collection=collection,
@@ -905,11 +830,11 @@ def collection_view(request, collection_slug):
     except (EmptyPage, InvalidPage):
         resources = paginator.page(paginator.num_pages)
 
-    return render_to_response('orb/collection/view.html',
-                              {'collection': collection,
-                               'page': resources,
-                               'total_results': paginator.count},
-                              context_instance=RequestContext(request))
+    return render(request, 'orb/collection/view.html', {
+        'collection': collection,
+        'page': resources,
+        'total_results': paginator.count,
+    })
 
 # Helper functions
 
@@ -946,8 +871,7 @@ def resource_can_view(resource, user):
     elif ((user.is_staff or
            user == resource.create_user or
            user == resource.update_user) or
-          (user.userprofile and (user.userprofile.crt_member == True or
-                                 user.userprofile.mep_member == True))):
+          (user.userprofile and (user.userprofile.is_reviewer))):
         return True
     else:
         return False
@@ -981,6 +905,7 @@ def resource_add_free_text_tags(request, form, resource, field, slug):
                 ResourceTag(tag=tag, resource=resource,
                             create_user=request.user).save()
             except IntegrityError:
+                # TODO log this
                 pass
 
 

@@ -1,0 +1,3 @@
+{% for role in assignments.items %}
+    <span class="label label-{{ role.1.class }}">{{ role.0 }}: {{ role.1.status }}</span>
+{% endfor %}

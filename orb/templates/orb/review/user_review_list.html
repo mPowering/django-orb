@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load i18n review_tags %}
+
+{% block extra_head_title %}{% trans 'Pending Resources' %}{% endblock extra_head_title %}
+
+{% block content %}
+
+
+    <h2>{% trans 'My Reviews' %}</h2>
+    <h3>{% trans 'Pending Resources' %}</h3>
+    {% if review_assignments %}
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>{% trans 'Assigned' %}</th>
+                    <th>{% trans 'Title' %}</th>
+                    <th>{% trans 'Organisation' %}</th>
+                    <th colspan="2">{% trans 'Options' %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for review in review_assignments %}
+                    <tr>
+                        <td>{{ review.update_date|date }}</td>
+                        <td>{{ review.resource.title }}</td>
+                        <td>
+                            {% for organisation in review.resource.get_organisations %}
+                                {{ organisation.name }}
+
+                            {% endfor %}
+                        </td>
+                        <td>
+                            <a target="_blank"
+                               href="{% url 'orb_resource' review.resource.slug %}" class="preview">{% trans 'Preview' %}</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'orb_resource_review' review.resource.pk review.pk %}">{% trans 'Review' %}</a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+    <p>{% trans 'No resources assigned for your review' %}</p>
+    {% endif %}
+
+    <p><a href="{% url 'orb_pending_resources' %}">See all pending resources for review.</a></p>
+
+{% endblock %}

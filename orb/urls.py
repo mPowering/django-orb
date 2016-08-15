@@ -1,11 +1,10 @@
 # orb/urls.py
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
 from orb.feeds import LatestTagEntries, LatestEntries
 
-urlpatterns = patterns('',
-
+urlpatterns = [
     url(r'^$', 'orb.views.home_view', name="orb_home"),
     url(r'^robots.txt$', TemplateView.as_view(template_name="orb/robots.txt")),
     url(r'^about/$', TemplateView.as_view(template_name="orb/about.html"), name="orb_about"),
@@ -17,7 +16,7 @@ urlpatterns = patterns('',
     url(r'^taxonomy/$', 'orb.views.taxonomy_view', name="orb_taxonomy"),
     url(r'^terms/$', TemplateView.as_view(template_name="orb/terms.html"), name="orb_terms"),
 
-    url(r'^profile/', include('orb.profile.urls')),
+    url(r'^profile/', include('orb.profiles.urls')),
 
     url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', 'orb.views.tag_view', name="orb_tags"),
     url(r'^tag/cloud/$', 'orb.views.tag_cloud_view', name="orb_tag_cloud"),
@@ -61,8 +60,8 @@ urlpatterns = patterns('',
 
     url(r'^resource/rate/', include('orb.rating.urls')),
     url(r'^resource/bookmark/', include('orb.bookmark.urls')),
+    url(r'^review/', include('orb.review.urls')),
     url(r'^viz/', include('orb.viz.urls')),
     url(r'^toolkits/', include('orb.toolkits.urls')),
-
     url(r'^i18n/', include('django.conf.urls.i18n')),
-)
+]

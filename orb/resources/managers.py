@@ -64,6 +64,12 @@ class ResourceManager(models.Manager):
             user = AnonymousUser()
         return approved_queryset(qs, user)
 
+    def pending(self):
+        return self.get_queryset().exclude(
+            models.Q(status="approved") |
+            models.Q(status="rejected")
+        )
+
 
 class ResourceURLManager(models.Manager):
 

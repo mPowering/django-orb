@@ -17,9 +17,19 @@ from .fields import AutoSlugField
 models.signals.post_save.connect(create_api_key, sender=User)
 
 
-class Resource (models.Model):
+class TimestampBase(models.Model):
+    """Base class for adding create and update timestamp fields to models"""
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Resource(TimestampBase):
     REJECTED = 'rejected'
     PENDING_CRT = 'pending_crt'
+    PENDING = PENDING_CRT
     PENDING_MRT = 'pending_mrt'
     APPROVED = 'approved'
     STATUS_TYPES = (
@@ -46,10 +56,8 @@ class Resource (models.Model):
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
     status = models.CharField(
         max_length=50, choices=STATUS_TYPES, default=PENDING_CRT)
-    create_date = models.DateTimeField(auto_now_add=True)
-    create_user = models.ForeignKey(User, related_name='resource_create_user')
-    update_date = models.DateTimeField(auto_now=True)
-    update_user = models.ForeignKey(User, related_name='resource_update_user')
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_create_user')
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_update_user')
     slug = AutoSlugField(populate_from='title', max_length=100, blank=True, null=True)
     study_time_number = models.IntegerField(default=0, null=True, blank=True)
     study_time_unit = models.CharField(
@@ -57,7 +65,8 @@ class Resource (models.Model):
     born_on = models.DateTimeField(blank=True, null=True, default=None)
     attribution = models.TextField(blank=True, null=True, default=None)
 
-    objects = ResourceManager()
+    resources = ResourceManager()
+    objects = resources  # alias
     approved = ApprovedManager()
 
     class Meta:
@@ -67,6 +76,24 @@ class Resource (models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return urlresolvers.reverse('orb_resource', args=[self.slug])
+
+    def approve(self):
+        self.status = self.APPROVED
+        self.content_reviews.all().update(status=self.APPROVED)
+
+    def reject(self):
+        self.status = self.REJECTED
+        self.content_reviews.all().update(status=self.REJECTED)
+
+    def is_pending(self):
+        return self.status not in [self.REJECTED, self.APPROVED]
+
+    def has_assignments(self):
+        """Returns whether there are *any* reivew assignments"""
+        return self.content_reviews.all().exists()
 
     def get_organisations(self):
         return Tag.objects.filter(resourcetag__resource=self, category__slug='organisation')
@@ -100,9 +127,6 @@ class Resource (models.Model):
         tags = Tag.objects.filter(
             resourcetag__resource=self, category__slug='type')
         return tags
-
-    def get_absolute_url(self):
-        return urlresolvers.reverse('orb_resource', args=[self.slug])
 
     def tags(self):
         return Tag.objects.filter(resourcetag__resource=self)
@@ -148,26 +172,16 @@ class Resource (models.Model):
 
 
 class ResourceWorkflowTracker(models.Model):
-    REJECTED = 'rejected'
-    PENDING_CRT = 'pending_crt'
-    PENDING_MEP = 'pending_mep'
-    APPROVED = 'approved'
-    STATUS_TYPES = (
-        (REJECTED, _('Rejected')),
-        (PENDING_CRT, _('Pending CRT')),
-        (PENDING_MEP, _('Pending MEP')),
-        (APPROVED, _('Approved')),
-    )
-    resource = models.ForeignKey(Resource, blank=True, null=True)
     create_date = models.DateTimeField(auto_now_add=True)
-    create_user = models.ForeignKey(User)
+    resource = models.ForeignKey(Resource, blank=True, null=True)
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL)
     status = models.CharField(
-        max_length=50, choices=STATUS_TYPES, default=PENDING_CRT)
+        max_length=50, choices=Resource.STATUS_TYPES, default=Resource.PENDING_CRT)
     notes = models.TextField(blank=True, null=True)
     owner_email_sent = models.BooleanField(default=False, blank=False)
 
 
-class ResourceURL (models.Model):
+class ResourceURL(TimestampBase):
     url = models.URLField(blank=False, null=False, max_length=500)
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
@@ -176,10 +190,8 @@ class ResourceURL (models.Model):
     file_size = models.IntegerField(default=0)
     image = models.ImageField(
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(
         User, related_name='resource_url_create_user')
-    update_date = models.DateTimeField(auto_now=True)
     update_user = models.ForeignKey(
         User, related_name='resource_url_update_user')
 
@@ -189,7 +201,7 @@ class ResourceURL (models.Model):
         return self.url
 
 
-class ResourceFile (models.Model):
+class ResourceFile(TimestampBase):
     file = models.FileField(upload_to='resource/%Y/%m/%d', max_length=200)
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
@@ -197,10 +209,8 @@ class ResourceFile (models.Model):
     order_by = models.IntegerField(default=0)
     image = models.ImageField(
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(
         User, related_name='resource_file_create_user')
-    update_date = models.DateTimeField(auto_now=True)
     update_user = models.ForeignKey(
         User, related_name='resource_file_update_user')
     file_full_text = models.TextField(blank=True, null=True, default=None)
@@ -217,7 +227,7 @@ class ResourceFile (models.Model):
 # ResourceRelationship
 
 
-class ResourceRelationship (models.Model):
+class ResourceRelationship(TimestampBase):
     RELATIONSHIP_TYPES = (
         ('is_translation_of', _('is translation of')),
         ('is_derivative_of', _('is derivative of')),
@@ -230,10 +240,8 @@ class ResourceRelationship (models.Model):
     relationship_type = models.CharField(
         max_length=50, choices=RELATIONSHIP_TYPES)
     description = models.TextField(blank=False, null=False)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(
         User, related_name='resource_relationship_create_user')
-    update_date = models.DateTimeField(auto_now=True)
     update_user = models.ForeignKey(
         User, related_name='resource_relationship_update_user')
 
@@ -252,8 +260,15 @@ class ResourceCriteria(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORIES)
     category_order_by = models.IntegerField(default=0)
 
+    def __unicode__(self):
+        return self.description
 
-class Category (models.Model):
+    class Meta:
+        verbose_name = _("resource criterion")
+        verbose_name_plural = _("resource criteria")
+
+
+class Category(models.Model):
     name = models.CharField(blank=False, null=False, max_length=100)
     top_level = models.BooleanField(null=False, default=False)
     slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
@@ -268,14 +283,12 @@ class Category (models.Model):
         return self.name
 
 
-class Tag (models.Model):
+class Tag(TimestampBase):
     category = models.ForeignKey(Category)
     parent_tag = models.ForeignKey('self', blank=True, null=True, default=None)
     name = models.CharField(blank=False, null=False, max_length=100)
-    create_date = models.DateTimeField(auto_now_add=True)
-    create_user = models.ForeignKey(User, related_name='tag_create_user')
-    update_date = models.DateTimeField(auto_now=True)
-    update_user = models.ForeignKey(User, related_name='tag_update_user')
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_create_user')
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_update_user')
     image = models.ImageField(upload_to='tag/%Y/%m/%d', null=True, blank=True)
     slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
     order_by = models.IntegerField(default=0)
@@ -333,17 +346,17 @@ class TagProperty(models.Model):
 
 
 class TagOwner(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     tag = models.ForeignKey(Tag)
 
     class Meta:
         unique_together = ("user", "tag")
 
 
-class ResourceTag (models.Model):
+class ResourceTag(models.Model):
+    create_date = models.DateTimeField(auto_now_add=True)
     resource = models.ForeignKey(Resource)
     tag = models.ForeignKey(Tag)
-    create_date = models.DateTimeField(auto_now_add=True)
     create_user = models.ForeignKey(
         User, related_name='resourcetag_create_user')
 
@@ -353,7 +366,7 @@ class ResourceTag (models.Model):
         unique_together = ("resource", "tag")
 
 
-class UserProfile (models.Model):
+class UserProfile(TimestampBase):
     AGE_RANGE = (
         ('under_18', _('under 18')),
         ('18_25', _('18-24')),
@@ -388,10 +401,17 @@ class UserProfile (models.Model):
     age_range = models.CharField(
         max_length=50, choices=AGE_RANGE, default='none')
     mailing = models.BooleanField(default=False, blank=False)
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
     crt_member = models.BooleanField(default=False, blank=False)
     mep_member = models.BooleanField(default=False, blank=False)
+    reviewer_role = models.ForeignKey('ReviewerRole', blank=True, null=True)
+
+    class Meta:
+        db_table = "orb_userprofile"
+        verbose_name = _("user profile")
+        verbose_name_plural = _("user profiles")
+
+    def __unicode__(self):
+        return self.user.get_full_name()
 
     def get_twitter_url(self):
         if self.twitter is not None:
@@ -401,7 +421,7 @@ class UserProfile (models.Model):
 
     @property
     def is_reviewer(self):
-        return self.crt_member or self.mep_member
+        return bool(self.reviewer_role)
 
 
 class ResourceTracker(models.Model):
@@ -417,7 +437,7 @@ class ResourceTracker(models.Model):
         (DOWNLOAD, _(u'Download')),
         (CREATE, _(u'Create')),
     )
-    user = models.ForeignKey(User, blank=True, null=True,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
                              default=None, on_delete=models.SET_NULL)
     type = models.CharField(max_length=50, choices=TRACKER_TYPES, default=VIEW)
     resource = models.ForeignKey(
@@ -447,7 +467,7 @@ class SearchTracker(models.Model):
         (SEARCH_API, _(u'search-api')),
         (SEARCH_ADV, _(u'search-adv')),
     )
-    user = models.ForeignKey(User, blank=True, null=True,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
                              default=None, on_delete=models.SET_NULL)
     query = models.TextField(blank=True, null=True, default=None)
     no_results = models.IntegerField(blank=True, null=True, default=0)
@@ -468,7 +488,7 @@ class TagTracker(models.Model):
         (VIEW_API, _(u'View-API')),
         (VIEW_URL, _(u'View-URL')),
     )
-    user = models.ForeignKey(User, blank=True, null=True,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
                              default=None, on_delete=models.SET_NULL)
     type = models.CharField(max_length=50, choices=TRACKER_TYPES, default=VIEW)
     tag = models.ForeignKey(Tag, blank=True, null=True,
@@ -479,17 +499,15 @@ class TagTracker(models.Model):
     extra_data = models.TextField(blank=True, null=True, default=None)
 
 
-class ResourceRating(models.Model):
-    user = models.ForeignKey(User, blank=False, null=False)
+class ResourceRating(TimestampBase):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, null=False)
     resource = models.ForeignKey(Resource, blank=False, null=False)
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
     rating = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)])
     comments = models.TextField(blank=True, null=True, default=None)
 
 
-class Collection(models.Model):
+class Collection(TimestampBase):
     PUBLIC = 'public'
     PRIVATE = 'private'
     VISIBILITY_TYPES = (
@@ -503,8 +521,6 @@ class Collection(models.Model):
     image = models.ImageField(
         upload_to='collection/%Y/%m/%d', null=True, blank=True)
     slug = AutoSlugField(populate_from='title', max_length=255, blank=True, null=True)
-    create_date = models.DateTimeField(auto_now_add=True)
-    update_date = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = _('Collection')
@@ -522,7 +538,7 @@ class Collection(models.Model):
 
 
 class CollectionUser(models.Model):
-    user = models.ForeignKey(User, blank=False, null=False)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False, null=False)
     collection = models.ForeignKey(Collection, blank=False, null=False)
 
     class Meta:
@@ -540,3 +556,24 @@ class CollectionResource(models.Model):
         verbose_name = _('Collection resource')
         verbose_name_plural = _('Collection resources')
         ordering = ('collection', 'order_by', 'resource')
+
+
+class ReviewerRole(models.Model):
+    """
+    Models the different roles a content review might fulfill
+
+    Set up with choices to start with.
+    """
+    ROLE_CHOICES = [
+        ('medical', _('Medical')),
+        ('technical', _('Technical')),
+        ('training', _('Training')),
+    ]
+
+    name = models.CharField(max_length=100, choices=ROLE_CHOICES, unique=True, default='medical')
+
+    roles = models.Manager()
+    objects = roles
+
+    def __unicode__(self):
+        return self.get_name_display()

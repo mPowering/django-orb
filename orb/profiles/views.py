@@ -14,7 +14,7 @@ from django.shortcuts import render
 from django.utils.translation import ugettext as _
 
 from orb.models import UserProfile, Tag, Category, Resource, ResourceRating, Collection
-from orb.profile.forms import LoginForm, RegisterForm, ResetForm, ProfileForm
+from orb.profiles.forms import LoginForm, RegisterForm, ResetForm, ProfileForm
 from orb.emailer import password_reset
 from orb.signals import user_registered
 from tastypie.models import ApiKey

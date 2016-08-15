@@ -8,6 +8,43 @@ from django.utils.translation import ugettext as _
 from orb.models import ResourceCriteria
 
 
+def send_orb_email(
+        from_email=settings.SERVER_EMAIL,
+        template_html=None,
+        template_text=None,
+        subject="",
+        fail_silently=False,
+        recipients=[],
+        **context):
+    """
+    Base email task function
+
+    Args:
+        from_email: from address
+        template_html: path to HTML body template
+        template_text: path to text body template
+        subject: email subject, not including prefex
+        fail_silently: boolean, should send_mail fail silently
+        recipients: a list or iterable of email addresses
+        **context: dictionary providing email template context
+
+    Returns:
+        0 or 1, return value of send_mail
+
+    """
+    email_subject = settings.EMAIL_SUBJECT_PREFIX + subject
+    text_content = render_to_string(template_text, context)
+    html_content = render_to_string(template_html, context)
+    return send_mail(
+        email_subject,
+        text_content,
+        from_email,
+        recipients,
+        fail_silently=fail_silently,
+        html_message=html_content,
+    )
+
+
 def user_welcome(to_user):
     template_html = 'orb/email/welcome.html'
     template_text = 'orb/email/welcome.txt'
@@ -29,8 +66,6 @@ def user_welcome(to_user):
               fail_silently=False,
               html_message=html_content)
 
-    return
-
 
 def password_reset(to_user, new_password):
     template_html = 'orb/email/password_reset.html'
@@ -50,8 +85,6 @@ def password_reset(to_user, new_password):
               [to_user.email],
               fail_silently=False,
               html_message=html_content)
-
-    return
 
 
 def first_resource(to_user, resource):
@@ -77,8 +110,6 @@ def first_resource(to_user, resource):
               fail_silently=False,
               html_message=html_content)
 
-    return
-
 
 def resource_approved(request, to_user, resource):
     template_html = 'orb/email/resource_approved.html'
@@ -103,8 +134,6 @@ def resource_approved(request, to_user, resource):
               [to_user.email],
               fail_silently=False,
               html_message=html_content)
-
-    return
 
 
 def resource_rejected(to_user, resource, criteria, notes):
@@ -133,8 +162,6 @@ def resource_rejected(to_user, resource, criteria, notes):
               fail_silently=False,
               html_message=html_content)
 
-    return
-
 
 def new_resource_submitted(request, resource):
     template_html = 'orb/email/resource_submitted.html'
@@ -160,8 +187,6 @@ def new_resource_submitted(request, resource):
               fail_silently=False,
               html_message=html_content)
 
-    return
-
 
 def link_checker_results(resource_urls, tags):
     template_html = 'orb/email/link_checker_results.html'
@@ -184,5 +209,3 @@ def link_checker_results(resource_urls, tags):
               [email for name, email in settings.ADMINS],
               fail_silently=False,
               html_message=html_content)
-
-    return

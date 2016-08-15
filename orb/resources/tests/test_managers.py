@@ -7,7 +7,7 @@ Tests for ORB resource models
 from django.contrib.auth.models import User, AnonymousUser
 from django.test import TestCase
 
-from orb.models import Resource, ResourceURL, UserProfile
+from orb.models import Resource, ResourceURL, UserProfile, ReviewerRole
 from orb.resources.tests.factory import resource_factory, resource_url_factory
 
 
@@ -24,10 +24,9 @@ class ResourceTests(TestCase):
         cls.user = User.objects.create(username="tester")
         cls.updater = User.objects.create(username="updater")
         cls.staff = User.objects.create(username="staff", is_staff=True)
-        cls.mep_user = User.objects.create(username="mep")
-        UserProfile.objects.create(user=cls.mep_user, mep_member=True)
+        role = ReviewerRole.objects.create(name="Medical")
         cls.crt_user = User.objects.create(username="crt")
-        UserProfile.objects.create(user=cls.crt_user, crt_member=True)
+        UserProfile.objects.create(user=cls.crt_user, crt_member=True, reviewer_role=role)
 
         approved = resource_factory(
             user=cls.user,
@@ -55,6 +54,7 @@ class ResourceTests(TestCase):
     def tearDownClass(cls):
         User.objects.all().delete()
         Resource.objects.all().delete()
+        ReviewerRole.objects.all().delete()
 
     # Tests for the ResourceManager
 
@@ -81,11 +81,7 @@ class ResourceTests(TestCase):
         """Staff should include all resources regardless of status"""
         self.assertEqual(Resource.objects.approved(user=self.staff).count(), 3)
 
-    def test_approved_mep_reviewer(self):
-        """Reviewer should include all resources regardless of status"""
-        self.assertEqual(Resource.objects.approved(user=self.mep_user).count(), 3)
-
-    def test_approved_crt_reviewer(self):
+    def test_approved_reviewer(self):
         """Reviewer should include all resources regardless of status"""
         self.assertEqual(Resource.objects.approved(user=self.crt_user).count(), 3)
 
