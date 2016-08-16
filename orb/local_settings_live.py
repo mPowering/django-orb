@@ -12,7 +12,8 @@ def modify(settings):
                                    'orb.analytics',
                                    'orb.review',
                                    'orb.partners.OnemCHW',
-                                   'django.contrib.humanize')
+                                   'django.contrib.humanize',
+                                   'modeltranslation',)
     settings['MIDDLEWARE_CLASSES'] += ('orb.middleware.SearchFormMiddleware',)
     settings[
         'TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_menu',)
