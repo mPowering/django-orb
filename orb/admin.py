@@ -93,7 +93,7 @@ class TagPropertyAdmin(admin.ModelAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'api_access', 'about', 'job_title', 'organisation')
+    list_display = ('user_name', 'api_access', 'about', 'job_title', 'organisation')
 
 
 @admin.register(TagOwner)

@@ -420,6 +420,10 @@ class UserProfile(TimestampBase):
             return None
 
     @property
+    def user_name(self):
+        return self.user.get_full_name()
+
+    @property
     def is_reviewer(self):
         return bool(self.reviewer_role)
 
