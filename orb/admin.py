@@ -8,6 +8,9 @@ from orb.models import ResourceTracker, SearchTracker, TagOwner, ResourceWorkflo
 
 
 class ReviewerFilter(admin.SimpleListFilter):
+    """
+    List filter for UserProfiles, to filter by reviewer status
+    """
     title = _('is reviewer')
     parameter_name = 'reviewer'
 
@@ -114,6 +117,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user_name', 'api_access', 'about', 'job_title', 'organisation')
     list_filter = (
         ReviewerFilter,
+        'reviewer_role',
     )
 
 
