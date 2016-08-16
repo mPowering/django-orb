@@ -1,9 +1,27 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
 from orb.models import Category, Tag, Resource, ResourceURL, TagProperty
+from orb.models import Collection, CollectionUser, CollectionResource, ReviewerRole
 from orb.models import ResourceFile, ResourceTag, UserProfile, ResourceCriteria
 from orb.models import ResourceTracker, SearchTracker, TagOwner, ResourceWorkflowTracker, ResourceRating
-from orb.models import Collection, CollectionUser, CollectionResource, ReviewerRole
+
+
+class ReviewerFilter(admin.SimpleListFilter):
+    title = _('is reviewer')
+    parameter_name = 'reviewer'
+
+    def lookups(self, request, model_admin):
+        return (
+            ('1', _('Yes')),
+            ('0', _('No')),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == '1':
+            return queryset.reviewers()
+        if self.value() == '0':
+            return queryset.nonreviewers()
 
 
 @admin.register(ReviewerRole)
@@ -94,6 +112,9 @@ class TagPropertyAdmin(admin.ModelAdmin):
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user_name', 'api_access', 'about', 'job_title', 'organisation')
+    list_filter = (
+        ReviewerFilter,
+    )
 
 
 @admin.register(TagOwner)

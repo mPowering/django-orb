@@ -17,6 +17,17 @@ from .fields import AutoSlugField
 models.signals.post_save.connect(create_api_key, sender=User)
 
 
+class ProfilesQueryset(models.QuerySet):
+    """
+    QuerySet class for UserProfiles
+    """
+    def reviewers(self):
+        return self.filter(reviewer_role__isnull=False)
+
+    def nonreviewers(self):
+        return self.filter(reviewer_role__isnull=True)
+
+
 class TimestampBase(models.Model):
     """Base class for adding create and update timestamp fields to models"""
     create_date = models.DateTimeField(auto_now_add=True)
@@ -404,6 +415,9 @@ class UserProfile(TimestampBase):
     crt_member = models.BooleanField(default=False, blank=False)
     mep_member = models.BooleanField(default=False, blank=False)
     reviewer_role = models.ForeignKey('ReviewerRole', blank=True, null=True)
+
+    profiles = ProfilesQueryset.as_manager()
+    objects = profiles
 
     class Meta:
         db_table = "orb_userprofile"
