@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from orb.decorators import reviewer_required
 from orb.models import Resource, ResourceCriteria, ReviewerRole
-from .forms import ReviewForm, RejectionForm, AssignmentForm, StaffReviewForm
+from .forms import ReviewForm, ContentReviewForm, AssignmentForm, StaffReviewForm
 from .models import ContentReview
 
 
@@ -86,7 +86,7 @@ def reject_resource(request, review):
         return redirect("orb_pending_resources")
 
     if request.method == 'POST':
-        form = RejectionForm(request.POST, instance=review)
+        form = ContentReviewForm(request.POST, instance=review)
         if form.is_valid():
             review = form.save(commit=False)
             review.reject()
@@ -94,7 +94,7 @@ def reject_resource(request, review):
             messages.success(request, _(u"Thank you for reviewing this content"))
             return redirect("orb_pending_resources")
     else:
-        form = RejectionForm()
+        form = ContentReviewForm()
     return render(request, "orb/review/reject_form.html", {
         'form': form,
         'resource': review.resource,

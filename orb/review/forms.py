@@ -65,7 +65,7 @@ class StaffReviewForm(forms.Form):
         return messages.SUCCESS, _("The resource has been rejected")
 
 
-class RejectionForm(forms.ModelForm):
+class ContentReviewForm(forms.ModelForm):
     """
     Form class for capturing the explanation for rejecting a submitted resource
     """
@@ -90,7 +90,7 @@ class RejectionForm(forms.ModelForm):
         fields = ('criteria', 'notes')
 
     def __init__(self, *args, **kwargs):
-        super(RejectionForm, self).__init__(*args, **kwargs)
+        super(ContentReviewForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
@@ -104,6 +104,11 @@ class RejectionForm(forms.ModelForm):
                 css_class='col-lg-offset-2 col-lg-8',
             ),
         )
+
+    def save(self, *args, **kwargs):
+        for criterion in self.cleaned_data['criteria']:
+            self.instance.criteria.add(criterion)
+        return super(ContentReviewForm, self).save()
 
 
 class AssignmentForm(forms.Form):
