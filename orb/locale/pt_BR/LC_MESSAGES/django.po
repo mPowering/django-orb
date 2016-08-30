@@ -3,20 +3,19 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-05-18 15:47+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2016-08-30 17:05+0200\n"
+"Last-Translator: Alex Little <alex@alexlittle.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: orb/api/error_codes.py:31
 msgid "You have already uploaded a resource with this title"
@@ -433,7 +432,8 @@ msgstr ""
 msgid "Male"
 msgstr ""
 
-#: orb/models.py:431 orb/models.py:484 orb/templates/orb/analytics/tag.html:105
+#: orb/models.py:431 orb/models.py:484
+#: orb/templates/orb/analytics/tag.html:105
 msgid "View"
 msgstr ""
 
@@ -769,7 +769,8 @@ msgstr ""
 msgid "Country Map"
 msgstr ""
 
-#: orb/templates/includes/header.html:32 orb/templates/orb/toolkits/home.html:4
+#: orb/templates/includes/header.html:32
+#: orb/templates/orb/toolkits/home.html:4
 #: orb/templates/orb/toolkits/home.html:7
 msgid "Toolkits"
 msgstr ""
