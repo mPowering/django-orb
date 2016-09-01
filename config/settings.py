@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'orb.review',
     'orb.analytics',
     'orb.partners.OnemCHW',
+    'modeltranslation_exim',
 ]
 
 
