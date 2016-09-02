@@ -23,10 +23,7 @@ value of 12, and also in the `title` field of the `OtherModel` model for
 primary key 12.
 
 """
-import importlib
-from collections import defaultdict
 
-from django.apps import apps
 from django.core.management.base import BaseCommand
 
 from modeltranslation_exim import DatabaseTranslations
@@ -49,18 +46,5 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        class_and_field = defaultdict(list)
-        for dotted_path in args:
-            module_name, class_name, field_name = dotted_path.rsplit(".", 2)
-
-            module = importlib.import_module(module_name)
-
-            try:
-                model_class = getattr(module, class_name)
-            except AttributeError:
-                model_class = apps.get_model(module_name, class_name)
-
-            class_and_field[model_class].append(field_name)
-
-        exported = DatabaseTranslations(class_and_field)
+        exported = DatabaseTranslations.from_paths(*args)
         exported.save()

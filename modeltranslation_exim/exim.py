@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 import importlib
 import sys
 from collections import defaultdict
@@ -57,6 +58,34 @@ class DatabaseTranslations(object):
 
         for entry in self.get_entries():
             self.po.append(entry)
+
+    @classmethod
+    def from_paths(cls, *args):
+        """
+        Creates a new DatabaseTranslations instance from a sequence of
+        module.Class.field_name paths.
+
+        Args:
+            *args: combined module, class, field name dotted paths
+
+        Returns:
+            a new DatabaseTranslations instance
+
+        """
+        class_and_field = defaultdict(list)
+        for dotted_path in args:
+            module_name, class_name, field_name = dotted_path.rsplit(".", 2)
+
+            module = importlib.import_module(module_name)
+
+            try:
+                model_class = getattr(module, class_name)
+            except AttributeError:
+                model_class = apps.get_model(module_name, class_name)
+
+            class_and_field[model_class].append(field_name)
+
+        return DatabaseTranslations(class_and_field)
 
     def _untranslated(self):
         """
