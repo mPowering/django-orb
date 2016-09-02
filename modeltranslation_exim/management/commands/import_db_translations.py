@@ -29,6 +29,7 @@ from collections import defaultdict
 
 from django.apps import apps
 from django.core.management.base import BaseCommand, CommandError
+from optparse import make_option
 
 from modeltranslation_exim import POTranslations
 
@@ -48,12 +49,24 @@ class Command(BaseCommand):
     only if the model/field names have not been specified in the
     command arguments.
     """
+    help = "Update database translations from specially formatted PO file"
+    args = "<PO file path>"
+
+    option_list = BaseCommand.option_list + (
+        make_option('--language',
+            dest='language',
+            help='Language code for target language, e.g. `pt-br` (required)',),
+    )
 
     def handle(self, *args, **options):
         try:
-            filepath, language = args
+            filepath, = args
         except ValueError:
-            raise CommandError("You must provide the PO file path and language code")
+            raise CommandError("Command takes one required file path argument")
+
+        language = options.get('language')
+        if language is None:
+            raise CommandError("Missing required --language option")
 
         translator = POTranslations(filepath, language, output=self.stdout)
         translator.save()

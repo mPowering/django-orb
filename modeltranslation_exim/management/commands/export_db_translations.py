@@ -44,6 +44,8 @@ class Command(BaseCommand):
     only if the model/field names have not been specified in the
     command arguments.
     """
+    help = "Create a specially formatted PO file (stdout) from database fields"
+    args = "<module.Class.field> <module.Class.field> ... "
 
     def handle(self, *args, **options):
         exported = DatabaseTranslations.from_paths(*args)
