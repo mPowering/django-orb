@@ -24,12 +24,13 @@ primary key 12.
 
 """
 import importlib
+import polib
 from collections import defaultdict
 
 from django.apps import apps
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
 
-from modeltranslation_exim import DatabaseTranslations
+from modeltranslation_exim import POTranslations
 
 
 class Command(BaseCommand):
@@ -49,18 +50,11 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **options):
-        class_and_field = defaultdict(list)
-        for dotted_path in args:
-            module_name, class_name, field_name = dotted_path.rsplit(".", 2)
+        try:
+            filepath, language = args
+        except ValueError:
+            raise CommandError("You must provide the PO file path and language code")
 
-            module = importlib.import_module(module_name)
+        translator = POTranslations(filepath, language, output=self.stdout)
+        translator.save()
 
-            try:
-                model_class = getattr(module, class_name)
-            except AttributeError:
-                model_class = apps.get_model(module_name, class_name)
-
-            class_and_field[model_class].append(field_name)
-
-        exported = DatabaseTranslations(class_and_field)
-        exported.save()
