@@ -28,6 +28,35 @@ from tastypie.throttle import CacheDBThrottle
 from tastypie.utils import trailing_slash
 
 
+class TagBase(object):
+    """
+    Mixin class for orb.Tag resources
+    """
+
+    def obj_get_list(self, bundle, **kwargs):
+        """
+        Get a list of available tags that have associated resources
+
+        Explicitly excludes items from the list that do not have an
+        associated resource. In effect two different base querysets
+        should be employed, 'all' and 'active', for list and detail
+        API views, respectively. A Resource can only have one base
+        queryset however. Further, filter kwargs must refer to
+        *Resource fields* and not to *queryset fields* which precludes
+        sending queryset filter arguments in the **kwargs parameter.
+
+        Args:
+            bundle: the Tastypie data bundle
+            **kwargs: any filtering kwargs
+
+        Returns:
+            A limited Tag queryset
+
+        """
+        return super(TagBase, self).obj_get_list(
+            bundle, **kwargs).exclude(resourcetag__isnull=True)
+
+
 class ResourceResource(ModelResource):
     """
     To get, post and pushing resources
@@ -258,12 +287,12 @@ class ResourceTagResource(ModelResource):
         return bundle
 
 
-class TagResource(ModelResource):
+class TagResource(TagBase, ModelResource):
     url = fields.CharField(readonly=True)
     category = fields.CharField(attribute="category")
 
     class Meta:
-        queryset = Tag.active.all()
+        queryset = Tag.objects.all()
         resource_name = 'tag'
         allowed_methods = ['get', 'post']
         fields = ['id', 'name', 'image']
@@ -344,14 +373,14 @@ class TagResource(ModelResource):
         return bundle
 
 
-class TagsResource(ModelResource):
+class TagsResource(TagBase, ModelResource):
     resources = fields.ToManyField('orb.api.resources.TagsResourceResource',
                                    'resourcetag_set', full=True, null=True, use_in='detail')
     url = fields.CharField(readonly=True)
     category = fields.CharField(attribute="category")
 
     class Meta:
-        queryset = Tag.active.all()
+        queryset = Tag.objects.all()
         resource_name = 'tags'
         allowed_methods = ['get']
         fields = ['id', 'name', 'image']
