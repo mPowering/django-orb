@@ -1,4 +1,4 @@
-.PHONY: deps python-deps test test-django lint database help
+.PHONY: deps python-deps test test-django lint database help docs
 
 ###################################
 ### Dependency building
