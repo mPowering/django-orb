@@ -25,6 +25,11 @@ lint:  ## Run flake8 over app
 makemessages:  ## Make PO messages files
 	./manage.py makemessages -l es -l pt_BR
 
+register-languages:  ## Make migrations for new translated fields, migrate, and update fields
+	./manage.py makemigrations
+	./manage.py migrate
+	./manage.py update_translation_fields
+
 ###################################
 ### Building project components
 
