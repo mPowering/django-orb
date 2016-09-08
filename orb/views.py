@@ -244,13 +244,13 @@ def resource_create_step1_view(request):
 
             # add organisation(s)/geography and other tags
             resource_add_free_text_tags(
-                request, form, resource, 'organisations', 'organisation')
+                resource, form.cleaned_data.get('organisations'), request.user, 'organisation')
             resource_add_free_text_tags(
-                request, form, resource, 'geography', 'geography')
+                resource, form.cleaned_data.get('geography'), request.user, 'geography')
             resource_add_free_text_tags(
-                request, form, resource, 'languages', 'language')
+                resource, form.cleaned_data.get('languages'), request.user, 'language')
             resource_add_free_text_tags(
-                request, form, resource, 'other_tags', 'other')
+                resource, form.cleaned_data.get('other_tags'), request.user, 'other')
 
             # add tags
             resource_add_tags(request, form, resource)
@@ -535,13 +535,13 @@ def resource_edit_view(request, resource_id):
             ResourceTag.objects.filter(resource=resource).delete()
             resource_add_tags(request, form, resource)
             resource_add_free_text_tags(
-                request, form, resource, 'organisations', 'organisation')
+                resource, form.cleaned_data.get('organisations'), request.user, 'organisation')
             resource_add_free_text_tags(
-                request, form, resource, 'geography', 'geography')
+                resource, form.cleaned_data.get('geography'), request.user, 'geography')
             resource_add_free_text_tags(
-                request, form, resource, 'languages', 'language')
+                resource, form.cleaned_data.get('languages'), request.user, 'language')
             resource_add_free_text_tags(
-                request, form, resource, 'other_tags', 'other')
+                resource, form.cleaned_data.get('other_tags'), request.user, 'other')
 
             # All successful - now redirect
             # Redirect after POST
@@ -889,24 +889,32 @@ def resource_can_edit(resource, user):
             return False
 
 
-def resource_add_free_text_tags(request, form, resource, field, slug):
-    free_text_tags = [x.strip()
-                      for x in form.cleaned_data.get(field).split(',')]
-    for ftt in free_text_tags:
-        if ftt != '':
-            try:
-                tag = Tag.objects.get(name=ftt, category__slug=slug)
-            except Tag.DoesNotExist:
-                category = Category.objects.get(slug=slug)
-                tag = Tag(name=ftt, category=category,
-                          create_user=request.user, update_user=request.user)
-                tag.save()
-            try:
-                ResourceTag(tag=tag, resource=resource,
-                            create_user=request.user).save()
-            except IntegrityError:
-                # TODO log this
-                pass
+def resource_add_free_text_tags(resource, tag_text, user, category_slug):
+    """
+    Adds tags to a resource based on free text and category slugs
+
+    Args:
+        resource: a Resource object
+        tag_text: string of text including multiple comma separated tags
+        user: the User object to use for the tags
+        category_slug: the slug of the related Category
+
+    Returns:
+        None
+
+    """
+    free_text_tags = [x.strip() for x in tag_text.split(',') if x.strip()]
+
+    category = Category.objects.get(slug=category_slug)
+
+    for tag_name in free_text_tags:
+        tag, created = Tag.tags.get_or_create(name=tag_name, defaults={
+            'category': category,
+            'create_user': user,
+            'update_user': user,
+        })
+        ResourceTag.objects.get_or_create(
+            tag=tag, resource=resource, defaults={'create_user': user})
 
 
 def resource_add_tags(request, form, resource):
