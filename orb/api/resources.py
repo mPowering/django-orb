@@ -1,31 +1,57 @@
-
 import re
 
-from django.conf import settings
+from django.conf.urls import url
 from django.core.paginator import Paginator, InvalidPage
 from django.core.urlresolvers import reverse
-from django.conf.urls import url
 from django.http.response import Http404
 from django.utils.html import strip_tags
-
 from haystack.query import SearchQuerySet
-
-from orb.api.authorization import ORBResourceAuthorization, ORBAuthorization, ORBResourceTagAuthorization
-from orb.api.error_codes import *
-from orb.api.exceptions import ORBAPIBadRequest
-from orb.api.serializers import PrettyJSONSerializer, ResourceSerializer
-from orb.models import Resource, ResourceFile, ResourceURL, ResourceTag
-from orb.models import User, Tag, Category, ResourceTracker, SearchTracker
-from orb.signals import resource_viewed, search
-from orb.views import resource_can_edit
-
 from tastypie import fields
-from tastypie.constants import ALL
 from tastypie.authentication import ApiKeyAuthentication
+from tastypie.constants import ALL
 from tastypie.exceptions import Unauthorized
 from tastypie.resources import ModelResource
 from tastypie.throttle import CacheDBThrottle
 from tastypie.utils import trailing_slash
+
+from orb.api.authorization import (ORBResourceAuthorization, ORBAuthorization,
+                                   ORBResourceTagAuthorization)
+from orb.api.error_codes import *
+from orb.api.exceptions import ORBAPIBadRequest
+from orb.api.serializers import PrettyJSONSerializer, ResourceSerializer
+from orb.models import (Resource, ResourceFile, ResourceURL, ResourceTag, User,
+                        Tag, Category, ResourceTracker, SearchTracker)
+from orb.signals import resource_viewed, search
+from orb.views import resource_can_edit
+
+
+class TagBase(object):
+    """
+    Mixin class for orb.Tag resources
+    """
+
+    def obj_get_list(self, bundle, **kwargs):
+        """
+        Get a list of available tags that have associated resources
+
+        Explicitly excludes items from the list that do not have an
+        associated resource. In effect two different base querysets
+        should be employed, 'all' and 'active', for list and detail
+        API views, respectively. A Resource can only have one base
+        queryset however. Further, filter kwargs must refer to
+        *Resource fields* and not to *queryset fields* which precludes
+        sending queryset filter arguments in the **kwargs parameter.
+
+        Args:
+            bundle: the Tastypie data bundle
+            **kwargs: any filtering kwargs
+
+        Returns:
+            A limited Tag queryset
+
+        """
+        return super(TagBase, self).obj_get_list(
+            bundle, **kwargs).exclude(resourcetag__isnull=True)
 
 
 class ResourceResource(ModelResource):
@@ -258,12 +284,12 @@ class ResourceTagResource(ModelResource):
         return bundle
 
 
-class TagResource(ModelResource):
+class TagResource(TagBase, ModelResource):
     url = fields.CharField(readonly=True)
     category = fields.CharField(attribute="category")
 
     class Meta:
-        queryset = Tag.active.all()
+        queryset = Tag.objects.all()
         resource_name = 'tag'
         allowed_methods = ['get', 'post']
         fields = ['id', 'name', 'image']
@@ -344,14 +370,14 @@ class TagResource(ModelResource):
         return bundle
 
 
-class TagsResource(ModelResource):
+class TagsResource(TagBase, ModelResource):
     resources = fields.ToManyField('orb.api.resources.TagsResourceResource',
                                    'resourcetag_set', full=True, null=True, use_in='detail')
     url = fields.CharField(readonly=True)
     category = fields.CharField(attribute="category")
 
     class Meta:
-        queryset = Tag.active.all()
+        queryset = Tag.objects.all()
         resource_name = 'tags'
         allowed_methods = ['get']
         fields = ['id', 'name', 'image']
