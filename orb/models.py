@@ -226,12 +226,20 @@ class ResourceFile(TimestampBase):
         User, related_name='resource_file_update_user')
     file_full_text = models.TextField(blank=True, null=True, default=None)
 
+    def __unicode__(self):
+        return self.title or self.file.name
+
     def filename(self):
         return os.path.basename(self.file.name)
 
+    @property
+    def full_path(self):
+        """Returns the complete path to the file"""
+        return os.path.join(settings.MEDIA_ROOT, self.file.name)
+
     def filesize(self):
-        if os.path.isfile(settings.MEDIA_ROOT + self.file.name):
-            return os.path.getsize(settings.MEDIA_ROOT + self.file.name)
+        if os.path.isfile(self.full_path):
+            return os.path.getsize(self.full_path)
         else:
             return 0
 

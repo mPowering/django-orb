@@ -1,4 +1,4 @@
-.PHONY: deps python-deps test test-django lint database help
+.PHONY: deps python-deps test test-django lint database help docs
 
 ###################################
 ### Dependency building
@@ -24,6 +24,11 @@ lint:  ## Run flake8 over app
 ### Language
 makemessages:  ## Make PO messages files
 	./manage.py makemessages -l es -l pt_BR
+
+register-languages:  ## Make migrations for new translated fields, migrate, and update fields
+	./manage.py makemigrations
+	./manage.py migrate
+	./manage.py update_translation_fields
 
 ###################################
 ### Building project components
