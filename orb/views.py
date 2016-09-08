@@ -666,7 +666,7 @@ def resource_edit_step2_view(request, resource_id):
 
 
 def resource_edit_thanks_view(request, id):
-    resource = get_object_or_404(Resource, pk=resource_id)
+    resource = get_object_or_404(Resource, pk=id)
     if not resource_can_edit(resource, request.user):
         raise Http404()
     return render(request, 'orb/resource/edit_thanks.html', {'resource': resource})
