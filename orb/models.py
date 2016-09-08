@@ -139,6 +139,7 @@ class Resource(TimestampBase):
             resourcetag__resource=self, category__slug='type')
         return tags
 
+    # TODO make this an M2M field with a defined through model
     def tags(self):
         return Tag.objects.filter(resourcetag__resource=self)
 
@@ -305,7 +306,7 @@ class Category(models.Model):
 class Tag(TimestampBase):
     category = models.ForeignKey(Category)
     parent_tag = models.ForeignKey('self', blank=True, null=True, default=None)
-    name = models.CharField(blank=False, null=False, max_length=100)
+    name = models.CharField(max_length=100, unique=True)
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_create_user')
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_update_user')
     image = models.ImageField(upload_to='tag/%Y/%m/%d', null=True, blank=True)
@@ -317,7 +318,8 @@ class Tag(TimestampBase):
     summary = models.CharField(blank=True, null=True, max_length=100)
     contact_email = models.CharField(blank=True, null=True, max_length=100)
 
-    objects = models.Manager()
+    tags = models.Manager()
+    objects = tags  # backwards compatability
     active = ActiveTagManager()
 
     class Meta:
