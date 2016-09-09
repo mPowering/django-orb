@@ -1,25 +1,18 @@
 import logging
 
+from crispy_forms.bootstrap import FieldWithButtons
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Div, Field, HTML, Layout, Row, Submit
 from django import forms
 from django.conf import settings
-from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
+from django.core.validators import URLValidator
+from django.template.defaultfilters import filesizeformat
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext as _
-from django.template.defaultfilters import filesizeformat
-
-from crispy_forms.helper import FormHelper
-from crispy_forms.bootstrap import FieldWithButtons
-from crispy_forms.layout import Div
-from crispy_forms.layout import Field
-from crispy_forms.layout import HTML
-from crispy_forms.layout import Layout
-from crispy_forms.layout import Row
-from crispy_forms.layout import Submit
 
 from orb.models import Resource
-
 
 logger = logging.getLogger('orb')
 
