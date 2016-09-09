@@ -92,6 +92,10 @@ class ResourceStep1Form(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        self.user = kwargs.pop('user', None)
+        if self.request and not self.user:
+            self.user = self.request.user
+
         super(ResourceStep1Form, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
