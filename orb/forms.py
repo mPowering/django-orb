@@ -153,7 +153,10 @@ class ResourceStep1Form(forms.Form):
         )
 
     def clean(self):
-        if self.cleaned_data.get("study_time_number") is not None and self.cleaned_data.get("study_time_number") != 0 and self.cleaned_data.get("study_time_unit") is None:
+        time_number = self.cleaned_data.get("study_time_number")
+        time_unit = self.cleaned_data.get("study_time_unit")
+
+        if time_number and not time_unit:
             raise forms.ValidationError(
                 _(u"You have entered a study time, but not selected a unit."))
 

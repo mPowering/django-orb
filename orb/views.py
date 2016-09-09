@@ -395,8 +395,6 @@ def resource_guidelines_view(request):
     criteria = []
 
     for k, v in ResourceCriteria.CATEGORIES:
-        # print k.get_category_display()
-        print v
         obj = {}
         cat = ResourceCriteria.objects.filter(category=k).order_by('order_by')
         obj['category'] = cat[0].get_category_display()
