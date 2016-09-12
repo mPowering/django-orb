@@ -78,10 +78,6 @@ def resource_workflow_callback(sender, **kwargs):
         resource_approved(request, resource.create_user, resource)
         email_sent = True
 
-    # if passed to MEP
-    if status == Resource.PENDING_MEP:
-        pass
-
     # if rejected
     if status == Resource.REJECTED:
         resource_rejected(resource.create_user, resource, criteria, notes)
