@@ -447,7 +447,7 @@ class UserProfile(TimestampBase):
     mailing = models.BooleanField(default=False, blank=False)
     crt_member = models.BooleanField(default=False, blank=False)
     mep_member = models.BooleanField(default=False, blank=False)
-    reviewer_role = models.ForeignKey('ReviewerRole', blank=True, null=True)
+    reviewer_roles = models.ManyToManyField('ReviewerRole', blank=True)
 
     profiles = ProfilesQueryset.as_manager()
     objects = profiles

@@ -122,7 +122,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user_name', 'api_access', 'about', 'job_title', 'organisation')
     list_filter = (
         ReviewerFilter,
-        'reviewer_role',
+        'reviewer_roles',
     )
 
 
