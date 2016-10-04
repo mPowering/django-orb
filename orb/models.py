@@ -6,9 +6,10 @@ from django.core import urlresolvers
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Avg, Count
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
-
 from tastypie.models import create_api_key
+
 from orb.analytics.models import UserLocationVisualization
 from orb.resources.managers import ResourceManager, ResourceURLManager, ApprovedManager
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
@@ -26,6 +27,16 @@ class ProfilesQueryset(models.QuerySet):
 
     def nonreviewers(self):
         return self.filter(reviewer_role__isnull=True)
+
+
+class CriteriaQueryset(models.QuerySet):
+
+    def general(self):
+        return self.filter(role__isnull=True)
+
+    def for_role(self, role):
+        """Returns both general and role specific criteria"""
+        return self.filter(Q(role=role) | Q(role__isnull=True))
 
 
 class TimestampBase(models.Model):
@@ -276,9 +287,21 @@ class ResourceCriteria(models.Model):
         ('text', _('Text based resources')),
     )
     description = models.TextField(blank=False, null=False)
-    order_by = models.IntegerField(default=0)
     category = models.CharField(max_length=50, choices=CATEGORIES)
+    order_by = models.IntegerField(default=0)
     category_order_by = models.IntegerField(default=0)
+    role = models.ForeignKey(
+        'orb.ReviewerRole',
+        related_name="criteria",
+        blank=True, null=True,
+        help_text=_("Used to show specific criteria to reviewers based on their role. "
+                    "Leave blank if criterion applies generally."),
+    )
+
+    def get_role_display(self):
+        """Returns an appropriate label for the admin"""
+        return _("General") if not self.role else self.role.name
+    get_role_display.short_description = "Role"
 
     def __unicode__(self):
         return self.description
