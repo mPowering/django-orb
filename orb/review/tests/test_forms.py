@@ -51,18 +51,15 @@ class AssignmentFormTests(TestCase):
         cls.medical_role, _ = ReviewerRole.objects.get_or_create(name='medical')
         cls.technical_role, _ = ReviewerRole.objects.get_or_create(name='technical')
 
-        cls.profile_one, _ = UserProfile.objects.get_or_create(
-            user=cls.user_one,
-            reviewer_role=cls.medical_role,
-        )
-        cls.profile_two, _ = UserProfile.objects.get_or_create(
-            user=cls.user_two,
-            reviewer_role=cls.technical_role,
-        )
-        cls.profile_three, _ = UserProfile.objects.get_or_create(
-            user=cls.user_three,
-            reviewer_role=cls.technical_role,
-        )
+        cls.profile_one, _ = UserProfile.objects.get_or_create(user=cls.user_one)
+        cls.profile_one.reviewer_roles.add(cls.medical_role)
+
+        cls.profile_two, _ = UserProfile.objects.get_or_create(user=cls.user_two)
+        cls.profile_two.reviewer_roles.add(cls.technical_role)
+
+        cls.profile_three, _ = UserProfile.objects.get_or_create(user=cls.user_three)
+        cls.profile_three.reviewer_roles.add(cls.technical_role)
+
         cls.resource = resource_factory(
             user=cls.user_four,
             title=u"Básica salud del recién nacido",

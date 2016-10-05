@@ -205,16 +205,16 @@ def process_resource_reviews(resource):
     review_status = set(resource.content_reviews.all().values_list('status', flat=True))
 
     if review_status == {Resource.APPROVED}:
-        resource.approve()
-        resource.save()
-        signals.resource_approved.send(sender=resource.__class__, resource=resource)
-        return resource.status
+        #resource.approve()
+        #resource.save()
+        #signals.resource_approved.send(sender=resource.__class__, resource=resource)
+        return Resource.APPROVED
 
     if Resource.PENDING not in review_status:
-        resource.reject()
-        resource.save()
-        signals.resource_rejected.send(sender=resource.__class__, resource=resource)
-        return resource.status
+        #resource.reject()
+        #resource.save()
+        #signals.resource_rejected.send(sender=resource.__class__, resource=resource)
+        return Resource.REJECTED
 
     return resource.status
 

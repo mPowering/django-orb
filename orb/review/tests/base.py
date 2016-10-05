@@ -27,14 +27,10 @@ class ReviewTestCase(TestCase):
         cls.nonreviewer, _ = User.objects.get_or_create(
             username="nonreviewer", email="nonreviewer@acme.org")
 
-        cls.profile_one, _ = UserProfile.objects.get_or_create(
-            user=cls.staff_user,
-            reviewer_role=cls.medical_role,
-        )
-        cls.profile_two, _ = UserProfile.objects.get_or_create(
-            user=cls.reviewer,
-            reviewer_role=cls.technical_role,
-        )
+        cls.profile_one, _ = UserProfile.objects.get_or_create(user=cls.staff_user)
+        cls.profile_one.reviewer_roles.add(cls.medical_role)
+        cls.profile_two, _ = UserProfile.objects.get_or_create(user=cls.reviewer)
+        cls.profile_two.reviewer_roles.add(cls.technical_role)
 
         cls.resource = resource_factory(
             user=cls.nonreviewer,

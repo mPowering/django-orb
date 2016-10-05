@@ -6,12 +6,12 @@ from django.core import urlresolvers
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Avg, Count
-from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 from tastypie.models import create_api_key
 
 from orb.analytics.models import UserLocationVisualization
 from orb.resources.managers import ResourceManager, ResourceURLManager, ApprovedManager
+from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
 from .fields import AutoSlugField
 
@@ -27,16 +27,6 @@ class ProfilesQueryset(models.QuerySet):
 
     def nonreviewers(self):
         return self.filter(reviewer_role__isnull=True)
-
-
-class CriteriaQueryset(models.QuerySet):
-
-    def general(self):
-        return self.filter(role__isnull=True)
-
-    def for_role(self, role):
-        """Returns both general and role specific criteria"""
-        return self.filter(Q(role=role) | Q(role__isnull=True))
 
 
 class TimestampBase(models.Model):
@@ -286,8 +276,8 @@ class ResourceCriteria(models.Model):
         ('audio', _('Audio resources')),
         ('text', _('Text based resources')),
     )
-    description = models.TextField(blank=False, null=False)
-    category = models.CharField(max_length=50, choices=CATEGORIES)
+    description = models.TextField()
+    category = models.CharField(max_length=50, choices=CATEGORIES, null=True, blank=True)
     order_by = models.IntegerField(default=0)
     category_order_by = models.IntegerField(default=0)
     role = models.ForeignKey(
@@ -297,6 +287,9 @@ class ResourceCriteria(models.Model):
         help_text=_("Used to show specific criteria to reviewers based on their role. "
                     "Leave blank if criterion applies generally."),
     )
+
+    criteria = CriteriaQueryset.as_manager()
+    objects = criteria
 
     def get_role_display(self):
         """Returns an appropriate label for the admin"""
@@ -472,7 +465,7 @@ class UserProfile(TimestampBase):
 
     @property
     def is_reviewer(self):
-        return bool(self.reviewer_role)
+        return self.reviewer_roles.exists()
 
 
 class ResourceTracker(models.Model):

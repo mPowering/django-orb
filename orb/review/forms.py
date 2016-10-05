@@ -119,7 +119,7 @@ class AssignmentForm(forms.Form):
         self.resource = kwargs.pop('resource')
         for role in self.roles:
             self.declared_fields[role.name] = forms.ModelChoiceField(
-                queryset=UserProfile.objects.filter(reviewer_role=role),
+                queryset=UserProfile.objects.filter(reviewer_roles=role),
                 required=False,
             )
             self.declared_fields[role.name].initial = self.assignments.get(role.name)
@@ -128,7 +128,7 @@ class AssignmentForm(forms.Form):
 
         for role in self.roles:
             self.fields[role.name] = forms.ModelChoiceField(
-                queryset=UserProfile.objects.filter(reviewer_role=role),
+                queryset=UserProfile.objects.filter(reviewer_roles=role),
                 required=False,
             )
             self.declared_fields[role.name] = self.fields[role.name]
