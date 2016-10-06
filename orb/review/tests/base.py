@@ -42,3 +42,5 @@ class ReviewTestCase(TestCase):
     def tearDownClass(cls):
         super(ReviewTestCase, cls).tearDownClass()
         User.objects.all().delete()
+        ContentReview.objects.all().delete()
+        ReviewerRole.objects.all().delete()

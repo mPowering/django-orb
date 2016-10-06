@@ -71,6 +71,7 @@ class AssignmentFormTests(TestCase):
         super(AssignmentFormTests, cls).tearDownClass()
         get_user_model().objects.all().delete()
         ReviewerRole.objects.all().delete()
+        ContentReview.objects.all().delete()
 
     def test_field_count(self):
         """If no assignments, should have no initial values"""
