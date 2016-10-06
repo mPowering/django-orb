@@ -121,12 +121,6 @@ class ReviewIntegrationTests(ReviewTestCase):
         review.approve()
         review.save()
 
-        # Force refresh from the DB - TestCase attribute will be stale
-        resource = Resource.objects.get(pk=self.resource.pk)
-
-        # Ensure status is changed
-        #self.assertEqual(resource.status, Resource.APPROVED)
-
         # Ensure email is sent to staff
         self.assertEqual(email_count + 1, len(mail.outbox))
 

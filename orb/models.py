@@ -46,8 +46,8 @@ class Resource(TimestampBase):
     APPROVED = 'approved'
     STATUS_TYPES = (
         (REJECTED, _('Rejected')),
-        (PENDING_CRT, _('Pending CRT')),
-        (PENDING_MRT, _('Pending MRT')),
+        (PENDING_CRT, _('Pending')),
+        (PENDING_MRT, _('Pending')),  # TODO data migration for all existin MRT review
         (APPROVED, _('Approved')),
     )
 
