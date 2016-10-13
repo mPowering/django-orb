@@ -3,7 +3,7 @@
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from orb.models import ReviewerRole, UserProfile
+from orb.models import ReviewerRole, UserProfile, ResourceCriteria
 from orb.resources.tests.factory import resource_factory
 from orb.review.models import ContentReview
 
@@ -44,3 +44,4 @@ class ReviewTestCase(TestCase):
         User.objects.all().delete()
         ContentReview.objects.all().delete()
         ReviewerRole.objects.all().delete()
+        ResourceCriteria.objects.all().delete()

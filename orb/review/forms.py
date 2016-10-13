@@ -2,6 +2,8 @@
 Forms for resources - primarily for content review
 """
 
+import logging
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit, HTML
 from django import forms
@@ -14,6 +16,9 @@ from django.utils.translation import ugettext as _
 from orb.models import Resource, ResourceCriteria, ReviewerRole
 from orb.models import UserProfile
 from .models import ContentReview
+
+
+logger = logging.getLogger(__name__)
 
 
 class ReviewForm(forms.Form):
@@ -69,6 +74,7 @@ class ContentReviewForm(forms.ModelForm):
     """
     Form class for capturing the explanation for rejecting a submitted resource
     """
+    approved = forms.BooleanField(required=False)
     criteria = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
         queryset=ResourceCriteria.objects.all().order_by('category_order_by', 'order_by'),
@@ -76,9 +82,9 @@ class ContentReviewForm(forms.ModelForm):
     )
     notes = forms.CharField(
         widget=forms.Textarea,
-        required=True,
+        required=False,
         error_messages={'required': _(
-            'Please enter a reason as to why the resource has been rejected')},
+            'Please enter a reason as to why the resource has been rejected.')},
         help_text=_(
             'The text you enter here will be included in the email to the submitter of the '
             'resource, so please bear this in mind when explaining your reasoning.'),
@@ -89,13 +95,57 @@ class ContentReviewForm(forms.ModelForm):
         model = ContentReview
         fields = ('criteria', 'notes')
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user=None, *args, **kwargs):
+        self.user = user
         super(ContentReviewForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-2'
-        self.helper.field_class = 'col-lg-8'
-        self.helper.layout = Layout(
+        self.fields['criteria'].queryset = self.get_criteria()
+        self.helper = self.form_helper()
+
+    def clean(self):
+        data = self.cleaned_data
+
+        if data.get('approved'):
+            selected_criteria = data.get('criteria').values_list('pk', flat=True)
+            given_criteria = self.fields['criteria'].queryset.values_list('pk', flat=True)
+
+            if list(selected_criteria) != list(given_criteria):
+                raise forms.ValidationError(_("All criteria must be met before resource can be approved."))
+
+        else:
+            if not data.get('notes'):
+                raise forms.ValidationError(
+                    _('Please enter a reason as to why the resource has been rejected. {}'.format(data.get('approved'))))
+
+        return data
+
+    def _clean_criteria(self):
+        data = self.cleaned_data
+
+        if not data.get('approved'):
+            return data.get('criteria')
+
+        selected_criteria = data.get('criteria').values_list('pk', flat=True)
+        given_criteria = self.fields['criteria'].values_list('pk', flat=True)
+
+        if selected_criteria != given_criteria:
+            raise forms.ValidationError(_("All criteria must be met before resource can be approved."))
+
+        return data.get('criteria')
+
+    def get_criteria(self):
+        try:
+            roles = self.user.userprofile.reviewer_roles.all()
+        except AttributeError:
+            logger.warning("{} has no profile, showing all resource criteria".format(self.user))
+            return ResourceCriteria.criteria.all()
+        return ResourceCriteria.criteria.for_roles(*roles)
+
+    def form_helper(self):
+        helper = FormHelper()
+        helper.form_class = 'form-horizontal'
+        helper.label_class = 'col-lg-2'
+        helper.field_class = 'col-lg-8'
+        helper.layout = Layout(
             'criteria',
             'notes',
             Div(
@@ -104,6 +154,7 @@ class ContentReviewForm(forms.ModelForm):
                 css_class='col-lg-offset-2 col-lg-8',
             ),
         )
+        return helper
 
     def save(self, *args, **kwargs):
         for criterion in self.cleaned_data['criteria']:

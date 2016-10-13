@@ -8,5 +8,9 @@ class CriteriaQueryset(models.QuerySet):
         return self.filter(role__isnull=True)
 
     def for_role(self, role):
-        """Returns both general and role specific criteria"""
+        """Returns both general and role specific criteria for one role"""
         return self.filter(Q(role=role) | Q(role__isnull=True))
+
+    def for_roles(self, *roles):
+        """Returns both general and role specific criteria for multiple roles"""
+        return self.filter(Q(role__in=roles) | Q(role__isnull=True))

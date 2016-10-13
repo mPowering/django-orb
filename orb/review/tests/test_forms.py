@@ -3,38 +3,84 @@
 """
 Tests for ORB resource forms
 """
+import unittest
 
-from django.test import TestCase
 from django.contrib.auth import get_user_model
-from orb.review.forms import ReviewForm
+from django.test import TestCase
+
+from orb.models import Resource, ResourceCriteria
 from orb.models import UserProfile, ReviewerRole
-
-from orb.models import Resource
 from orb.resources.tests.factory import resource_factory
-from orb.review.forms import AssignmentForm
+from orb.review.forms import AssignmentForm, ContentReviewForm
 from orb.review.models import ContentReview
+from .base import ReviewTestCase
 
 
-class ReviewFormTests(TestCase):
+class ReviewFormTests(ReviewTestCase):
     """
     Tests for the reviewer's review entry form
     """
-    def test_accept_form(self):
-        """Form should not require reason if resource approved"""
-        form = ReviewForm(data={'approved': True})
-        self.assertTrue(form.is_valid())
 
-    def test_reject_no_reason(self):
+    @classmethod
+    def setUpClass(cls):
+        """
+        cls.staff_user - medical
+        cls.reviewer - technical
+
+        """
+        super(ReviewFormTests, cls).setUpClass()
+        cls.criteria_1 = ResourceCriteria.objects.create(description="A", role=cls.medical_role)
+        cls.criteria_2 = ResourceCriteria.objects.create(description="B", role=cls.medical_role)
+        cls.criteria_3 = ResourceCriteria.objects.create(description="C", role=cls.technical_role)
+        cls.criteria_4 = ResourceCriteria.objects.create(description="D", role=cls.technical_role)
+        cls.criteria_5 = ResourceCriteria.objects.create(description="E")
+        cls.criteria_6 = ResourceCriteria.objects.create(description="F")
+
+    def test_displayed_criteria(self):
+        """Criteria should be based on user role"""
+        form = ContentReviewForm(user=self.staff_user)
+        self.assertEqual(
+            list(form.fields['criteria'].queryset),
+            [self.criteria_1, self.criteria_2, self.criteria_5, self.criteria_6],
+        )
+
+    def test_reject_without_reason(self):
         """Form should require reason if resource rejected"""
-        form = ReviewForm(data={'approved': False})
+        form = ContentReviewForm(data={'approved': False}, user=self.staff_user)
         self.assertFalse(form.is_valid())
-        form = ReviewForm(data={'approved': False, 'reason': ''})
+
+        form = ContentReviewForm(data={'approved': False, 'notes': ''}, user=self.staff_user)
         self.assertFalse(form.is_valid())
 
     def test_reject_with_reason(self):
         """Form should require reason if resource rejected"""
-        form = ReviewForm(data={'approved': False, 'reason': u"¡Olé!"})
+        form = ContentReviewForm(data={'approved': False, 'notes': 'Bad content!'}, user=self.staff_user)
         self.assertTrue(form.is_valid())
+
+    def test_reject_with_all_criteria(self):
+        """It should be possible to reject with all criteria selected"""
+        form = ContentReviewForm(data={
+            'approved': False,
+            'notes': 'Bad content!',
+            'criteria': [self.criteria_1.pk, self.criteria_2.pk, self.criteria_5.pk, self.criteria_6.pk],
+        }, user=self.staff_user)
+        self.assertTrue(form.is_valid())
+
+    def test_approve_with_all_criteria(self):
+        """Approval should be valid if all criteria are selected"""
+        form = ContentReviewForm(data={
+            'approved': True,
+            'criteria': [self.criteria_1.pk, self.criteria_2.pk, self.criteria_5.pk, self.criteria_6.pk],
+        }, user=self.staff_user)
+        self.assertTrue(form.is_valid())
+
+    def test_approve_missing_criteria(self):
+        """Approval should not be valid if not all criteria are selected"""
+        form = ContentReviewForm(data={
+            'approved': True,
+            'criteria': [self.criteria_2.pk, self.criteria_5.pk, self.criteria_6.pk],
+        }, user=self.staff_user)
+        self.assertFalse(form.is_valid())
 
 
 class AssignmentFormTests(TestCase):

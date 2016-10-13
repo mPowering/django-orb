@@ -132,3 +132,9 @@ class ReviewCriteriaQuerysetTests(TestCase):
             [self.resource_1, self.resource_2, self.resource_4],
             list(ResourceCriteria.criteria.for_role(self.role_a)),
         )
+
+    def test_for_roles(self):
+        self.assertEqual(
+            [self.resource_1, self.resource_2, self.resource_4],
+            list(ResourceCriteria.criteria.for_roles(self.role_a)),
+        )
