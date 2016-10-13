@@ -21,6 +21,13 @@ from .models import ContentReview
 logger = logging.getLogger(__name__)
 
 
+class FormErrors(object):
+    """Consolidates form error string literals"""
+    MISSING_REASON = _("Please provide a reason for rejecting this content.")
+    ASSIGN_COMPLETED_REIVEW = _("Cannot reassign a completed review.")
+    ALL_CRITERIA = _("All criteria must be met before resource can be approved.")
+
+
 class ReviewForm(forms.Form):
     """
     Form for allowing a reviewer to enter a resource review
@@ -42,7 +49,7 @@ class ReviewForm(forms.Form):
     def clean(self):
         data = self.cleaned_data
         if not data.get('approved') and not data.get('reason'):
-            raise forms.ValidationError(_("Please provide a reason for rejecting this content."))
+            raise forms.ValidationError(FormErrors.MISSING_REASON)
         return data
 
 
@@ -73,6 +80,9 @@ class StaffReviewForm(forms.Form):
 class ContentReviewForm(forms.ModelForm):
     """
     Form class for capturing the explanation for rejecting a submitted resource
+
+    This form is used for capturing review feedback which is then used
+    by a staff member for final approval.
     """
     approved = forms.BooleanField(required=False)
     criteria = forms.ModelMultipleChoiceField(
@@ -83,8 +93,7 @@ class ContentReviewForm(forms.ModelForm):
     notes = forms.CharField(
         widget=forms.Textarea,
         required=False,
-        error_messages={'required': _(
-            'Please enter a reason as to why the resource has been rejected.')},
+        error_messages={'required': FormErrors.MISSING_REASON},
         help_text=_(
             'The text you enter here will be included in the email to the submitter of the '
             'resource, so please bear this in mind when explaining your reasoning.'),
@@ -109,28 +118,13 @@ class ContentReviewForm(forms.ModelForm):
             given_criteria = self.fields['criteria'].queryset.values_list('pk', flat=True)
 
             if list(selected_criteria) != list(given_criteria):
-                raise forms.ValidationError(_("All criteria must be met before resource can be approved."))
+                raise forms.ValidationError(FormErrors.ALL_CRITERIA)
 
         else:
             if not data.get('notes'):
-                raise forms.ValidationError(
-                    _('Please enter a reason as to why the resource has been rejected. {}'.format(data.get('approved'))))
+                raise forms.ValidationError(FormErrors.MISSING_REASON)
 
         return data
-
-    def _clean_criteria(self):
-        data = self.cleaned_data
-
-        if not data.get('approved'):
-            return data.get('criteria')
-
-        selected_criteria = data.get('criteria').values_list('pk', flat=True)
-        given_criteria = self.fields['criteria'].values_list('pk', flat=True)
-
-        if selected_criteria != given_criteria:
-            raise forms.ValidationError(_("All criteria must be met before resource can be approved."))
-
-        return data.get('criteria')
 
     def get_criteria(self):
         try:
@@ -229,7 +223,7 @@ class AssignmentForm(forms.Form):
         complete_reviews = self.resource.content_reviews.complete()
         for review in complete_reviews:
             if data[review.role.name] != review.reviewer.userprofile:
-                self.add_error(review.role.name, _("Cannot reassign a completed review."))
+                self.add_error(review.role.name, FormErrors.ASSIGN_COMPLETED_REIVEW)
         return data
 
     def save(self):

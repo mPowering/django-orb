@@ -10,23 +10,13 @@ from django.utils.translation import ugettext_lazy as _
 from tastypie.models import create_api_key
 
 from orb.analytics.models import UserLocationVisualization
+from orb.profiles.querysets import ProfilesQueryset
 from orb.resources.managers import ResourceManager, ResourceURLManager, ApprovedManager
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
 from .fields import AutoSlugField
 
 models.signals.post_save.connect(create_api_key, sender=User)
-
-
-class ProfilesQueryset(models.QuerySet):
-    """
-    QuerySet class for UserProfiles
-    """
-    def reviewers(self):
-        return self.filter(reviewer_role__isnull=False)
-
-    def nonreviewers(self):
-        return self.filter(reviewer_role__isnull=True)
 
 
 class TimestampBase(models.Model):
