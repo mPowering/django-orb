@@ -9,9 +9,9 @@ from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from orb.decorators import reviewer_required
+from orb.review.decorators import reviewer_required
 from orb.models import Resource, ResourceCriteria, ReviewerRole
-from .forms import ReviewForm, ContentReviewForm, AssignmentForm, StaffReviewForm
+from .forms import ReviewForm, ContentReviewForm, AssignmentForm, StaffReviewForm, ReviewStartForm
 from .models import ContentReview
 
 
@@ -221,7 +221,7 @@ def staff_review(request, resource_id):
     })
 
 
-@reviewer_required
+@reviewer_required(include_staff=False)
 def start_assignment(request, resource_id):
     """
     View function that allows a user to assign themselves to review a resource
@@ -237,18 +237,16 @@ def start_assignment(request, resource_id):
     """
     resource = get_object_or_404(Resource, pk=resource_id)
     if request.method == 'POST':
-        try:
-            review = ContentReview.reviews.create(
-                resource=resource,
-                role=request.user.userprofile.reviewer_role,
-                reviewer=request.user,
-            )
-        except IntegrityError:
-            messages.error(request, _("There was an error starting the review."))
-            return redirect("orb_pending_resources")
-        return redirect(review.get_absolute_url())
+        form = ReviewStartForm(data=request.POST, resource=resource, reviewer=request.user)
+        if form.is_valid():
+            review = form.save()
+            return redirect(review.get_absolute_url())
+        messages.error(request, _("There was an error starting the review."))
+        return redirect("orb_pending_resources")
 
     return render(request, "orb/review/start_review.html", {
         'resource': resource,
-        'role': request.user.userprofile.reviewer_role,
+        'roles': ReviewerRole.objects.filter(
+            profiles__user=request.user,
+        ).exclude(reviews__in=resource.content_reviews.all()),
     })

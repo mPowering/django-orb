@@ -77,6 +77,32 @@ class StaffReviewForm(forms.Form):
         return messages.SUCCESS, _("The resource has been rejected")
 
 
+class ReviewStartForm(forms.ModelForm):
+    """
+    Form class for validating a user starting a review on a resource.
+
+    Takes a resource, a user, and then validates that the role selected
+    belongs to the user and that it is available for a reivew.
+    """
+    class Meta:
+        model = ContentReview
+        fields = ['role']
+
+    def __init__(self, *args, **kwargs):
+        self.resource = kwargs.pop('resource')
+        self.reviewer = kwargs.pop('reviewer')
+        super(ReviewStartForm, self).__init__(*args, **kwargs)
+        self.fields['role'].queryset = ReviewerRole.objects.filter(
+            profiles__user=self.reviewer).exclude(reviews__in=self.resource.content_reviews.all())
+
+    def save(self):
+        instance = super(ReviewStartForm, self).save(commit=False)
+        instance.resource = self.resource
+        instance.reviewer = self.reviewer
+        instance.save()
+        return instance
+
+
 class ContentReviewForm(forms.ModelForm):
     """
     Form class for capturing the explanation for rejecting a submitted resource

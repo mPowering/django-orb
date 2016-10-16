@@ -20,27 +20,6 @@ def staff_test(user):
     raise PermissionDenied
 
 
-def content_reviewer(user):
-    """
-    Tests that user is content reviewer (or superuser)
-
-    Args:
-        user: the User object
-
-    Returns:
-        Boolean
-
-    Raises:
-        PermissionDenied
-
-    """
-    if not user.is_authenticated():
-        return False
-    if user.is_active and (user.userprofile.is_reviewer or user.is_staff):
-        return True
-    raise PermissionDenied
-
-
 def staff_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None):
     """
     Decorator for views that checks that the user is logged in and a staff member.
@@ -57,20 +36,3 @@ def staff_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login
     if function:
         return actual_decorator(function)
     return actual_decorator
-
-
-def reviewer_required(function=None, redirect_field_name=REDIRECT_FIELD_NAME, login_url=None):
-    """
-    Decorator for views that checks that the user is logged in and either a
-    staff member or a content reviewer.
-    """
-    actual_decorator = user_passes_test(
-        lambda u: content_reviewer(u),
-        login_url=login_url,
-        redirect_field_name=redirect_field_name
-    )
-    if function:
-        return actual_decorator(function)
-    return actual_decorator
-
-

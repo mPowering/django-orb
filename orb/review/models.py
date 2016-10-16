@@ -109,7 +109,6 @@ class ContentReview(TimestampBase):
         verbose_name = _("content review")
         verbose_name_plural = _("content reviews")
         unique_together = (
-            ('resource', 'reviewer'),
             ('resource', 'role'),
         )
 

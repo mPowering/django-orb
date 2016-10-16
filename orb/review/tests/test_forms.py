@@ -11,7 +11,7 @@ from django.test import TestCase
 from orb.models import Resource, ResourceCriteria
 from orb.models import UserProfile, ReviewerRole
 from orb.resources.tests.factory import resource_factory
-from orb.review.forms import AssignmentForm, ContentReviewForm
+from orb.review.forms import AssignmentForm, ContentReviewForm, ReviewStartForm
 from orb.review.models import ContentReview
 from .base import ReviewTestCase
 
@@ -35,6 +35,10 @@ class ReviewFormTests(ReviewTestCase):
         cls.criteria_4 = ResourceCriteria.objects.create(description="D", role=cls.technical_role)
         cls.criteria_5 = ResourceCriteria.objects.create(description="E")
         cls.criteria_6 = ResourceCriteria.objects.create(description="F")
+
+    @classmethod
+    def tearDownClass(cls):
+        super(ReviewFormTests, cls).tearDownClass()
 
     def test_displayed_criteria(self):
         """Criteria should be based on user role"""
@@ -170,3 +174,59 @@ class AssignmentFormTests(TestCase):
         form.save()
         self.assertEqual(count + 1, ContentReview.reviews.all().count())
         ContentReview.reviews.all().delete()
+
+
+class StartFormTests(ReviewTestCase):
+    """
+    The ReviewStartForm takes a resource, a user, and then validates
+    that the role selected belongs to the user and that it is
+    available for a reivew.
+    """
+    def test_non_reviewer(self):
+        form = ReviewStartForm(data={
+            'role': self.technical_role.pk,
+        }, resource=self.resource, reviewer=self.nonreviewer)
+        self.assertFalse(form.is_valid())
+
+    def test_reviewer_wrong_role(self):
+        form = ReviewStartForm(data={
+            'role': self.technical_role.pk,
+        }, resource=self.resource, reviewer=self.staff_user)
+        self.assertFalse(form.is_valid())
+
+    def test_reviewer_matching_role(self):
+        form = ReviewStartForm(data={
+            'role': self.technical_role.pk,
+        }, resource=self.resource, reviewer=self.reviewer)
+        self.assertTrue(form.is_valid())
+
+    def test_existing_assignment(self):
+        ContentReview.objects.create(
+            reviewer=self.reviewer,
+            resource=self.resource,
+            role=self.technical_role,
+        )
+        form = ReviewStartForm(data={
+            'role': self.technical_role.pk,
+        }, resource=self.resource, reviewer=self.reviewer)
+        self.assertFalse(form.is_valid())
+
+    def test_create_additional_review(self):
+        """If"""
+        ContentReview.objects.create(
+            reviewer=self.staff_user,
+            resource=self.resource,
+            role=self.medical_role,
+        )
+        form = ReviewStartForm(data={
+            'role': self.technical_role.pk,
+        }, resource=self.resource, reviewer=self.reviewer)
+        self.assertTrue(form.is_valid())
+
+    def test_create_content_review(self):
+        form = ReviewStartForm(data={
+            'role': self.medical_role.pk,
+        }, resource=self.resource, reviewer=self.staff_user)
+        self.assertTrue(form.is_valid())
+        self.assertTrue(form.save())
+
