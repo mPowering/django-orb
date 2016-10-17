@@ -207,13 +207,13 @@ def staff_review(request, resource_id):
     """
     resource = get_object_or_404(Resource, pk=resource_id)
     if request.method == 'POST':
-        form = StaffReviewForm(resource=resource, data=request.POST)
+        form = StaffReviewForm(data=request.POST, resource=resource, user=request.user)
         if form.is_valid():
             message_level, message = form.save()
             messages.add_message(request, message_level, message)
             return redirect("orb_pending_resources")
     else:
-        form = StaffReviewForm(resource=resource)
+        form = StaffReviewForm(resource=resource, user=request.user)
     return render(request, "orb/review/staff_review.html", {
         'resource': resource,
         'form': form,

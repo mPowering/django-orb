@@ -14,8 +14,8 @@ from django.forms import inlineformset_factory
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _
 
-from orb.models import Resource, ResourceCriteria, ReviewerRole
-from orb.models import UserProfile
+from orb.models import (Resource, ResourceCriteria, ReviewerRole,
+                        ResourceWorkflowTracker, UserProfile)
 from .models import ContentReview
 
 
@@ -54,28 +54,77 @@ class ReviewForm(forms.Form):
         return data
 
 
-class StaffReviewForm(forms.Form):
+class StaffReviewForm(forms.ModelForm):
     """
-    Form for allowing a staff user to quickly approve or reject content
+    Form for allowing a staff user to approve or reject content
     """
     approved = forms.BooleanField(required=False)
 
-    def __init__(self, resource=None, *args, **kwargs):
-        self.resource = resource
+    class Meta:
+        model = ResourceWorkflowTracker
+        fields = ['notes']
+
+    def __init__(self, *args, **kwargs):
+        self.resource = kwargs.pop('resource')
+        self.user = kwargs.pop('user')
         super(StaffReviewForm, self).__init__(*args, **kwargs)
+        self.helper = self.form_helper()
+
+    def clean(self):
+        data = self.cleaned_data
+        if not data.get('approved') and not data.get('notes'):
+            raise forms.ValidationError(FormErrors.MISSING_REASON)
+        return data
 
     def save(self):
         """
         Handles logic of either approving or rejecting the resource
         """
         approved = self.cleaned_data['approved']
+
+        instance = super(StaffReviewForm, self).save(commit=False)
+        instance.create_user = self.user
+        instance.resource = self.resource
+
+        # TODO the following should be re-encapsulated in the review app workflow
+
         if approved:
+            instance.status = Resource.APPROVED
+            instance.save()
             self.resource.approve()
             self.resource.save()
             return messages.SUCCESS, _("The resource has been approved")
+
+        instance.status = Resource.REJECTED
+        instance.save()
         self.resource.reject()
         self.resource.save()
         return messages.SUCCESS, _("The resource has been rejected")
+
+    def form_helper(self):
+        helper = FormHelper()
+        helper.form_class = 'form-horizontal'
+        helper.label_class = 'col-lg-2'
+        helper.field_class = 'col-lg-8'
+        helper.layout = Layout(
+            'notes',
+            Row(HTML('<hr>')),
+            Div(
+                StrictButton(_(u'Approve'), name='approved', value=1, type="submit",
+                       css_class='btn btn-success'),
+                StrictButton(_(u'Reject'), name='approved', type="submit",
+                       css_class='btn btn-warning'),
+
+                HTML(
+                    "<a class='btn btn-danger' href='{}'>{}</a>".format(
+                        reverse('orb_delete_resource', kwargs={'resource_id': self.resource.pk}),
+                        _('Delete'),
+                    )
+                ),
+                css_class='col-lg-offset-2 col-lg-8',
+            ),
+        )
+        return helper
 
 
 class ReviewStartForm(forms.ModelForm):

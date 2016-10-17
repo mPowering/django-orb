@@ -179,7 +179,7 @@ class ResourceWorkflowTracker(models.Model):
     resource = models.ForeignKey(Resource, blank=True, null=True)
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL)
     status = models.CharField(
-        max_length=50, choices=Resource.STATUS_TYPES, default=Resource.PENDING_CRT)
+        max_length=50, choices=Resource.STATUS_TYPES, default=Resource.PENDING)
     notes = models.TextField(blank=True, null=True)
     owner_email_sent = models.BooleanField(default=False, blank=False)
 

@@ -11,7 +11,7 @@ from django.test import TestCase
 from orb.models import Resource, ResourceCriteria
 from orb.models import UserProfile, ReviewerRole
 from orb.resources.tests.factory import resource_factory
-from orb.review.forms import AssignmentForm, ContentReviewForm, ReviewStartForm
+from orb.review.forms import AssignmentForm, ContentReviewForm, ReviewStartForm, StaffReviewForm
 from orb.review.models import ContentReview
 from .base import ReviewTestCase
 
@@ -230,3 +230,11 @@ class StartFormTests(ReviewTestCase):
         self.assertTrue(form.is_valid())
         self.assertTrue(form.save())
 
+
+class StaffReviewFormTests(ReviewTestCase):
+
+    def test_rejection_no_notes(self):
+        form = StaffReviewForm(data={
+            'approved': False,
+        }, resource=self.resource, user=self.staff_user)
+        self.assertFalse(form.is_valid())

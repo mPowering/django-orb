@@ -16,9 +16,7 @@
 </div>
 
 <form method="POST" action=".">{% csrf_token %}
-<button class="btn btn-success" name="approved" value="1">{% trans 'Approve' %}</button>
-<button class="btn btn-warning" name="approved">{% trans 'Reject' %}</button>
-<a class="btn btn-danger" href="{% url 'orb_delete_resource' resource.pk %}">{% trans 'Delete' %}</a>
+    {% crispy form %}
 </form>
 
 {% endblock %}
