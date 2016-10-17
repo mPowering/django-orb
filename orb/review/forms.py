@@ -4,12 +4,12 @@ Forms for resources - primarily for content review
 
 import logging
 
+from crispy_forms.bootstrap import StrictButton
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit, HTML, Row
-from crispy_forms.bootstrap import StrictButton
 from django import forms
-from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.forms import inlineformset_factory
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext as _

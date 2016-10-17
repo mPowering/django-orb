@@ -3,20 +3,60 @@
 {% block extra_head_title %}{% trans 'Content Review' %}{% endblock extra_head_title %}
 {% block content %}
 
-<h2>{% trans 'Staff Content Review' %}</h2>
+    <h2>{% trans 'Staff Content Review' %}</h2>
 
-<h3>{{ resource.title }} (<a href="{% url 'orb_resource' resource.slug %}"
-                                    target="_blank" class="preview">{% trans 'Preview' %}</a>)</h3>
+    <h3>{{ resource.title }} (<a href="{% url 'orb_resource' resource.slug %}"
+                                 target="_blank" class="preview">{% trans 'Preview' %}</a>)</h3>
 
-<div class="well">
-<p>{% trans 'Consider the following criteria in your review.' %}</p>
-{% for criterion in criteria %}
-<li>{{ criterion }}</li>
-{% endfor %}
-</div>
+    {% if resource.is_pending %}
 
-<form method="POST" action=".">{% csrf_token %}
-    {% crispy form %}
-</form>
+        {% url 'orb_assign_review' resource.pk as assignment_url %}
+        {% if resource.content_reviews.exists %}
+            <div class="well">
+                <h4>{% trans 'Content reviews' %}</h4>
+                {% for role in missing_assignments %}
+                    <li>
+                        {{ role }}: <a
+                            href="{{ assignment_url }}">{% trans 'Requires assignment' %}</a>
+                    </li>
+                {% endfor %}
+                {% for review in resource.content_reviews.all %}
+                    <li>
+                        {{ review.role }}: {{ review.reviewer }}
+                        ({{ review.get_status_display|title }})
+                    </li>
+                {% endfor %}
+            </div>
+        {% else %}
+            {% blocktrans %}
+                <p>There are no reviews assigned for this resource.</p>
+                <p>You can make an immediate assessment here or <a href="{{ assignment_url }}">assign
+                    reviewers &raquo;</a>.</p>
+            {% endblocktrans %}
+            <p></p>
+        {% endif %}
+
+        <div>
+            <p>{% trans 'Consider the following criteria in your review.' %}</p>
+            {% for criterion in criteria %}
+                <li>{{ criterion }}</li>
+            {% endfor %}
+        </div>
+
+        <form method="POST" action=".">{% csrf_token %}
+            {% crispy form %}
+        </form>
+
+    {% else %}
+
+        {% url 'orb_pending_resources' as resource_list_url %}
+        {% with resource.status as status %}
+            {% blocktrans %}
+                <p>This resource has already been {{ status }}.</p>
+                <p><a href="{{ resource_list_url }}">Return to submitted resource list.</a></p>
+            {% endblocktrans %}
+        {% endwith %}
+
+    {% endif %}
 
 {% endblock %}

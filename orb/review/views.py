@@ -214,10 +214,12 @@ def staff_review(request, resource_id):
             return redirect("orb_pending_resources")
     else:
         form = StaffReviewForm(resource=resource, user=request.user)
+
     return render(request, "orb/review/staff_review.html", {
         'resource': resource,
         'form': form,
         'criteria': ResourceCriteria.objects.all(),
+        'missing_assignments': ReviewerRole.objects.exclude(reviews__resource=resource),
     })
 
 
@@ -236,6 +238,14 @@ def start_assignment(request, resource_id):
 
     """
     resource = get_object_or_404(Resource, pk=resource_id)
+
+    if resource.status != Resource.PENDING:
+        if resource.status == Resource.APPROVED:
+            messages.error(request, _("The resource has already been approved."))
+        else:
+            messages.error(request, _("The resource has already been rejected."))
+        return redirect("orb_pending_resources")
+
     if request.method == 'POST':
         form = ReviewStartForm(data=request.POST, resource=resource, reviewer=request.user)
         if form.is_valid():

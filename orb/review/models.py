@@ -126,6 +126,10 @@ class ContentReview(TimestampBase):
             'review_id': self.pk,
         })
 
+    def get_status_display(self):
+        """Returns the status, accounting for legacy status"""
+        return self.status.split("_")[0]
+
     @transition(field=status, source=Resource.PENDING, target=Resource.APPROVED)
     def approve(self):
         self._status_changed = True

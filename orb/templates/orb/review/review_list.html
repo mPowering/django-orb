@@ -7,6 +7,8 @@
 
     <h2>{% trans 'Pending Resources' %}</h2>
 
+    {% include "includes/messages.html" %}
+
     {% if user.is_staff and overdue_reviews %}
     <h3>{% trans 'Overdue Reviews' %}</h3>
         <div class="table-responsive">
@@ -115,7 +117,7 @@
                     <th>{% trans 'Submitted' %}</th>
                     <th>{% trans 'Title' %}</th>
                     <th>{% trans 'Organisation' %}</th>
-                    <th colspan="{% if user.is_staff %}3{% else %}2{% endif %}">{% trans 'Options' %}</th>
+                    <th colspan="{% if user.is_staff %}4{% else %}2{% endif %}">{% trans 'Options' %}</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -136,7 +138,7 @@
                             </a>
                         </td>
                         {% can_start_review resource as can_review %}
-                        {% if can_review %}
+                        {% if can_review and not user.is_staff %}
                             <td><a href="{% url 'orb_start_review' resource.pk %}">{% trans 'Start a review' %}</a></td>
                         {% else %}
                             <td></td>
@@ -147,6 +149,15 @@
                                 <span class="glyphicon glyphicon-user" aria-hidden="true" title="{% trans 'Assignments' %}"></span>
                                 <span class="sr-only">{% trans 'Assignments' %}</a></span>
                         </td>
+                            <td>
+                            <a href="{% url 'orb_staff_review' resource.pk %}">
+                                <button class="btn btn-xs btn-default">
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true" title="{% trans 'Review' %}"></span>
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true" title="{% trans 'Review' %}"></span>
+                                </button>
+                                <span class="sr-only">{% trans 'Review' %}</span>
+                            </a>
+                            </td>
                         {% endif %}
                     </tr>
                 {% endfor %}
