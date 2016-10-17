@@ -45,7 +45,7 @@ def review_resource(request, review):
 
     """
     if request.method == 'POST':
-        form = ReviewForm(request.POST)
+        form = ContentReviewForm(data=request.POST, user=request.user)
         if form.is_valid():
             approved = form.cleaned_data['approved']
             if approved:
@@ -58,7 +58,7 @@ def review_resource(request, review):
                 messages.success(request, _(u"Thank you for reviewing this content"))
             return redirect("orb_pending_resources")
     else:
-        form = ReviewForm()
+        form = ContentReviewForm(user=request.user)
 
     return render(request, "orb/review/review_form.html", {
         'review': review,

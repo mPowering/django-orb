@@ -5,7 +5,8 @@ Forms for resources - primarily for content review
 import logging
 
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Layout, Submit, HTML
+from crispy_forms.layout import Div, Layout, Submit, HTML, Row
+from crispy_forms.bootstrap import StrictButton
 from django import forms
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -115,15 +116,16 @@ class ContentReviewForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         queryset=ResourceCriteria.objects.all().order_by('category_order_by', 'order_by'),
         required=False,
+        label=_(u"Approval criteria"),
     )
     notes = forms.CharField(
         widget=forms.Textarea,
         required=False,
         error_messages={'required': FormErrors.MISSING_REASON},
         help_text=_(
-            'The text you enter here will be included in the email to the submitter of the '
+            'The text you enter here will be used for providing feedback to the submitter of the '
             'resource, so please bear this in mind when explaining your reasoning.'),
-        label=_(u"Reason for rejection")
+        label=_(u"Rejection reason or other notes")
     )
 
     class Meta:
@@ -167,10 +169,13 @@ class ContentReviewForm(forms.ModelForm):
         helper.field_class = 'col-lg-8'
         helper.layout = Layout(
             'criteria',
+            Row(HTML('<hr>')),
             'notes',
             Div(
-                Submit('submit', _(u'Submit'),
-                       css_class='btn btn-default'),
+                StrictButton(_(u'Approve'), name='approved', value=1, type="submit",
+                       css_class='btn btn-success'),
+                StrictButton(_(u'Reject'), name='approved', type="submit",
+                       css_class='btn btn-danger'),
                 css_class='col-lg-offset-2 col-lg-8',
             ),
         )
