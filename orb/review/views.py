@@ -9,9 +9,9 @@ from django.db.models import Q
 from django.shortcuts import redirect, render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 
-from orb.decorators import reviewer_required
+from orb.review.decorators import reviewer_required
 from orb.models import Resource, ResourceCriteria, ReviewerRole
-from .forms import ReviewForm, ContentReviewForm, AssignmentForm, StaffReviewForm
+from .forms import ReviewForm, ContentReviewForm, AssignmentForm, StaffReviewForm, ReviewStartForm
 from .models import ContentReview
 
 
@@ -45,7 +45,7 @@ def review_resource(request, review):
 
     """
     if request.method == 'POST':
-        form = ReviewForm(request.POST)
+        form = ContentReviewForm(data=request.POST, user=request.user)
         if form.is_valid():
             approved = form.cleaned_data['approved']
             if approved:
@@ -58,7 +58,7 @@ def review_resource(request, review):
                 messages.success(request, _(u"Thank you for reviewing this content"))
             return redirect("orb_pending_resources")
     else:
-        form = ReviewForm()
+        form = ContentReviewForm(user=request.user)
 
     return render(request, "orb/review/review_form.html", {
         'review': review,
@@ -207,21 +207,23 @@ def staff_review(request, resource_id):
     """
     resource = get_object_or_404(Resource, pk=resource_id)
     if request.method == 'POST':
-        form = StaffReviewForm(resource=resource, data=request.POST)
+        form = StaffReviewForm(data=request.POST, resource=resource, user=request.user)
         if form.is_valid():
             message_level, message = form.save()
             messages.add_message(request, message_level, message)
             return redirect("orb_pending_resources")
     else:
-        form = StaffReviewForm(resource=resource)
+        form = StaffReviewForm(resource=resource, user=request.user)
+
     return render(request, "orb/review/staff_review.html", {
         'resource': resource,
         'form': form,
         'criteria': ResourceCriteria.objects.all(),
+        'missing_assignments': ReviewerRole.objects.exclude(reviews__resource=resource),
     })
 
 
-@reviewer_required
+@reviewer_required(include_staff=False)
 def start_assignment(request, resource_id):
     """
     View function that allows a user to assign themselves to review a resource
@@ -236,19 +238,25 @@ def start_assignment(request, resource_id):
 
     """
     resource = get_object_or_404(Resource, pk=resource_id)
+
+    if resource.status != Resource.PENDING:
+        if resource.status == Resource.APPROVED:
+            messages.error(request, _("The resource has already been approved."))
+        else:
+            messages.error(request, _("The resource has already been rejected."))
+        return redirect("orb_pending_resources")
+
     if request.method == 'POST':
-        try:
-            review = ContentReview.reviews.create(
-                resource=resource,
-                role=request.user.userprofile.reviewer_role,
-                reviewer=request.user,
-            )
-        except IntegrityError:
-            messages.error(request, _("There was an error starting the review."))
-            return redirect("orb_pending_resources")
-        return redirect(review.get_absolute_url())
+        form = ReviewStartForm(data=request.POST, resource=resource, reviewer=request.user)
+        if form.is_valid():
+            review = form.save()
+            return redirect(review.get_absolute_url())
+        messages.error(request, _("There was an error starting the review."))
+        return redirect("orb_pending_resources")
 
     return render(request, "orb/review/start_review.html", {
         'resource': resource,
-        'role': request.user.userprofile.reviewer_role,
+        'roles': ReviewerRole.objects.filter(
+            profiles__user=request.user,
+        ).exclude(reviews__in=resource.content_reviews.all()),
     })

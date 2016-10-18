@@ -77,7 +77,7 @@ def send_resource_approved_email(resource):
     return send_orb_email(
         template_html="orb/email/resource_approved.html",
         template_text="orb/email/resource_approved.txt",
-        subject = _(u"Resource Submission") + ": " + resource.title,
+        subject=_(u"Resource Submission") + ": " + resource.title,
         recipients=[resource.create_user.email],
         title=resource.title,
         firstname=resource.create_user.first_name,
@@ -92,11 +92,30 @@ def send_resource_rejected_email(resource):
     return send_orb_email(
         template_html="orb/email/resource_rejected.html",
         template_text="orb/email/resource_rejected.txt",
-        subject = _(u"Resource Submission") + ": " + resource.title,
+        subject=_(u"Resource Submission") + ": " + resource.title,
         recipients=[resource.create_user.email],
         title=resource.title,
         firstname=resource.create_user.first_name,
         lastname=resource.create_user.last_name,
         info_email=settings.ORB_INFO_EMAIL,
         resource_link=current_site.domain + reverse('orb_resource', args=[resource.slug]),
+    )
+
+
+def send_review_complete_email(resource, **kwargs):
+    """
+    Sends an email to staff recipients that all reviews for the given
+    resource have been completed.
+    """
+    current_site = Site.objects.get_current()
+    return send_orb_email(
+        template_html="orb/email/review_complete.html",
+        template_text="orb/email/review_complete.txt",
+        subject=_(u"Resource Review Complete") + ": " + resource.title,
+        recipients=[settings.ORB_INFO_EMAIL],
+        title=resource.title,
+        firstname=resource.create_user.first_name,
+        lastname=resource.create_user.last_name,
+        resource_link=current_site.domain + reverse('orb_resource', args=[resource.slug]),
+        **kwargs
     )

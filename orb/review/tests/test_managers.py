@@ -5,10 +5,11 @@ Tests for orb.review managers and querysets
 """
 
 from datetime import date, timedelta
+from django.test import TestCase
 
 from freezegun import freeze_time
 
-from orb.models import Resource
+from orb.models import Resource, ReviewerRole, ResourceCriteria
 from orb.resources.tests.factory import resource_factory
 from orb.review.models import ContentReview
 from orb.review.tests.base import ReviewTestCase
@@ -100,3 +101,40 @@ class ReviewQuerysetTests(ReviewTestCase):
 
     def test_for_user_qs(self):
         """Returns any reviews for user"""
+
+
+class ReviewCriteriaQuerysetTests(TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        super(ReviewCriteriaQuerysetTests, cls).setUpClass()
+        cls.role_a = ReviewerRole.objects.create(name="test A")
+        cls.role_b = ReviewerRole.objects.create(name="test B")
+        cls.resource_1 = ResourceCriteria.objects.create(description="a", role=cls.role_a)
+        cls.resource_2 = ResourceCriteria.objects.create(description="b", role=cls.role_a)
+        cls.resource_3 = ResourceCriteria.objects.create(description="c", role=cls.role_b)
+        cls.resource_4 = ResourceCriteria.objects.create(description="d")
+
+    @classmethod
+    def tearDownClass(cls):
+        super(ReviewCriteriaQuerysetTests, cls).tearDownClass()
+        ReviewerRole.objects.all().delete()
+        ResourceCriteria.objects.all().delete()
+
+    def test_general_criteria(self):
+        self.assertEqual(
+            [self.resource_4],
+            list(ResourceCriteria.criteria.general()),
+        )
+
+    def test_specified_criteria(self):
+        self.assertEqual(
+            [self.resource_1, self.resource_2, self.resource_4],
+            list(ResourceCriteria.criteria.for_role(self.role_a)),
+        )
+
+    def test_for_roles(self):
+        self.assertEqual(
+            [self.resource_1, self.resource_2, self.resource_4],
+            list(ResourceCriteria.criteria.for_roles(self.role_a)),
+        )

@@ -109,7 +109,6 @@ class ContentReview(TimestampBase):
         verbose_name = _("content review")
         verbose_name_plural = _("content reviews")
         unique_together = (
-            ('resource', 'reviewer'),
             ('resource', 'role'),
         )
 
@@ -126,6 +125,10 @@ class ContentReview(TimestampBase):
             'resource_id': self.resource.pk,
             'review_id': self.pk,
         })
+
+    def get_status_display(self):
+        """Returns the status, accounting for legacy status"""
+        return self.status.split("_")[0]
 
     @transition(field=status, source=Resource.PENDING, target=Resource.APPROVED)
     def approve(self):
@@ -205,16 +208,12 @@ def process_resource_reviews(resource):
     review_status = set(resource.content_reviews.all().values_list('status', flat=True))
 
     if review_status == {Resource.APPROVED}:
-        resource.approve()
-        resource.save()
-        signals.resource_approved.send(sender=resource.__class__, resource=resource)
-        return resource.status
+        tasks.send_review_complete_email(resource, verdict=Resource.APPROVED)
+        return Resource.APPROVED
 
     if Resource.PENDING not in review_status:
-        resource.reject()
-        resource.save()
-        signals.resource_rejected.send(sender=resource.__class__, resource=resource)
-        return resource.status
+        tasks.send_review_complete_email(resource, verdict=Resource.REJECTED)
+        return Resource.REJECTED
 
     return resource.status
 

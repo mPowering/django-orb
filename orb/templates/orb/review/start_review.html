@@ -14,8 +14,15 @@ In order to review, click "Start" below and this will make you the reviewer for 
 {% endblocktrans %}</p>
 </div>
 
+
 <form method="POST" action=".">{% csrf_token %}
-<button class="btn btn-success" name="approved" value="1">{% trans 'Start' %}</button>
+    {%  for role in roles %}
+        <button class="btn btn-success" name="role" value="{{ role.pk }}">
+            {% blocktrans %}
+                Start {{ role }} Review
+            {% endblocktrans %}
+        </button>
+    {% endfor %}
 <a href="{% url 'orb_pending_resources' %}">{% trans 'Cancel' %}</a>
 </form>
 

@@ -27,9 +27,15 @@ class ReviewerFilter(admin.SimpleListFilter):
             return queryset.nonreviewers()
 
 
+class ResourceCriteriaInline(admin.TabularInline):
+    """Inline class for showing related ResourceCriteria"""
+    model = ResourceCriteria
+    extra = 0
+
+
 @admin.register(ReviewerRole)
 class ReviewerRoleAdmin(admin.ModelAdmin):
-    pass
+    inlines = [ResourceCriteriaInline]
 
 
 @admin.register(Category)
@@ -46,8 +52,7 @@ class ResourceAdmin(admin.ModelAdmin):
 
 @admin.register(ResourceCriteria)
 class ResourceCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('description', 'category',
-                    'category_order_by', 'order_by', )
+    list_display = ('description', 'get_role_display', 'category_order_by', 'order_by', )
     search_fields = ['description']
 
 
@@ -117,7 +122,7 @@ class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user_name', 'api_access', 'about', 'job_title', 'organisation')
     list_filter = (
         ReviewerFilter,
-        'reviewer_role',
+        'reviewer_roles',
     )
 
 

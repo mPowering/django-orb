@@ -73,4 +73,7 @@ def can_start_review(context, resource):
 
     """
     profile = context['user'].userprofile
-    return not resource.content_reviews.filter(role=profile.reviewer_role).exists()
+    if not profile.is_reviewer:
+        return False
+    # TODO this is wrong
+    return not resource.content_reviews.filter(role__in=profile.reviewer_roles.all).exists()

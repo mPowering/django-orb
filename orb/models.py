@@ -7,25 +7,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Avg, Count
 from django.utils.translation import ugettext_lazy as _
-
 from tastypie.models import create_api_key
+
 from orb.analytics.models import UserLocationVisualization
+from orb.profiles.querysets import ProfilesQueryset
 from orb.resources.managers import ResourceManager, ResourceURLManager, ApprovedManager
+from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
 from .fields import AutoSlugField
 
 models.signals.post_save.connect(create_api_key, sender=User)
-
-
-class ProfilesQueryset(models.QuerySet):
-    """
-    QuerySet class for UserProfiles
-    """
-    def reviewers(self):
-        return self.filter(reviewer_role__isnull=False)
-
-    def nonreviewers(self):
-        return self.filter(reviewer_role__isnull=True)
 
 
 class TimestampBase(models.Model):
@@ -45,8 +36,8 @@ class Resource(TimestampBase):
     APPROVED = 'approved'
     STATUS_TYPES = (
         (REJECTED, _('Rejected')),
-        (PENDING_CRT, _('Pending CRT')),
-        (PENDING_MRT, _('Pending MRT')),
+        (PENDING_CRT, _('Pending')),
+        (PENDING_MRT, _('Pending')),  # TODO data migration for all existin MRT review
         (APPROVED, _('Approved')),
     )
 
@@ -188,7 +179,7 @@ class ResourceWorkflowTracker(models.Model):
     resource = models.ForeignKey(Resource, blank=True, null=True)
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL)
     status = models.CharField(
-        max_length=50, choices=Resource.STATUS_TYPES, default=Resource.PENDING_CRT)
+        max_length=50, choices=Resource.STATUS_TYPES, default=Resource.PENDING)
     notes = models.TextField(blank=True, null=True)
     owner_email_sent = models.BooleanField(default=False, blank=False)
 
@@ -275,10 +266,25 @@ class ResourceCriteria(models.Model):
         ('audio', _('Audio resources')),
         ('text', _('Text based resources')),
     )
-    description = models.TextField(blank=False, null=False)
+    description = models.TextField()
+    category = models.CharField(max_length=50, choices=CATEGORIES, null=True, blank=True)
     order_by = models.IntegerField(default=0)
-    category = models.CharField(max_length=50, choices=CATEGORIES)
     category_order_by = models.IntegerField(default=0)
+    role = models.ForeignKey(
+        'orb.ReviewerRole',
+        related_name="criteria",
+        blank=True, null=True,
+        help_text=_("Used to show specific criteria to reviewers based on their role. "
+                    "Leave blank if criterion applies generally."),
+    )
+
+    criteria = CriteriaQueryset.as_manager()
+    objects = criteria
+
+    def get_role_display(self):
+        """Returns an appropriate label for the admin"""
+        return _("General") if not self.role else self.role.name
+    get_role_display.short_description = "Role"
 
     def __unicode__(self):
         return self.description
@@ -424,7 +430,7 @@ class UserProfile(TimestampBase):
     mailing = models.BooleanField(default=False, blank=False)
     crt_member = models.BooleanField(default=False, blank=False)
     mep_member = models.BooleanField(default=False, blank=False)
-    reviewer_role = models.ForeignKey('ReviewerRole', blank=True, null=True)
+    reviewer_roles = models.ManyToManyField('ReviewerRole', blank=True, related_name="profiles")
 
     profiles = ProfilesQueryset.as_manager()
     objects = profiles
@@ -449,7 +455,7 @@ class UserProfile(TimestampBase):
 
     @property
     def is_reviewer(self):
-        return bool(self.reviewer_role)
+        return self.reviewer_roles.exists()
 
 
 class ResourceTracker(models.Model):

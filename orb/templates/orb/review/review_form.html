@@ -8,21 +8,13 @@
 <h3>{{ review.resource.title }} (<a href="{% url 'orb_resource' review.resource.slug %}"
                                     target="_blank" class="preview">{% trans 'Preview' %}</a>)</h3>
 
-<div class="well">
-<p>{% trans 'Consider the following criteria in your review.' %}</p>
-{% for criterion in criteria %}
-<li>{{ criterion }}</li>
-{% endfor %}
-</div>
-
-    {% if review.is_pending %}
-<form method="POST" action=".">{% csrf_token %}
-<button class="btn btn-success" name="approved" value="1">Approve</button>
-<a href="{% url 'orb_reject_resource' review.resource.pk review.pk %}" class="btn btn-danger">Reject</a>
-</form>
-        {% else %}
-        <p>{% trans 'You have already reviewed this resource.' %}
-        <a href="{% url 'orb_pending_resources' %}">{% trans 'Return to pending content.' %}</a></p>
+{% if review.is_pending %}
+    <form method="POST" action=".">{% csrf_token %}
+        <p>{% trans 'Please mark which resource criteria the resource meets.' %}</p>
+        {% crispy form %}
+    </form>
+{% else %}
+    <p>{% trans 'You have already reviewed this resource.' %}
+    <a href="{% url 'orb_pending_resources' %}">{% trans 'Return to pending content.' %}</a></p>
     {% endif %}
-
 {% endblock %}

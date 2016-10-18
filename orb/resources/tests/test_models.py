@@ -16,7 +16,7 @@ class ResourceTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.user = User.objects.create(username="tester")
+        cls.user, _ = User.objects.get_or_create(username="tester")
         cls.resource = resource_factory(
             user=cls.user,
             title=u"Básica salud del recién nacido",
@@ -80,7 +80,7 @@ class ResourceURLTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.user = User.objects.create(username="tester")
+        cls.user, _ = User.objects.get_or_create(username="tester")
         cls.resource = resource_factory(
             user=cls.user,
             title=u"Básica salud del recién nacido",
