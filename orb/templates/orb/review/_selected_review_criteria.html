@@ -1,0 +1,12 @@
+<strong>Selected Criteria</strong>
+<ul>
+{% for criterion in selected %}
+    <li>{{ criterion }}</li>
+{% endfor %}
+</ul>
+<strong>Missing Criteria</strong>
+<ul>
+{% for criterion in unselected %}
+    <li>{{ criterion }}</li>
+{% endfor %}
+</ul>

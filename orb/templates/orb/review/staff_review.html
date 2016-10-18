@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n crispy_forms_tags %}
+{% load i18n crispy_forms_tags review_tags %}
 {% block extra_head_title %}{% trans 'Content Review' %}{% endblock extra_head_title %}
 {% block content %}
 
@@ -22,8 +22,34 @@
                 {% endfor %}
                 {% for review in resource.content_reviews.all %}
                     <li>
-                        {{ review.role }}: {{ review.reviewer }}
-                        ({{ review.get_status_display|title }})
+                    {% if review.is_pending %}
+                        {{ review.role }}: {{ review.reviewer }} ({{ review.get_status_display|title }})
+                    {% else %}
+                    <a data-toggle="modal" data-target="#review-modal-{{ review.pk }}">
+                        {{ review.role }}: {{ review.reviewer }} ({{ review.get_status_display|title }})
+                    </a>
+                    {% endif %}
+
+                    {% if not review.is_pending %}
+                    <div class="modal fade" id="review-modal-{{ review.pk }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">{{ review.get_status_display|title }}: {{ review.role }} by {{ review.reviewer }}</h4>
+                          </div>
+                          <div class="modal-body">
+                              <strong>Selected criteria</strong>:
+                              {% selected_criteria review %}
+                              <p>
+                              <strong>{% trans 'Reviewer notes' %}</strong>: {{ review.notes }}
+                              </p>
+                          </div>
+                        </div>
+                          </div>
+                    </div>
+                    {% endif %}
+
                     </li>
                 {% endfor %}
             </div>
