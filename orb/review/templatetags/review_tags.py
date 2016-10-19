@@ -4,7 +4,7 @@ Template labels for content review
 
 from django import template
 
-from orb.models import ReviewerRole
+from orb.models import ReviewerRole, ResourceCriteria
 
 register = template.Library()
 
@@ -54,6 +54,16 @@ def status_labels(resource):
 
     return {
         'assignments': assignments,
+    }
+
+
+@register.inclusion_tag("orb/review/_selected_review_criteria.html")
+def selected_criteria(review):
+    selected = review.criteria.all()
+    unselected = ResourceCriteria.objects.for_role(review.role).exclude(pk__in=selected)
+    return {
+        'selected': selected,
+        'unselected': unselected,
     }
 
 
