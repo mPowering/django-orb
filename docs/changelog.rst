@@ -2,6 +2,23 @@ Change log
 =====================================
 
 
+v2.2.2 - not yet released
+---------------------------------
+
+* 350: API - error when requesting limit of 1000 - http://github.com/mPowering/django-orb/issues/issues/issue/350
+* 383: Scope of database field translations - http://github.com/mPowering/django-orb/issues/issues/issue/383
+* 380: Tag API is only returning tags that are already attached to a resource - http://github.com/mPowering/django-orb/issues/issues/issue/380
+* 378: Tags can be duplicated - http://github.com/mPowering/django-orb/issues/issues/issue/378
+* 365: Implement option for user to change language - http://github.com/mPowering/django-orb/issues/issues/issue/365
+* 369: Allow for translators to translate content from the database - http://github.com/mPowering/django-orb/issues/issues/issue/369
+* 366: Add Spanish lang pack for interface - http://github.com/mPowering/django-orb/issues/issues/issue/366
+* 395: On selecting Accept/Reject the review should be checked for... - http://github.com/mPowering/django-orb/issues/issues/issue/395
+* 392: CRT process - starting review with no role assignments - http://github.com/mPowering/django-orb/issues/issues/issue/392
+* 384: Content Review - should be an option to add a (free-text) reason for rejection - http://github.com/mPowering/django-orb/issues/issues/issue/384
+* 385: Content Review - reviews should be able to check off the individual criteria - http://github.com/mPowering/django-orb/issues/issues/issue/385
+
+
+
 v2.2.1 - released 3 May 2016
 ---------------------------------
 
