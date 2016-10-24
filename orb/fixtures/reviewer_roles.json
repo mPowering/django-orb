@@ -1,0 +1,23 @@
+[
+{
+    "fields": {
+        "name": "medical"
+    },
+    "model": "orb.reviewerrole",
+    "pk": 1
+},
+{
+    "fields": {
+        "name": "technical"
+    },
+    "model": "orb.reviewerrole",
+    "pk": 2
+},
+{
+    "fields": {
+        "name": "training"
+    },
+    "model": "orb.reviewerrole",
+    "pk": 3
+}
+]
