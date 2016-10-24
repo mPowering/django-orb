@@ -267,9 +267,14 @@ class ResourceCriteria(models.Model):
         ('text', _('Text based resources')),
     )
     description = models.TextField()
-    category = models.CharField(max_length=50, choices=CATEGORIES, null=True, blank=True)
+    category = models.CharField(max_length=50, 
+                                choices=CATEGORIES, 
+                                null=True, 
+                                blank=True,
+                                help_text=_("deprecated"))
     order_by = models.IntegerField(default=0)
-    category_order_by = models.IntegerField(default=0)
+    category_order_by = models.IntegerField(default=0, 
+                                            help_text=_("deprecated"))
     role = models.ForeignKey(
         'orb.ReviewerRole',
         related_name="criteria",

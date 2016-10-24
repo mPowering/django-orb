@@ -1,0 +1,156 @@
+[
+{
+    "fields": {
+        "category": "qa",
+        "order_by": 1,
+        "description": "Does the resource fit the mPowering remit of reproductive, maternal, newborn and child health (incl. nutrition and WASH)?",
+        "description_en": "Does the resource fit the mPowering remit of reproductive, maternal, newborn and child health (incl. nutrition and WASH)?",
+        "description_es": "",
+        "role": null,
+        "category_order_by": 1,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 1
+},
+{
+    "fields": {
+        "category": "qa",
+        "order_by": 2,
+        "description": "Is the resource released under an open license (Creative Commons or public domain)?",
+        "description_en": "Is the resource released under an open license (Creative Commons or public domain)?",
+        "description_es": "",
+        "role": null,
+        "category_order_by": 1,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 2
+},
+{
+    "fields": {
+        "category": "qa",
+        "order_by": 1,
+        "description": "Is the resource suitable for the intended mobile delivery method/device?",
+        "description_en": "Is the resource suitable for the intended mobile delivery method/device?",
+        "description_es": "",
+        "role": 2,
+        "category_order_by": 1,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 3
+},
+{
+    "fields": {
+        "category": "value",
+        "order_by": 2,
+        "description": "Has the resource been produced to high technical quality?",
+        "description_en": "Has the resource been produced to high technical quality?",
+        "description_es": "",
+        "role": 2,
+        "category_order_by": 2,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 4
+},
+{
+    "fields": {
+        "category": "value",
+        "order_by": 1,
+        "description": "Does the resource have clear learning objectives?",
+        "description_en": "Does the resource have clear learning objectives?",
+        "description_es": "",
+        "role": 3,
+        "category_order_by": 2,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 5
+},
+{
+    "fields": {
+        "category": "value",
+        "order_by": 3,
+        "description": "Is the resource likely to help improve FLHW performance?",
+        "description_en": "Is the resource likely to help improve FLHW performance?",
+        "description_es": "",
+        "role": null,
+        "category_order_by": 2,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 6
+},
+{
+    "fields": {
+        "category": "value",
+        "order_by": 2,
+        "description": "Is the information clear, correct and authentic?",
+        "description_en": "Is the information clear, correct and authentic?",
+        "description_es": "",
+        "role": 1,
+        "category_order_by": 2,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 7
+},
+{
+    "fields": {
+        "category": "video",
+        "order_by": 2,
+        "description": "Can FLHWs identify with the providers and patients in the resource?",
+        "description_en": "Can FLHWs identify with the providers and patients in the resource?",
+        "description_es": "",
+        "role": 3,
+        "category_order_by": 3,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 9
+},
+{
+    "fields": {
+        "category": "animation",
+        "order_by": 4,
+        "description": "Does the resource feel authentic to FLHWs in low-resource settings?",
+        "description_en": "Does the resource feel authentic to FLHWs in low-resource settings?",
+        "description_es": "",
+        "role": 3,
+        "category_order_by": 4,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 12
+},
+{
+    "fields": {
+        "category": "text",
+        "order_by": 3,
+        "description": "Is the resource written in clear, easy to understand language?",
+        "description_en": "Is the resource written in clear, easy to understand language?",
+        "description_es": "",
+        "role": 3,
+        "category_order_by": 6,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 16
+},
+{
+    "fields": {
+        "category": "qa",
+        "order_by": 1,
+        "description": "Does the resource reflect current medical guidelines and best practice?",
+        "description_en": "Does the resource reflect current medical guidelines and best practice?",
+        "description_es": "",
+        "role": 1,
+        "category_order_by": 1,
+        "description_pt_br": ""
+    },
+    "model": "orb.resourcecriteria",
+    "pk": 19
+}
+]

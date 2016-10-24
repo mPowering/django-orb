@@ -14,6 +14,7 @@ from haystack.query import SearchQuerySet
 from orb.forms import (ResourceStep1Form, ResourceStep2Form, SearchForm,
                        ResourceRejectForm, AdvancedSearchForm)
 from orb.models import Collection
+from orb.models import ReviewerRole
 from orb.models import ResourceFile, ResourceTag, ResourceCriteria, ResourceRating
 from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, TagTracker, SearchTracker
 from orb.partners.OnemCHW.models import CountryData
@@ -393,13 +394,18 @@ def resource_guidelines_view(request):
 
     criteria = []
 
-    for k, v in ResourceCriteria.CATEGORIES:
+    # get the general criteria
+    criteria_general = ResourceCriteria.objects.filter(role=None).order_by('order_by')
+    obj = {}
+    obj['category'] = _("General")
+    obj['criteria'] = criteria_general
+    criteria.append(obj)
+
+    for k in ReviewerRole.objects.all():
         obj = {}
-        cat = ResourceCriteria.objects.filter(category=k).order_by('order_by')
-        obj['category'] = cat[0].get_category_display()
-        obj['category_order_by'] = cat[0].category_order_by
+        cat = ResourceCriteria.objects.filter(role=k).order_by('order_by')
+        obj['category'] = k
         obj['criteria'] = cat
-        #obj['category'] = k.get_category_display()
 
         criteria.append(obj)
 

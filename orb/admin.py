@@ -52,7 +52,7 @@ class ResourceAdmin(admin.ModelAdmin):
 
 @admin.register(ResourceCriteria)
 class ResourceCriteriaAdmin(admin.ModelAdmin):
-    list_display = ('description', 'get_role_display', 'category_order_by', 'order_by', )
+    list_display = ('description', 'get_role_display', 'order_by', )
     search_fields = ['description']
 
 

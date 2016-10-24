@@ -15,18 +15,21 @@
 {% endblocktrans %} 
 
 {% blocktrans %}
-<p>All resources submitted to ORB will be evaluated, by our
-	Content Review Team and Medical Expert Panel, against the following
-	criteria:</p>
+<p>All resources submitted to ORB will be evaluated by our
+	Content Review Team against the following criteria:</p>
 {% endblocktrans %} 
 
+<ol>
 {% for cc in criteria_categories %} 
-	<strong>{{ cc.category_order_by }}. {{ cc.category }}</strong>
+	<li>
+	<strong>{{ cc.category }}</strong>
 	<ol style="list-style-type: lower-roman;">
 		{% for c in cc.criteria %}
 			<li>{{ c.description }}</li>
 		{% endfor %} 
-	</ol> 
+	</ol>
+	</li> 
 {% endfor %} 
+</ol>
 
 {% endblock %}
