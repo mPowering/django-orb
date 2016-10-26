@@ -10,4 +10,4 @@ class ContentReviewAdmin(admin.ModelAdmin):
 
 @admin.register(ReviewLogEntry)
 class ReviewLogAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('__unicode__', 'create_date')

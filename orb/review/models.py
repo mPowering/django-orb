@@ -172,7 +172,7 @@ class ContentReview(TimestampBase):
         self._status_changed = True
         old_reviewer = self.reviewer
         self.reviewer = new_user
-        # TODO send email
+        tasks.send_review_assignment_email(self)
         ReviewLogEntry.objects.create(
             review=self,
             review_status=self.status,
