@@ -23,10 +23,12 @@ def get_menu(request):
     else:
         reviewer = False
 
-    return {'header_menu_categories': categories,
-            'header_owns_tags': tags,
-            'settings': settings,
-            'reviewer': reviewer, }
+    return {
+        'header_menu_categories': categories,
+        'header_owns_tags': tags,
+        'settings': settings,
+        'reviewer': reviewer,
+    }
 
 
 def get_version(request):
