@@ -15,8 +15,19 @@ from orb.resources.managers import ResourceManager, ResourceURLManager, Approved
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
 from .fields import AutoSlugField
+from orb import signals
 
 models.signals.post_save.connect(create_api_key, sender=User)
+
+
+class WorkflowQueryset(models.QuerySet):
+
+    def rejected(self):
+        return self.filter(status=Resource.REJECTED)
+
+    def notes(self, delimmiter="\n\n"):
+        """Returns a concatenated selection of final workflow notes"""
+        return delimmiter.join([r.notes for r in self if r.notes])
 
 
 class TimestampBase(models.Model):
@@ -85,10 +96,12 @@ class Resource(TimestampBase):
     def approve(self):
         self.status = self.APPROVED
         self.content_reviews.all().update(status=self.APPROVED)
+        signals.resource_approved.send(sender=self, resource=self)
 
     def reject(self):
         self.status = self.REJECTED
         self.content_reviews.all().update(status=self.REJECTED)
+        signals.resource_rejected.send(sender=self, resource=self)
 
     def is_pending(self):
         return self.status not in [self.REJECTED, self.APPROVED]
@@ -176,12 +189,16 @@ class Resource(TimestampBase):
 
 class ResourceWorkflowTracker(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
-    resource = models.ForeignKey(Resource, blank=True, null=True)
+    resource = models.ForeignKey(Resource, blank=True, null=True,
+                                 related_name="workflow_trackers")
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL)
     status = models.CharField(
         max_length=50, choices=Resource.STATUS_TYPES, default=Resource.PENDING)
     notes = models.TextField(blank=True, null=True)
     owner_email_sent = models.BooleanField(default=False, blank=False)
+
+    workflows = WorkflowQueryset.as_manager()
+    objects = workflows  # Backwards compatible alias
 
 
 class ResourceURL(TimestampBase):
@@ -267,13 +284,13 @@ class ResourceCriteria(models.Model):
         ('text', _('Text based resources')),
     )
     description = models.TextField()
-    category = models.CharField(max_length=50, 
-                                choices=CATEGORIES, 
-                                null=True, 
+    category = models.CharField(max_length=50,
+                                choices=CATEGORIES,
+                                null=True,
                                 blank=True,
                                 help_text=_("deprecated"))
     order_by = models.IntegerField(default=0)
-    category_order_by = models.IntegerField(default=0, 
+    category_order_by = models.IntegerField(default=0,
                                             help_text=_("deprecated"))
     role = models.ForeignKey(
         'orb.ReviewerRole',

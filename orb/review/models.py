@@ -27,6 +27,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django_fsm import FSMField, transition, TransitionNotAllowed
 
+import orb.signals
 from orb.models import TimestampBase, Resource, ReviewerRole
 from orb.review import signals, tasks
 
@@ -281,7 +282,7 @@ def review_approved(sender, review, **kwargs):
     process_resource_reviews(review.resource)
 
 
-@receiver(signals.resource_rejected)
+@receiver(orb.signals.resource_rejected)
 def resource_rejected(sender, resource, **kwargs):
     """
     Handles actions after a resource has been finally rejected
@@ -296,7 +297,7 @@ def resource_rejected(sender, resource, **kwargs):
     tasks.send_resource_rejected_email(resource)
 
 
-@receiver(signals.resource_approved)
+@receiver(orb.signals.resource_approved)
 def resource_approved(sender, resource, **kwargs):
     """
     Handles actions after a resource has been finally approved
