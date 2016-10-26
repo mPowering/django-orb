@@ -231,9 +231,10 @@ class ContentReviewForm(forms.ModelForm):
         return helper
 
     def save(self, *args, **kwargs):
+        instance = super(ContentReviewForm, self).save()
         for criterion in self.cleaned_data['criteria']:
             self.instance.criteria.add(criterion)
-        return super(ContentReviewForm, self).save()
+        return instance
 
 
 class AssignmentForm(forms.Form):
