@@ -2,7 +2,7 @@
 {% blocktrans %}
 Best regards,
 
-Lesley-Anne Long
+Carolyn Moore
 
 ORB by mPowering Frontline Health Workers
 info@mpoweringhealth.org
