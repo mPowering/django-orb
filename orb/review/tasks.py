@@ -99,6 +99,7 @@ def send_resource_rejected_email(resource):
         lastname=resource.create_user.last_name,
         info_email=settings.ORB_INFO_EMAIL,
         resource_link=current_site.domain + reverse('orb_resource', args=[resource.slug]),
+        notes=resource.workflow_trackers.rejected().notes(),
     )
 
 
