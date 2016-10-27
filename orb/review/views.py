@@ -155,6 +155,9 @@ def assign_review(request, resource_id):
         form = AssignmentForm(resource=resource, data=request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, _("Assignments successfully updated"))
+        else:
+            messages.error(request, _("There was an error assigning these reviews"))
 
     else:
         form = AssignmentForm(resource=resource)

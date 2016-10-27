@@ -3,6 +3,8 @@
 {% block extra_head_title %}{% trans 'Assign Content Review' %}{% endblock extra_head_title %}
 {% block content %}
 
+    {% include "includes/messages.html" %}
+
     <h2>{% trans 'Assign Content Review' %}</h2>
 
     <h3>{{ resource.title }} (<a href="{% url 'orb_resource' resource.slug %}"

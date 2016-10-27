@@ -267,6 +267,29 @@ class AssignmentForm(forms.Form):
         self.helper.field_class = 'col-lg-8'
         self.helper.layout = Layout(*self.layout_fields())
 
+    def clean(self):
+        data = self.cleaned_data
+        complete_reviews = self.resource.content_reviews.complete()
+        for review in complete_reviews:
+            if data[review.role.name] != review.reviewer.userprofile:
+                self.add_error(review.role.name, FormErrors.ASSIGN_COMPLETED_REIVEW)
+        return data
+
+    def save(self):
+        for role in self.roles:
+            assigned = self.cleaned_data.get(role.name)
+            if assigned:
+                try:
+                    review = ContentReview.reviews.get(resource=self.resource, role=role)
+                except ContentReview.DoesNotExist:
+                    review = ContentReview.reviews.assign(resource=self.resource, role=role, reviewer=assigned.user)
+                    logger.debug("New assignment {} for {}".format(review, assigned.user))
+                else:
+                    if review.reviewer != assigned.user:
+                        logger.debug("Reassigning review {} to user {}".format(review, assigned.user))
+                        review.reassign(assigned.user)
+                        review.save()
+
     def layout_fields(self):
         """
         Yields the fields for the layout.
@@ -297,29 +320,6 @@ class AssignmentForm(forms.Form):
             for review in ContentReview.objects.filter(resource=self.resource)
         }
         return x
-
-    def clean(self):
-        data = self.cleaned_data
-        complete_reviews = self.resource.content_reviews.complete()
-        for review in complete_reviews:
-            if data[review.role.name] != review.reviewer.userprofile:
-                self.add_error(review.role.name, FormErrors.ASSIGN_COMPLETED_REIVEW)
-        return data
-
-    def save(self):
-        for role in self.roles:
-            assigned = self.cleaned_data.get(role.name)
-            if assigned:
-                review, created = ContentReview.objects.get_or_create(
-                    resource=self.resource,
-                    role=role,
-                    defaults={
-                        'reviewer': assigned.user,
-                    }
-                )
-                if not created:
-                    review.reassign(assigned.user)
-                    review.save()
 
 AssignmentFormSet = inlineformset_factory(
     Resource,
