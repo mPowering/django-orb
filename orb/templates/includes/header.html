@@ -35,7 +35,7 @@
 
                 <li><a href="{% url 'orb_resource_create' %}">{% trans 'Add Resource' %}</a></li>
 
-                {% if header_owns_tags or user.is_staff or reviewer %}
+                {% if header_owns_tags or user.is_staff %}
                     <li class="dropdown"><a href="#" data-toggle="dropdown"
                                             class="dropdown-toggle">{% trans 'Analytics' %} <b
                         class="caret"></b></a>
