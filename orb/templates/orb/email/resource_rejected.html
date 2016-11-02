@@ -3,13 +3,23 @@
 <p>Dear {{ firstname }} {{ lastname }},</p>
 
 <p>Thank you for submitting "{{ title }}" to the ORB platform.</p>
-<p>Unfortunately, your resource did not meet the criteria to be included on ORB.</p>
+<p>Unfortunately, your resource did not meet the following criteria to be included on ORB:</p>
+
+{{ bullet list of criteria not met (from all reviewers) }}
+
 {% endblocktrans %}
+
+
 
 {% blocktrans %}
 <p>The review team made the following comments:</p>
 
-<p>"{{ notes }}"</p>
+<p>"{{ just the notes from mpowering final review (not all the reviewer comments) }}"</p>
+
+{% endblocktrans %}
+
+{% blocktrans %}
+<p>We would be happy to discuss with you how the resource could be updated to meet our criteria.</p>
 {% endblocktrans %}
 
 {% include 'orb/email/footer.html' %}
