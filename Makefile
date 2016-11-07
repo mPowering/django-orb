@@ -36,6 +36,11 @@ register-languages:  ## Make migrations for new translated fields, migrate, and 
 ###################################
 ### Building project components
 
+clean:
+	-@find . -name '*.pyc' -follow -print0 | xargs -0 rm -f &> /dev/null
+	-@find . -name '*.pyo' -follow -print0 | xargs -0 rm -f &> /dev/null
+	-@find . -name '__pycache__' -type d -follow -print0 | xargs -0 rm -rf &> /dev/null
+
 build: python-deps node-deps database templates docs  ## Run all build commands, including dependencies, database, assets, and docs
 
 docs:  ## Rebuild the documentation and open in default browser
