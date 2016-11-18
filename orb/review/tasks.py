@@ -23,7 +23,7 @@ def send_review_assignment_email(review):
     return send_orb_email(
         template_html="orb/email/review_assignment.html",
         template_text="orb/email/review_assignment.txt",
-        subject=_(u"[ORB]: Content Review for: {}".format(review.resource)),
+        subject=_(u"[ORB]: Content Review for: ") + unicode(review.resource),
         recipients=[review.reviewer.email],
         review=review,
         reviews_link=current_site.domain + reverse('orb_user_reviews'),
@@ -40,13 +40,15 @@ def send_review_reminder_email(review):
         result of `send_mail` - 1 or 0
 
     """
+    current_site = Site.objects.get_current()
     return send_orb_email(
         template_html="orb/email/review_reminder.html",
         template_text="orb/email/review_reminder.txt",
-        subject=_(u"Pending review reminder"),
+        subject=_(u"[ORB]: Resource review reminder: ") + unicode(review.resource),
         recipients=[review.reviewer.email],
         review=review,
         review_age_days=7,
+        reviews_link=current_site.domain + reverse('orb_user_reviews'),
     )
 
 

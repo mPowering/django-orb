@@ -1,9 +1,9 @@
 {% load i18n %}
-{% url 'orb_resource_review' review.resource.pk review.pk as review_url %}
 {% blocktrans %}
-This is a reminder that you a content resource awaiting your review.
+Dear {{ review.reviewer.get_full_name }},
 
-You can access the content and make your review on the content dashboard: {{ review_url }}
+This is a reminder that you have an ORB content resource awaiting your review.
 
+You can access the content and make your review on the content dashboard: {{ reviews_link }}
 {% endblocktrans %}
-{% include 'orb/email/footer.txt' %}
+{% include 'orb/email/footer.html' %}
