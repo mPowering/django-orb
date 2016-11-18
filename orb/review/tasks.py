@@ -122,5 +122,6 @@ def send_review_complete_email(resource, **kwargs):
         firstname=resource.create_user.first_name,
         lastname=resource.create_user.last_name,
         resource_link=current_site.domain + reverse('orb_resource', args=[resource.slug]),
+        resource=resource,
         **kwargs
     )

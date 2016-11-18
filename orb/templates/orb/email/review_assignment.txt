@@ -10,4 +10,4 @@ Please review this resource within the next 10 business days.
 We appreciate your time and efforts in being part of the ORB content review team.
 
 {% endblocktrans %}
-{% include 'orb/email/footer.html' %}
+{% include 'orb/email/footer.txt' %}

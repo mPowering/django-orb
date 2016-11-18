@@ -6,4 +6,4 @@ This is a reminder that you have an ORB content resource awaiting your review.
 
 You can access the content and make your review on the content dashboard: {{ reviews_link }}
 {% endblocktrans %}
-{% include 'orb/email/footer.html' %}
+{% include 'orb/email/footer.txt' %}

@@ -1,9 +1,8 @@
 {% load i18n %}
-{% url 'orb_resource_review' review.resource.pk review.pk as review_url %}
 {% blocktrans %}
 All content reviews for {{ resource }} are now complete. The overall recommendation is {{ verdict }}.
 
-You can make the final final review here: {{ resource_link }}
+You can make the final review here: {{ resource_link }}
 
 {% endblocktrans %}
 {% include 'orb/email/footer.txt' %}
