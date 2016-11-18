@@ -144,7 +144,7 @@ def send_review_complete_email(resource, **kwargs):
         title=resource.title,
         firstname=resource.create_user.first_name,
         lastname=resource.create_user.last_name,
-        resource_link=reverse_fqdn('orb_resource', resource.slug),
+        resource_link=reverse_fqdn('orb_staff_review', resource.pk),
         resource=resource,
         **kwargs
     )
