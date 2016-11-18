@@ -62,7 +62,6 @@ def send_review_reminder_email(review):
         result of `send_mail` - 1 or 0
 
     """
-    current_site = Site.objects.get_current()
     return send_orb_email(
         template_html="orb/email/review_reminder.html",
         template_text="orb/email/review_reminder.txt",
@@ -72,7 +71,7 @@ def send_review_reminder_email(review):
         resource_title=review.resource.title,
         review=review,
         review_age_days=7,
-        reviews_link=current_site.domain + reverse('orb_user_reviews'),
+        reviews_link=reverse_fqdn('orb_user_reviews'),
     )
 
 
@@ -118,7 +117,6 @@ def send_resource_approved_email(resource):
 
 
 def send_resource_rejected_email(resource):
-    current_site = Site.objects.get_current()
     return send_orb_email(
         template_html="orb/email/resource_rejected.html",
         template_text="orb/email/resource_rejected.txt",
@@ -128,7 +126,7 @@ def send_resource_rejected_email(resource):
         firstname=resource.create_user.first_name,
         lastname=resource.create_user.last_name,
         info_email=settings.ORB_INFO_EMAIL,
-        resource_link=current_site.domain + reverse('orb_resource', args=[resource.slug]),
+        resource_link=reverse_fqdn('orb_resource', resource.slug),
         notes=resource.workflow_trackers.rejected().notes(),
     )
 
@@ -138,7 +136,6 @@ def send_review_complete_email(resource, **kwargs):
     Sends an email to staff recipients that all reviews for the given
     resource have been completed.
     """
-    current_site = Site.objects.get_current()
     return send_orb_email(
         template_html="orb/email/review_complete.html",
         template_text="orb/email/review_complete.txt",
@@ -147,7 +144,7 @@ def send_review_complete_email(resource, **kwargs):
         title=resource.title,
         firstname=resource.create_user.first_name,
         lastname=resource.create_user.last_name,
-        resource_link=current_site.domain + reverse('orb_resource', args=[resource.slug]),
+        resource_link=reverse_fqdn('orb_resource', resource.slug),
         resource=resource,
         **kwargs
     )
