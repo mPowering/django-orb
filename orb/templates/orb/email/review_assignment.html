@@ -1,8 +1,8 @@
 {% load i18n %}
 {% blocktrans %}
-<p>Dear {{ review.reviewer.get_full_name }},</p>
+<p>Dear {{ reviewer_name }},</p>
 
-<p>You have been assigned as the {{ review.role }} reviewer for the following resource on ORB: {{ review.resource.title }}</p>
+<p>You have been assigned as the {{ reviewer_role }} reviewer for the following resource on ORB: {{ resource_title }}</p>
 
 <p>You can view all the resources pending your review <a href="{{ reviews_link }}">here on ORB</a>.
 Please review this resource within the next 10 business days.</p>

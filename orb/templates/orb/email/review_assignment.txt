@@ -1,10 +1,10 @@
 {% load i18n %}
 {% blocktrans %}
-Dear {{ review.reviewer.full_name }},
+Dear {{ reviewer_name }},
 
-You have been assigned as the {{ review.role }} reviewer for the following resource on ORB: {{ review.resource.title }}
+You have been assigned as the {{ reviewer_role }} reviewer for the following resource on ORB: {{ resource_title }}
 
-You can view all the resources pending your review here on ORB: {{ reviews_link }}
+You can view all the resources pending your review here on ORB: {{ reviews_link }}.
 Please review this resource within the next 10 business days.
 
 We appreciate your time and efforts in being part of the ORB content review team.
