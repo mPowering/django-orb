@@ -19,12 +19,14 @@ def send_review_assignment_email(review):
         result of `send_mail` - 1 or 0
 
     """
+    current_site = Site.objects.get_current()
     return send_orb_email(
         template_html="orb/email/review_assignment.html",
         template_text="orb/email/review_assignment.txt",
-        subject=_(u"New content review assignment"),
+        subject=_(u"[ORB]: Content Review for: {}".format(review.resource)),
         recipients=[review.reviewer.email],
         review=review,
+        reviews_link=current_site.domain + reverse('orb_user_reviews'),
     )
 
 

@@ -1,11 +1,10 @@
 {% load i18n %}
-{% url 'orb_resource_review' review.resource.pk review.pk as review_url %}
 {% blocktrans %}
 <p>Dear {{ review.reviewer.user.first_name }} {{ review.reviewer.lastname }},</p>
 
-<p>You have been assigned as the {{ role }} reviewer for the following resource on ORB: {{ review.resource.title }}</p>
+<p>You have been assigned as the {{ review.role }} reviewer for the following resource on ORB: {{ review.resource.title }}</p>
 
-<p>You can view all the resources pending your review <a href="{{ all_pending_full_url eg http://health-orb.org/}}">here on ORB</a> . 
+<p>You can view all the resources pending your review <a href="{{ reviews_link }}">here on ORB</a>.
 Please review this resource within the next 10 business days.</p>
 
 We appreciate your time and efforts in being part of the ORB content review team.
