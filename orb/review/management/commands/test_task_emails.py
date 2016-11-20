@@ -24,7 +24,8 @@ class Command(BaseCommand):
             'review_assignment': (tasks.send_review_assignment_email, ContentReview.reviews.all().first),
             'review_reminder': (tasks.send_review_reminder_email, ContentReview.reviews.all().first),
             'resource_approved': (tasks.send_resource_approved_email, resources_with_titles.first),
-            'resource_rejected': (tasks.send_resource_rejected_email, resources_with_titles.first),
+            'resource_rejected': (tasks.send_resource_rejected_email,
+                                  resources_with_titles.filter(status="rejected").first),
             'review_complete': (tasks.send_review_complete_email, resources_with_titles.first,
                                 [], {'verdict': Resource.APPROVED}),
         }
