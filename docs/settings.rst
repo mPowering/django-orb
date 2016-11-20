@@ -22,7 +22,7 @@ ORB Settings
     3
 
 `SITE_HTTP_PROTOCOL`
-    boolean value which is used to toggle between `http` and `https` in full URLs
+    string value which should be either `'http'` or `'https'` (email tasks will default to `'http'` if this is not defined)
 
 `STAGING`
     False  # used for version context processor
