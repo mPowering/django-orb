@@ -7,8 +7,9 @@ Tests for ORB resource models
 from django.core import mail
 from django_fsm import TransitionNotAllowed
 
-from orb.models import Resource
+from orb.models import Resource, ResourceCriteria
 from orb.review.models import ContentReview, process_resource_reviews
+from orb.review.utils import unmet_criteria
 from orb.review.tests.base import ReviewTestCase
 
 
@@ -129,3 +130,43 @@ class ReviewIntegrationTests(ReviewTestCase):
         self.resource.status = Resource.PENDING
         self.resource.save()
         self.assertEqual(self.resource.status, Resource.PENDING)  # sanity check
+
+
+class UtilityTests(ReviewTestCase):
+    """
+    Tests for the model class properties and methods
+    """
+    @classmethod
+    def setUpClass(cls):
+        super(UtilityTests, cls).setUpClass()
+        cls.criteria_1 = ResourceCriteria.objects.create(description="a", role=cls.medical_role)
+        cls.criteria_2 = ResourceCriteria.objects.create(description="b")
+        cls.criteria_3 = ResourceCriteria.objects.create(description="c")
+        cls.criteria_4 = ResourceCriteria.objects.create(description="d", role=cls.technical_role)
+
+        cls.review_one = ContentReview.objects.create(resource=cls.resource, reviewer=cls.reviewer, role=cls.medical_role)
+        cls.review_two = ContentReview.objects.create(resource=cls.resource, reviewer=cls.staff_user, role=cls.technical_role)
+
+        cls.review_one.criteria.add(cls.criteria_1)
+        cls.review_two.criteria.add(cls.criteria_2)
+
+    def test_unmet_criteria(self):
+        """Method should return only unmet criteria relevant to related role"""
+
+        self.assertEqual(
+            set(self.review_one.unmet_criteria()),
+            set([self.criteria_2, self.criteria_3]),
+        )
+
+        self.assertEqual(
+            set(self.review_two.unmet_criteria()),
+            set([self.criteria_3, self.criteria_4]),
+        )
+
+    def test_all_unmatched_criteria(self):
+        """Function should aggregate all unselected criteria"""
+
+        self.assertEqual(
+            set(unmet_criteria(self.resource)),
+            set([self.criteria_2, self.criteria_3, self.criteria_4]),
+        )

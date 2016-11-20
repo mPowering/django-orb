@@ -1,11 +1,12 @@
 from datetime import datetime, timedelta
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
 from orb.emailer import send_orb_email
+from orb.review.utils import unmet_criteria
 
 
 def reverse_fqdn(url_name, *args, **kwargs):
@@ -128,6 +129,7 @@ def send_resource_rejected_email(resource):
         info_email=settings.ORB_INFO_EMAIL,
         resource_link=reverse_fqdn('orb_resource', resource.slug),
         notes=resource.workflow_trackers.rejected().notes(),
+        rejected_criteria=unmet_criteria(resource),
     )
 
 
