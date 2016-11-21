@@ -4,12 +4,20 @@ Dear {{ firstname }} {{ lastname }},
 
 Thank you for submitting "{{ title }}" to the ORB platform.
 
-Unfortunately, your resource did not meet the criteria to be included on ORB.
+Unfortunately, your resource did not meet the following criteria to be included on ORB:
 {% endblocktrans %}
-
+    {% for criterion in rejected_criteria %}
+        <li>{{ criterion }}</li>
+    {% endfor %}
 {% blocktrans %}
 The review team made the following comments:
 
 "{{ notes }}"
+
 {% endblocktrans %}
+
+{% blocktrans %}
+We would be happy to discuss with you how the resource could be updated to meet our criteria.
+{% endblocktrans %}
+
 {% include 'orb/email/footer.txt' %}

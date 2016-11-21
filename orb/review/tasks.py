@@ -1,11 +1,32 @@
 from datetime import datetime, timedelta
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.contrib.sites.models import Site
+from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
 from orb.emailer import send_orb_email
+from orb.review.utils import unmet_criteria
+
+
+def reverse_fqdn(url_name, *args, **kwargs):
+    """
+    Returns a reversed URL including the fully qualified domain name and protocol
+
+    Args:
+        url_name: named URL
+        *args: positional arguments to pass to `reverse`
+        **kwargs: keyword arguments to pass to `reverse`
+
+    Returns:
+        the whole URL
+
+    """
+    return u"{protocol}://{domain}{path}".format(
+        protocol=getattr(settings, "SITE_HTTP_PROTOCOL", "http"),
+        domain=Site.objects.get_current().domain,
+        path=reverse(url_name, args=args, kwargs=kwargs),
+    )
 
 
 def send_review_assignment_email(review):
@@ -22,9 +43,13 @@ def send_review_assignment_email(review):
     return send_orb_email(
         template_html="orb/email/review_assignment.html",
         template_text="orb/email/review_assignment.txt",
-        subject=_(u"New content review assignment"),
+        subject=_(u"Content Review for: ") + unicode(review.resource),
         recipients=[review.reviewer.email],
+        reviewer_name=review.reviewer.get_full_name(),
+        resource_title=review.resource.title,
+        reviewer_role=review.role.get_name_display(),
         review=review,
+        reviews_link=reverse_fqdn('orb_user_reviews'),
     )
 
 
@@ -41,19 +66,25 @@ def send_review_reminder_email(review):
     return send_orb_email(
         template_html="orb/email/review_reminder.html",
         template_text="orb/email/review_reminder.txt",
-        subject=_(u"Pending review reminder"),
+        subject=_(u"Resource review reminder: ") + unicode(review.resource),
         recipients=[review.reviewer.email],
+        reviewer_name=review.reviewer.get_full_name(),
+        resource_title=review.resource.title,
         review=review,
         review_age_days=7,
+        reviews_link=reverse_fqdn('orb_user_reviews'),
     )
 
 
 def remind_reviewers(start_days=7, end_days=8):
     """
+    Sends reminders to reviewers for all late reviews created during a defined window
+
+    A window is defined by looking back
 
     Args:
-        start_days:
-        end_days:
+        start_days: the earlier number of days to go "back"
+        end_days: the final number of days to go "back"
 
     Returns:
         None
@@ -73,7 +104,6 @@ def remind_reviewers(start_days=7, end_days=8):
 
 
 def send_resource_approved_email(resource):
-    current_site = Site.objects.get_current()
     return send_orb_email(
         template_html="orb/email/resource_approved.html",
         template_text="orb/email/resource_approved.txt",
@@ -83,12 +113,11 @@ def send_resource_approved_email(resource):
         firstname=resource.create_user.first_name,
         lastname=resource.create_user.last_name,
         info_email=settings.ORB_INFO_EMAIL,
-        resource_link=current_site.domain + reverse('orb_resource', args=[resource.slug]),
+        resource_link=reverse_fqdn('orb_resource', resource.slug),
     )
 
 
 def send_resource_rejected_email(resource):
-    current_site = Site.objects.get_current()
     return send_orb_email(
         template_html="orb/email/resource_rejected.html",
         template_text="orb/email/resource_rejected.txt",
@@ -98,8 +127,9 @@ def send_resource_rejected_email(resource):
         firstname=resource.create_user.first_name,
         lastname=resource.create_user.last_name,
         info_email=settings.ORB_INFO_EMAIL,
-        resource_link=current_site.domain + reverse('orb_resource', args=[resource.slug]),
+        resource_link=reverse_fqdn('orb_resource', resource.slug),
         notes=resource.workflow_trackers.rejected().notes(),
+        rejected_criteria=unmet_criteria(resource),
     )
 
 
@@ -108,7 +138,6 @@ def send_review_complete_email(resource, **kwargs):
     Sends an email to staff recipients that all reviews for the given
     resource have been completed.
     """
-    current_site = Site.objects.get_current()
     return send_orb_email(
         template_html="orb/email/review_complete.html",
         template_text="orb/email/review_complete.txt",
@@ -117,6 +146,7 @@ def send_review_complete_email(resource, **kwargs):
         title=resource.title,
         firstname=resource.create_user.first_name,
         lastname=resource.create_user.last_name,
-        resource_link=current_site.domain + reverse('orb_resource', args=[resource.slug]),
+        resource_link=reverse_fqdn('orb_staff_review', resource.pk),
+        resource=resource,
         **kwargs
     )

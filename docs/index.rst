@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 1
 
    code
+   settings
    restapi
    language
    changelog

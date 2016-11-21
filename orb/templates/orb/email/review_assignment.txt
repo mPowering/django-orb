@@ -1,9 +1,13 @@
 {% load i18n %}
-{% url 'orb_resource_review' review.resource.pk review.pk as review_url %}
 {% blocktrans %}
-There is a new content resource for your review.
+Dear {{ reviewer_name }},
 
-You can access the content and make your review on the content dashboard: {{ review_url }}
+You have been assigned as the {{ reviewer_role }} reviewer for the following resource on ORB: {{ resource_title }}
+
+You can view all the resources pending your review here on ORB: {{ reviews_link }}.
+Please review this resource within the next 10 business days.
+
+We appreciate your time and efforts in being part of the ORB content review team.
 
 {% endblocktrans %}
 {% include 'orb/email/footer.txt' %}

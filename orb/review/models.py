@@ -28,7 +28,7 @@ from django.utils.translation import ugettext_lazy as _
 from django_fsm import FSMField, transition, TransitionNotAllowed
 
 import orb.signals
-from orb.models import TimestampBase, Resource, ReviewerRole
+from orb.models import TimestampBase, Resource, ReviewerRole, ResourceCriteria
 from orb.review import signals, tasks
 
 
@@ -179,6 +179,16 @@ class ContentReview(TimestampBase):
             review_status=self.status,
             action="Reassigned from {0} to {1}".format(old_reviewer, new_user),
         )
+
+    def unmet_criteria(self):
+        """
+        Criteria applicable to this role that were unselected
+
+        Returns:
+            queryset of ResourceCriteria
+
+        """
+        return ResourceCriteria.criteria.for_role(self.role).exclude(id__in=self.criteria.all())
 
 
 def process_resource_reviews(resource):
