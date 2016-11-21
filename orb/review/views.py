@@ -45,9 +45,10 @@ def review_resource(request, review):
 
     """
     if request.method == 'POST':
-        form = ContentReviewForm(data=request.POST, user=request.user)
+        form = ContentReviewForm(data=request.POST, user=request.user, instance=review)
         if form.is_valid():
             approved = form.cleaned_data['approved']
+            form.save()
             if approved:
                 review.approve()
                 review.save()

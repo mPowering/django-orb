@@ -44,5 +44,8 @@ database:  ## Migrate the database
 	@echo "Setting up and updating the database..."
 	./manage.py migrate --noinput
 
+clean:  ## Removes extraneous files and build artifacts
+	find . -name "*.pyc" -delete
+
 help:
 	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
