@@ -14,6 +14,7 @@ class ResourceStep2FormTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        super(ResourceStep2FormTests, cls).setUpClass()
         cls.uploaded_file = MagicMock()
         cls.uploaded_file.content_type = "application/pdf"
         cls.uploaded_file.size = 100

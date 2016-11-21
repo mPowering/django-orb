@@ -20,7 +20,17 @@ class SearchResourceTest(ResourceTestCase):
         super(SearchResourceTest, self).setUp()
 
         standard_user = User.objects.get(username='standarduser')
+        print("*" * 80)
+        print("*" * 80)
+        print("*" * 80)
+        print("*" * 80)
+        print(ApiKey.objects.all())
+        print("*" * 80)
+        print("*" * 80)
+        print("*" * 80)
+        print("*" * 80)
         api_key = ApiKey.objects.get(user=standard_user)
+
         self.standard_user = {
             'username': standard_user.username,
             'api_key': api_key.key,
