@@ -1,72 +1,68 @@
-# orb.test_api.py
+"""
+API Resource specific tests for the ORB API
+"""
 
+import uuid
 
 from django.contrib.auth.models import User
-
-from orb.models import SearchTracker
-
 from tastypie.models import ApiKey
 from tastypie.test import ResourceTestCase
 
-# Create your tests here.
-
-# Search API
+from orb.models import SearchTracker
 
 
-class SearchResourceTest(ResourceTestCase):
-    fixtures = ['user.json', 'orb.json']
+class ApiTestFixture(object):
+    @classmethod
+    def setUpClass(cls):
 
-    def setUp(self):
-        super(SearchResourceTest, self).setUp()
+        super(ApiTestFixture, cls).setUpClass()
 
         standard_user = User.objects.get(username='standarduser')
-        print("*" * 80)
-        print("*" * 80)
-        print("*" * 80)
-        print("*" * 80)
-        print(ApiKey.objects.all())
-        print("*" * 80)
-        print("*" * 80)
-        print("*" * 80)
-        print("*" * 80)
-        api_key = ApiKey.objects.get(user=standard_user)
+        api_key, _ = ApiKey.objects.get_or_create(user=standard_user, defaults={"key": str(uuid.uuid4())})
 
-        self.standard_user = {
+        cls.standard_user = {
             'username': standard_user.username,
             'api_key': api_key.key,
         }
 
         api_user = User.objects.get(username='apiuser')
-        api_key = ApiKey.objects.get(user=api_user)
-        self.api_user = {
+        api_key, _ = ApiKey.objects.get_or_create(user=api_user, defaults={"key": str(uuid.uuid4())})
+        cls.api_user = {
             'username': api_user.username,
             'api_key': api_key.key,
         }
 
         super_user = User.objects.get(username='superuser')
-        api_key = ApiKey.objects.get(user=super_user)
-        self.super_user = {
+        api_key, _ = ApiKey.objects.get_or_create(user=super_user, defaults={"key": str(uuid.uuid4())})
+        cls.super_user = {
             'username': super_user.username,
             'api_key': api_key.key,
         }
 
         staff_user = User.objects.get(username='staffuser')
-        api_key = ApiKey.objects.get(user=staff_user)
-        self.staff_user = {
+        api_key, _ = ApiKey.objects.get_or_create(user=staff_user, defaults={"key": str(uuid.uuid4())})
+        cls.staff_user = {
             'username': staff_user.username,
             'api_key': api_key.key,
         }
 
         orgowner_user = User.objects.get(username='orgowner')
-        api_key = ApiKey.objects.get(user=orgowner_user)
-        self.orgowner_user = {
+        api_key, _ = ApiKey.objects.get_or_create(user=orgowner_user, defaults={"key": str(uuid.uuid4())})
+        cls.orgowner_user = {
             'username': orgowner_user.username,
             'api_key': api_key.key,
         }
 
+        cls.user_set = [cls.api_user, cls.standard_user,
+                        cls.super_user, cls.staff_user, cls.orgowner_user]
+
+
+class SearchResourceTest(ApiTestFixture, ResourceTestCase):
+    fixtures = ['user.json', 'orb.json']
+
+    def setUp(self):
+        super(SearchResourceTest, self).setUp()
         self.url = '/api/v1/resource/search/'
-        self.user_set = [self.api_user, self.standard_user,
-                         self.super_user, self.staff_user, self.orgowner_user]
 
     # check post not allowed
     def test_post_invalid(self):
@@ -110,50 +106,12 @@ class SearchResourceTest(ResourceTestCase):
 # Resource API
 
 
-class ResourceResourceTest(ResourceTestCase):
+class ResourceResourceTest(ApiTestFixture, ResourceTestCase):
     fixtures = ['user.json', 'orb.json']
 
     def setUp(self):
         super(ResourceResourceTest, self).setUp()
-
-        standard_user = User.objects.get(username='standarduser')
-        api_key = ApiKey.objects.get(user=standard_user)
-        self.standard_user = {
-            'username': standard_user.username,
-            'api_key': api_key.key,
-        }
-
-        api_user = User.objects.get(username='apiuser')
-        api_key = ApiKey.objects.get(user=api_user)
-        self.api_user = {
-            'username': api_user.username,
-            'api_key': api_key.key,
-        }
-
-        super_user = User.objects.get(username='superuser')
-        api_key = ApiKey.objects.get(user=super_user)
-        self.super_user = {
-            'username': super_user.username,
-            'api_key': api_key.key,
-        }
-
-        staff_user = User.objects.get(username='staffuser')
-        api_key = ApiKey.objects.get(user=staff_user)
-        self.staff_user = {
-            'username': staff_user.username,
-            'api_key': api_key.key,
-        }
-
-        orgowner_user = User.objects.get(username='orgowner')
-        api_key = ApiKey.objects.get(user=orgowner_user)
-        self.orgowner_user = {
-            'username': orgowner_user.username,
-            'api_key': api_key.key,
-        }
-
         self.url = '/api/v1/resource/'
-        self.user_set = [self.api_user, self.standard_user,
-                         self.super_user, self.staff_user, self.orgowner_user]
 
     # check get allowed for valid user
     def test_get_valid(self):
@@ -254,50 +212,12 @@ class ResourceResourceTest(ResourceTestCase):
 
 
 # Tag API
-class TagResourceTest(ResourceTestCase):
+class TagResourceTest(ApiTestFixture, ResourceTestCase):
     fixtures = ['user.json', 'orb.json']
 
     def setUp(self):
         super(TagResourceTest, self).setUp()
-
-        standard_user = User.objects.get(username='standarduser')
-        api_key = ApiKey.objects.get(user=standard_user)
-        self.standard_user = {
-            'username': standard_user.username,
-            'api_key': api_key.key,
-        }
-
-        api_user = User.objects.get(username='apiuser')
-        api_key = ApiKey.objects.get(user=api_user)
-        self.api_user = {
-            'username': api_user.username,
-            'api_key': api_key.key,
-        }
-
-        super_user = User.objects.get(username='superuser')
-        api_key = ApiKey.objects.get(user=super_user)
-        self.super_user = {
-            'username': super_user.username,
-            'api_key': api_key.key,
-        }
-
-        staff_user = User.objects.get(username='staffuser')
-        api_key = ApiKey.objects.get(user=staff_user)
-        self.staff_user = {
-            'username': staff_user.username,
-            'api_key': api_key.key,
-        }
-
-        orgowner_user = User.objects.get(username='orgowner')
-        api_key = ApiKey.objects.get(user=orgowner_user)
-        self.orgowner_user = {
-            'username': orgowner_user.username,
-            'api_key': api_key.key,
-        }
-
         self.url = '/api/v1/tag/'
-        self.user_set = [self.api_user, self.standard_user,
-                         self.super_user, self.staff_user, self.orgowner_user]
 
     # check get allowed for valid user
     def test_get_valid(self):
@@ -390,42 +310,6 @@ class ResourceTagResourceTest(ResourceTestCase):
 
     def setUp(self):
         super(ResourceTagResourceTest, self).setUp()
-
-        standard_user = User.objects.get(username='standarduser')
-        api_key = ApiKey.objects.get(user=standard_user)
-        self.standard_user = {
-            'username': standard_user.username,
-            'api_key': api_key.key,
-        }
-
-        api_user = User.objects.get(username='apiuser')
-        api_key = ApiKey.objects.get(user=api_user)
-        self.api_user = {
-            'username': api_user.username,
-            'api_key': api_key.key,
-        }
-
-        super_user = User.objects.get(username='superuser')
-        api_key = ApiKey.objects.get(user=super_user)
-        self.super_user = {
-            'username': super_user.username,
-            'api_key': api_key.key,
-        }
-
-        staff_user = User.objects.get(username='staffuser')
-        api_key = ApiKey.objects.get(user=staff_user)
-        self.staff_user = {
-            'username': staff_user.username,
-            'api_key': api_key.key,
-        }
-
-        orgowner_user = User.objects.get(username='orgowner')
-        api_key = ApiKey.objects.get(user=orgowner_user)
-        self.orgowner_user = {
-            'username': orgowner_user.username,
-            'api_key': api_key.key,
-        }
-
         self.url = '/api/v1/resourcetag/'
 
 
@@ -435,45 +319,8 @@ class ResourceFileTest(ResourceTestCase):
 
     def setUp(self):
         super(ResourceFileTest, self).setUp()
-
-        standard_user = User.objects.get(username='standarduser')
-        api_key = ApiKey.objects.get(user=standard_user)
-        self.standard_user = {
-            'username': standard_user.username,
-            'api_key': api_key.key,
-        }
-
-        api_user = User.objects.get(username='apiuser')
-        api_key = ApiKey.objects.get(user=api_user)
-        self.api_user = {
-            'username': api_user.username,
-            'api_key': api_key.key,
-        }
-
-        super_user = User.objects.get(username='superuser')
-        api_key = ApiKey.objects.get(user=super_user)
-        self.super_user = {
-            'username': super_user.username,
-            'api_key': api_key.key,
-        }
-
-        staff_user = User.objects.get(username='staffuser')
-        api_key = ApiKey.objects.get(user=staff_user)
-        self.staff_user = {
-            'username': staff_user.username,
-            'api_key': api_key.key,
-        }
-
-        orgowner_user = User.objects.get(username='orgowner')
-        api_key = ApiKey.objects.get(user=orgowner_user)
-        self.orgowner_user = {
-            'username': orgowner_user.username,
-            'api_key': api_key.key,
-        }
-
         self.url = '/api/v1/resourcefile/'
 
-# ResourceURL API
 
 
 class ResourceURLTest(ResourceTestCase):
@@ -481,40 +328,4 @@ class ResourceURLTest(ResourceTestCase):
 
     def setUp(self):
         super(ResourceURLTest, self).setUp()
-
-        standard_user = User.objects.get(username='standarduser')
-        api_key = ApiKey.objects.get(user=standard_user)
-        self.standard_user = {
-            'username': standard_user.username,
-            'api_key': api_key.key,
-        }
-
-        api_user = User.objects.get(username='apiuser')
-        api_key = ApiKey.objects.get(user=api_user)
-        self.api_user = {
-            'username': api_user.username,
-            'api_key': api_key.key,
-        }
-
-        super_user = User.objects.get(username='superuser')
-        api_key = ApiKey.objects.get(user=super_user)
-        self.super_user = {
-            'username': super_user.username,
-            'api_key': api_key.key,
-        }
-
-        staff_user = User.objects.get(username='staffuser')
-        api_key = ApiKey.objects.get(user=staff_user)
-        self.staff_user = {
-            'username': staff_user.username,
-            'api_key': api_key.key,
-        }
-
-        orgowner_user = User.objects.get(username='orgowner')
-        api_key = ApiKey.objects.get(user=orgowner_user)
-        self.orgowner_user = {
-            'username': orgowner_user.username,
-            'api_key': api_key.key,
-        }
-
         self.url = '/api/v1/resourceurl/'
