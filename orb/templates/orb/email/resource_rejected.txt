@@ -7,7 +7,7 @@ Thank you for submitting "{{ title }}" to the ORB platform.
 Unfortunately, your resource did not meet the following criteria to be included on ORB:
 {% endblocktrans %}
     {% for criterion in rejected_criteria %}
-        <li>{{ criterion }}</li>
+* {{ criterion }}
     {% endfor %}
 {% blocktrans %}
 The review team made the following comments:
