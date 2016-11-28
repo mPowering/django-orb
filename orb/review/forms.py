@@ -194,7 +194,7 @@ class ContentReviewForm(forms.ModelForm):
             selected_criteria = data.get('criteria').values_list('pk', flat=True)
             given_criteria = self.fields['criteria'].queryset.values_list('pk', flat=True)
 
-            if list(selected_criteria) != list(given_criteria):
+            if set(selected_criteria) != set(given_criteria):
                 raise forms.ValidationError(FormErrors.ALL_CRITERIA)
 
         else:
