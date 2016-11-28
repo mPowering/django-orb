@@ -1,5 +1,9 @@
 # Base requirements for installation *except* Django
+#
+# Isolating Django from the other requirements allows better cross-version
+# (Django) testing.
 
+Django==1.8.16
 
 django-tastypie==0.13.3
 django-tablib>=0.9.11,<4.0
