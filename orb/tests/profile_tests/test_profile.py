@@ -1,32 +1,39 @@
 # orb.test_profile.py
 
+import uuid
+
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
+from tastypie.models import ApiKey
 
 from orb.models import UserProfile
-
-from tastypie.models import ApiKey
 
 
 class ProfilePageTest(TestCase):
     fixtures = ['user.json', 'orb.json']
 
-    def setUp(self):
-        self.client = Client()
+    @classmethod
+    def setUpClass(cls):
+        super(ProfilePageTest, cls).setUpClass()
+        standard_user = User.objects.get(username="standarduser")
+        api_key, _ = ApiKey.objects.get_or_create(user=standard_user, defaults={"key": str(uuid.uuid4())})
 
-    def test_pages(self):
+    def test_profile_register(self):
         response = self.client.get(reverse('profile_register'))
         self.assertEqual(response.status_code, 200)
 
+    def test_profile_login(self):
         response = self.client.get(reverse('profile_login'))
         self.assertEqual(response.status_code, 200)
 
+    def test_profile_edit(self):
         response = self.client.get(reverse('my_profile_edit'))
         # should redirect to login page if not logged in
         self.assertEqual(response.status_code, 302)
 
+    def test_login_to_profile_edit(self):
         self.client.login(username='standarduser', password='password')
         response = self.client.get(reverse('my_profile_edit'))
         self.assertEqual(response.status_code, 200)
@@ -38,9 +45,11 @@ class ProfilePageTest(TestCase):
         response = self.client.get(reverse('profile_logout'))
         self.assertEqual(response.status_code, 200)
 
+    def test_profile_reset(self):
         response = self.client.get(reverse('profile_reset'))
         self.assertEqual(response.status_code, 200)
 
+    def test_profile_reset_sent(self):
         response = self.client.get(reverse('profile_reset_sent'))
         self.assertEqual(response.status_code, 200)
 
@@ -108,8 +117,11 @@ class RegisterTest(TestCase):
 class PasswordUpdateTest(TestCase):
     fixtures = ['user.json', 'orb.json']
 
-    def setUp(self):
-        self.client = Client()
+    @classmethod
+    def setUpClass(cls):
+        super(PasswordUpdateTest, cls).setUpClass()
+        standard_user = User.objects.get(username="standarduser")
+        api_key, _ = ApiKey.objects.get_or_create(user=standard_user, defaults={"key": str(uuid.uuid4())})
 
     def test_update_password(self):
         new_password = '123456'
