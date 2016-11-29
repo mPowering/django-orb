@@ -1,0 +1,8 @@
+# Master requirements installation point
+#
+# Isolating Django from the other requirements allows better cross-version
+# (Django) testing.
+
+Django==1.8.16
+-r requirements/base.txt
+

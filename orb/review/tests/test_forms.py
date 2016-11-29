@@ -74,8 +74,12 @@ class ReviewFormTests(ReviewTestCase):
         """Approval should be valid if all criteria are selected"""
         form = ContentReviewForm(data={
             'approved': True,
-            'criteria': [self.criteria_1.pk, self.criteria_2.pk, self.criteria_5.pk, self.criteria_6.pk],
+            'criteria': [
+                c.pk for c in
+                ResourceCriteria.criteria.for_roles(*self.staff_user.userprofile.reviewer_roles.all())
+            ]
         }, user=self.staff_user)
+        form.is_valid()
         self.assertTrue(form.is_valid())
 
     def test_approve_missing_criteria(self):
