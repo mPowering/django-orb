@@ -42,30 +42,17 @@
 {% endblocktrans %}
 
 
-<h3><a name="crt" class="named-anchor"></a>{% trans 'Content Review Team' %}</h3>
+<h3><a name="crp" class="named-anchor"></a>{% trans 'Content Review Process' %}</h3>
+{% url 'orb_guidelines' as guidelines %}
 {% blocktrans %}
 <p>Our Content Review Team consists of staff from over 35
 	organsations, with backgrounds in global public health, training and
 	technology.</p>
 <p>When resources are submitted to ORB, the Content Review Team makes
-	the initial decision on the suitability of the resource to be included
-	in ORB. Once a resource has been approved by the Content Review Team it
-	is then passed to our Medical Expert Panel.</p>
+	the decision on the suitability of the resource to be included
+	in ORB, based on the <a href="{{ guidelines }}">ORB content guidelines and criteria</a>.</p>
 {% endblocktrans %}
 
-
-<h3>
-	<a name="mep" class="named-anchor"></a>{% trans 'Medical Expert Panel' %}
-</h3>
-{% blocktrans %}
-<p>Our Medical Expert Panel consists of medical professionals from
-	international health organisations.</p>
-<p>When a submitted resource has been approved by Content Review
-	Team, the Medical Expert Panel makes the final decision on whether a
-	resource can be included in ORB, based on the most up to date medical
-	information and guidelines available.</p>
-
-{% endblocktrans %}
 
 <hr/>
 <h4>{% trans 'Homepage Photo Credits' %}</h4>

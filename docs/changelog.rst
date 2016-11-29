@@ -16,8 +16,12 @@ v2.2.2 - not yet released
 * 392: CRT process - starting review with no role assignments - http://github.com/mPowering/django-orb/issues/issues/issue/392
 * 384: Content Review - should be an option to add a (free-text) reason for rejection - http://github.com/mPowering/django-orb/issues/issues/issue/384
 * 385: Content Review - reviews should be able to check off the individual criteria - http://github.com/mPowering/django-orb/issues/issues/issue/385
-
-
+* 414: Add migration file following latest commits - http://github.com/mPowering/django-orb/issues/issues/issue/414
+* 371: Update content review workflow with new CRT structure - http://github.com/mPowering/django-orb/issues/issues/issue/371
+* 372: Allow health domain owners to approve content - http://github.com/mPowering/django-orb/issues/issues/issue/372
+* 400: Resource submitted email gets sent after step 1 rather than step 2 - http://github.com/mPowering/django-orb/issues/issues/issue/400
+* 406: Error on final resource review (when rejected) - http://github.com/mPowering/django-orb/issues/issues/issue/406
+* 404: Update about page - to reflect CRT/MEP process - http://github.com/mPowering/django-orb/issues/issues/issue/404
 
 v2.2.1 - released 3 May 2016
 ---------------------------------
