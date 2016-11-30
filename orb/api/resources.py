@@ -202,7 +202,7 @@ class ResourceURLResource(ModelResource):
         queryset = ResourceURL.objects.all()
         resource_name = 'resourceurl'
         allowed_methods = ['get', 'post', 'delete']
-        fields = ['id', 'url', 'title', 'description', 'order_by', 'file_size']
+        excludes = ['create_date', 'update_date', 'image']
         authentication = ApiKeyAuthentication()
         authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
