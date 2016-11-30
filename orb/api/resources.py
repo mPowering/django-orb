@@ -182,8 +182,7 @@ class ResourceFileResource(ModelResource):
         queryset = ResourceFile.objects.all()
         resource_name = 'resourcefile'
         allowed_methods = ['get', 'delete']
-        fields = ['id', 'file', 'title',
-                  'description', 'order_by', 'file_size']
+        excludes = ['create_date', 'update_date', 'image', 'file_full_text']
         authentication = ApiKeyAuthentication()
         authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
