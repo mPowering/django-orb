@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -40,7 +41,20 @@ class TimestampBase(models.Model):
         abstract = True
 
 
-class Resource(TimestampBase):
+class GlobalModel(models.Model):
+    guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        if not self.guid:
+            self.guid = uuid.uuid4()
+        super(GlobalModel, self).save(*args, **kwargs)
+
+
+
+class Resource(GlobalModel, TimestampBase):
     REJECTED = 'rejected'
     PENDING_CRT = 'pending_crt'
     PENDING = PENDING_CRT
@@ -217,7 +231,7 @@ class ResourceWorkflowTracker(models.Model):
     objects = workflows  # Backwards compatible alias
 
 
-class ResourceURL(TimestampBase):
+class ResourceURL(TimestampBase, GlobalModel):
     url = models.URLField(blank=False, null=False, max_length=500)
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
@@ -237,7 +251,7 @@ class ResourceURL(TimestampBase):
         return self.url
 
 
-class ResourceFile(TimestampBase):
+class ResourceFile(TimestampBase, GlobalModel):
     file = models.FileField(upload_to='resource/%Y/%m/%d', max_length=200)
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
