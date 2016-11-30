@@ -41,20 +41,7 @@ class TimestampBase(models.Model):
         abstract = True
 
 
-class GlobalModel(models.Model):
-    guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
-
-    class Meta:
-        abstract = True
-
-    def save(self, *args, **kwargs):
-        if not self.guid:
-            self.guid = uuid.uuid4()
-        super(GlobalModel, self).save(*args, **kwargs)
-
-
-
-class Resource(GlobalModel, TimestampBase):
+class Resource(TimestampBase):
     REJECTED = 'rejected'
     PENDING_CRT = 'pending_crt'
     PENDING = PENDING_CRT
@@ -78,6 +65,7 @@ class Resource(GlobalModel, TimestampBase):
         (WEEKS, _('Weeks')),
     )
 
+    guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
     title = models.TextField(blank=False, null=False)
     description = models.TextField(blank=False, null=False)
     image = models.ImageField(
@@ -231,7 +219,8 @@ class ResourceWorkflowTracker(models.Model):
     objects = workflows  # Backwards compatible alias
 
 
-class ResourceURL(TimestampBase, GlobalModel):
+class ResourceURL(TimestampBase):
+    guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
     url = models.URLField(blank=False, null=False, max_length=500)
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
@@ -251,7 +240,8 @@ class ResourceURL(TimestampBase, GlobalModel):
         return self.url
 
 
-class ResourceFile(TimestampBase, GlobalModel):
+class ResourceFile(TimestampBase):
+    guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
     file = models.FileField(upload_to='resource/%Y/%m/%d', max_length=200)
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
