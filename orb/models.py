@@ -7,15 +7,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Avg, Count
 from django.utils.translation import ugettext_lazy as _
+from modeltranslation.utils import build_localized_fieldname
 from tastypie.models import create_api_key
 
+from orb import signals
 from orb.analytics.models import UserLocationVisualization
 from orb.profiles.querysets import ProfilesQueryset
 from orb.resources.managers import ResourceManager, ResourceURLManager, ApprovedManager
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
 from .fields import AutoSlugField
-from orb import signals
 
 models.signals.post_save.connect(create_api_key, sender=User)
 
@@ -185,6 +186,21 @@ class Resource(TimestampBase):
         if rating['rating']:
             rating['rating'] = round(rating['rating'], 0)
         return rating
+
+    def available_languages(self):
+        """
+        Returns a list of site languages for which this resource has translations
+
+        This is based on having both title and description for these fields.
+        """
+        field_names = {
+            language[0]: [build_localized_fieldname(field, language[0]) for field in ["title", "description"]]
+            for language in settings.LANGUAGES
+        }
+
+        return [
+            language for language, fields in field_names.items() if all([getattr(self, field) for field in fields])
+        ]
 
 
 class ResourceWorkflowTracker(models.Model):

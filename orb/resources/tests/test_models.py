@@ -4,11 +4,49 @@
 Tests for ORB resource models
 """
 
+import pytest
 from django.contrib.auth.models import User
 from django.test import TestCase
 
 from orb.models import Resource, ResourceURL
 from orb.resources.tests.factory import resource_factory
+
+
+pytestmark = pytest.mark.django_db
+
+
+@pytest.fixture(scope="module")
+def test_user():
+    user, _ = User.objects.get_or_create(username="tester")
+    yield user
+
+
+@pytest.fixture(scope="module")
+def test_resource(test_user):
+    yield resource_factory(
+        user=test_user,
+        title=u"Básica salud del recién nacido",
+        description=u"Básica salud del recién nacido",
+    )
+
+
+def test_guid(test_resource):
+    assert test_resource.guid is not None
+
+
+def test_languages(test_resource, settings):
+    """Instance method should return list of available languages"""
+    settings.LANGUAGES = [
+        ('en', u'English'),
+        ('es', u'Español'),
+        ('pt-br', u'Português'),
+    ]
+    test_resource.title_en = "Hey"
+    test_resource.title_pt_br = "Hey"
+    test_resource.description_en = "Hey"
+    test_resource.description_pt_br = "Hey"
+    test_resource.title_es = "hola"
+    assert test_resource.available_languages() == ["en", "pt-br"]
 
 
 class ResourceTests(TestCase):
