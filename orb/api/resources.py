@@ -292,19 +292,19 @@ class TagResource(TagBase, ModelResource):
         queryset = Tag.objects.all()
         resource_name = 'tag'
         allowed_methods = ['get', 'post']
-        fields = ['id', 'name', 'image']
-        filtering = {"name": ["exact"]}
+        excludes = ['contact_email', 'create_date', 'order_by', 'external_url', 'update_date', 'slug']
         authentication = ApiKeyAuthentication()
         authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
         always_return_data = True
         include_resource_uri = True
         filtering = {
+            "name": ["exact"],
             "category": ('exact',),
             "name": ALL,
         }
 
-    def build_filters(self, filters=None):
+    def build_filters(self, filters=None, **kwargs):
         """
         Creates additional filters for a querylist of Tag resources
 
@@ -391,7 +391,7 @@ class TagsResource(TagBase, ModelResource):
             "name": ALL,
         }
 
-    def build_filters(self, filters=None):
+    def build_filters(self, filters=None, **kwargs):
         """
         Creates additional filters for a querylist of Tag resources
 
