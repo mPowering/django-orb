@@ -304,7 +304,6 @@ class TagResource(TagBase, ModelResource):
         always_return_data = True
         include_resource_uri = True
         filtering = {
-            "name": ["exact"],
             "category": ('exact',),
             "name": ALL,
         }
