@@ -14,7 +14,7 @@ from tastypie.models import create_api_key
 from orb import signals
 from orb.analytics.models import UserLocationVisualization
 from orb.profiles.querysets import ProfilesQueryset
-from orb.resources.managers import ResourceManager, ResourceURLManager, ApprovedManager
+from orb.resources.managers import ResourceURLManager, ApprovedManager, ResourceQueryset
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
 from .fields import AutoSlugField
@@ -90,7 +90,7 @@ class Resource(TimestampBase):
     source_peer = models.ForeignKey('peers.Peer', null=True, blank=True, related_name="resources",
                                     help_text=_("The peer ORB from which the resource was downloaded."))
 
-    resources = ResourceManager()
+    resources = ResourceQueryset.as_manager()
     objects = resources  # alias
     approved = ApprovedManager()
 

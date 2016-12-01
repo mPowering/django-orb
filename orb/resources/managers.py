@@ -45,7 +45,7 @@ def approved_queryset(queryset, user=AnonymousUser, status="approved", relation=
     )
 
 
-class ResourceManager(models.Manager):
+class ResourceQueryset(models.QuerySet):
 
     def approved(self, user=None):
         """
@@ -59,13 +59,12 @@ class ResourceManager(models.Manager):
             QuerySet: A queryset filtered by status and/or user
 
         """
-        qs = super(ResourceManager, self).get_queryset()
         if user is None:
             user = AnonymousUser()
-        return approved_queryset(qs, user)
+        return approved_queryset(self, user)
 
     def pending(self):
-        return self.get_queryset().exclude(
+        return self.exclude(
             models.Q(status="approved") |
             models.Q(status="rejected")
         )
