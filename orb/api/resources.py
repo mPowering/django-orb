@@ -78,6 +78,9 @@ class ResourceResource(ModelResource):
         include_resource_uri = True
         throttle = CacheDBThrottle(throttle_at=1000, timeframe=3600)
         ordering = ['update_date']
+        filtering = {
+            'update_date': ['lte', 'gte'],  # `exact` would imply a timestamp, not date comparison
+        }
 
     def get_object_list(self, request):
         return Resource.objects.approved(request.user)
