@@ -77,6 +77,7 @@ class ResourceResource(ModelResource):
         always_return_data = True
         include_resource_uri = True
         throttle = CacheDBThrottle(throttle_at=1000, timeframe=3600)
+        ordering = ['update_date']
 
     def get_object_list(self, request):
         return Resource.objects.approved(request.user)
