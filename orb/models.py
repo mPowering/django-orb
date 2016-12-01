@@ -81,6 +81,15 @@ class Resource(TimestampBase):
     born_on = models.DateTimeField(blank=True, null=True, default=None)
     attribution = models.TextField(blank=True, null=True, default=None)
 
+    # Tracking fields
+    source_url = models.URLField(null=True, blank=True, help_text=_("Original resource URL."))
+    source_name = models.CharField(null=True, blank=True, max_length=200,
+                                   help_text=_("Name of the source ORB instance where resource was sourced."))
+    source_host = models.URLField(null=True, blank=True,
+                                   help_text=_("Host URL of the original ORB instance where resource was sourced."))
+    source_peer = models.ForeignKey('peers.Peer', null=True, blank=True, related_name="resources",
+                                    help_text=_("The peer ORB from which the resource was downloaded."))
+
     resources = ResourceManager()
     objects = resources  # alias
     approved = ApprovedManager()
