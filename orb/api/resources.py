@@ -65,6 +65,7 @@ class ResourceResource(ModelResource):
     tags = fields.ToManyField('orb.api.resources.ResourceTagResource', 'resourcetag_set',
                               related_name='resource', full=True, null=True, use_in='detail')
     url = fields.CharField(readonly=True)
+    languages = fields.ListField(readonly=True, default=[])
 
     class Meta:
         queryset = Resource.objects.all()
@@ -90,6 +91,10 @@ class ResourceResource(ModelResource):
         url = bundle.request.build_absolute_uri(
             reverse('orb_resource', args=[bundle.obj.slug]))
         return url
+
+    def dehydrate_languages(self, bundle):
+        """Returns a list of languages the resource is available in"""
+        return bundle.obj.available_languages()
 
     def authorized_read_detail(self, object_list, bundle):
         # add to ResourceTracker
