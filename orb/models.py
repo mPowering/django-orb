@@ -14,7 +14,7 @@ from tastypie.models import create_api_key
 from orb import signals
 from orb.analytics.models import UserLocationVisualization
 from orb.profiles.querysets import ProfilesQueryset
-from orb.resources.managers import ResourceURLManager, ApprovedManager, ResourceQueryset
+from orb.resources.managers import ResourceURLManager, ResourceQueryset
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
 from .fields import AutoSlugField
@@ -92,7 +92,6 @@ class Resource(TimestampBase):
 
     resources = ResourceQueryset.as_manager()
     objects = resources  # alias
-    approved = ApprovedManager()
 
     class Meta:
         verbose_name = _('Resource')

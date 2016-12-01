@@ -21,6 +21,7 @@ class ResourceTests(TestCase):
 
     @classmethod
     def setUpClass(cls):
+        """Returns only resources that were sourced from peer instances"""
         cls.user = User.objects.create(username="tester")
         cls.updater = User.objects.create(username="updater")
         cls.staff = User.objects.create(username="staff", is_staff=True)
@@ -89,22 +90,11 @@ class ResourceTests(TestCase):
     # Tests for the ApprovalManager
 
     def test_approval_manager(self):
-        self.assertEqual(Resource.approved.all().count(), 1)
-
-    def test_approved_anon(self):
-        """Should be equal to default approved count"""
-        self.assertEqual(Resource.approved.filter(user=AnonymousUser()).count(), 1)
+        self.assertEqual(Resource.objects.approved().all().count(), 1)
 
     def test_approved_owner(self):
         """Should include resources created by user"""
-        self.assertEqual(Resource.approved.filter(user=self.user).count(), 2)
-
-    def test_approved_staff(self):
-        """Should include all resources regardless of status"""
-        self.assertEqual(Resource.approved.filter(user=self.staff).count(), 3)
-
-    def test_get_approved(self):
-        assert Resource.approved.get(user=self.user, title=u"Unapproved resource")
+        self.assertEqual(Resource.objects.approved(user=self.user).count(), 2)
 
     # Tests for ResourceURL
 
