@@ -51,7 +51,6 @@ class ResourceTests(TestCase):
         resource_url_factory(resource=approved, user=cls.user)
         resource_url_factory(resource=unapproved_user, user=cls.user)
 
-
     @classmethod
     def tearDownClass(cls):
         User.objects.all().delete()

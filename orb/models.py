@@ -117,6 +117,9 @@ class Resource(TimestampBase):
     def is_pending(self):
         return self.status not in [self.REJECTED, self.APPROVED]
 
+    def is_local(self):
+        return not bool(self.source_peer)
+
     def has_assignments(self):
         """Returns whether there are *any* reivew assignments"""
         return self.content_reviews.all().exists()
