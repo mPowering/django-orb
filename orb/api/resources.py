@@ -70,6 +70,7 @@ class ResourceResource(ModelResource):
     class Meta:
         queryset = Resource.objects.all()
         resource_name = 'resource'
+        excludes = ['source_peer']
         allowed_methods = ['get', 'post', 'put']
         authentication = ApiKeyAuthentication()
         authorization = ORBResourceAuthorization()
@@ -80,6 +81,7 @@ class ResourceResource(ModelResource):
         ordering = ['update_date']
         filtering = {
             'update_date': ['lte', 'gte'],  # `exact` would imply a timestamp, not date comparison
+            'status': ['exact'],
         }
 
     def get_object_list(self, request):
