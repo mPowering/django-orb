@@ -1,0 +1,100 @@
+# -*- coding: utf-8 -*-
+
+"""
+Unit tests for API resources
+
+Run these tests with pytest!
+
+These tests can run without building the entire request cycle or requiring
+authentication.
+
+"""
+
+import pytest
+from django.contrib.auth.models import User
+from django.test.client import RequestFactory
+
+from orb.models import Tag, Category, Resource
+from orb.api.resources import TagResource, ResourceResource
+from orb.resources.tests.factory import resource_factory
+
+pytestmark = pytest.mark.django_db
+
+
+def get_request():
+    factory = RequestFactory()
+    request = factory.request()
+    return request
+
+
+def get_resource_data(obj, resource_class, request=None):
+    """
+    Builds the dehydrated data for a tastypie.Resource
+
+    Performs much the same job as Resource.get_detail
+
+    Args:
+        obj: a model instance
+        resource_class: tastyepie.Resource class to use
+        request: HTTP request object
+
+    Returns:
+        dictionary of the data to be returned.
+
+        The return data *may* contain other bundles in the case that the
+        API resource includes nested data.
+
+    """
+    if not request:
+        request = get_request()
+
+    api_resource = resource_class()
+    bundle = api_resource.build_bundle(obj=obj, request=request)
+    bundle = api_resource.full_dehydrate(bundle)
+    return bundle.data
+
+
+@pytest.fixture(scope="session")
+def test_user():
+    user, _ = User.objects.get_or_create(username="tester")
+    yield user
+
+
+@pytest.fixture(scope="module")
+def test_resource(test_user):
+    yield resource_factory(
+        user=test_user,
+        title=u"Básica salud del recién nacido",
+        description=u"Básica salud del recién nacido",
+    )
+
+
+class TestOrbResource(object):
+    """
+    Tests against the data returned for orb.Resources
+    """
+
+    def test_peer_absent(self, test_resource):
+        """Ensure source_peer is never in data"""
+        resource_data = get_resource_data(test_resource, ResourceResource)
+        assert 'source_peer' not in resource_data
+
+    def test_base_languages(self, test_resource):
+        resource_data = get_resource_data(test_resource, ResourceResource)
+        assert resource_data['languages'] == ['en']
+
+    def test_additional_languages(self, test_resource, mocker):
+        mocker.patch.object(test_resource, 'available_languages', return_value=['en', 'es'])
+        resource_data = get_resource_data(test_resource, ResourceResource)
+        assert resource_data['languages'] == ['en', 'es']
+
+    def test_language_fields(self, test_resource, mocker):
+        mocker.patch.object(test_resource, 'title_es', u'Español')
+        mocker.patch.object(test_resource, 'title_pt_br', u'português')
+        mocker.patch.object(test_resource, 'description_es', u'Español description')
+        mocker.patch.object(test_resource, 'description_pt_br', u'português description')
+
+        resource_data = get_resource_data(test_resource, ResourceResource)
+        assert sorted(resource_data['languages']) == ['en', 'es', 'pt-br']
+        for field in ['title_en', 'title_es', 'title_pt_br', 'description_en', 'description_es', 'description_pt_br']:
+            assert field in resource_data

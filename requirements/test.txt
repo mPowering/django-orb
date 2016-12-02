@@ -1,13 +1,14 @@
 Sphinx
 flake8
-mock
+mock==2.0.0
 freezegun==0.3.7
 
 hypothesis==3.6.0
 
 pytest==3.0.4
-pytest-django==3.1.1
-pytest-sugar==0.7.1
-pytest-pythonpath==0.7.1
+pytest-django==3.1.1             # Django specific fixtures, settings handling
+pytest-sugar==0.7.1              # Adds a progressbar and shows tests failures as they happen
+pytest-pythonpath==0.7.1         # Fix the project path no matter where tests are run
+pytest-mock==1.5.0               # Wrapper around mock library
 
 IPython==5.1.0
