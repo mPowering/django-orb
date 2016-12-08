@@ -1,14 +1,24 @@
 """
 Models for the ORB content sharing network
 """
+import logging
+
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
+
+logger = logging.getLogger('orb')
 
 
 class PeersQuerySet(models.QuerySet):
     def active(self):
         return self.filter(active=True)
+
+    def inactive(self):
+        return self.filter(active=False)
+
+    def queryable(self):
+        """Returns only peers which can be queried by API"""
+        return self.filter(api_user__isnull=False, api_key__isnull=False)
 
 
 class Peer(models.Model):
@@ -18,6 +28,8 @@ class Peer(models.Model):
     name = models.CharField(max_length=100)
     host = models.URLField()
     active = models.BooleanField(default=True)
+    api_user = models.CharField(max_length=100, blank=True, null=True)
+    api_key = models.CharField(max_length=100, blank=True, null=True)
 
     peers = PeersQuerySet.as_manager()
     objects = peers

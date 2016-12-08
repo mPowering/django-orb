@@ -26,6 +26,11 @@ class TestPeerQuerysets(object):
         Peer.peers.create(name="Third ORB", host="http://www.yahoo.ca", active=False)
         assert u"Second ORB" == Peer.peers.active().get().name
 
+    def test_queryable(self):
+        assert not Peer.peers.queryable()
+        Peer.peers.create(name="API ORB", host="http://www.yahoo.de", active=True, api_user="bob", api_key="1")
+        assert Peer.peers.queryable().count() == 1
+
 
 @pytest.mark.django_db
 class TestLoggingQuerysets(object):
