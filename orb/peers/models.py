@@ -18,7 +18,7 @@ class PeersQuerySet(models.QuerySet):
 
     def queryable(self):
         """Returns only peers which can be queried by API"""
-        return self.filter(api_user__isnull=False, api_key__isnull=False)
+        return self.active().filter(api_user__isnull=False, api_key__isnull=False)
 
 
 class Peer(models.Model):
@@ -36,6 +36,18 @@ class Peer(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def sync_resources(self, writer=None):
+        """
+        Interface method to query and sync resources from the peer
+
+        Args:
+            writer: optional output writing function
+
+        Returns:
+            dictionary of results
+
+        """
 
 
 class PeerQueryLog(models.Model):
