@@ -41,6 +41,12 @@ class TimestampBase(models.Model):
         abstract = True
 
 
+def pop_fields(input, *fieldnames):
+    for field in fieldnames:
+        input.pop(field, None)
+    return input
+
+
 class Resource(TimestampBase):
     REJECTED = 'rejected'
     PENDING_CRT = 'pending_crt'
@@ -117,16 +123,26 @@ class Resource(TimestampBase):
             the Resource object created
 
         """
-        files = api_data.pop('files')
-        languages = api_data.pop('languages')
-        tags = api_data.pop('tags')
-        urls = api_data.pop('urls')
+        resource_files = api_data.pop('files', [])
+        languages = api_data.pop('languages', [])
+        tags = api_data.pop('tags', [])
+        resource_urls = api_data.pop('urls', [])
         resource_uri = api_data.pop('resource_uri')
         url = api_data.pop('url')
 
         import_user = get_import_user()
 
-        return cls.resources.create(create_user=import_user, update_user=import_user, **api_data)
+        resource = cls.resources.create(create_user=import_user, update_user=import_user, **api_data)
+
+        ResourceURL.objects.bulk_create([
+            ResourceURL.from_url_data(resource, resource_url_data, import_user)
+            for resource_url_data in resource_urls
+        ] + [
+            ResourceURL.from_file_data(resource, resource_file_data, import_user)
+            for resource_file_data in resource_files
+        ])
+
+        return resource
 
     def approve(self):
         self.status = self.APPROVED
@@ -273,6 +289,55 @@ class ResourceURL(TimestampBase):
 
     def __unicode__(self):
         return self.url
+
+    @classmethod
+    def from_url_data(cls, resource, api_data, user=None):
+        """
+        Creates a new Resource object and its suite of related content based
+        on a dictionary of data as returned from the ORB API
+
+        Args:
+            resource: associated resource
+            api_data: serialized data from the ORB API describing a resource in detail
+            user: create_user/update_user
+
+        Returns:
+            the ResourceURL object (not saved to DB)
+
+        """
+        for field in ['id', 'resource_uri']:
+            api_data.pop(field, None)
+
+        if not user:
+            user = get_import_user()
+
+        return cls(resource=resource, create_user=user, update_user=user, **api_data)
+
+    @classmethod
+    def from_file_data(cls, resource, api_data, user=None):
+        """
+        Creates a new Resource object and its suite of related content based
+        on a dictionary of Resource file data as returned from the ORB API
+
+        Args:
+            resource: associated resource
+            api_data: serialized data from the ORB API describing a resource in detail
+            user: create_user/update_user
+
+        Returns:
+            the ResourceURL object (not saved to DB)
+
+        """
+        for field in ['id', 'resource_uri']:
+            api_data.pop(field, None)
+
+        api_data['url'] = api_data.pop('file')
+
+        if not user:
+            user = get_import_user()
+
+        return cls(resource=resource, create_user=user, update_user=user, **api_data)
+
 
 
 class ResourceFile(TimestampBase):

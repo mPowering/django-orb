@@ -4,6 +4,7 @@
 Tests for ORB resource models
 """
 
+from datetime import date
 import json
 import os
 
@@ -139,12 +140,26 @@ class TestResourceFromAPI(object):
     takes the dictionary of data and returns
 
     - Test the new user attached to the Resource
+    - Tests
     """
     def test_sanity(self, api_data):
+        """Verify what we're getting from the fixture"""
         assert "Dosing Guidelines Poster" == api_data['title']
 
     def test_returns_resource(self, api_data):
-        assert isinstance(Resource.create_from_api(api_data), Resource)
+        result = Resource.create_from_api(api_data)
+        assert isinstance(result, Resource)
+        assert result.guid == "db557aca-f190-45d5-8988-d574bd21cdcf"
+        assert result.create_user == get_import_user()
+        # assert result.create_date.date == date(2015, 5, 18)
+        assert result.description == "<p>Dosing Guidelines Poster</p>"
+        assert result.description_en == "<p>Dosing Guidelines Poster</p>"
+        assert result.description_es == ""
+        assert result.description_pt_br == ""
+        assert result.source_url == "http://www.cool-org.org/resource/view/dosing-guidelines-poster"
+
+        assert not result.resourcefile_set.all().exists()
+        assert result.resourceurl_set.all().count() == 3  # 1 source URL and 2 source files
 
 
 def test_get_importer_user():
