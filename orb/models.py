@@ -104,6 +104,30 @@ class Resource(TimestampBase):
     def get_absolute_url(self):
         return urlresolvers.reverse('orb_resource', args=[self.slug])
 
+    @classmethod
+    def create_from_api(cls, api_data):
+        """
+        Creates a new Resource object and its suite of related content based
+        on a dictionary of data as returned from the ORB API
+
+        Args:
+            api_data: serialized data from the ORB API describing a resource in detail
+
+        Returns:
+            the Resource object created
+
+        """
+        files = api_data.pop('files')
+        languages = api_data.pop('languages')
+        tags = api_data.pop('tags')
+        urls = api_data.pop('urls')
+        resource_uri = api_data.pop('resource_uri')
+        url = api_data.pop('url')
+
+        import_user = get_import_user()
+
+        return cls.resources.create(create_user=import_user, update_user=import_user, **api_data)
+
     def approve(self):
         self.status = self.APPROVED
         self.content_reviews.all().update(status=self.APPROVED)
@@ -664,3 +688,14 @@ class ReviewerRole(models.Model):
 
     def __unicode__(self):
         return self.get_name_display()
+
+
+def get_import_user():
+    try:
+        return User.objects.get(username="importer")
+    except User.DoesNotExist:
+        user = User.objects.create(username="importer")
+        user.set_unusable_password()
+        user.is_active = False
+        user.save()
+        return user

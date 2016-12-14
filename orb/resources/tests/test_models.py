@@ -4,14 +4,25 @@
 Tests for ORB resource models
 """
 
+import json
+import os
+
 import pytest
 from django.contrib.auth.models import User
 
-from orb.models import ResourceURL
+from orb.models import Resource, ResourceURL, get_import_user
 from orb.peers.models import Peer
 from orb.resources.tests.factory import resource_factory
 
 pytestmark = pytest.mark.django_db
+
+
+@pytest.fixture(scope="module")
+def api_data():
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(dirname, "resource_from_api.json"), "r") as json_file:
+        file_data = json_file.read()
+    return json.loads(file_data)
 
 
 @pytest.fixture(scope="module")
@@ -118,3 +129,27 @@ class TestResourceLocality(object):
         test_resource.source_name = "Another ORB"
         test_resource.source_host = "http://www.yahoo.com"
         assert not test_resource.is_local()
+
+
+class TestResourceFromAPI(object):
+    """
+    The create_from_api class method for each respective thing.
+
+    Ultimately we want a single entry point, function or method, that
+    takes the dictionary of data and returns
+
+    - Test the new user attached to the Resource
+    """
+    def test_sanity(self, api_data):
+        assert "Dosing Guidelines Poster" == api_data['title']
+
+    def test_returns_resource(self, api_data):
+        assert isinstance(Resource.create_from_api(api_data), Resource)
+
+
+def test_get_importer_user():
+    importer = get_import_user()
+    assert not importer.has_usable_password()
+    assert not importer.is_active
+    assert not importer.is_staff
+    assert not importer.is_superuser
