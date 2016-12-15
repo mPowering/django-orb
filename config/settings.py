@@ -21,7 +21,7 @@ SECRET_KEY = '*****************************'
 DEBUG = True
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 ADMINS = (
     ('Admin', 'org@example.com'),
@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'haystack',
     'sorl.thumbnail',
     'orb',
+    'orb.peers',
     'orb.review',
     'orb.analytics',
     'orb.partners.OnemCHW',

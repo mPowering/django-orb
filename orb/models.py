@@ -1,4 +1,5 @@
 import os
+import uuid
 
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -7,15 +8,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Avg, Count
 from django.utils.translation import ugettext_lazy as _
+from modeltranslation.utils import build_localized_fieldname
 from tastypie.models import create_api_key
 
+from orb import signals
 from orb.analytics.models import UserLocationVisualization
 from orb.profiles.querysets import ProfilesQueryset
-from orb.resources.managers import ResourceManager, ResourceURLManager, ApprovedManager
+from orb.resources.managers import ResourceURLManager, ResourceQueryset
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ActiveTagManager, ResourceTagManager
 from .fields import AutoSlugField
-from orb import signals
 
 models.signals.post_save.connect(create_api_key, sender=User)
 
@@ -63,6 +65,7 @@ class Resource(TimestampBase):
         (WEEKS, _('Weeks')),
     )
 
+    guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
     title = models.TextField(blank=False, null=False)
     description = models.TextField(blank=False, null=False)
     image = models.ImageField(
@@ -78,9 +81,17 @@ class Resource(TimestampBase):
     born_on = models.DateTimeField(blank=True, null=True, default=None)
     attribution = models.TextField(blank=True, null=True, default=None)
 
-    resources = ResourceManager()
+    # Tracking fields
+    source_url = models.URLField(null=True, blank=True, help_text=_("Original resource URL."))
+    source_name = models.CharField(null=True, blank=True, max_length=200,
+                                   help_text=_("Name of the source ORB instance where resource was sourced."))
+    source_host = models.URLField(null=True, blank=True,
+                                   help_text=_("Host URL of the original ORB instance where resource was sourced."))
+    source_peer = models.ForeignKey('peers.Peer', null=True, blank=True, related_name="resources",
+                                    help_text=_("The peer ORB from which the resource was downloaded."))
+
+    resources = ResourceQueryset.as_manager()
     objects = resources  # alias
-    approved = ApprovedManager()
 
     class Meta:
         verbose_name = _('Resource')
@@ -105,6 +116,9 @@ class Resource(TimestampBase):
 
     def is_pending(self):
         return self.status not in [self.REJECTED, self.APPROVED]
+
+    def is_local(self):
+        return not bool(self.source_peer)
 
     def has_assignments(self):
         """Returns whether there are *any* reivew assignments"""
@@ -186,6 +200,21 @@ class Resource(TimestampBase):
             rating['rating'] = round(rating['rating'], 0)
         return rating
 
+    def available_languages(self):
+        """
+        Returns a list of site languages for which this resource has translations
+
+        This is based on having both title and description for these fields.
+        """
+        field_names = {
+            language[0]: [build_localized_fieldname(field, language[0]) for field in ["title", "description"]]
+            for language in settings.LANGUAGES
+        }
+
+        return [
+            language for language, fields in field_names.items() if all([getattr(self, field) for field in fields])
+        ]
+
 
 class ResourceWorkflowTracker(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
@@ -202,6 +231,7 @@ class ResourceWorkflowTracker(models.Model):
 
 
 class ResourceURL(TimestampBase):
+    guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
     url = models.URLField(blank=False, null=False, max_length=500)
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)
@@ -222,6 +252,7 @@ class ResourceURL(TimestampBase):
 
 
 class ResourceFile(TimestampBase):
+    guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
     file = models.FileField(upload_to='resource/%Y/%m/%d', max_length=200)
     resource = models.ForeignKey(Resource)
     title = models.TextField(blank=True, null=True)

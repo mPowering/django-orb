@@ -65,10 +65,15 @@ class ResourceResource(ModelResource):
     tags = fields.ToManyField('orb.api.resources.ResourceTagResource', 'resourcetag_set',
                               related_name='resource', full=True, null=True, use_in='detail')
     url = fields.CharField(readonly=True)
+    source_name = fields.CharField()
+    source_host = fields.CharField()
+    source_url = fields.CharField()
+    languages = fields.ListField(readonly=True, default=[])
 
     class Meta:
         queryset = Resource.objects.all()
         resource_name = 'resource'
+        excludes = ['source_peer']
         allowed_methods = ['get', 'post', 'put']
         authentication = ApiKeyAuthentication()
         authorization = ORBResourceAuthorization()
@@ -76,6 +81,11 @@ class ResourceResource(ModelResource):
         always_return_data = True
         include_resource_uri = True
         throttle = CacheDBThrottle(throttle_at=1000, timeframe=3600)
+        ordering = ['update_date']
+        filtering = {
+            'update_date': ['lte', 'gte'],  # `exact` would imply a timestamp, not date comparison
+            'status': ['exact'],
+        }
 
     def get_object_list(self, request):
         return Resource.objects.approved(request.user)
@@ -90,6 +100,26 @@ class ResourceResource(ModelResource):
         url = bundle.request.build_absolute_uri(
             reverse('orb_resource', args=[bundle.obj.slug]))
         return url
+
+    def dehydrate_languages(self, bundle):
+        """Returns a list of languages the resource is available in"""
+        return bundle.obj.available_languages()
+
+    def dehydrate_source_url(self, bundle):
+        """Returns the *original* URL of the resource"""
+        if bundle.obj.is_local():
+            return self.dehydrate_url(bundle)
+        return self.bundle.obj.source_url
+
+    def dehydrate_source_name(self, bundle):
+        if bundle.obj.is_local():
+            return None
+        return self.bundle.obj.source_name
+
+    def dehydrate_source_host(self, bundle):
+        if bundle.obj.is_local():
+            return None
+        return self.bundle.obj.source_host
 
     def authorized_read_detail(self, object_list, bundle):
         # add to ResourceTracker
@@ -182,8 +212,7 @@ class ResourceFileResource(ModelResource):
         queryset = ResourceFile.objects.all()
         resource_name = 'resourcefile'
         allowed_methods = ['get', 'delete']
-        fields = ['id', 'file', 'title',
-                  'description', 'order_by', 'file_size']
+        excludes = ['create_date', 'update_date', 'image', 'file_full_text']
         authentication = ApiKeyAuthentication()
         authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
@@ -203,7 +232,7 @@ class ResourceURLResource(ModelResource):
         queryset = ResourceURL.objects.all()
         resource_name = 'resourceurl'
         allowed_methods = ['get', 'post', 'delete']
-        fields = ['id', 'url', 'title', 'description', 'order_by', 'file_size']
+        excludes = ['create_date', 'update_date', 'image']
         authentication = ApiKeyAuthentication()
         authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
@@ -292,8 +321,7 @@ class TagResource(TagBase, ModelResource):
         queryset = Tag.objects.all()
         resource_name = 'tag'
         allowed_methods = ['get', 'post']
-        fields = ['id', 'name', 'image']
-        filtering = {"name": ["exact"]}
+        excludes = ['contact_email', 'create_date', 'order_by', 'external_url', 'update_date', 'slug']
         authentication = ApiKeyAuthentication()
         authorization = ORBAuthorization()
         serializer = PrettyJSONSerializer()
@@ -304,7 +332,7 @@ class TagResource(TagBase, ModelResource):
             "name": ALL,
         }
 
-    def build_filters(self, filters=None):
+    def build_filters(self, filters=None, **kwargs):
         """
         Creates additional filters for a querylist of Tag resources
 
@@ -391,7 +419,7 @@ class TagsResource(TagBase, ModelResource):
             "name": ALL,
         }
 
-    def build_filters(self, filters=None):
+    def build_filters(self, filters=None, **kwargs):
         """
         Creates additional filters for a querylist of Tag resources
 

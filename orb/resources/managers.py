@@ -45,7 +45,7 @@ def approved_queryset(queryset, user=AnonymousUser, status="approved", relation=
     )
 
 
-class ResourceManager(models.Manager):
+class ResourceQueryset(models.QuerySet):
 
     def approved(self, user=None):
         """
@@ -59,13 +59,12 @@ class ResourceManager(models.Manager):
             QuerySet: A queryset filtered by status and/or user
 
         """
-        qs = super(ResourceManager, self).get_queryset()
         if user is None:
             user = AnonymousUser()
-        return approved_queryset(qs, user)
+        return approved_queryset(self, user)
 
     def pending(self):
-        return self.get_queryset().exclude(
+        return self.exclude(
             models.Q(status="approved") |
             models.Q(status="rejected")
         )
@@ -89,37 +88,3 @@ class ResourceURLManager(models.Manager):
         if user is None:
             user = AnonymousUser()
         return approved_queryset(qs, user, relation="resource__")
-
-
-class ApprovedManager(models.Manager):
-
-    def __init__(self, *args, **kwargs):
-        self.user = AnonymousUser()
-        super(ApprovedManager, self).__init__(*args, **kwargs)
-
-    def get_queryset(self, user=None):
-        """
-        Queryset that includes only resources viewable by given user
-
-        Args:
-            user (auth.User): the user to check 'permission' against
-
-        Returns:
-            QuerySet: A queryset filtered by status and/or user
-
-        """
-        qs = super(ApprovedManager, self).get_queryset()
-        if user is None:
-            user = self.user
-
-        return approved_queryset(qs, user)
-
-    def filter(self, **kwargs):
-        user = kwargs.pop('user', AnonymousUser)
-        self.user = user
-        return super(ApprovedManager, self).filter(**kwargs)
-
-    def get(self, **kwargs):
-        user = kwargs.pop('user', AnonymousUser)
-        self.user = user
-        return super(ApprovedManager, self).get(**kwargs)
