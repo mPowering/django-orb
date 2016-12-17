@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'orb.analytics',
     'orb.partners.OnemCHW',
     'modeltranslation_exim',
+    'django_extensions',
 ]
 
 

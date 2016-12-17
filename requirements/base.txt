@@ -28,3 +28,6 @@ django-haystack>=2.3.0,<2.4.0
 django-autoslug==1.9.3
 django-modeltranslation==0.9
 django-fsm==2.4.0
+
+
+django-extensions==1.7.5
