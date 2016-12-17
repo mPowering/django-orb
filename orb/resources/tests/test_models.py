@@ -7,6 +7,7 @@ Fixtures are loaded by pytest using root level conftest.py from fixtures module
 """
 
 import json
+from copy import deepcopy
 import os
 
 import pytest
@@ -22,7 +23,15 @@ def api_data():
     dirname = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(dirname, "resource_from_api.json"), "r") as json_file:
         file_data = json_file.read()
-    return json.loads(file_data)
+    yield json.loads(file_data)
+
+
+@pytest.fixture(scope="module")
+def languages_api_data():
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    with open(os.path.join(dirname, "resource_from_api_diff_languages.json"), "r") as json_file:
+        file_data = json_file.read()
+    yield json.loads(file_data)
 
 
 class TestResource(object):
@@ -118,8 +127,6 @@ class TestResourceFromAPI(object):
     Ultimately we want a single entry point, function or method, that
     takes the dictionary of data and returns
 
-    - Test the new user attached to the Resource
-    - Tests
     - Tests when languages do not match (e.g. incoming language is not present)
     """
     def test_sanity(self, api_data):
@@ -127,21 +134,46 @@ class TestResourceFromAPI(object):
         assert "Dosing Guidelines Poster" == api_data['title']
 
     def test_returns_resource(self, api_data):
-        result = Resource.create_from_api(api_data)
+        """Creates the orb.Resource and associated content"""
+        test_data = deepcopy(api_data)
+        result = Resource.create_from_api(test_data)
+
         assert isinstance(result, Resource)
         assert result.guid == "db557aca-f190-45d5-8988-d574bd21cdcf"
         assert result.create_user == get_import_user()
         # assert result.create_date.date == date(2015, 5, 18)
-        assert result.description == "<p>Dosing Guidelines Poster</p>"
-        assert result.description_en == "<p>Dosing Guidelines Poster</p>"
-        assert result.description_es == ""
-        assert result.description_pt_br == ""
+        assert result.description == u"<p>Dosing Guidelines Poster</p>"
+        assert result.description_en == u"<p>Dosing Guidelines Poster</p>"
+        assert result.description_es == u"<p>Pautas de dosificación</p>"
+        assert result.description_pt_br == "<p>Diretrizes de dosagem</p>"
         assert result.source_url == "http://www.cool-org.org/resource/view/dosing-guidelines-poster"
 
         assert not result.resourcefile_set.all().exists()
         assert result.resourceurl_set.all().count() == 3  # 1 source URL and 2 source files
 
         assert result.resourcetag_set.all().count() == 2
+
+    @pytest.mark.xfail(strict=True)
+    def test_language_mismatch(self, languages_api_data):
+        """Creates the orb.Resource using only languages available locally
+
+        Also should match near-enough languages, e.g. pt and pt-br
+        """
+        test_data = deepcopy(languages_api_data)
+        result = Resource.create_from_api(test_data)
+
+        assert isinstance(result, Resource)
+        assert result.guid == "db557aca-f190-45d5-8988-d574bd21cdcf"
+        assert result.create_user == get_import_user()
+        # assert result.create_date.date == date(2015, 5, 18)
+        assert result.description == "<p>Dosing Guidelines Poster</p>"
+        assert result.description_en == "<p>Dosing Guidelines Poster</p>"
+        assert result.description_pt == ""
+        assert result.source_url == "http://www.cool-org.org/resource/view/dosing-guidelines-poster"
+
+        assert not result.resourcefile_set.all().exists()
+        assert result.resourceurl_set.all().count() == 3  # 1 source URL and 2 source files
+
 
 
 def test_get_importer_user():
