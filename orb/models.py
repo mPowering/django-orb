@@ -142,6 +142,9 @@ class Resource(TimestampBase):
             for resource_file_data in resource_files
         ])
 
+        for tag_data in tags:
+            ResourceTag.create_from_api_data(resource, tag_data['tag'], user=import_user)
+
         return resource
 
     def approve(self):
@@ -339,7 +342,6 @@ class ResourceURL(TimestampBase):
         return cls(resource=resource, create_user=user, update_user=user, **api_data)
 
 
-
 class ResourceFile(TimestampBase):
     guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
     file = models.FileField(upload_to='resource/%Y/%m/%d', max_length=200)
@@ -437,8 +439,8 @@ class ResourceCriteria(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(blank=False, null=False, max_length=100)
-    top_level = models.BooleanField(null=False, default=False)
+    name = models.CharField(max_length=100)
+    top_level = models.BooleanField(default=False)
     slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
     order_by = models.IntegerField(default=0)
 
@@ -451,7 +453,7 @@ class Category(models.Model):
         return self.name
 
     @classmethod
-    def name_translation_fields(cls):
+    def api_translation_fields(cls):
         """Returns name field's translation field names"""
         return [f.name for f in cls._meta.get_fields() if f.name.startswith('name') and f.name != 'name']
 
@@ -538,6 +540,43 @@ class ResourceTag(models.Model):
 
     class Meta:
         unique_together = ("resource", "tag")
+
+    @classmethod
+    def create_from_api_data(cls, resource, api_data, user=None):
+        """
+        Creates a new Resource object and its suite of related content based
+        on a dictionary of data as returned from the ORB API
+
+        Args:
+            resource: associated resource
+            api_data: serialized data from the ORB API describing a tag in detail
+            user: create_user/update_user
+
+        Returns:
+            a ResourceTag instance that has been saved to the database
+        """
+        if not user:
+            user = get_import_user()
+
+        api_data['create_user'] = user
+        api_data['update_user'] = user
+        api_data.pop('id', None)
+        api_data.pop('resource_uri', None)
+        api_data.pop('url', None)
+
+        category_name = api_data.pop('category')
+        category_fields = [f for f in Category.api_translation_fields()]
+        category_name_translations = {
+            field: api_data.pop(field.replace('category', 'name'), "")
+            for field in category_fields
+        }
+
+        category, created = Category.objects.get_or_create(name=category_name, defaults=category_name_translations)
+
+        api_data['category'] = category
+
+        tag, created = Tag.objects.get_or_create(name=api_data['name'], defaults=api_data)
+        return cls.objects.create(resource=resource, tag=tag, create_user=user)
 
 
 class UserProfile(TimestampBase):

@@ -372,7 +372,7 @@ class TagResource(TagBase, ModelResource):
             return None
 
     def dehydrate(self, bundle):
-        for field in Category.name_translation_fields():
+        for field in Category.api_translation_fields():
             field_name = field.replace('name', 'category')
             bundle.data[field_name] = getattr(bundle.obj.category, field)
         return bundle
