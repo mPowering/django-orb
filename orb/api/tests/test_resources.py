@@ -8,6 +8,8 @@ Run these tests with pytest!
 These tests can run without building the entire request cycle or requiring
 authentication.
 
+Fixtures are loaded by pytest using root level conftest.py from fixtures module
+
 """
 
 import pytest
@@ -52,21 +54,6 @@ def get_resource_data(obj, resource_class, request=None):
     bundle = api_resource.build_bundle(obj=obj, request=request)
     bundle = api_resource.full_dehydrate(bundle)
     return bundle.data
-
-
-@pytest.fixture(scope="session")
-def test_user():
-    user, _ = User.objects.get_or_create(username="tester")
-    yield user
-
-
-@pytest.fixture(scope="module")
-def test_resource(test_user):
-    yield resource_factory(
-        user=test_user,
-        title=u"Básica salud del recién nacido",
-        description=u"Básica salud del recién nacido",
-    )
 
 
 class TestOrbResource(object):

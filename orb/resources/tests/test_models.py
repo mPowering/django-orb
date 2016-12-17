@@ -2,17 +2,16 @@
 
 """
 Tests for ORB resource models
+
+Fixtures are loaded by pytest using root level conftest.py from fixtures module
 """
 
-from datetime import date
 import json
 import os
 
 import pytest
-from django.contrib.auth.models import User
 
 from orb.models import Resource, ResourceURL, get_import_user
-from orb.peers.models import Peer
 from orb.resources.tests.factory import resource_factory
 
 pytestmark = pytest.mark.django_db
@@ -24,26 +23,6 @@ def api_data():
     with open(os.path.join(dirname, "resource_from_api.json"), "r") as json_file:
         file_data = json_file.read()
     return json.loads(file_data)
-
-
-@pytest.fixture(scope="module")
-def test_user():
-    user, _ = User.objects.get_or_create(username="tester")
-    yield user
-
-
-@pytest.fixture(scope="module")
-def test_resource(test_user):
-    yield resource_factory(
-        user=test_user,
-        title=u"Básica salud del recién nacido",
-        description=u"Básica salud del recién nacido",
-    )
-
-
-@pytest.fixture(scope="module")
-def test_peer():
-    yield Peer.peers.create(name="Distant ORB", host="http://www.orb.org/")
 
 
 class TestResource(object):
@@ -141,6 +120,7 @@ class TestResourceFromAPI(object):
 
     - Test the new user attached to the Resource
     - Tests
+    - Tests when languages do not match (e.g. incoming language is not present)
     """
     def test_sanity(self, api_data):
         """Verify what we're getting from the fixture"""
@@ -160,6 +140,8 @@ class TestResourceFromAPI(object):
 
         assert not result.resourcefile_set.all().exists()
         assert result.resourceurl_set.all().count() == 3  # 1 source URL and 2 source files
+
+        assert result.resourcetag_set.all().count() == 2
 
 
 def test_get_importer_user():
