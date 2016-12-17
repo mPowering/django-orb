@@ -450,6 +450,11 @@ class Category(models.Model):
     def __unicode__(self):
         return self.name
 
+    @classmethod
+    def name_translation_fields(cls):
+        """Returns name field's translation field names"""
+        return [f.name for f in cls._meta.get_fields() if f.name.startswith('name') and f.name != 'name']
+
 
 class Tag(TimestampBase):
     category = models.ForeignKey(Category)
