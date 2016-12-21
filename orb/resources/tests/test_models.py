@@ -7,10 +7,13 @@ Fixtures are loaded by pytest using root level conftest.py from fixtures module
 """
 
 import json
-from copy import deepcopy
 import os
+import uuid
+from copy import deepcopy
+from datetime import datetime
 
 import pytest
+from dateutil.relativedelta import relativedelta
 
 from orb.models import Resource, ResourceURL, get_import_user
 from orb.resources.tests.factory import resource_factory
@@ -118,6 +121,57 @@ class TestResourceLocality(object):
         test_resource.source_name = "Another ORB"
         test_resource.source_host = "http://www.yahoo.com"
         assert not test_resource.is_local()
+
+
+class TestUpdateFromAPI(object):
+    """
+    The update_from_api instance method.
+    """
+
+    def test_local_is_source(self, test_resource, api_data):
+        """Raises ValueError if the local copy is the source
+
+        Protects local copy from being accidentally overwritten.
+        """
+        test_data = deepcopy(api_data)
+        test_resource.guid = test_data['guid']
+        test_resource.is_local = lambda: True
+
+        with pytest.raises(LookupError):
+            test_resource.update_from_api(test_data)
+
+    def test_update_missing_resource(self, test_resource, api_data):
+        """Raises LookupError if the GUIDs don't match
+
+        Protects local copy from being accidentally overwritten.
+        """
+        test_data = deepcopy(api_data)
+        test_resource.guid = str(uuid.uuid4())
+
+        with pytest.raises(LookupError):
+            test_resource.update_from_api(test_data)
+
+    def test_doesnt_need_updating(self, test_peer, test_resource, api_data):
+        """Returns False if the api_data modification <= local creation"""
+        test_data = deepcopy(api_data)
+        test_data['update_date'] = datetime(2010, 1, 1)
+        test_resource.guid = test_data['guid']
+        test_resource.source_peer = test_peer
+        assert test_resource.update_from_api(test_data) is False
+
+    def test_update_resource_data(self, remote_resource, api_data):
+        test_data = deepcopy(api_data)
+        test_data['update_date'] = datetime.now() + relativedelta(days=1)  # make this in the future
+        test_data['title'] = 'My test Resource'
+        test_data['title_en'] = 'My test Resource'
+        test_data['description'] = 'Just another test resource'
+        test_data['description_en'] = 'Just another test resource'
+        remote_resource.guid = test_data['guid']
+
+        assert remote_resource.update_from_api(test_data) is True
+
+        assert remote_resource.title == 'My test Resource'
+        assert remote_resource.description == 'Just another test resource'
 
 
 class TestResourceFromAPI(object):

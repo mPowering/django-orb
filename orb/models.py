@@ -110,6 +110,53 @@ class Resource(TimestampBase):
     def get_absolute_url(self):
         return urlresolvers.reverse('orb_resource', args=[self.slug])
 
+    def update_from_api(self, api_data):
+        """
+        Conditionally updates a resource based on API data.
+
+        Args:
+            api_data: serialized data from the ORB API describing a resource in detail
+
+        Returns:
+            boolean for whether the resource needed updating
+
+        """
+        if self.is_local():
+            raise LookupError("Cannot update a locally created resource from API data")
+
+        if api_data['guid'] != self.guid:
+            raise LookupError("API GUID {} does not match local GUID {}".format(api_data['guid'], str(self.guid)))
+
+        updated_time = api_data.pop('update_date')
+        created_time = api_data.pop('create_date')
+
+        updated_time.date, self.create_date.date
+        if updated_time.date <= self.create_date.date:
+            return False
+
+        untracked_fields = ['id', 'guid']
+
+        resource_files = api_data.pop('files', [])
+        languages = api_data.pop('languages', [])
+        tags = api_data.pop('tags', [])
+        resource_urls = api_data.pop('urls', [])
+        resource_uri = api_data.pop('resource_uri')
+        url = api_data.pop('url')
+
+        for field in untracked_fields:
+            api_data.pop(field, None)
+
+        import_user = get_import_user()
+
+        for attr, value in api_data.iteritems():
+            setattr(self, attr, value)
+
+        self.update_user = import_user
+
+        self.save()
+
+        return True
+
     @classmethod
     def create_from_api(cls, api_data):
         """
