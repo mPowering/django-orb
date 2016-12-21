@@ -28,8 +28,8 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         peer_ids = options.get('peer_ids')
-        peers = Peer.peers.queryable()
 
+        peers = Peer.peers.queryable()
         if peer_ids:
             peers = peers.filter(pk__in=peer_ids)
 

@@ -18,18 +18,18 @@ from orb.peers.models import Peer
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        active = Peer.peers.active()
+        active = Peer.peers.queryable()
         inactive = Peer.peers.inactive()
 
         if not active or inactive:
             print("No peers have been registered.")
 
         if active:
-            print("\nActive peers\n")
+            print("\nQueryable peers\n")
             for peer in active:
                 print("[{}] {}, {}".format(peer.pk, peer.name, peer.host))
 
         if inactive:
-            print("\nInctive peers (unsynced)\n")
+            print("\nUnqueryable peers (unsynced)\n")
             for peer in inactive:
                 print("[{}] {}, {}".format(peer.pk, peer.name, peer.host))
