@@ -31,3 +31,5 @@ django-fsm==2.4.0
 
 
 django-extensions==1.7.5
+
+git+https://github.com/mPowering/orb-api-python.git@v0.1.1#orb_api
