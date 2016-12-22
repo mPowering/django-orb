@@ -99,6 +99,9 @@ class Resource(TimestampBase):
     resources = ResourceQueryset.as_manager()
     objects = resources  # alias
 
+    # Fields to strip from API data
+    API_EXCLUDED_FIELDS = ['id', 'guid']
+
     class Meta:
         verbose_name = _('Resource')
         verbose_name_plural = _('Resources')
@@ -134,8 +137,6 @@ class Resource(TimestampBase):
         if updated_time.date <= self.create_date.date:
             return False
 
-        untracked_fields = ['id', 'guid']
-
         resource_files = api_data.pop('files', [])
         languages = api_data.pop('languages', [])
         tags = api_data.pop('tags', [])
@@ -143,7 +144,7 @@ class Resource(TimestampBase):
         resource_uri = api_data.pop('resource_uri')
         url = api_data.pop('url')
 
-        for field in untracked_fields:
+        for field in self.API_EXCLUDED_FIELDS:
             api_data.pop(field, None)
 
         import_user = get_import_user()
@@ -152,7 +153,6 @@ class Resource(TimestampBase):
             setattr(self, attr, value)
 
         self.update_user = import_user
-
         self.save()
 
         return True
