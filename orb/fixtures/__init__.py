@@ -11,6 +11,8 @@ from orb.models import Category, Tag
 from orb.peers.models import Peer
 from orb.resources.tests.factory import resource_factory
 
+pytestmark = pytest.mark.django_db
+
 
 @pytest.fixture(scope="session")
 def test_user():
