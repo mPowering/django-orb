@@ -41,6 +41,12 @@ class TimestampBase(models.Model):
         abstract = True
 
 
+def pop_fields(input, *fieldnames):
+    for field in fieldnames:
+        input.pop(field, None)
+    return input
+
+
 class Resource(TimestampBase):
     REJECTED = 'rejected'
     PENDING_CRT = 'pending_crt'
@@ -93,6 +99,9 @@ class Resource(TimestampBase):
     resources = ResourceQueryset.as_manager()
     objects = resources  # alias
 
+    # Fields to strip from API data
+    API_EXCLUDED_FIELDS = ['id', 'guid']
+
     class Meta:
         verbose_name = _('Resource')
         verbose_name_plural = _('Resources')
@@ -103,6 +112,87 @@ class Resource(TimestampBase):
 
     def get_absolute_url(self):
         return urlresolvers.reverse('orb_resource', args=[self.slug])
+
+    def update_from_api(self, api_data):
+        """
+        Conditionally updates a resource based on API data.
+
+        Args:
+            api_data: serialized data from the ORB API describing a resource in detail
+
+        Returns:
+            boolean for whether the resource needed updating
+
+        """
+        if self.is_local():
+            raise LookupError("Cannot update a locally created resource from API data")
+
+        if api_data['guid'] != self.guid:
+            raise LookupError("API GUID {} does not match local GUID {}".format(api_data['guid'], str(self.guid)))
+
+        updated_time = api_data.pop('update_date')
+        created_time = api_data.pop('create_date')
+
+        updated_time.date, self.create_date.date
+        if updated_time.date <= self.create_date.date:
+            return False
+
+        resource_files = api_data.pop('files', [])
+        languages = api_data.pop('languages', [])
+        tags = api_data.pop('tags', [])
+        resource_urls = api_data.pop('urls', [])
+        resource_uri = api_data.pop('resource_uri')
+        url = api_data.pop('url')
+
+        for field in self.API_EXCLUDED_FIELDS:
+            api_data.pop(field, None)
+
+        import_user = get_import_user()
+
+        for attr, value in api_data.iteritems():
+            setattr(self, attr, value)
+
+        self.update_user = import_user
+        self.save()
+
+        return True
+
+    @classmethod
+    def create_from_api(cls, api_data):
+        """
+        Creates a new Resource object and its suite of related content based
+        on a dictionary of data as returned from the ORB API
+
+        Args:
+            api_data: serialized data from the ORB API describing a resource in detail
+
+        Returns:
+            the Resource object created
+
+        """
+        resource_files = api_data.pop('files', [])
+        languages = api_data.pop('languages', [])
+        tags = api_data.pop('tags', [])
+        resource_urls = api_data.pop('urls', [])
+        resource_uri = api_data.pop('resource_uri')
+        url = api_data.pop('url')
+
+        import_user = get_import_user()
+
+        resource = cls.resources.create(create_user=import_user, update_user=import_user, **api_data)
+
+        ResourceURL.objects.bulk_create([
+            ResourceURL.from_url_data(resource, resource_url_data, import_user)
+            for resource_url_data in resource_urls
+        ] + [
+            ResourceURL.from_file_data(resource, resource_file_data, import_user)
+            for resource_file_data in resource_files
+        ])
+
+        for tag_data in tags:
+            ResourceTag.create_from_api_data(resource, tag_data['tag'], user=import_user)
+
+        return resource
 
     def approve(self):
         self.status = self.APPROVED
@@ -250,6 +340,54 @@ class ResourceURL(TimestampBase):
     def __unicode__(self):
         return self.url
 
+    @classmethod
+    def from_url_data(cls, resource, api_data, user=None):
+        """
+        Creates a new Resource object and its suite of related content based
+        on a dictionary of data as returned from the ORB API
+
+        Args:
+            resource: associated resource
+            api_data: serialized data from the ORB API describing a resource in detail
+            user: create_user/update_user
+
+        Returns:
+            the ResourceURL object (not saved to DB)
+
+        """
+        for field in ['id', 'resource_uri']:
+            api_data.pop(field, None)
+
+        if not user:
+            user = get_import_user()
+
+        return cls(resource=resource, create_user=user, update_user=user, **api_data)
+
+    @classmethod
+    def from_file_data(cls, resource, api_data, user=None):
+        """
+        Creates a new Resource object and its suite of related content based
+        on a dictionary of Resource file data as returned from the ORB API
+
+        Args:
+            resource: associated resource
+            api_data: serialized data from the ORB API describing a resource in detail
+            user: create_user/update_user
+
+        Returns:
+            the ResourceURL object (not saved to DB)
+
+        """
+        for field in ['id', 'resource_uri']:
+            api_data.pop(field, None)
+
+        api_data['url'] = api_data.pop('file')
+
+        if not user:
+            user = get_import_user()
+
+        return cls(resource=resource, create_user=user, update_user=user, **api_data)
+
 
 class ResourceFile(TimestampBase):
     guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
@@ -348,8 +486,8 @@ class ResourceCriteria(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(blank=False, null=False, max_length=100)
-    top_level = models.BooleanField(null=False, default=False)
+    name = models.CharField(max_length=100)
+    top_level = models.BooleanField(default=False)
     slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
     order_by = models.IntegerField(default=0)
 
@@ -360,6 +498,11 @@ class Category(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    @classmethod
+    def api_translation_fields(cls):
+        """Returns name field's translation field names"""
+        return [f.name for f in cls._meta.get_fields() if f.name.startswith('name') and f.name != 'name']
 
 
 class Tag(TimestampBase):
@@ -444,6 +587,43 @@ class ResourceTag(models.Model):
 
     class Meta:
         unique_together = ("resource", "tag")
+
+    @classmethod
+    def create_from_api_data(cls, resource, api_data, user=None):
+        """
+        Creates a new Resource object and its suite of related content based
+        on a dictionary of data as returned from the ORB API
+
+        Args:
+            resource: associated resource
+            api_data: serialized data from the ORB API describing a tag in detail
+            user: create_user/update_user
+
+        Returns:
+            a ResourceTag instance that has been saved to the database
+        """
+        if not user:
+            user = get_import_user()
+
+        api_data['create_user'] = user
+        api_data['update_user'] = user
+        api_data.pop('id', None)
+        api_data.pop('resource_uri', None)
+        api_data.pop('url', None)
+
+        category_name = api_data.pop('category')
+        category_fields = [f for f in Category.api_translation_fields()]
+        category_name_translations = {
+            field: api_data.pop(field.replace('category', 'name'), "")
+            for field in category_fields
+        }
+
+        category, created = Category.objects.get_or_create(name=category_name, defaults=category_name_translations)
+
+        api_data['category'] = category
+
+        tag, created = Tag.objects.get_or_create(name=api_data['name'], defaults=api_data)
+        return cls.objects.create(resource=resource, tag=tag, create_user=user)
 
 
 class UserProfile(TimestampBase):
@@ -664,3 +844,14 @@ class ReviewerRole(models.Model):
 
     def __unicode__(self):
         return self.get_name_display()
+
+
+def get_import_user():
+    try:
+        return User.objects.get(username="importer")
+    except User.DoesNotExist:
+        user = User.objects.create(username="importer")
+        user.set_unusable_password()
+        user.is_active = False
+        user.save()
+        return user

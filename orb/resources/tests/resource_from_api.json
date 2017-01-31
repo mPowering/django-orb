@@ -1,0 +1,132 @@
+{
+    "attribution": null,
+    "attribution_en": null,
+    "attribution_es": null,
+    "attribution_pt_br": null,
+    "born_on": null,
+    "create_date": "2015-05-18T21:09:29",
+    "description": "<p>Dosing Guidelines Poster</p>",
+    "description_en": "<p>Dosing Guidelines Poster</p>",
+    "description_es": "<p>Pautas de dosificación</p>",
+    "description_pt_br": "<p>Diretrizes de dosagem</p>",
+    "files": [
+        {
+            "description": "",
+            "description_en": "",
+            "description_es": "",
+            "description_pt_br": "",
+            "file": "http://localhost:8000/media/resource/2015/05/18/018-af-all-poster-fr.pdf",
+            "guid": "5cd75a03-11fb-40f9-8e21-a2f9b9fbb4c6",
+            "id": 67,
+            "order_by": 0,
+            "resource_uri": "/api/v1/resourcefile/67/",
+            "title": "Poster (in French)",
+            "title_en": "Poster (in French)",
+            "title_es": "",
+            "title_pt_br": ""
+        },
+        {
+            "description": "",
+            "description_en": "",
+            "description_es": "",
+            "description_pt_br": "",
+            "file": "http://localhost:8000/media/resource/2015/05/27/008-af-all-poster.pdf",
+            "guid": "3140c10b-878b-4add-a393-67e88870e0ee",
+            "id": 108,
+            "order_by": 0,
+            "resource_uri": "/api/v1/resourcefile/108/",
+            "title": "Poster (in English)",
+            "title_en": "Poster (in English)",
+            "title_es": "",
+            "title_pt_br": ""
+        }
+    ],
+    "guid": "db557aca-f190-45d5-8988-d574bd21cdcf",
+    "id": 170,
+    "image": "http://localhost:8000/media/resourceimage/2015/05/18/018-af-all-poster-fr.jpg",
+    "languages": [
+        "en"
+    ],
+    "resource_uri": "/api/v1/resource/170/",
+    "slug": "dosing-guidelines-poster",
+    "source_host": null,
+    "source_name": null,
+    "source_url": "http://www.cool-org.org/resource/view/dosing-guidelines-poster",
+    "status": "approved",
+    "study_time_number": 0,
+    "study_time_unit": null,
+    "tags": [
+        {
+            "create_date": "2015-05-27T18:19:19",
+            "id": 11122,
+            "resource_uri": "/api/v1/resourcetag/11122/",
+            "tag": {
+                "category": "",
+                "description": null,
+                "description_en": null,
+                "description_es": null,
+                "description_pt_br": null,
+                "id": 131,
+                "image": null,
+                "name": "diarrhea",
+                "name_en": "diarrhea",
+                "name_es": "",
+                "name_pt_br": "",
+                "resource_uri": "/api/v1/tag/131/",
+                "summary": null,
+                "summary_en": null,
+                "summary_es": null,
+                "summary_pt_br": null,
+                "url": "http://localhost:8000/tag/view/diarrhea"
+            }
+        },
+        {
+            "create_date": "2015-05-27T18:19:19",
+            "id": 11117,
+            "resource_uri": "/api/v1/resourcetag/11117/",
+            "tag": {
+                "category": "",
+                "description": "",
+                "description_en": "",
+                "description_es": null,
+                "description_pt_br": null,
+                "id": 133,
+                "image": "http://localhost:8000/media/tag/2015/05/18/88x31.png",
+                "name": "creative-commons-40-cc-by-nc",
+                "name_en": "creative-commons-40-cc-by-nc",
+                "name_es": "",
+                "name_pt_br": "",
+                "resource_uri": "/api/v1/tag/133/",
+                "summary": "",
+                "summary_en": "",
+                "summary_es": null,
+                "summary_pt_br": null,
+                "url": "http://localhost:8000/tag/view/creative-commons-40-cc-by-nc"
+            }
+        }
+    ],
+    "title": "Dosing Guidelines Poster",
+    "title_en": "Dosing Guidelines Poster",
+    "title_es": "Pautas de dosificación",
+    "title_pt_br": "Diretrizes de dosagem",
+    "update_date": "2016-11-30T01:36:41",
+    "url": "http://localhost:8000/resource/view/dosing-guidelines-poster",
+    "urls": [
+        {
+            "description": "",
+            "description_en": "",
+            "description_es": "",
+            "description_pt_br": "",
+            "file_size": 0,
+            "guid": "017ff4ef-6fb6-4fab-8cc8-d2992dd53bbf",
+            "id": 1044,
+            "order_by": 0,
+            "resource_uri": "/api/v1/resourceurl/1044/",
+            "title": "View on Zinc+ORS website ",
+            "title_en": "View on Zinc+ORS website ",
+            "title_es": "",
+            "title_pt_br": "",
+            "url": "http://zinc-ors.org/resources"
+        }
+    ]
+}
