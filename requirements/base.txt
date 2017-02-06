@@ -3,8 +3,6 @@
 # Isolating Django from the other requirements allows better cross-version
 # (Django) testing.
 
-Django==1.8.16
-
 MySQL-python==1.2.5
 pysolr>=3.3.0,<3.4.0
 
