@@ -121,6 +121,9 @@ class PeerQueryLog(models.Model):
     class Meta:
         get_latest_by = 'finished'
 
+    def __unicode__(self):
+        return u"{} - {}".format(self.peer, self.created)
+
     def finish(self):
         """
         Interface for updating the completion (finished) time
