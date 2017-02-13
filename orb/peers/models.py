@@ -82,13 +82,15 @@ class Peer(models.Model):
 
         filters = {} if last_update is None else {'updated__gte': last_update}
 
-        for api_resource in self.client.list_resources(**filters):
+        total_count, resource_list = self.client.list_resources(**filters)
+
+        for api_resource in resource_list:
             try:
-                local_resource = Resource.resources.get(uuid=api_resource['guid'])
+                local_resource = Resource.resources.get(guid=api_resource['guid'])
             except Resource.DoesNotExist:
                 Resource.create_from_api(api_resource)
                 resource_counts['new_resources'] += 1
-                writer("Created a new resource: {}".format(api_resource['title']))
+                writer(u"Created a new resource: {}".format(api_resource['title']))
             else:
                 if local_resource.is_local():
                     resource_counts['skipped_local_resources'] += 1
