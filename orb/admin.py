@@ -121,7 +121,7 @@ class TagPropertyAdmin(admin.ModelAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
-    search_fields = ('user__username', 'user__email')
+    search_fields = ('user__username', 'user__email', 'user__first_name', 'user__last_name')
     list_display = ('user_name', 'api_access', 'about', 'job_title', 'organisation')
     list_filter = (
         ReviewerFilter,
