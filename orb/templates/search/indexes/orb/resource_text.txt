@@ -1,10 +1,21 @@
-{{ object.title }}
-{{ object.description }}
+{% load translation_tags %}
+
+{% translated_fields object 'title' as title_values %}
+{% for title in title_values %}
+    {{ title }}
+{% endfor %}
+
+{% translated_fields object 'description' as description_values %}
+{% for description in description_values %}
+    {{ description }}
+{% endfor %}
 
 {% for tag in object.tags.all %}
-	{{ tag.name }}
+    {% translated_fields object 'name' as tag_name %}
+    {{ tag_name }}
 	{% if tag.parent_tag %}
-		{{ tag.parent_tag.name }}
+        {% translated_fields tag.parent_tag 'name' as parent_tag_name %}
+		{{ parent_tag_name }}
 	{% endif %}
 {% endfor %}
 
