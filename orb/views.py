@@ -4,7 +4,6 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
-from django.db import IntegrityError
 from django.db.models import Count, Max, Min, Q, Avg
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -14,8 +13,8 @@ from haystack.query import SearchQuerySet
 from orb.forms import (ResourceStep1Form, ResourceStep2Form, SearchForm,
                        ResourceRejectForm, AdvancedSearchForm)
 from orb.models import Collection
-from orb.models import ReviewerRole
 from orb.models import ResourceFile, ResourceTag, ResourceCriteria, ResourceRating
+from orb.models import ReviewerRole
 from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, TagTracker, SearchTracker
 from orb.partners.OnemCHW.models import CountryData
 from orb.signals import (resource_viewed, resource_url_viewed, resource_file_viewed,
