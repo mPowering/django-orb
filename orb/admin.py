@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db.models import Value as V, F
+from django.db.models.functions import Concat
 from django.utils.translation import ugettext_lazy as _
 
 from orb.models import Category, Tag, Resource, ResourceURL, TagProperty
@@ -119,11 +121,25 @@ class TagPropertyAdmin(admin.ModelAdmin):
 
 @admin.register(UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
+    search_fields = ('user__username', 'user__email', 'user__first_name', 'user__last_name')
     list_display = ('user_name', 'api_access', 'about', 'job_title', 'organisation')
     list_filter = (
         ReviewerFilter,
         'reviewer_roles',
     )
+
+    def get_queryset(self, request):
+        return super(UserProfileAdmin, self).get_queryset(request).annotate(
+            full_user_name=Concat(
+                F('user__first_name'),
+                V(' '),
+                F('user__last_name'),
+            )
+        )
+
+    def user_name(self, obj):
+        return obj.user.get_full_name()
+    user_name.admin_order_field = 'full_user_name'
 
 
 @admin.register(TagOwner)
