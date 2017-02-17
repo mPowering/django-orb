@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     'orb.peers',
     'orb.review',
     'orb.analytics',
-    'orb.partners.OnemCHW',
     'modeltranslation_exim',
     'django_extensions',
 ]
@@ -215,7 +214,6 @@ ORB_INFO_EMAIL = 'orb@example.com'
 ORB_RESOURCE_DESCRIPTION_MAX_WORDS = 150
 ORB_PAGINATOR_DEFAULT = 20
 ORB_RESOURCE_MIN_RATINGS = 3
-ORB_PARTNER_DATA_ENABLED = False
 TASK_UPLOAD_FILE_TYPE_BLACKLIST = [u'application/vnd.android']
 TASK_UPLOAD_FILE_MAX_SIZE = "5242880"
 STAGING = False  # used for version context processor

@@ -11,7 +11,6 @@ def modify(settings):
                                    'sorl.thumbnail',
                                    'orb.analytics',
                                    'orb.review',
-                                   'orb.partners.OnemCHW',
                                    'django.contrib.humanize',
                                    'modeltranslation',
                                    'modeltranslation_exim',
@@ -38,8 +37,6 @@ def modify(settings):
     settings['ORB_PAGINATOR_DEFAULT'] = 20
 
     settings['ORB_RESOURCE_MIN_RATINGS'] = 3
-
-    settings['ORB_PARTNER_DATA_ENABLED'] = False
 
     settings['TASK_UPLOAD_FILE_TYPE_BLACKLIST'] = [u'application/vnd.android']
 

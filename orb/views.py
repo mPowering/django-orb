@@ -16,7 +16,6 @@ from orb.models import Collection
 from orb.models import ResourceFile, ResourceTag, ResourceCriteria, ResourceRating
 from orb.models import ReviewerRole
 from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, TagTracker, SearchTracker
-from orb.partners.OnemCHW.models import CountryData
 from orb.signals import (resource_viewed, resource_url_viewed, resource_file_viewed,
                          search, resource_workflow, resource_submitted, tag_viewed)
 
@@ -112,14 +111,6 @@ def tag_view(request, tag_slug):
 
     tag_viewed.send(sender=tag, tag=tag, request=request)
 
-    country_key_facts = None
-
-    if settings.ORB_PARTNER_DATA_ENABLED:
-        try:
-            country_key_facts = CountryData.objects.get(slug=tag.slug)
-        except CountryData.DoesNotExist:
-            pass
-
     is_geo_tag = tag.category.name == "Geography"
 
     return render(request, 'orb/tag.html', {
@@ -129,7 +120,6 @@ def tag_view(request, tag_slug):
         'ordering': ORDER_OPTIONS,
         'current_order': order_by,
         'show_filter_link': show_filter_link,
-        'country_key_facts': country_key_facts,
         'is_geo_tag': is_geo_tag,
     })
 
