@@ -508,7 +508,7 @@ class Category(models.Model):
 class Tag(TimestampBase):
     category = models.ForeignKey(Category)
     parent_tag = models.ForeignKey('self', blank=True, null=True, default=None)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_create_user')
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_update_user')
     image = models.ImageField(upload_to='tag/%Y/%m/%d', null=True, blank=True)
@@ -528,6 +528,7 @@ class Tag(TimestampBase):
         verbose_name = _('Tag')
         verbose_name_plural = _('Tags')
         ordering = ('name',)
+        unique_together = ('name', 'category')
 
     def __unicode__(self):
         return self.name
