@@ -25,7 +25,7 @@ v2.2.2 - not yet released
 * 347: Add SSL cert to site - http://github.com/mPowering/django-orb/issues/issues/347
 * 440: IntegrityError on importing Spanish translation database files - http://github.com/mPowering/django-orb/issues/issues/440
 * 441: ReadTheBuild build failing with AttributeError: 'module' object has no attribute 'UUIDField' - http://github.com/mPowering/django-orb/issues/issues/441
-
+* 430: Add option in django admin to search/order by username - http://github.com/mPowering/django-orb/issues/issues/430
 
 v2.2.1 - released 3 May 2016
 ---------------------------------
