@@ -7,136 +7,148 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ORBv1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-20 17:18+0000\n"
-"PO-Revision-Date: 2016-08-30 19:45+0200\n"
+"POT-Creation-Date: 2017-02-04 20:53+0200\n"
+"PO-Revision-Date: 2017-02-06 16:02+0200\n"
 "Last-Translator: Alex Little <alex@alexlittle.net>\n"
 "Language-Team: Spanish (https://www.transifex.com/bennylope/teams/64448/"
 "es/)\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
-#: orb/api/error_codes.py:31
+#: admin.py:14
+msgid "is reviewer"
+msgstr "Vista preliminar"
+
+#: admin.py:19
+msgid "Yes"
+msgstr ""
+
+#: admin.py:20
+msgid "No"
+msgstr ""
+
+#: api/error_codes.py:31
 msgid "You have already uploaded a resource with this title"
 msgstr "Ya ha cargado un recurso con este título"
 
-#: orb/api/error_codes.py:32
+#: api/error_codes.py:32
 msgid "Resource not found"
 msgstr "No se encontró el recurso"
 
-#: orb/api/error_codes.py:33
+#: api/error_codes.py:33
 msgid "No title provided"
 msgstr "No se brindó ningún título"
 
-#: orb/api/error_codes.py:34
+#: api/error_codes.py:34
 msgid "No description provided"
 msgstr "No se brindó ninguna descripción"
 
-#: orb/api/error_codes.py:35
+#: api/error_codes.py:35
 msgid "This tag already exists"
 msgstr "Esta etiqueta ya existe"
 
-#: orb/api/error_codes.py:36
+#: api/error_codes.py:36
 msgid "Cannot add empty tag"
 msgstr "No se puede agregar una etiqueta vacía"
 
-#: orb/api/error_codes.py:37
+#: api/error_codes.py:37
 msgid "Please supply a string to search for"
 msgstr "Proporcione una cadena para buscar"
 
-#: orb/api/error_codes.py:38
+#: api/error_codes.py:38
 msgid "No resource specfified"
 msgstr "No se especificó ningún recurso"
 
-#: orb/api/error_codes.py:39
+#: api/error_codes.py:39
 msgid "No tag specfified"
 msgstr "No se especificó ninguna etiqueta"
 
-#: orb/api/error_codes.py:40
+#: api/error_codes.py:40
 msgid "Tag not found"
 msgstr "No se encontró la etiqueta"
 
-#: orb/api/error_codes.py:41
+#: api/error_codes.py:41
 msgid "Resource already tagged with this tag"
 msgstr "El recurso ya contiene esta etiqueta"
 
-#: orb/api/error_codes.py:42
+#: api/error_codes.py:42
 #, python-brace-format
 msgid "Description is too long, please enter no more than {max_words} words"
 msgstr ""
 "La descripción es demasiado larga, ingrese no más de {max_words} palabras"
 
-#: orb/api/validation.py:13
+#: api/validation.py:13
 msgid "You do not have API access"
 msgstr "No tiene acceso a la API"
 
-#: orb/emailer.py:16
+#: emailer.py:53
 msgid "Welcome to ORB"
 msgstr "Bienvenido a ORB"
 
-#: orb/emailer.py:40 orb/templates/orb/profile/reset-sent.html:3
-#: orb/templates/orb/profile/reset-sent.html:6
+#: emailer.py:75 templates/orb/profile/reset-sent.html:3
+#: templates/orb/profile/reset-sent.html:6
 msgid "Password reset"
 msgstr "Restablecimiento de contraseña"
 
-#: orb/emailer.py:63 orb/templates/orb/resource/create_thanks.html:3
-#: orb/templates/orb/resource/create_thanks.html:6
+#: emailer.py:96 templates/orb/resource/create_thanks.html:3
+#: templates/orb/resource/create_thanks.html:6
 msgid "Resource Submitted"
 msgstr "Recurso enviado"
 
-#: orb/emailer.py:89 orb/emailer.py:116
+#: emailer.py:120 emailer.py:145 review/tasks.py:110 review/tasks.py:124
 msgid "Resource Submission"
 msgstr "Envío de recurso"
 
-#: orb/emailer.py:145
+#: emailer.py:172
 msgid " New resource submitted"
 msgstr "Nuevo recurso enviado"
 
-#: orb/emailer.py:171
+#: emailer.py:196
 msgid "Link checker results"
 msgstr "Resultados del verificador de enlaces"
 
-#: orb/forms.py:31
+#: forms.py:24
 msgid "Please enter a title"
 msgstr "Ingrese un título"
 
-#: orb/forms.py:33
+#: forms.py:26
 msgid "Comma separated if entering more than one organisation"
 msgstr "Utilice comas para separar si ingresa más de una organización"
 
-#: orb/forms.py:35
+#: forms.py:28
 msgid "Please enter at least one organisation"
 msgstr "Ingrese al menos una organización"
 
-#: orb/forms.py:39
+#: forms.py:32
 msgid "Please enter a description"
 msgstr "Ingrese una descripción"
 
-#: orb/forms.py:40
+#: forms.py:33
 #, python-format
 msgid "Please enter no more than %d words."
 msgstr "Ingrese no más de %d palabras."
 
-#: orb/forms.py:46
+#: forms.py:39
 msgid "Health domain"
 msgstr "Dominio de salud"
 
-#: orb/forms.py:49
+#: forms.py:42
 msgid "Please select at least one health domain"
 msgstr "Seleccione al menos un dominio de salud"
 
-#: orb/forms.py:53
+#: forms.py:46
 msgid "Please select at least one resource type"
 msgstr "Seleccione al menos un tipo de recurso"
 
-#: orb/forms.py:57
+#: forms.py:50
 msgid "Please select at least one audience"
 msgstr "Seleccione al menos una audiencia"
 
-#: orb/forms.py:60
+#: forms.py:53
 msgid ""
 "The geographic area the resource is designed for, may be region e.g. "
 "(\"Africa\", \"East Africa\") or country (e.g. \"Ethiopia\", \"Mali\"). "
@@ -146,11 +158,11 @@ msgstr ""
 "región, p. ej. \"África\", \"Este de África\", o un país, p. ej. \"Etiopía"
 "\", \"Malí\". Utilice comas para separar si ingresa más de un área geográfica"
 
-#: orb/forms.py:61
+#: forms.py:54
 msgid "Please enter at least one geographical area"
 msgstr "Ingrese al menos un área geográfica"
 
-#: orb/forms.py:65
+#: forms.py:58
 msgid ""
 "The languages the resource uses. Comma separated if entering more than one "
 "language"
@@ -158,19 +170,19 @@ msgstr ""
 "Los idiomas que usa el recurso. Utilice comas para separar si ingresa más de "
 "un idioma"
 
-#: orb/forms.py:66
+#: forms.py:59
 msgid "Please enter at least one language"
 msgstr "Ingrese al menos un idioma"
 
-#: orb/forms.py:70
+#: forms.py:63
 msgid "Please select at least one device"
 msgstr "Seleccione al menos un dispositivo"
 
-#: orb/forms.py:74
+#: forms.py:67
 msgid "Please select a license"
 msgstr "Seleccione una licencia"
 
-#: orb/forms.py:75
+#: forms.py:68
 msgid ""
 "<a href='/cc-faq' target='_blank'>More information on Creative Commons "
 "licenses</a>"
@@ -178,7 +190,7 @@ msgstr ""
 "<a href='/cc-faq' target='_blank'>Para obtener más información sobre "
 "licencias de Creative Commons</a>"
 
-#: orb/forms.py:78
+#: forms.py:71
 msgid ""
 "Please enter any other relevant tags for this resource, comma separated if "
 "entering more than one tag"
@@ -186,7 +198,7 @@ msgstr ""
 "Ingrese cualquier otra etiqueta relevante para este recurso. Utilice comas "
 "para separar si ingresa más de una etiqueta"
 
-#: orb/forms.py:82
+#: forms.py:75
 msgid ""
 "Please tick the box to confirm that you have read the <a href='/resource/"
 "guidelines/' target='_blank' class='prominent'>guidelines and criteria</a> "
@@ -196,7 +208,7 @@ msgstr ""
 "guidelines/' target='_blank' class='prominent'>pautas y los criterios</a> "
 "para enviar recursos a ORB"
 
-#: orb/forms.py:84
+#: forms.py:77
 msgid ""
 "Please tick the box to confirm that you have read the guidelines for "
 "submitting resources to ORB"
@@ -204,7 +216,7 @@ msgstr ""
 "Marque la casilla para confirmar que ha leído las pautas para enviar "
 "recursos a ORB"
 
-#: orb/forms.py:97
+#: forms.py:90
 msgid ""
 "Please enter any specific text you would like to be used for the attribution "
 "for this resource"
@@ -212,46 +224,46 @@ msgstr ""
 "Ingrese el texto específico que le gustaría que se use para la atribución de "
 "este recurso"
 
-#: orb/forms.py:121 orb/templates/orb/resource/view.html:247
+#: forms.py:118 templates/orb/resource/view.html:247
 msgid "Study Time"
 msgstr "Tiempo del estudio"
 
-#: orb/forms.py:152
+#: forms.py:149
 msgid "Continue &gt;&gt;"
 msgstr "Continuar &gt;&gt;"
 
-#: orb/forms.py:161
+#: forms.py:161
 msgid "You have entered a study time, but not selected a unit."
 msgstr "Ha ingresado un tiempo de estudio, pero no seleccionó una unidad."
 
-#: orb/forms.py:169
+#: forms.py:169
 #, python-brace-format
 msgid ""
 "You have entered {no_words} words, please enter no more than {max_words}"
 msgstr "Ha ingresado {no_words} palabras. No ingrese más de {max_words}"
 
-#: orb/forms.py:187
+#: forms.py:187
 msgid "You have entered already submitted a resource with this title."
 msgstr "Ya ha enviado un recurso con este título."
 
-#: orb/forms.py:216
+#: forms.py:216
 msgid "Add"
 msgstr "Agregar"
 
-#: orb/forms.py:227
+#: forms.py:227
 msgid "Please correct the errors below and resubmit the form."
 msgstr "Corrija los errores a continuación y vuelva a enviar el formulario."
 
-#: orb/forms.py:231
+#: forms.py:231
 msgid "Please submit a file and/or a url for this resource"
 msgstr "Envíe un archivo o URL para este recurso"
 
-#: orb/forms.py:242
+#: forms.py:242
 #, python-format
 msgid "Currently, ORB does not allow uploading of '%s' files"
 msgstr "Actualmente, ORB no permite cargar archivos '%s'"
 
-#: orb/forms.py:245
+#: forms.py:245
 #, python-format
 msgid ""
 "Please keep filesize under %(max_size)s. Current filesize %(actual_size)s"
@@ -259,40 +271,40 @@ msgstr ""
 "Mantenga el tamaño de los archivos por debajo de %(max_size)s. El tamaño de "
 "archivo actual es %(actual_size)s"
 
-#: orb/forms.py:258
+#: forms.py:258
 msgid "This does not appear to be a valid Url"
 msgstr "Esta no parece ser una URL válida"
 
-#: orb/forms.py:265 orb/forms.py:284 orb/forms.py:309
+#: forms.py:265 forms.py:284 forms.py:309
 msgid "Please enter something to search for"
 msgstr "Ingrese algo para buscar"
 
-#: orb/forms.py:275
+#: forms.py:275
 msgid "Go"
 msgstr "Ir"
 
-#: orb/forms.py:296 orb/forms.py:356 orb/templates/orb/search.html:5
-#: orb/templates/orb/search.html.py:9
+#: forms.py:296 forms.py:356 templates/orb/search.html:5
+#: templates/orb/search.html.py:9
 msgid "Search"
 msgstr "Buscar"
 
-#: orb/forms.py:300
+#: forms.py:300
 msgid "Advanced search"
 msgstr "Búsqueda avanzada"
 
-#: orb/forms.py:308
+#: forms.py:308
 msgid "Search terms"
 msgstr "Términos de búsqueda"
 
-#: orb/forms.py:378
+#: forms.py:378
 msgid "Please select at least a search term or a tag"
 msgstr "Seleccione al menos un término o etiqueta de búsqueda"
 
-#: orb/forms.py:391
+#: forms.py:391
 msgid "Please enter a reason as to why the resource has been rejected"
 msgstr "Ingrese un motivo por el cual se ha rechazado el recurso"
 
-#: orb/forms.py:392
+#: forms.py:392
 msgid ""
 "The text you enter here will be included in the email to the submitter of "
 "the resource, so please bear this in mind when explaining your reasoning."
@@ -301,316 +313,414 @@ msgstr ""
 "a quien envió el recurso, de modo que recuerde esto cuando explique sus "
 "razones."
 
-#: orb/forms.py:393
+#: forms.py:393
 msgid "Reason for rejection"
 msgstr "Motivo del rechazo"
 
-#: orb/forms.py:406
+#: forms.py:406
 msgid "Submit"
 msgstr "Enviar"
 
-#: orb/models.py:26 orb/models.py:156
+#: models.py:57
 msgid "Rejected"
 msgstr "Rechazado"
 
-#: orb/models.py:27 orb/models.py:157 orb/templates/orb/analytics/home.html:80
-#: orb/templates/orb/analytics/home.html:93
-#: orb/templates/orb/analytics/review.html:11
-msgid "Pending CRT"
-msgstr "CRT pendiente"
+#: models.py:58 models.py:59
+msgid "Pending"
+msgstr "Pendiente"
 
-#: orb/models.py:28
-msgid "Pending MRT"
-msgstr "MRT pendiente"
-
-#: orb/models.py:29 orb/models.py:159
+#: models.py:60
 msgid "Approved"
 msgstr "Aprobado"
 
-#: orb/models.py:37
+#: models.py:68
 msgid "Mins"
 msgstr "Minutos"
 
-#: orb/models.py:38
+#: models.py:69
 msgid "Hours"
 msgstr "Horas"
 
-#: orb/models.py:39
+#: models.py:70
 msgid "Days"
 msgstr "Días"
 
-#: orb/models.py:40
+#: models.py:71
 msgid "Weeks"
 msgstr "Semanas"
 
-#: orb/models.py:64 orb/templates/orb/analytics/resource.html:60
-#: orb/templates/orb/analytics/tag.html:65
-#: orb/templates/orb/analytics/tag.html:94
+#: models.py:91
+msgid "Original resource URL."
+msgstr "URL del recurso"
+
+#: models.py:93
+msgid "Name of the source ORB instance where resource was sourced."
+msgstr ""
+
+#: models.py:95
+msgid "Host URL of the original ORB instance where resource was sourced."
+msgstr ""
+
+#: models.py:97
+msgid "The peer ORB from which the resource was downloaded."
+msgstr ""
+
+#: models.py:106 templates/orb/analytics/resource.html:60
+#: templates/orb/analytics/tag.html:65 templates/orb/analytics/tag.html:94
 msgid "Resource"
 msgstr "Recurso"
 
-#: orb/models.py:65 orb/templates/orb/analytics/tag.html:53
-#: orb/templates/orb/analytics/tag.html:87
+#: models.py:107 templates/orb/analytics/tag.html:53
+#: templates/orb/analytics/tag.html:87
 msgid "Resources"
 msgstr "Recursos"
 
-#: orb/models.py:158 orb/templates/orb/analytics/home.html:81
-#: orb/templates/orb/analytics/home.html:121
-#: orb/templates/orb/analytics/home.html:138
-#: orb/templates/orb/analytics/review.html:49
-msgid "Pending MEP"
-msgstr "MEP pendiente"
-
-#: orb/models.py:222
+#: models.py:429
 msgid "is translation of"
 msgstr "es traducción de"
 
-#: orb/models.py:223
+#: models.py:430
 msgid "is derivative of"
 msgstr "es derivado de"
 
-#: orb/models.py:224
+#: models.py:431
 msgid "is contained in"
 msgstr "está contenido en"
 
-#: orb/models.py:243
+#: models.py:448
 msgid "Quality Assurance"
 msgstr "Aseguramiento de la calidad"
 
-#: orb/models.py:244
+#: models.py:449
 msgid "Value for Frontline Health Workers (FLHW)"
 msgstr "Valor para Frontline Health Workers (FLHW)"
 
-#: orb/models.py:245
+#: models.py:450
 msgid "Video resources"
 msgstr "Recursos de video"
 
-#: orb/models.py:246
+#: models.py:451
 msgid "Animation resources"
 msgstr "Recursos de animación"
 
-#: orb/models.py:247
+#: models.py:452
 msgid "Audio resources"
 msgstr "Recursos de audio"
 
-#: orb/models.py:248
+#: models.py:453
 msgid "Text based resources"
 msgstr "Recursos basados en texto"
 
-#: orb/models.py:263
+#: models.py:460 models.py:463
+msgid "deprecated"
+msgstr ""
+
+#: models.py:468
+msgid ""
+"Used to show specific criteria to reviewers based on their role. Leave blank "
+"if criterion applies generally."
+msgstr ""
+
+#: models.py:477 views.py:400
+msgid "General"
+msgstr ""
+
+#: models.py:484
+msgid "resource criterion"
+msgstr "recursos calificados"
+
+#: models.py:485
+#, fuzzy
+#| msgid "resources rated"
+msgid "resource criteria"
+msgstr "recursos calificados"
+
+#: models.py:495
 msgid "Category"
 msgstr "Categoría"
 
-#: orb/models.py:264
+#: models.py:496
 msgid "Categories"
 msgstr "Categorías"
 
-#: orb/models.py:292
+#: models.py:528
 msgid "Tag"
 msgstr "Etiqueta"
 
-#: orb/models.py:293 orb/templates/orb/email/link_checker_results.html:18
-#: orb/templates/orb/email/link_checker_results.txt:16
+#: models.py:529 templates/orb/email/link_checker_results.html:18
+#: templates/orb/email/link_checker_results.txt:16
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: orb/models.py:327
+#: models.py:563
 msgid "Tag property"
 msgstr "Propiedad de la etiqueta"
 
-#: orb/models.py:328
+#: models.py:564
 msgid "Tag properties"
 msgstr "Propiedades de la etiqueta"
 
-#: orb/models.py:358
+#: models.py:631
 msgid "under 18"
 msgstr "Menos de 18 años"
 
-#: orb/models.py:359
+#: models.py:632
 msgid "18-24"
 msgstr "Entre 18 y 24 años"
 
-#: orb/models.py:360
+#: models.py:633
 msgid "25-34"
 msgstr "Entre 25 y 34 años"
 
-#: orb/models.py:361
+#: models.py:634
 msgid "35-50"
 msgstr "Entre 35 y 50 años"
 
-#: orb/models.py:362
+#: models.py:635
 msgid "over 50"
 msgstr "Más de 50 años"
 
-#: orb/models.py:363 orb/models.py:368
+#: models.py:636 models.py:641
 msgid "Prefer not to say"
 msgstr "Prefiero no responder"
 
-#: orb/models.py:366
+#: models.py:639
 msgid "Female"
 msgstr "Femenino"
 
-#: orb/models.py:367
+#: models.py:640
 msgid "Male"
 msgstr "Masculino"
 
-#: orb/models.py:414 orb/models.py:467
-#: orb/templates/orb/analytics/tag.html:105
+#: models.py:673
+#, fuzzy
+#| msgid "Your Profile"
+msgid "user profile"
+msgstr "Su perfil"
+
+#: models.py:674
+#, fuzzy
+#| msgid "Your Profile"
+msgid "user profiles"
+msgstr "Su perfil"
+
+#: models.py:701 models.py:754 templates/orb/analytics/tag.html:105
 msgid "View"
 msgstr "Ver"
 
-#: orb/models.py:415
+#: models.py:702
 msgid "View-api"
 msgstr "Ver API"
 
-#: orb/models.py:416 orb/templates/orb/analytics/tag.html:106
-#: orb/templates/orb/profile/view.html:83 orb/views.py:183
+#: models.py:703 templates/orb/analytics/tag.html:106
+#: templates/orb/profile/view.html:83 views.py:169
 msgid "Edit"
 msgstr "Editar"
 
-#: orb/models.py:417 orb/templates/orb/resource/view.html:180
-#: orb/templates/orb/resource/view.html:185
+#: models.py:704 templates/orb/resource/view.html:180
+#: templates/orb/resource/view.html:185
 msgid "Download"
 msgstr "Descargar"
 
-#: orb/models.py:418
+#: models.py:705
 msgid "Create"
 msgstr "Crear"
 
-#: orb/models.py:446
+#: models.py:733
 msgid "search"
 msgstr "buscar"
 
-#: orb/models.py:447
+#: models.py:734
 msgid "search-api"
 msgstr "buscar api"
 
-#: orb/models.py:448
+#: models.py:735
 msgid "search-adv"
 msgstr "búsqueda avanzada"
 
-#: orb/models.py:468
+#: models.py:755
 msgid "View-API"
 msgstr "Ver API"
 
-#: orb/models.py:469
+#: models.py:756
 msgid "View-URL"
 msgstr "Ver URL"
 
-#: orb/models.py:496
+#: models.py:781
 msgid "Public"
 msgstr "Público"
 
-#: orb/models.py:497
+#: models.py:782
 msgid "Private"
 msgstr "Privado"
 
-#: orb/models.py:510
+#: models.py:793
 msgid "Collection"
 msgstr "Colección"
 
-#: orb/models.py:511 orb/templates/orb/resource/view.html:236
+#: models.py:794 templates/orb/resource/view.html:236
 msgid "Collections"
 msgstr "Colecciones"
 
-#: orb/models.py:529
+#: models.py:812
 msgid "Collection user"
 msgstr "Usuario de colección"
 
-#: orb/models.py:530
+#: models.py:813
 msgid "Collection users"
 msgstr "Usuarios de colección"
 
-#: orb/models.py:540
+#: models.py:823
 msgid "Collection resource"
 msgstr "Recurso de colección"
 
-#: orb/models.py:541
+#: models.py:824
 msgid "Collection resources"
 msgstr "Recursos de colección"
 
-#: orb/partners/OnemCHW/models.py:23 orb/partners/OnemCHW/models.py:24
+#: models.py:835
+msgid "Medical"
+msgstr ""
+
+#: models.py:836
+msgid "Technical"
+msgstr ""
+
+#: models.py:837
+msgid "Training"
+msgstr ""
+
+#: partners/OnemCHW/models.py:23 partners/OnemCHW/models.py:24
 msgid "CountryData"
 msgstr "Datos de país"
 
-#: orb/profile/forms.py:20 orb/profile/forms.py:64
+#: profiles/forms.py:20 profiles/forms.py:64
 msgid "Please enter a username."
 msgstr "Ingrese un nombre de usuario."
 
-#: orb/profile/forms.py:24 orb/profile/forms.py:70
+#: profiles/forms.py:24 profiles/forms.py:72
 msgid "Please enter a password."
 msgstr "Ingrese una contraseña."
 
-#: orb/profile/forms.py:26
+#: profiles/forms.py:26
 msgid "Please note that your username and password are case-sensitive."
 msgstr ""
 "Tenga en cuenta que su nombre de usuario y su contraseña distinguen "
 "mayúsculas y minúsculas."
 
-#: orb/profile/forms.py:41 orb/profile/views.py:45
-#: orb/templates/includes/header.html:85
+#: profiles/forms.py:41 profiles/views.py:45 templates/includes/header.html:89
 msgid "Login"
 msgstr "Iniciar sesión"
 
-#: orb/profile/forms.py:44
+#: profiles/forms.py:44
 msgid "Forgotten password?"
 msgstr "¿Olvidó su contraseña?"
 
-#: orb/profile/forms.py:57
+#: profiles/forms.py:57
 msgid "Invalid username or password. Please try again."
 msgstr "Nombre de usuario o contraseña no válidos. Inténtelo nuevamente."
 
-#: orb/profile/forms.py:66 orb/profile/forms.py:227
+#: profiles/forms.py:65
+msgid "Username"
+msgstr "Usuario"
+
+#: profiles/forms.py:67 profiles/forms.py:235
 msgid "Please enter a valid e-mail address."
 msgstr "Ingrese una dirección de correo electrónico válida."
 
-#: orb/profile/forms.py:67
+#: profiles/forms.py:68
 msgid "Please enter your e-mail address."
 msgstr "Ingrese su dirección de correo electrónico."
 
-#: orb/profile/forms.py:71
+#: profiles/forms.py:70
+msgid "Email"
+msgstr "Correo electrónico:"
+
+#: profiles/forms.py:73
 msgid "Your password should be at least 6 characters long."
 msgstr "Su contraseña debe tener al menos 6 caracteres de longitud."
 
-#: orb/profile/forms.py:76
+#: profiles/forms.py:76
+msgid "Password"
+msgstr "Restablecimiento de contraseña"
+
+#: profiles/forms.py:79
 msgid "Please enter your password again."
 msgstr "Ingrese su contraseña nuevamente."
 
-#: orb/profile/forms.py:77
+#: profiles/forms.py:80
 msgid "Your password again should be at least 6 characters long."
 msgstr "Su nueva contraseña debe tener al menos 6 caracteres de longitud."
 
-#: orb/profile/forms.py:80
+#: profiles/forms.py:82
+#, fuzzy
+#| msgid "Password updated"
+msgid "Password again"
+msgstr "Contraseña actualizada"
+
+#: profiles/forms.py:84
 msgid "Please enter your first name."
 msgstr "Ingrese su nombre."
 
-#: orb/profile/forms.py:81
+#: profiles/forms.py:85
 msgid "Your first name should be at least 2 characters long."
 msgstr "Su nombre debe tener al menos 2 caracteres de longitud."
 
-#: orb/profile/forms.py:85
+#: profiles/forms.py:88
+msgid "First name"
+msgstr ""
+
+#: profiles/forms.py:90
 msgid "Please enter your last name."
 msgstr "Ingrese su apellido."
 
-#: orb/profile/forms.py:86
+#: profiles/forms.py:91
 msgid "Your last name should be at least 2 characters long."
 msgstr "Su apellido debe tener al menos 2 caracteres de longitud."
 
-#: orb/profile/forms.py:92 orb/profile/forms.py:248
+#: profiles/forms.py:94
+#, fuzzy
+#| msgid "Last updated"
+msgid "Last name"
+msgstr "Última actualización"
+
+#: profiles/forms.py:97 profiles/forms.py:256
 msgid "Please select from the options above, or enter in the field below:"
 msgstr ""
 "Seleccione entre las opciones anteriores o ingrese en el campo a "
 "continuación:"
 
-#: orb/profile/forms.py:100 orb/profile/forms.py:174 orb/profile/forms.py:256
+#: profiles/forms.py:98 templates/orb/profile/view.html:25
+#: templates/orb/review/review_list.html:21
+msgid "Role"
+msgstr "Rol"
+
+#: profiles/forms.py:104 templates/orb/analytics/home.html:102
+#: templates/orb/analytics/home.html:147 templates/orb/analytics/review.html:20
+#: templates/orb/analytics/review.html:58 templates/orb/profile/view.html:40
+#: templates/orb/review/review_list.html:57
+#: templates/orb/review/review_list.html:119
+#: templates/orb/review/user_review_list.html:18
+msgid "Organisation"
+msgstr "Organización"
+
+#: profiles/forms.py:107 profiles/forms.py:182 profiles/forms.py:264
 msgid "Please select an age range"
 msgstr "Seleccione un rango de edad"
 
-#: orb/profile/forms.py:104 orb/profile/forms.py:178 orb/profile/forms.py:260
+#: profiles/forms.py:108
+msgid "Age Range"
+msgstr "Rango de edad"
+
+#: profiles/forms.py:111 profiles/forms.py:186 profiles/forms.py:268
 msgid "Please select a gender"
 msgstr "Seleccione un género"
 
-#: orb/profile/forms.py:107
+#: profiles/forms.py:112
+msgid "Gender"
+msgstr "Género"
+
+#: profiles/forms.py:115
 msgid ""
 "Please tick the box to confirm that you have read the <a href='/terms/' "
 "target='_blank' class='prominent'>terms</a> about registering with ORB"
@@ -618,94 +728,233 @@ msgstr ""
 "Marque la casilla para confirmar que ha leído los <a href='/terms/' "
 "target='_blank' class='prominent'>términos</a> sobre el registro en ORB"
 
-#: orb/profile/forms.py:109
+#: profiles/forms.py:117
 msgid "Please tick the box to confirm that you have read the terms"
 msgstr "Marque la casilla para confirmar que ha leído los términos"
 
-#: orb/profile/forms.py:111
+#: profiles/forms.py:119
 msgid "Subscribe to mPowering update emails"
 msgstr "Suscribirse a correos electrónicos de actualización de mPowering "
 
-#: orb/profile/forms.py:136 orb/profile/views.py:108
-#: orb/templates/includes/header.html:86
+#: profiles/forms.py:144 profiles/views.py:108
+#: templates/includes/header.html:90
 msgid "Register"
 msgstr "Registrarse"
 
-#: orb/profile/forms.py:153
+#: profiles/forms.py:161
 msgid "Username has already been registered, please select another."
 msgstr "El nombre de usuario ya se ha registrado, seleccione otro."
 
-#: orb/profile/forms.py:159
+#: profiles/forms.py:167
 msgid "Email has already been registered"
 msgstr "El correo electrónico ya se ha registrado"
 
-#: orb/profile/forms.py:164 orb/profile/forms.py:324
+#: profiles/forms.py:172 profiles/forms.py:332
 msgid "Passwords do not match."
 msgstr "Las contraseñas no coinciden."
 
-#: orb/profile/forms.py:170
+#: profiles/forms.py:178
 msgid "Please select or enter a role"
 msgstr "Seleccione o ingrese un rol"
 
-#: orb/profile/forms.py:187
+#: profiles/forms.py:195
 msgid "Please enter a username or email address."
 msgstr "Ingrese un nombre de usuario o dirección de correo electrónico."
 
-#: orb/profile/forms.py:201 orb/profile/views.py:130
+#: profiles/forms.py:209 profiles/views.py:130
 msgid "Reset password"
 msgstr "Restablecer contraseña"
 
-#: orb/profile/forms.py:216
+#: profiles/forms.py:224
 msgid "Username/email not found"
 msgstr "Nombre de usuario/correo electrónico no encontrado"
 
-#: orb/profile/forms.py:222
+#: profiles/forms.py:230
 msgid "You cannot edit your API Key."
 msgstr "No puede editar su clave API."
 
-#: orb/profile/forms.py:224
+#: profiles/forms.py:232
 msgid "You cannot edit your username."
 msgstr "No puede editar su nombre de usuario."
 
-#: orb/profile/forms.py:232
+#: profiles/forms.py:240
 msgid "Your new password should be at least 6 characters long"
 msgstr "Su nueva contraseña debería tener al menos 6 caracteres de longitud"
 
-#: orb/profile/forms.py:262
+#: profiles/forms.py:270
 msgid "Please tick the box to subscribe to mPowering update emails"
 msgstr ""
 "Marque la casilla para suscribirse a los correos electrónicos de "
 "actualización de mPowering"
 
-#: orb/profile/forms.py:295
+#: profiles/forms.py:303
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
-#: orb/profile/forms.py:300
+#: profiles/forms.py:308
 msgid "API Key"
 msgstr "Clave API"
 
-#: orb/profile/forms.py:304
+#: profiles/forms.py:312
 msgid "Save"
 msgstr "Guardar"
 
-#: orb/profile/forms.py:317
+#: profiles/forms.py:325
 msgid "Email address already in use"
 msgstr "La dirección de correo electróncio ya está en uso"
 
-#: orb/profile/views.py:187
+#: profiles/views.py:187
 msgid "Profile updated"
 msgstr "Perfil actualizado"
 
-#: orb/profile/views.py:194
+#: profiles/views.py:194
 msgid "Password updated"
 msgstr "Contraseña actualizada"
 
-#: orb/templates/404.html:3 orb/templates/404.html.py:5
+#: review/forms.py:27
+msgid "Please provide a reason for rejecting this content."
+msgstr ""
+
+#: review/forms.py:28
+msgid "Cannot reassign a completed review."
+msgstr ""
+
+#: review/forms.py:29
+msgid "All criteria must be met before resource can be approved."
+msgstr ""
+
+#: review/forms.py:96
+msgid "The resource has been approved"
+msgstr ""
+
+#: review/forms.py:102
+msgid "The resource has been rejected"
+msgstr "Ingrese un motivo por el cual se ha rechazado el recurso"
+
+#: review/forms.py:113 review/forms.py:224
+#: templates/orb/analytics/home.html:123 templates/orb/analytics/home.html:166
+#: templates/orb/analytics/review.html:75 views.py:186
+msgid "Approve"
+msgstr "Aprobar"
+
+#: review/forms.py:115 review/forms.py:226
+#: templates/orb/analytics/home.html:125 templates/orb/analytics/home.html:168
+#: templates/orb/analytics/review.html:76 views.py:181
+msgid "Reject"
+msgstr "Desaprobar"
+
+#: review/forms.py:121 templates/orb/resource/confirm_delete.html:13
+msgid "Delete"
+msgstr ""
+
+#: review/forms.py:168
+msgid "Approval criteria"
+msgstr ""
+
+#: review/forms.py:175
+msgid ""
+"The text you enter here will be used for providing feedback to the submitter "
+"of the resource, so please bear this in mind when explaining your reasoning."
+msgstr ""
+"El texto que ingresó aquí se incluirá en el correo electrónico que se envíe "
+"a quien envió el recurso, de modo que recuerde esto cuando explique sus "
+"razones."
+
+#: review/forms.py:177
+msgid "Rejection reason or other notes"
+msgstr ""
+
+#: review/forms.py:304
+msgid "Assign"
+msgstr ""
+
+#: review/forms.py:308
+msgid "Return to pending list"
+msgstr ""
+
+#: review/models.py:49
+msgid "review log entry"
+msgstr ""
+
+#: review/models.py:50
+msgid "review log entries"
+msgstr ""
+
+#: review/models.py:110
+#, fuzzy
+#| msgid "Content Review Team"
+msgid "content review"
+msgstr "Equipo de revisión de contenido"
+
+#: review/models.py:111
+#, fuzzy
+#| msgid "Content Review Team"
+msgid "content reviews"
+msgstr "Equipo de revisión de contenido"
+
+#: review/tasks.py:46
+#, fuzzy
+#| msgid "Content Review Team"
+msgid "Content Review for: "
+msgstr "Equipo de revisión de contenido"
+
+#: review/tasks.py:69
+#, fuzzy
+#| msgid "Resource File Views"
+msgid "Resource review reminder: "
+msgstr "Vistas de archivos de recursos"
+
+#: review/tasks.py:144
+#, fuzzy
+#| msgid "Resource - Reject"
+msgid "Resource Review Complete"
+msgstr "Recurso - Rechazo"
+
+#: review/views.py:55 review/views.py:59 review/views.py:95
+msgid "Thank you for reviewing this content"
+msgstr "Gracias por su calificación."
+
+#: review/views.py:86
+msgid "You cannot review this content again."
+msgstr ""
+
+#: review/views.py:159
+msgid "Assignments successfully updated"
+msgstr ""
+
+#: review/views.py:161
+msgid "There was an error assigning these reviews"
+msgstr ""
+
+#: review/views.py:186
+msgid "You cannot delete non-pending resources"
+msgstr ""
+
+#: review/views.py:190
+msgid "You cannot delete resources with existing review assignemnts"
+msgstr ""
+
+#: review/views.py:193
+msgid "The resource was deleted"
+msgstr "recursos calificados"
+
+#: review/views.py:248
+msgid "The resource has already been approved."
+msgstr ""
+
+#: review/views.py:250
+msgid "The resource has already been rejected."
+msgstr "El correo electrónico ya se ha registrado"
+
+#: review/views.py:258
+msgid "There was an error starting the review."
+msgstr ""
+
+#: templates/404.html:3 templates/404.html.py:5
 msgid "Page not found"
 msgstr "Página no encontrada"
 
-#: orb/templates/404.html:9
+#: templates/404.html:9
 #, python-format
 msgid ""
 "\n"
@@ -718,11 +967,11 @@ msgstr ""
 "<p>Regrese a la <a href=\"%(home)s\">página de inicio</a> o intente realizar "
 "una <a href=\"%(search)s\">búsqueda</a></p>\n"
 
-#: orb/templates/500.html:3
+#: templates/500.html:3
 msgid "Server Error"
 msgstr "Error del servidor"
 
-#: orb/templates/500.html:4
+#: templates/500.html:4
 msgid ""
 "\n"
 "<p>Unfortunately a server error has occurred. A message has been sent to the "
@@ -732,155 +981,160 @@ msgstr ""
 "<p>Lamentablemente, se ha producido un error del servidor. Se ha enviado un "
 "mensaje al administrador del servidor.</p>\n"
 
-#: orb/templates/base.html:6 orb/templates/orb/home.html:5 orb/views.py:54
+#: templates/base.html:6 templates/orb/home.html:5 views.py:52
 msgid "ORB by mPowering"
 msgstr "ORB por mPowering"
 
-#: orb/templates/base.html:9 orb/templates/search/opensearch.html:3
+#: templates/base.html:9 templates/search/opensearch.html:3
 msgid "ORB"
 msgstr "ORB"
 
-#: orb/templates/base.html:67
+#: templates/base.html:56
+msgid ""
+"This is the development server, anything added here will not be shared on "
+"the live site"
+msgstr ""
+
+#: templates/base.html:66
 msgid "Contact Us"
 msgstr "Contáctenos"
 
-#: orb/templates/base.html:71
+#: templates/base.html:70
 msgid "Follow Us"
 msgstr "Síganos"
 
-#: orb/templates/base.html:72 orb/templates/orb/profile/view.html:73
+#: templates/base.html:71 templates/orb/profile/view.html:73
 msgid "Twitter"
 msgstr "Twitter"
 
-#: orb/templates/base.html:73
+#: templates/base.html:72
 msgid "Blog"
 msgstr "Blog"
 
-#: orb/templates/base.html:76
+#: templates/base.html:75
 msgid "About Us"
 msgstr "Acerca de nosotros"
 
-#: orb/templates/base.html:77 orb/templates/orb/about.html:4
-#: orb/templates/orb/profile/view.html:51
+#: templates/base.html:76 templates/orb/about.html:4
+#: templates/orb/profile/view.html:51
 msgid "About"
 msgstr "Acerca de"
 
-#: orb/templates/base.html:78 orb/templates/orb/about.html:45
-msgid "Content Review Team"
+#: templates/base.html:77 templates/orb/about.html:46
+msgid "Content Review Process"
 msgstr "Equipo de revisión de contenido"
 
-#: orb/templates/base.html:79 orb/templates/orb/about.html:58
-msgid "Medical Expert Panel"
-msgstr "Panel de expertos médicos"
-
-#: orb/templates/base.html:80 orb/templates/orb/partners.html:5
-#: orb/templates/orb/partners.html.py:10
+#: templates/base.html:78 templates/orb/partners.html:5
+#: templates/orb/partners.html.py:10
 msgid "Content Partners"
 msgstr "Socios de contenido"
 
-#: orb/templates/base.html:81 orb/templates/orb/how_to.html:4
-#: orb/templates/orb/how_to.html.py:9
+#: templates/base.html:79 templates/orb/how_to.html:4
+#: templates/orb/how_to.html.py:9
 msgid "How to use ORB resources"
 msgstr "Cómo usar recursos de ORB"
 
-#: orb/templates/base.html:82 orb/templates/orb/developers.html:4
-#: orb/templates/orb/developers.html:9
+#: templates/base.html:80 templates/orb/developers.html:4
+#: templates/orb/developers.html.py:9
 msgid "Developers Area"
 msgstr "Área de desarrolladores"
 
-#: orb/templates/base.html:87 orb/templates/orb/terms.html:4
+#: templates/base.html:85 templates/orb/terms.html:4
 msgid "Terms and Privacy Policy"
 msgstr "Términos y política de privacidad"
 
-#: orb/templates/includes/header.html:15
+#: templates/includes/header.html:13
+msgid "by mPowering"
+msgstr "por mPowering"
+
+#: templates/includes/header.html:15
 msgid "Language"
 msgstr "Idioma"
 
-#: orb/templates/includes/header.html:23
+#: templates/includes/header.html:23
 msgid "Browse Resources"
 msgstr "Buscar recursos"
 
-#: orb/templates/includes/header.html:31
-#: orb/templates/orb/viz/country_map.html:3
-#: orb/templates/orb/viz/country_map.html:103
+#: templates/includes/header.html:31 templates/orb/viz/country_map.html:3
+#: templates/orb/viz/country_map.html:103
 msgid "Country Map"
 msgstr "Mapa del país"
 
-#: orb/templates/includes/header.html:32
-#: orb/templates/orb/toolkits/home.html:4
-#: orb/templates/orb/toolkits/home.html:7
+#: templates/includes/header.html:32 templates/orb/toolkits/home.html:4
+#: templates/orb/toolkits/home.html.py:8
 msgid "Toolkits"
 msgstr "Kits de herramientas"
 
-#: orb/templates/includes/header.html:36
-#: orb/templates/orb/resource/create_step1.html:8
+#: templates/includes/header.html:36 templates/orb/resource/create_step1.html:8
 msgid "Add Resource"
 msgstr "Agregar recurso"
 
-#: orb/templates/includes/header.html:40
-#: orb/templates/orb/analytics/home.html:4
-#: orb/templates/orb/analytics/home.html:77
-#: orb/templates/orb/analytics/resource.html:3
-#: orb/templates/orb/analytics/tag.html:3
+#: templates/includes/header.html:40 templates/orb/analytics/home.html:4
+#: templates/orb/analytics/home.html:77 templates/orb/analytics/resource.html:3
+#: templates/orb/analytics/tag.html:3
 msgid "Analytics"
 msgstr "Analítica"
 
-#: orb/templates/includes/header.html:50
+#: templates/includes/header.html:50
 msgid "Site analytics"
 msgstr "Analítica del sitio"
 
-#: orb/templates/includes/header.html:53
+#: templates/includes/header.html:53
 msgid "Monthly Analytics"
 msgstr "Analítica mensual"
 
-#: orb/templates/includes/header.html:56
-#: orb/templates/orb/analytics/home.html:86
-#: orb/templates/orb/analytics/home.html:242
-#: orb/templates/orb/analytics/map.html:3
-#: orb/templates/orb/analytics/map.html:7
+#: templates/includes/header.html:56 templates/orb/analytics/home.html:86
+#: templates/orb/analytics/home.html:242 templates/orb/analytics/map.html:3
+#: templates/orb/analytics/map.html.py:7
 msgid "Activity Map"
 msgstr "Mapa de actividad"
 
-#: orb/templates/includes/header.html:61
-#: orb/templates/orb/analytics/review.html:4
-#: orb/templates/orb/analytics/review.html:8
+#: templates/includes/header.html:61 templates/orb/analytics/review.html:4
+#: templates/orb/analytics/review.html:8
+#: templates/orb/review/review_list.html:4
+#: templates/orb/review/review_list.html:8
+#: templates/orb/review/user_review_list.html:4
+#: templates/orb/review/user_review_list.html:10
 msgid "Pending Resources"
 msgstr "Recursos pendientes"
 
-#: orb/templates/includes/header.html:69
+#: templates/includes/header.html:69
 msgid "My ORB"
 msgstr "Mi ORB"
 
-#: orb/templates/includes/header.html:72
+#: templates/includes/header.html:72
 msgid "View Profile"
 msgstr "Ver perfil"
 
-#: orb/templates/includes/header.html:74
+#: templates/includes/header.html:74
 msgid "Edit Profile"
 msgstr "Editar perfil"
 
-#: orb/templates/includes/header.html:76
+#: templates/includes/header.html:76
 msgid "Rated"
 msgstr "Clasificado"
 
-#: orb/templates/includes/header.html:77
-#: orb/templates/orb/profile/bookmarks.html:7
+#: templates/includes/header.html:78
+msgid "Resource Reviews"
+msgstr "Vistas de recursos"
+
+#: templates/includes/header.html:81 templates/orb/profile/bookmarks.html:7
 msgid "Bookmarks"
 msgstr "Marcadores"
 
-#: orb/templates/includes/header.html:80
+#: templates/includes/header.html:84
 msgid "Logout"
 msgstr "Cerrar sesión"
 
-#: orb/templates/includes/i18n.html:7
+#: templates/includes/i18n.html:7
 msgid "Change language"
 msgstr "Cambiar idioma"
 
-#: orb/templates/orb/about.html:9
+#: templates/orb/about.html:9
 msgid "About ORB"
 msgstr "Acerca de ORB"
 
-#: orb/templates/orb/about.html:11
+#: templates/orb/about.html:11
 #, python-format
 msgid ""
 "\n"
@@ -895,8 +1149,9 @@ msgid ""
 "\t<li>Brings into one space quality-assured, multimedia materials\n"
 "\t\tfrom multiple content developers, with a focus on maternal and child\n"
 "\t\thealth.</li>\n"
-"\t<li>Adaptation of existing content: ORB aims to reduce the practice\n"
-"\t\tof new content being developed unnecessarily.</li>\n"
+"\t<li>Adaptation of existing content: ORB allows training\n"
+"\t\timplementers to re-use and adapt quality-assured training materials,\n"
+"\t\tsaving costs and time.</li>\n"
 "\t<li>A global collaborative network of organizations to share and\n"
 "\t\treview content, integrate content into programs and share\n"
 "\t\tuser-experience.</li>\n"
@@ -954,16 +1209,28 @@ msgstr ""
 "</p>\n"
 "\n"
 
-#: orb/templates/orb/about.html:46
+#: templates/orb/about.html:48
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "<p>Our Content Review Team consists of staff with backgrounds in\n"
+#| "\tglobal public health, training and technology.</p>\n"
+#| "<p>\n"
+#| "\tWhen resources are submitted to ORB, the Content Review Team makes the\n"
+#| "\tdecision on the suitability of the resource to be included in ORB,\n"
+#| "\tbased on the <a href=\"%(guidelines)s\">ORB content guidelines and\n"
+#| "\t\tcriteria</a>.\n"
+#| "</p>\n"
 msgid ""
 "\n"
-"<p>Our Content Review Team consists of staff from over 35\n"
-"\torgansations, with backgrounds in global public health, training and\n"
-"\ttechnology.</p>\n"
-"<p>When resources are submitted to ORB, the Content Review Team makes\n"
-"\tthe initial decision on the suitability of the resource to be included\n"
-"\tin ORB. Once a resource has been approved by the Content Review Team it\n"
-"\tis then passed to our Medical Expert Panel.</p>\n"
+"<p>Our Content Review Team consists of staff with backgrounds in\n"
+"\tglobal public health, training and technology.</p>\n"
+"<p>\n"
+"\tWhen resources are submitted to ORB, the Content Review Team makes the\n"
+"\tdecision on the suitability of the resource to be included in ORB,\n"
+"\tbased on the <a href=\"%(guidelines)s\">ORB content guidelines and\n"
+"\t\tcriteria</a>.\n"
+"</p>\n"
 msgstr ""
 "\n"
 "<p>Nuestro equipo de revisión de contenido está compuesto por personal de "
@@ -974,31 +1241,11 @@ msgstr ""
 "ORB. Cuando dicho Equipo ha aprobado un recurso, este pasa a nuestro Panel "
 "de expertos médicos.</p>\n"
 
-#: orb/templates/orb/about.html:60
-msgid ""
-"\n"
-"<p>Our Medical Expert Panel consists of medical professionals from\n"
-"\tinternational health organisations.</p>\n"
-"<p>When a submitted resource has been approved by Content Review\n"
-"\tTeam, the Medical Expert Panel makes the final decision on whether a\n"
-"\tresource can be included in ORB, based on the most up to date medical\n"
-"\tinformation and guidelines available.</p>\n"
-"\n"
-msgstr ""
-"\n"
-"<p>Nuestro Panel de expertos médicos está compuesto por profesionales "
-"médicos de organizaciones de salud internacionales.</p>\n"
-"<p>Cuando el Equipo de revisión de contenido ha aprobado un recurso enviado, "
-"el Panel de expertos médicos toma la decisión final respecto de si se puede "
-"incluir un recurso en ORB, en función de la información médica más "
-"actualizada y las pautas disponibles.</p>\n"
-"\n"
-
-#: orb/templates/orb/about.html:71
+#: templates/orb/about.html:61
 msgid "Homepage Photo Credits"
 msgstr "Créditos de la foto de la página de inicio"
 
-#: orb/templates/orb/about.html:72
+#: templates/orb/about.html:62
 #, python-format
 msgid ""
 "\n"
@@ -1039,11 +1286,11 @@ msgstr ""
 "File%%3AZIKA.png\">via Wikimedia Commons</a></li>\n"
 "</ul>\n"
 
-#: orb/templates/orb/about.html:84
+#: templates/orb/about.html:74
 msgid "Other Credits"
 msgstr "Otros créditos"
 
-#: orb/templates/orb/about.html:85
+#: templates/orb/about.html:75
 msgid ""
 "\n"
 "<ul>\n"
@@ -1055,237 +1302,221 @@ msgstr ""
 "\t<li>Íconos de banderas de países de Wikipedia (dominio público)</li>\n"
 "</ul>\n"
 
-#: orb/templates/orb/analytics/home.html:19
-#: orb/templates/orb/analytics/home.html:49
-#: orb/templates/orb/analytics/resource.html:17
-#: orb/templates/orb/analytics/resource.html:59
-#: orb/templates/orb/analytics/tag.html:17
-#: orb/templates/orb/analytics/tag.html:64
+#: templates/orb/analytics/home.html:19 templates/orb/analytics/home.html:49
+#: templates/orb/analytics/resource.html:17
+#: templates/orb/analytics/resource.html:59 templates/orb/analytics/tag.html:17
+#: templates/orb/analytics/tag.html:64
 msgid "Date"
 msgstr "Fecha"
 
-#: orb/templates/orb/analytics/home.html:20
-#: orb/templates/orb/analytics/resource.html:18
-#: orb/templates/orb/analytics/tag.html:18
-#: orb/templates/orb/analytics/visitor.html:18
+#: templates/orb/analytics/home.html:20
+#: templates/orb/analytics/resource.html:18 templates/orb/analytics/tag.html:18
+#: templates/orb/analytics/visitor.html:18
 msgid "Total"
 msgstr "Total"
 
-#: orb/templates/orb/analytics/home.html:21
-#: orb/templates/orb/analytics/resource.html:19
-#: orb/templates/orb/analytics/tag.html:19
+#: templates/orb/analytics/home.html:21
+#: templates/orb/analytics/resource.html:19 templates/orb/analytics/tag.html:19
 msgid "Resource Views"
 msgstr "Vistas de recursos"
 
-#: orb/templates/orb/analytics/home.html:22
-#: orb/templates/orb/analytics/resource.html:20
-#: orb/templates/orb/analytics/tag.html:20
+#: templates/orb/analytics/home.html:22
+#: templates/orb/analytics/resource.html:20 templates/orb/analytics/tag.html:20
 msgid "Resource File Views"
 msgstr "Vistas de archivos de recursos"
 
-#: orb/templates/orb/analytics/home.html:23
-#: orb/templates/orb/analytics/resource.html:21
-#: orb/templates/orb/analytics/tag.html:21
+#: templates/orb/analytics/home.html:23
+#: templates/orb/analytics/resource.html:21 templates/orb/analytics/tag.html:21
 msgid "Resource URL Views"
 msgstr "Vistas de URL de recursos"
 
-#: orb/templates/orb/analytics/home.html:24
+#: templates/orb/analytics/home.html:24
 msgid "Searches"
 msgstr "Búsquedas"
 
-#: orb/templates/orb/analytics/home.html:40
-#: orb/templates/orb/analytics/resource.html:35
-#: orb/templates/orb/analytics/tag.html:35
+#: templates/orb/analytics/home.html:40
+#: templates/orb/analytics/resource.html:35 templates/orb/analytics/tag.html:35
 msgid "Activity"
 msgstr "Actividad"
 
-#: orb/templates/orb/analytics/home.html:50
+#: templates/orb/analytics/home.html:50
 msgid "Users"
 msgstr "Usuarios"
 
-#: orb/templates/orb/analytics/home.html:62
-#: orb/templates/orb/analytics/home.html:82
-#: orb/templates/orb/analytics/home.html:181
+#: templates/orb/analytics/home.html:62 templates/orb/analytics/home.html:82
+#: templates/orb/analytics/home.html:181
 msgid "User Registrations"
 msgstr "Registros de usuario"
 
-#: orb/templates/orb/analytics/home.html:79
-#: orb/templates/orb/analytics/home.html:89
-#: orb/templates/orb/analytics/tag.html:50
+#: templates/orb/analytics/home.html:79 templates/orb/analytics/home.html:89
+#: templates/orb/analytics/tag.html:50
 msgid "Activity Graph"
 msgstr "Gráfico de actividad"
 
-#: orb/templates/orb/analytics/home.html:83
+#: templates/orb/analytics/home.html:80 templates/orb/analytics/home.html:93
+#: templates/orb/analytics/review.html:11
+msgid "Pending CRT"
+msgstr "CRT pendiente"
+
+#: templates/orb/analytics/home.html:81 templates/orb/analytics/home.html:121
+#: templates/orb/analytics/home.html:138 templates/orb/analytics/review.html:49
+msgid "Pending MEP"
+msgstr "MEP pendiente"
+
+#: templates/orb/analytics/home.html:83
 msgid "Popular Searches"
 msgstr "Búsquedas populares"
 
-#: orb/templates/orb/analytics/home.html:84
+#: templates/orb/analytics/home.html:84
 msgid "Popular Resources"
 msgstr "Recursos populares"
 
-#: orb/templates/orb/analytics/home.html:85
-#: orb/templates/orb/analytics/home.html:225
+#: templates/orb/analytics/home.html:85 templates/orb/analytics/home.html:225
 msgid "Organisations"
 msgstr "Organizaciones"
 
-#: orb/templates/orb/analytics/home.html:90
-#: orb/templates/orb/analytics/home.html:184
-#: orb/templates/orb/analytics/resource.html:51
-#: orb/templates/orb/analytics/tag.html:56
+#: templates/orb/analytics/home.html:90 templates/orb/analytics/home.html:184
+#: templates/orb/analytics/resource.html:51 templates/orb/analytics/tag.html:56
 msgid "graph_generating"
 msgstr "graph_generating"
 
-#: orb/templates/orb/analytics/home.html:100
-#: orb/templates/orb/analytics/home.html:145
-#: orb/templates/orb/analytics/review.html:18
-#: orb/templates/orb/analytics/review.html:56
+#: templates/orb/analytics/home.html:100 templates/orb/analytics/home.html:145
+#: templates/orb/analytics/review.html:18
+#: templates/orb/analytics/review.html:56
+#: templates/orb/review/review_list.html:55
+#: templates/orb/review/review_list.html:117
 msgid "Submitted"
 msgstr "Enviado"
 
-#: orb/templates/orb/analytics/home.html:101
-#: orb/templates/orb/analytics/home.html:146
-#: orb/templates/orb/analytics/review.html:19
-#: orb/templates/orb/analytics/review.html:57 orb/views.py:80
+#: templates/orb/analytics/home.html:101 templates/orb/analytics/home.html:146
+#: templates/orb/analytics/review.html:19
+#: templates/orb/analytics/review.html:57
+#: templates/orb/review/review_list.html:19
+#: templates/orb/review/review_list.html:56
+#: templates/orb/review/review_list.html:118
+#: templates/orb/review/user_review_list.html:17 views.py:76
 msgid "Title"
 msgstr "Título"
 
-#: orb/templates/orb/analytics/home.html:102
-#: orb/templates/orb/analytics/home.html:147
-#: orb/templates/orb/analytics/review.html:20
-#: orb/templates/orb/analytics/review.html:58
-#: orb/templates/orb/profile/view.html:40
-msgid "Organisation"
-msgstr "Organización"
-
-#: orb/templates/orb/analytics/home.html:103
-#: orb/templates/orb/analytics/home.html:148
-#: orb/templates/orb/analytics/review.html:21
-#: orb/templates/orb/analytics/review.html:59
-#: orb/templates/orb/analytics/tag.html:96
+#: templates/orb/analytics/home.html:103 templates/orb/analytics/home.html:148
+#: templates/orb/analytics/review.html:21
+#: templates/orb/analytics/review.html:59 templates/orb/analytics/tag.html:96
+#: templates/orb/review/review_list.html:22
+#: templates/orb/review/review_list.html:58
+#: templates/orb/review/review_list.html:120
+#: templates/orb/review/user_review_list.html:19
 msgid "Options"
 msgstr "Opciones"
 
-#: orb/templates/orb/analytics/home.html:119
-#: orb/templates/orb/analytics/home.html:164
-#: orb/templates/orb/analytics/review.html:36
-#: orb/templates/orb/analytics/review.html:74
+#: templates/orb/analytics/home.html:119 templates/orb/analytics/home.html:164
+#: templates/orb/analytics/review.html:36
+#: templates/orb/analytics/review.html:74
+#: templates/orb/review/assign_review.html:11
+#: templates/orb/review/review_form.html:9
+#: templates/orb/review/review_list.html:74
+#: templates/orb/review/review_list.html:75
+#: templates/orb/review/review_list.html:136
+#: templates/orb/review/review_list.html:137
+#: templates/orb/review/staff_review.html:9
+#: templates/orb/review/start_review.html:9
+#: templates/orb/review/user_review_list.html:35
 msgid "Preview"
 msgstr "Vista preliminar"
 
-#: orb/templates/orb/analytics/home.html:123
-#: orb/templates/orb/analytics/home.html:166
-#: orb/templates/orb/analytics/review.html:75 orb/views.py:200
-msgid "Approve"
-msgstr "Aprobar"
-
-#: orb/templates/orb/analytics/home.html:125
-#: orb/templates/orb/analytics/home.html:168
-#: orb/templates/orb/analytics/review.html:76 orb/views.py:195
-msgid "Reject"
-msgstr "Desaprobar"
-
-#: orb/templates/orb/analytics/home.html:134
-#: orb/templates/orb/analytics/review.html:45
+#: templates/orb/analytics/home.html:134 templates/orb/analytics/review.html:45
 msgid "No resources pending CRT review"
 msgstr "No hay recursos con revisión de CRT pendiente"
 
-#: orb/templates/orb/analytics/home.html:177
-#: orb/templates/orb/analytics/review.html:85
+#: templates/orb/analytics/home.html:177 templates/orb/analytics/review.html:85
 msgid "No resources pending MEP review"
 msgstr "No hay recursos con revisión de MEP pendiente"
 
-#: orb/templates/orb/analytics/home.html:182
+#: templates/orb/analytics/home.html:182
 msgid "Total registrations"
 msgstr "Registros totales"
 
-#: orb/templates/orb/analytics/home.html:187
+#: templates/orb/analytics/home.html:187
 msgid "Popular Searches (last month)"
 msgstr "Búsquedas populares (mes pasado)"
 
-#: orb/templates/orb/analytics/home.html:196
+#: templates/orb/analytics/home.html:196
 msgid "Popular Tags (last month)"
 msgstr "Etiquetas populares (mes pasado)"
 
-#: orb/templates/orb/analytics/home.html:205
+#: templates/orb/analytics/home.html:205
 msgid "Popular Resources (last month)"
 msgstr "Recursos populares (mes pasado)"
 
-#: orb/templates/orb/analytics/home.html:210
+#: templates/orb/analytics/home.html:210
 msgid "stats"
 msgstr "estadísticas"
 
-#: orb/templates/orb/analytics/home.html:216
+#: templates/orb/analytics/home.html:216
 msgid "Searches with no results (last 3 months)"
 msgstr "Búsquedas sin resultados (últimos 3 meses)"
 
-#: orb/templates/orb/analytics/home.html:226
+#: templates/orb/analytics/home.html:226
 msgid "Organizations with Approved Resources"
 msgstr "Organizaciones con recursos aprobados"
 
-#: orb/templates/orb/analytics/home.html:227
+#: templates/orb/analytics/home.html:227
 msgid "Approved content count in parentheses."
 msgstr "Conteo de contenido aprobado entre paréntesis."
 
-#: orb/templates/orb/analytics/home.html:234
+#: templates/orb/analytics/home.html:234
 msgid "Organizations without Approved Resources"
 msgstr "Organizaciones sin recursos aprobados"
 
-#: orb/templates/orb/analytics/home.html:248
+#: templates/orb/analytics/home.html:248
 msgid "Countries"
 msgstr "Países"
 
-#: orb/templates/orb/analytics/resource.html:48
-#: orb/templates/orb/analytics/tag.html:48
+#: templates/orb/analytics/resource.html:48 templates/orb/analytics/tag.html:48
 msgid "Analytics for:"
 msgstr "Analítica para:"
 
-#: orb/templates/orb/analytics/resource.html:50
-#: orb/templates/orb/analytics/tag.html:55
+#: templates/orb/analytics/resource.html:50 templates/orb/analytics/tag.html:55
 msgid "Activity Graph (last month)"
 msgstr "Gráfico de actividad (mes pasado)"
 
-#: orb/templates/orb/analytics/resource.html:53
-#: orb/templates/orb/analytics/tag.html:58
+#: templates/orb/analytics/resource.html:53 templates/orb/analytics/tag.html:58
 msgid "Activity Detail (last month)"
 msgstr "Detalle de actividades (mes pasado)"
 
-#: orb/templates/orb/analytics/resource.html:61
-#: orb/templates/orb/analytics/tag.html:66
+#: templates/orb/analytics/resource.html:61 templates/orb/analytics/tag.html:66
 msgid "Location"
 msgstr "Ubicación"
 
-#: orb/templates/orb/analytics/resource.html:62
-#: orb/templates/orb/analytics/tag.html:67
+#: templates/orb/analytics/resource.html:62 templates/orb/analytics/tag.html:67
 msgid "Resource File/URL"
 msgstr "Archivo de recurso/URL"
 
-#: orb/templates/orb/analytics/tag.html:51
+#: templates/orb/analytics/tag.html:51
 msgid "Activity Detail"
 msgstr "Detalle de actividad"
 
-#: orb/templates/orb/analytics/tag.html:52
-#: orb/templates/orb/analytics/tag.html:79
+#: templates/orb/analytics/tag.html:52 templates/orb/analytics/tag.html:79
 msgid "Export Analytics"
 msgstr "Analítica de exportación"
 
-#: orb/templates/orb/analytics/tag.html:93
+#: templates/orb/analytics/tag.html:93
 msgid "Last updated"
 msgstr "Última actualización"
 
-#: orb/templates/orb/analytics/tag.html:95
+#: templates/orb/analytics/tag.html:95
 msgid "Status"
 msgstr "Estado"
 
-#: orb/templates/orb/analytics/tag.html:107
+#: templates/orb/analytics/tag.html:107
 msgid "Stats"
 msgstr "Estadísticas"
 
-#: orb/templates/orb/analytics/visitor.html:3
-#: orb/templates/orb/analytics/visitor.html:7
+#: templates/orb/analytics/visitor.html:3
+#: templates/orb/analytics/visitor.html:7
 msgid "Visitor Analytics"
 msgstr "Analítica de visitante"
 
-#: orb/templates/orb/analytics/visitor.html:9
+#: templates/orb/analytics/visitor.html:9
 msgid ""
 "\n"
 "<p>Also look at the stats/analytics on <a href=\"https://analytics.google."
@@ -1295,62 +1526,62 @@ msgstr ""
 "<p>Examine también las estadísticas/analítica en <a href=\"https://analytics."
 "google.com/\">Google Analytics</a></p>\n"
 
-#: orb/templates/orb/analytics/visitor.html:17
+#: templates/orb/analytics/visitor.html:17
 msgid "Metric"
 msgstr "Medición"
 
-#: orb/templates/orb/analytics/visitor.html:23
+#: templates/orb/analytics/visitor.html:23
 msgid "Unique registered users"
 msgstr "Usuarios registrados únicos"
 
-#: orb/templates/orb/analytics/visitor.html:27
+#: templates/orb/analytics/visitor.html:27
 msgid "Unique anonymous users (IP)"
 msgstr "Usuarios anónimos únicos (IP)"
 
-#: orb/templates/orb/analytics/visitor.html:31
+#: templates/orb/analytics/visitor.html:31
 msgid "Total unique users"
 msgstr "Usuarios únicos totales"
 
-#: orb/templates/orb/analytics/visitor.html:35
+#: templates/orb/analytics/visitor.html:35
 msgid "Total new registrations"
 msgstr "Total de registros nuevos"
 
-#: orb/templates/orb/analytics/visitor.html:39
+#: templates/orb/analytics/visitor.html:39
 msgid "Total distinct visitor countries"
 msgstr "Total de países visitantes diferentes"
 
-#: orb/templates/orb/analytics/visitor.html:43
+#: templates/orb/analytics/visitor.html:43
 msgid "Total searches"
 msgstr "Búsquedas totales"
 
-#: orb/templates/orb/analytics/visitor.html:47
+#: templates/orb/analytics/visitor.html:47
 msgid "Resources submitted"
 msgstr "Recursos enviados"
 
-#: orb/templates/orb/analytics/visitor.html:51
+#: templates/orb/analytics/visitor.html:51
 #, python-format
 msgid "Total approved resources (until end %(month)s)"
 msgstr "Total de recursos aprobados (hasta fines de %(month)s)"
 
-#: orb/templates/orb/analytics/visitor.html:55
+#: templates/orb/analytics/visitor.html:55
 msgid "Total languages"
 msgstr "Idiomas totales"
 
-#: orb/templates/orb/analytics/visitor.html:62
+#: templates/orb/analytics/visitor.html:62
 msgid "Other Months"
 msgstr "Otros meses"
 
-#: orb/templates/orb/cc-faq.html:2
+#: templates/orb/cc-faq.html:2
 msgid "Creative Commons FAQs"
 msgstr "Preguntas frecuentes de Creative Commons"
 
-#: orb/templates/orb/cc-faq.html:6
+#: templates/orb/cc-faq.html:6
 msgid "FAQ: Creative Commons Licenses for Global Health Content"
 msgstr ""
 "Pregunta frecuente: Licencias de Creative Commons para contenido global "
 "sobre salud"
 
-#: orb/templates/orb/cc-faq.html:8
+#: templates/orb/cc-faq.html:8
 msgid ""
 "\n"
 "<h3>What is a Creative Commons (CC) license?</h3>\n"
@@ -1367,7 +1598,7 @@ msgstr ""
 "apto para compartir. El MIT, Khan Academy e incluso la Casa Blanca usan CC "
 "para compartir su contenido.</p>\n"
 
-#: orb/templates/orb/cc-faq.html:16
+#: templates/orb/cc-faq.html:16
 #, python-format
 msgid ""
 "\n"
@@ -1397,7 +1628,7 @@ msgstr ""
 "nuestros usuarios tengan permiso para acceder al contenido y compartirlo.\n"
 "</p>\n"
 
-#: orb/templates/orb/cc-faq.html:28
+#: templates/orb/cc-faq.html:28
 msgid ""
 "\n"
 "<h3>Will I still get credit as the author of my content?</h3>\n"
@@ -1412,7 +1643,7 @@ msgstr ""
 "contenido llegue a nuevas audiencias y se comparta el trabajo de su "
 "organización en forma más amplia.</p>\n"
 
-#: orb/templates/orb/cc-faq.html:33
+#: templates/orb/cc-faq.html:33
 msgid ""
 "\n"
 "<h3>Can my content be changed by others?</h3>\n"
@@ -1426,7 +1657,7 @@ msgstr ""
 "desarrollar o modificar un trabajo (crear obras derivadas), mientras otras "
 "no permiten la creación de obras derivadas de ningún tipo..</p>\n"
 
-#: orb/templates/orb/cc-faq.html:38
+#: templates/orb/cc-faq.html:38
 msgid ""
 "\n"
 "<h3>How can I decide which license is best for me?</h3>\n"
@@ -1450,7 +1681,7 @@ msgstr ""
 "\tpara encontrar una licencia que satisfaga sus necesidades.\n"
 "</p>\n"
 
-#: orb/templates/orb/cc-faq.html:47
+#: templates/orb/cc-faq.html:47
 msgid ""
 "\n"
 "<h3>Can I choose which content I release under a CC license?</h3>\n"
@@ -1466,7 +1697,7 @@ msgstr ""
 "publican algunas obras con licencias de CC y retienen otras para uso "
 "comercial.</p>\n"
 
-#: orb/templates/orb/cc-faq.html:53
+#: templates/orb/cc-faq.html:53
 msgid ""
 "\n"
 "<h3>How can I select the right CC license for my content?</h3>\n"
@@ -1497,7 +1728,7 @@ msgstr ""
 "licencia.\n"
 "</p>\n"
 
-#: orb/templates/orb/cc-faq.html:65
+#: templates/orb/cc-faq.html:65
 msgid ""
 "\n"
 "<h3>What if someone uses my content in a way that is not compatible\n"
@@ -1516,7 +1747,7 @@ msgstr ""
 "abordaría una violación de una licencia no abierta o de derechos de autor.</"
 "p>\n"
 
-#: orb/templates/orb/cc-faq.html:72
+#: templates/orb/cc-faq.html:72
 msgid ""
 "\n"
 "<h3>Could I be liable if someone makes mistakes when adapting my\n"
@@ -1545,7 +1776,7 @@ msgstr ""
 "satifagan sus necesidades.\n"
 "</p>\n"
 
-#: orb/templates/orb/cc-faq.html:83
+#: templates/orb/cc-faq.html:83
 #, python-format
 msgid ""
 "\n"
@@ -1566,11 +1797,11 @@ msgstr ""
 "comuníquese a <a href=\"mailto:%(email)s\">info@mpoweringhealth.org</a>.</"
 "p>\n"
 
-#: orb/templates/orb/collection/view.html:31
+#: templates/orb/collection/view.html:31
 msgid "There are no resources in this collection."
 msgstr "No hay recursos en esta colección."
 
-#: orb/templates/orb/developers.html:10
+#: templates/orb/developers.html:10
 msgid ""
 "\n"
 "<p>Here is a brief overview of the technologies behind the ORB platform.</"
@@ -1625,8 +1856,45 @@ msgstr ""
 "</p>\n"
 "\n"
 
-#: orb/templates/orb/email/first_resource.html:2
-#, python-format
+#: templates/orb/email/first_resource.html:2
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "<p>Dear %(firstname)s %(lastname)s,</p>\n"
+#| "\n"
+#| "<p>Welcome to the ORB community!</p>\n"
+#| "\n"
+#| "<p>Thank you for submitting your first resource ('%(title)s').</p>\n"
+#| "\n"
+#| "<p>Since this is your first resource on ORB, here’s some information\n"
+#| "\tabout our content approval process:</p>\n"
+#| "\n"
+#| "<ol>\n"
+#| "\t<li>Our Content Review Team will review your resource to make sure\n"
+#| "\t\tit meets our inclusion guidelines.</li>\n"
+#| "\t<li>If they approve your resource, they will pass it on to our\n"
+#| "\t\tMedical Expert Panel. They will check that your resource meets "
+#| "current\n"
+#| "\t\tbest medical practice and guidelines.</li>\n"
+#| "\t<li>The Medical Expert Panel will decide if your resource is ready\n"
+#| "\t\tto go up on the site.</li>\n"
+#| "\t<li>We will send you an email to let you know if your resource was\n"
+#| "\t\taccepted, or, if not, why we decided not to include it on ORB.</li>\n"
+#| "</ol>\n"
+#| "\n"
+#| "<p>\n"
+#| "\tYou can find more detailed information about the process here: <a\n"
+#| "\t\thref=\"http://health-orb.org/about/\">http://health-orb.org/about/</"
+#| "a>.\n"
+#| "</p>\n"
+#| "\n"
+#| "<p>\n"
+#| "\tThe approvals process takes about 2 weeks. If you have any questions\n"
+#| "\tplease contact us at <a href=\"mailto:%(info_email)s\">%(info_email)s</"
+#| "a>\n"
+#| "</p>\n"
+#| "\n"
+#| "<p>Thanks again for submitting your resource!</p> \n"
 msgid ""
 "\n"
 "<p>Dear %(firstname)s %(lastname)s,</p>\n"
@@ -1641,11 +1909,6 @@ msgid ""
 "<ol>\n"
 "\t<li>Our Content Review Team will review your resource to make sure\n"
 "\t\tit meets our inclusion guidelines.</li>\n"
-"\t<li>If they approve your resource, they will pass it on to our\n"
-"\t\tMedical Expert Panel. They will check that your resource meets current\n"
-"\t\tbest medical practice and guidelines.</li>\n"
-"\t<li>The Medical Expert Panel will decide if your resource is ready\n"
-"\t\tto go up on the site.</li>\n"
 "\t<li>We will send you an email to let you know if your resource was\n"
 "\t\taccepted, or, if not, why we decided not to include it on ORB.</li>\n"
 "</ol>\n"
@@ -1656,8 +1919,8 @@ msgid ""
 "</p>\n"
 "\n"
 "<p>\n"
-"\tThe approvals process takes about 2 weeks. If you have any questions\n"
-"\tplease contact us at <a href=\"mailto:%(info_email)s\">%(info_email)s</a>\n"
+"\tIf you have any questions please contact us at <a href=\"mailto:"
+"%(info_email)s\">%(info_email)s</a>\n"
 "</p>\n"
 "\n"
 "<p>Thanks again for submitting your resource!</p> \n"
@@ -1697,8 +1960,36 @@ msgstr ""
 "\n"
 "<p>Gracias nuevamente por enviar su recurso.</p> \n"
 
-#: orb/templates/orb/email/first_resource.txt:2
-#, python-format
+#: templates/orb/email/first_resource.txt:2
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "Dear %(firstname)s %(lastname)s,\n"
+#| "\n"
+#| "Welcome to the ORB community!\n"
+#| "\n"
+#| "Thank you for submitting your first resource ('%(title)s').\n"
+#| "\n"
+#| "Since this is your first resource on ORB, here’s some information about "
+#| "our content approval process:\n"
+#| "\n"
+#| "* Our Content Review Team will review your resource to make sure it meets "
+#| "our inclusion guidelines.\n"
+#| "* If they approve your resource, they will pass it on to our Medical "
+#| "Expert Panel. They will check that your resource meets current best "
+#| "medical practice and guidelines.\n"
+#| "* The Medical Expert Panel will decide if your resource is ready to go up "
+#| "on the site.\n"
+#| "* We will send you an email to let you know if your resource was "
+#| "accepted, or, if not, why we decided not to include it on ORB.\n"
+#| "\n"
+#| "You can find more detailed information about the process here: http://"
+#| "health-orb.org/about/\n"
+#| "\n"
+#| "The approvals process takes about 2 weeks. If you have any questions "
+#| "please contact us at %(info_email)s\n"
+#| "\n"
+#| "Thanks again for submitting your resource!\n"
 msgid ""
 "\n"
 "Dear %(firstname)s %(lastname)s,\n"
@@ -1712,19 +2003,13 @@ msgid ""
 "\n"
 "* Our Content Review Team will review your resource to make sure it meets "
 "our inclusion guidelines.\n"
-"* If they approve your resource, they will pass it on to our Medical Expert "
-"Panel. They will check that your resource meets current best medical "
-"practice and guidelines.\n"
-"* The Medical Expert Panel will decide if your resource is ready to go up on "
-"the site.\n"
 "* We will send you an email to let you know if your resource was accepted, "
 "or, if not, why we decided not to include it on ORB.\n"
 "\n"
 "You can find more detailed information about the process here: http://health-"
 "orb.org/about/\n"
 "\n"
-"The approvals process takes about 2 weeks. If you have any questions please "
-"contact us at %(info_email)s\n"
+"If you have any questions please contact us at %(info_email)s\n"
 "\n"
 "Thanks again for submitting your resource!\n"
 msgstr ""
@@ -1756,11 +2041,21 @@ msgstr ""
 "\n"
 "Gracias nuevamente por enviar su recurso.\n"
 
-#: orb/templates/orb/email/footer.html:2
+#: templates/orb/email/footer.html:2
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "<p>Best regards,</p>\n"
+#| "<p>Lesley-Anne Long<br/>\n"
+#| "ORB by mPowering Frontline Health Workers<br/>\n"
+#| "<a href=\"mailto:info@mpoweringhealth.org\">info@mpoweringhealth.org</"
+#| "a><br/>\n"
+#| "<a href=\"http://health-orb.org\">http://health-orb.org</a></br/>\n"
+#| "1776 Massachusetts Ave NW | Washington, D.C. 20036</p>\n"
 msgid ""
 "\n"
 "<p>Best regards,</p>\n"
-"<p>Lesley-Anne Long<br/>\n"
+"<p>Carolyn Moore<br/>\n"
 "ORB by mPowering Frontline Health Workers<br/>\n"
 "<a href=\"mailto:info@mpoweringhealth.org\">info@mpoweringhealth.org</a><br/"
 ">\n"
@@ -1776,12 +2071,23 @@ msgstr ""
 "<a href=\"http://health-orb.org\">http://health-orb.org</a></br/>\n"
 "1776 Massachusetts Ave NW | Washington, D.C. 20036</p>\n"
 
-#: orb/templates/orb/email/footer.txt:2
+#: templates/orb/email/footer.txt:2
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "Best regards,\n"
+#| "\n"
+#| "Lesley-Anne Long\n"
+#| "\n"
+#| "ORB by mPowering Frontline Health Workers\n"
+#| "info@mpoweringhealth.org\n"
+#| "http://health-orb.org\n"
+#| "1776 Massachusetts Ave NW | Washington, D.C. 20036\n"
 msgid ""
 "\n"
 "Best regards,\n"
 "\n"
-"Lesley-Anne Long\n"
+"Carolyn Moore\n"
 "\n"
 "ORB by mPowering Frontline Health Workers\n"
 "info@mpoweringhealth.org\n"
@@ -1798,22 +2104,22 @@ msgstr ""
 "http://health-orb.org\n"
 "1776 Massachusetts Ave NW | Washington, D.C. 20036\n"
 
-#: orb/templates/orb/email/link_checker_results.html:3
-#: orb/templates/orb/email/link_checker_results.txt:3
+#: templates/orb/email/link_checker_results.html:3
+#: templates/orb/email/link_checker_results.txt:3
 msgid "Results from Link Checker Validation"
 msgstr "Resultados de la validación del verificador de enlaces"
 
-#: orb/templates/orb/email/link_checker_results.html:5
-#: orb/templates/orb/email/link_checker_results.txt:5
+#: templates/orb/email/link_checker_results.html:5
+#: templates/orb/email/link_checker_results.txt:5
 msgid "The following urls had issues:"
 msgstr "Las siguientes URL presentaron problemas:"
 
-#: orb/templates/orb/email/link_checker_results.html:8
-#: orb/templates/orb/email/link_checker_results.txt:8
+#: templates/orb/email/link_checker_results.html:8
+#: templates/orb/email/link_checker_results.txt:8
 msgid "Resource URLs"
 msgstr "URL del recurso"
 
-#: orb/templates/orb/email/password_reset.html:2
+#: templates/orb/email/password_reset.html:2
 #, python-format
 msgid ""
 "\n"
@@ -1828,7 +2134,7 @@ msgstr ""
 "<p>Cuando inicie sesión la próxima vez, visite su página de perfil, donde "
 "podrá cambiar su contraseña por otra que recuerde mejor.</p>\n"
 
-#: orb/templates/orb/email/password_reset.txt:2
+#: templates/orb/email/password_reset.txt:2
 #, python-format
 msgid ""
 "\n"
@@ -1843,7 +2149,7 @@ msgstr ""
 "<p>Cuando inicie sesión la próxima vez, visite su página de perfil, donde "
 "podrá cambiar su contraseña por otra que recuerde mejor.</p>\n"
 
-#: orb/templates/orb/email/resource_approved.html:2
+#: templates/orb/email/resource_approved.html:2
 #, python-format
 msgid ""
 "\n"
@@ -1870,7 +2176,7 @@ msgstr ""
 "%(resource_link)s</a>.\n"
 "</p>\n"
 
-#: orb/templates/orb/email/resource_approved.txt:2
+#: templates/orb/email/resource_approved.txt:2
 #, python-format
 msgid ""
 "\n"
@@ -1893,14 +2199,21 @@ msgstr ""
 "\n"
 "Puede acceder a su recurso aquí: %(resource_link)s.\n"
 
-#: orb/templates/orb/email/resource_rejected.html:2
-#, python-format
+#: templates/orb/email/resource_rejected.html:2
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "<p>Dear %(firstname)s %(lastname)s,</p>\n"
+#| "\n"
+#| "<p>Thank you for submitting \"%(title)s\" to the ORB platform.</p>\n"
+#| "\n"
+#| "<p>Unfortunately, your resource did not meet the following criteria to be "
+#| "included on ORB:</p>\n"
 msgid ""
 "\n"
 "<p>Dear %(firstname)s %(lastname)s,</p>\n"
 "\n"
 "<p>Thank you for submitting \"%(title)s\" to the ORB platform.</p>\n"
-"\n"
 "<p>Unfortunately, your resource did not meet the following criteria to be "
 "included on ORB:</p>\n"
 msgstr ""
@@ -1912,20 +2225,33 @@ msgstr ""
 "<p>Lamentablemente, su recurso no cumple los siguientes criterios para "
 "incluirse en ORB:</p>\n"
 
-#: orb/templates/orb/email/resource_rejected.html:14
-#, python-format
+#: templates/orb/email/resource_rejected.html:11
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "<p>The review team made the following comments:</p>\t\n"
+#| "\t\n"
+#| "<p>\"%(notes)s\"</p>\n"
 msgid ""
 "\n"
-"<p>The review team made the following comments:</p>\t\n"
-"\t\n"
+"<p>The review team made the following comments:</p>\n"
+"\n"
 "<p>\"%(notes)s\"</p>\n"
+"\n"
 msgstr ""
 "\n"
 "<p>El equipo de revisión hizo los siguientes comentarios:</p>\t\n"
 "\t\n"
 "<p>\"%(notes)s\"</p>\n"
 
-#: orb/templates/orb/email/resource_rejected.txt:2
+#: templates/orb/email/resource_rejected.html:18
+msgid ""
+"\n"
+"<p>We would be happy to discuss with you how the resource could be updated "
+"to meet our criteria.</p>\n"
+msgstr ""
+
+#: templates/orb/email/resource_rejected.txt:2
 #, python-format
 msgid ""
 "\n"
@@ -1944,20 +2270,33 @@ msgstr ""
 "<p>Lamentablemente, su recurso no cumple los siguientes criterios para "
 "incluirse en ORB:</p>\n"
 
-#: orb/templates/orb/email/resource_rejected.txt:14
-#, python-format
+#: templates/orb/email/resource_rejected.txt:12
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "The review team made the following comments:\t\n"
+#| "\t\n"
+#| "\"%(notes)s\"\n"
 msgid ""
 "\n"
-"The review team made the following comments:\t\n"
-"\t\n"
+"The review team made the following comments:\n"
+"\n"
 "\"%(notes)s\"\n"
+"\n"
 msgstr ""
 "\n"
 "<p>El equipo de revisión hizo los siguientes comentarios:</p>\t\n"
 "\t\n"
 "<p>\"%(notes)s\"</p>\n"
 
-#: orb/templates/orb/email/resource_submitted.html:2
+#: templates/orb/email/resource_rejected.txt:19
+msgid ""
+"\n"
+"We would be happy to discuss with you how the resource could be updated to "
+"meet our criteria.\n"
+msgstr ""
+
+#: templates/orb/email/resource_submitted.html:2
 #, python-format
 msgid ""
 "\n"
@@ -1969,7 +2308,7 @@ msgstr ""
 "<p>%(firstname)s %(lastname)s ha enviado un nuevo recurso '%(title)s'.</p>\n"
 "\n"
 
-#: orb/templates/orb/email/resource_submitted.txt:2
+#: templates/orb/email/resource_submitted.txt:2
 #, python-format
 msgid ""
 "\n"
@@ -1982,16 +2321,113 @@ msgstr ""
 "%(firstname)s %(lastname)s ha enviado un nuevo recurso '%(title)s'.\n"
 "\n"
 
-#: orb/templates/orb/email/welcome.html:2
+#: templates/orb/email/review_assignment.html:2
 #, python-format
+msgid ""
+"\n"
+"<p>Dear %(reviewer_name)s,</p>\n"
+"\n"
+"<p>You have been assigned as the %(reviewer_role)s reviewer for the "
+"following resource on ORB: %(resource_title)s</p>\n"
+"\n"
+"<p>You can view all the resources pending your review <a href="
+"\"%(reviews_link)s\">here on ORB</a>.\n"
+"Please review this resource within the next 10 business days.</p>\n"
+"\n"
+"<p>We appreciate your time and efforts in being part of the ORB content "
+"review team.</p>\n"
+"\n"
+msgstr ""
+
+#: templates/orb/email/review_assignment.txt:2
+#, python-format
+msgid ""
+"\n"
+"Dear %(reviewer_name)s,\n"
+"\n"
+"You have been assigned as the %(reviewer_role)s reviewer for the following "
+"resource on ORB: %(resource_title)s\n"
+"\n"
+"You can view all the resources pending your review here on ORB: "
+"%(reviews_link)s.\n"
+"Please review this resource within the next 10 business days.\n"
+"\n"
+"We appreciate your time and efforts in being part of the ORB content review "
+"team.\n"
+"\n"
+msgstr ""
+
+#: templates/orb/email/review_complete.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>All content reviews for %(resource)s are now complete. The overall "
+"recommendation is %(verdict)s.</p>\n"
+"\n"
+"<p>You can make the final review here: <a href=\"%(resource_link)s\">"
+"%(resource_link)s</a>.</p>\n"
+"\n"
+msgstr ""
+
+#: templates/orb/email/review_complete.txt:2
+#, python-format
+msgid ""
+"\n"
+"All content reviews for %(resource)s are now complete. The overall "
+"recommendation is %(verdict)s.\n"
+"\n"
+"You can make the final review here: %(resource_link)s\n"
+"\n"
+msgstr ""
+
+#: templates/orb/email/review_reminder.html:2
+#, python-format
+msgid ""
+"\n"
+"<p>Dear %(reviewer_name)s,</p>\n"
+"\n"
+"<p>This is a reminder that you have an ORB content resource awaiting your "
+"review.</p>\n"
+"\n"
+"<p>You can access the content and make your review on <a href="
+"\"%(reviews_link)s\">the content dashboard</a>.</p>\n"
+"\n"
+msgstr ""
+
+#: templates/orb/email/review_reminder.txt:2
+#, python-format
+msgid ""
+"\n"
+"Dear %(reviewer_name)s,\n"
+"\n"
+"This is a reminder that you have an ORB content resource awaiting your "
+"review.\n"
+"\n"
+"You can access the content and make your review on the content dashboard: "
+"%(reviews_link)s\n"
+msgstr ""
+
+#: templates/orb/email/welcome.html:2
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "<p>Dear %(firstname)s %(lastname)s,</p>\n"
+#| "\n"
+#| "<p>Thank you for registering on ORB and welcome to our community!</p>\n"
+#| "\n"
+#| "<p>As a registered user you can now submit resources to ORB as well\n"
+#| "\tas opt to receive news and updates from our team.</p>\n"
+#| "\n"
+#| "<p>We're here to help if you have any questions, so please feel free\n"
+#| "\tto contact us.</p>\n"
 msgid ""
 "\n"
 "<p>Dear %(firstname)s %(lastname)s,</p>\n"
 "\n"
 "<p>Thank you for registering on ORB and welcome to our community!</p>\n"
 "\n"
-"<p>As a registered user you can now submit resources to ORB as well\n"
-"\tas opt to receive news and updates from our team.</p>\n"
+"<p>As a registered user you can now submit resources to ORB, bookmark \n"
+"\tresources and opt to receive news and updates from our team.</p>\n"
 "\n"
 "<p>We're here to help if you have any questions, so please feel free\n"
 "\tto contact us.</p>\n"
@@ -2008,17 +2444,29 @@ msgstr ""
 "<p>Estamos aquí para ayudarlo si tiene preguntas, de modo que no dude en "
 "contactarnos.</p>\n"
 
-#: orb/templates/orb/email/welcome.txt:2
-#, python-format
+#: templates/orb/email/welcome.txt:2
+#, fuzzy, python-format
+#| msgid ""
+#| "\n"
+#| "Dear %(firstname)s %(lastname)s,\n"
+#| "\n"
+#| "Thank you for registering on ORB and welcome to our community!\n"
+#| "\n"
+#| "As a registered user you can now submit resources to ORB as well as opt "
+#| "to receive news and updates from our team.\n"
+#| "\n"
+#| "We're here to help if you have any questions, so please feel free to "
+#| "contact us.\n"
 msgid ""
 "\n"
 "Dear %(firstname)s %(lastname)s,\n"
 "\n"
 "Thank you for registering on ORB and welcome to our community!\n"
 "\n"
-"As a registered user you can now submit resources to ORB as well as opt to "
-"receive news and updates from our team.\n"
-"\n"
+"As a registered user you can now submit resources to ORB, bookmark resources "
+"and \n"
+"opt to receive news and updates from our team.\n"
+"\t\n"
 "We're here to help if you have any questions, so please feel free to contact "
 "us.\n"
 msgstr ""
@@ -2033,7 +2481,7 @@ msgstr ""
 "Estamos aquí para ayudarlo si tiene preguntas, de modo que no dude en "
 "contactarnos.\n"
 
-#: orb/templates/orb/home.html:17
+#: templates/orb/home.html:17
 msgid ""
 "Connecting Frontline Health Workers to resources and each other to expand "
 "their knowledge, organize content into courses, and share their learning "
@@ -2043,11 +2491,11 @@ msgstr ""
 "con el fin de ampliar sus conocimientos, organizar contenido en cursos y "
 "compartir su aprendizaje con la comunidad."
 
-#: orb/templates/orb/how_to.html:11
+#: templates/orb/how_to.html:11
 msgid "Find Resources"
 msgstr "Encontrar recursos"
 
-#: orb/templates/orb/how_to.html:18
+#: templates/orb/how_to.html:18
 #, python-format
 msgid ""
 "\n"
@@ -2163,11 +2611,11 @@ msgstr ""
 "\t\thref=\"mailto:%(email)s\">comuníquese con nosotros</a>.\n"
 "</p>\n"
 
-#: orb/templates/orb/how_to.html:69
+#: templates/orb/how_to.html:69
 msgid "Submit Resources"
 msgstr "Enviar recursos"
 
-#: orb/templates/orb/how_to.html:75
+#: templates/orb/how_to.html:75
 #, python-format
 msgid ""
 "\n"
@@ -2220,62 +2668,62 @@ msgstr ""
 "</p>\n"
 "\n"
 
-#: orb/templates/orb/includes/country_key_facts.html:5
+#: templates/orb/includes/country_key_facts.html:5
 msgid "Key Facts"
 msgstr "Hechos clave"
 
-#: orb/templates/orb/includes/country_key_facts.html:7
+#: templates/orb/includes/country_key_facts.html:7
 msgid "Population"
 msgstr "Población"
 
-#: orb/templates/orb/includes/country_key_facts.html:8
+#: templates/orb/includes/country_key_facts.html:8
 msgid "census"
 msgstr "Censo"
 
-#: orb/templates/orb/includes/country_key_facts.html:9
+#: templates/orb/includes/country_key_facts.html:9
 msgid "Number of women in childbearing age"
 msgstr "Cantidad de mujeres en edad reproductiva"
 
-#: orb/templates/orb/includes/country_key_facts.html:16
+#: templates/orb/includes/country_key_facts.html:16
 msgid "Number of children under 5"
 msgstr "Cantidad de niños menores de 5 años"
 
-#: orb/templates/orb/includes/country_key_facts.html:23
+#: templates/orb/includes/country_key_facts.html:23
 msgid "Total Fertility Rate"
 msgstr "Tasa total de fertilidad"
 
-#: orb/templates/orb/includes/country_key_facts.html:26
+#: templates/orb/includes/country_key_facts.html:26
 msgid "Under 5 Mortality"
 msgstr "Mortalidad a menos de 5 años de edad"
 
-#: orb/templates/orb/includes/page_navigator.html:7
+#: templates/orb/includes/page_navigator.html:7
 msgid "previous"
 msgstr "anterior"
 
-#: orb/templates/orb/includes/page_navigator.html:11
+#: templates/orb/includes/page_navigator.html:11
 #, python-format
 msgid "Page %(i)s of %(x)s"
 msgstr "Página %(i)s de %(x)s"
 
-#: orb/templates/orb/includes/page_navigator.html:15
+#: templates/orb/includes/page_navigator.html:15
 msgid "next"
 msgstr "siguiente"
 
-#: orb/templates/orb/includes/profile_rating_row.html:20
-#: orb/templates/orb/includes/resource_row.html:21
+#: templates/orb/includes/profile_rating_row.html:20
+#: templates/orb/includes/resource_row.html:21
 msgid "from "
 msgstr "de"
 
-#: orb/templates/orb/includes/resource_row.html:40
-#: orb/templates/orb/includes/resource_row.html:41
+#: templates/orb/includes/resource_row.html:40
+#: templates/orb/includes/resource_row.html:41
 msgid "Study time: "
 msgstr "Tiempo del estudio:"
 
-#: orb/templates/orb/includes/user_rating.html:20
+#: templates/orb/includes/user_rating.html:20
 msgid "Thank you for your rating!"
 msgstr "Gracias por su calificación."
 
-#: orb/templates/orb/includes/user_rating.html:24
+#: templates/orb/includes/user_rating.html:24
 msgid ""
 "Thank you for your rating! Your rating will be shown once at least <span id="
 "\"rating-min-users\"></span> different users have submitted a rating."
@@ -2284,12 +2732,11 @@ msgstr ""
 "cuando <span id=\"rating-min-users\"></span> usuarios diferentes hayan "
 "enviado una calificación."
 
-#: orb/templates/orb/login_required.html:3
-#: orb/templates/orb/login_required.html:6
+#: templates/orb/login_required.html:3 templates/orb/login_required.html:6
 msgid "Login required"
 msgstr "Se requiere inicio de sesión"
 
-#: orb/templates/orb/login_required.html:14
+#: templates/orb/login_required.html:14
 #, python-format
 msgid ""
 "Please <a href=\"%(login)s?next=%(nextpath)s\" class=\"alert-link\">login</"
@@ -2298,11 +2745,11 @@ msgstr ""
 "<a href=\"%(login)s?next=%(nextpath)s\" class=\"alert-link\">Inicie sesión</"
 "a> o <a href=\"%(register)s\" class=\"alert-link\">regístrese</a>"
 
-#: orb/templates/orb/logout.html:3 orb/templates/orb/logout.html.py:5
+#: templates/orb/logout.html:3 templates/orb/logout.html.py:5
 msgid "Logged Out"
 msgstr "Se cerró la sesión"
 
-#: orb/templates/orb/logout.html:7
+#: templates/orb/logout.html:7
 #, python-format
 msgid ""
 "You are now logged out. <a href=\"%(url_login)s\" class=\"alert-link\">Log "
@@ -2311,7 +2758,7 @@ msgstr ""
 "Se ha cerrado su sesión. <a href=\"%(url_login)s\" class=\"alert-link"
 "\">Inicie sesión nuevamente</a>"
 
-#: orb/templates/orb/partners.html:12
+#: templates/orb/partners.html:12
 #, python-format
 msgid ""
 "\n"
@@ -2415,57 +2862,57 @@ msgstr ""
 "criterios y su motivación para convertirse en Socio de contenido.\n"
 "</p>\n"
 
-#: orb/templates/orb/partners.html:67 orb/templates/orb/partners.html.py:70
-#: orb/templates/orb/partners.html:81
+#: templates/orb/partners.html:67 templates/orb/partners.html.py:70
+#: templates/orb/partners.html:81
 #, python-format
 msgid "View all %(org)s resources on ORB"
 msgstr "Ver todos los recursos de %(org)s en ORB"
 
-#: orb/templates/orb/partners.html:78
+#: templates/orb/partners.html:78
 msgid "View all NURHI project resources on ORB"
 msgstr "Ver todos los recursos del proyecto NURHI en ORB"
 
-#: orb/templates/orb/partners.html:79
+#: templates/orb/partners.html:79
 msgid "View all Ghana BCS project resources on ORB"
 msgstr "Ver todos los recursos del proyecto BCS de Ghana en ORB"
 
-#: orb/templates/orb/profile/bookmarks.html:4
+#: templates/orb/profile/bookmarks.html:4
 msgid "bookmarks"
 msgstr "marcadores"
 
-#: orb/templates/orb/profile/bookmarks.html:10
+#: templates/orb/profile/bookmarks.html:10
 msgid "<p>You have bookmarked the following resources:</p>"
 msgstr "<p>Ha marcado los siguientes recursos:</p>"
 
-#: orb/templates/orb/profile/bookmarks.html:18
+#: templates/orb/profile/bookmarks.html:18
 msgid "Remove<br/> Bookmark"
 msgstr "Quitar<br/> marcador"
 
-#: orb/templates/orb/profile/bookmarks.html:23
+#: templates/orb/profile/bookmarks.html:23
 msgid "<p>You haven't bookmarked any resources yet.</p>"
 msgstr "<p>Aún no marcado ningún recurso.</p>"
 
-#: orb/templates/orb/profile/edit.html:5 orb/templates/orb/profile/edit.html:9
+#: templates/orb/profile/edit.html:5 templates/orb/profile/edit.html.py:9
 msgid "Your Profile"
 msgstr "Su perfil"
 
-#: orb/templates/orb/profile/rated.html:4
+#: templates/orb/profile/rated.html:4
 msgid "resources rated"
 msgstr "recursos calificados"
 
-#: orb/templates/orb/profile/rated.html:7
+#: templates/orb/profile/rated.html:7
 msgid "Resources Rated"
 msgstr "Recursos calificados"
 
-#: orb/templates/orb/profile/rated.html:10
+#: templates/orb/profile/rated.html:10
 msgid "<p>You have rated the following resources:</p>"
 msgstr "<p>Ha marcado los siguientes recursos:</p>"
 
-#: orb/templates/orb/profile/rated.html:15
+#: templates/orb/profile/rated.html:15
 msgid "<p>You haven't rated any resources yet.</p>"
 msgstr "<p>Aún no marcado ningún recurso.</p>"
 
-#: orb/templates/orb/profile/reset-sent.html:7
+#: templates/orb/profile/reset-sent.html:7
 msgid ""
 "\n"
 "<p>A new password has been emailed to you</p>\n"
@@ -2473,23 +2920,37 @@ msgstr ""
 "\n"
 "<p>Se le ha enviado una nueva contraseña por correo electrónico</p>\n"
 
-#: orb/templates/orb/profile/view.html:4
+#: templates/orb/profile/view.html:4
 msgid "profile"
 msgstr "perfil"
 
-#: orb/templates/orb/profile/view.html:25
-msgid "Role"
-msgstr "Rol"
-
-#: orb/templates/orb/profile/view.html:62
+#: templates/orb/profile/view.html:62
 msgid "Website"
 msgstr "Sitio web"
 
-#: orb/templates/orb/resource/create_step1.html:11
+#: templates/orb/resource/confirm_delete.html:3
+#: templates/orb/resource/confirm_delete.html:7
+#, fuzzy
+#| msgid "Reject Resource"
+msgid "Delete Resource"
+msgstr "Rechazar recurso"
+
+#: templates/orb/resource/confirm_delete.html:10
+#, python-format
+msgid ""
+"This will immediately and permanently delete the '%(resource)s' resource."
+msgstr ""
+
+#: templates/orb/resource/confirm_delete.html:14
+#: templates/orb/review/start_review.html:26
+msgid "Cancel"
+msgstr ""
+
+#: templates/orb/resource/create_step1.html:11
 msgid "Add Resource - Step 1"
 msgstr "Agregar recurso - Paso 1"
 
-#: orb/templates/orb/resource/create_step1.html:15
+#: templates/orb/resource/create_step1.html:15
 #, python-format
 msgid ""
 "<strong>Lots of resources to add?</strong> Please <a href=\"mailto:%(email)s"
@@ -2501,15 +2962,15 @@ msgstr ""
 "nuestra API a fin de que le resulte más fácil cargar y mantener sus recursos "
 "en ORB."
 
-#: orb/templates/orb/resource/create_step2.html:6
+#: templates/orb/resource/create_step2.html:6
 msgid "Add Resource -Step 2"
 msgstr "Agregar recurso - Paso 2"
 
-#: orb/templates/orb/resource/create_step2.html:9
+#: templates/orb/resource/create_step2.html:9
 msgid "Add Resource Files/URLs - Step 2"
 msgstr "Agregar archivos/URL de recursos - Paso 2"
 
-#: orb/templates/orb/resource/create_step2.html:11
+#: templates/orb/resource/create_step2.html:11
 #, python-format
 msgid ""
 "\n"
@@ -2525,40 +2986,40 @@ msgstr ""
 "ellos aquí.</p>\n"
 "<p>Brinde un título para cada uno de los archivos/URL.</p>\n"
 
-#: orb/templates/orb/resource/create_step2.html:17
-#: orb/templates/orb/resource/edit_step2.html:15
-#: orb/templates/orb/resource/view.html:174
+#: templates/orb/resource/create_step2.html:17
+#: templates/orb/resource/edit_step2.html:15
+#: templates/orb/resource/view.html:174
 msgid "Files"
 msgstr "Archivos"
 
-#: orb/templates/orb/resource/create_step2.html:27
-#: orb/templates/orb/resource/create_step2.html:45
-#: orb/templates/orb/resource/edit_step2.html:25
-#: orb/templates/orb/resource/edit_step2.html:43
+#: templates/orb/resource/create_step2.html:27
+#: templates/orb/resource/create_step2.html:45
+#: templates/orb/resource/edit_step2.html:25
+#: templates/orb/resource/edit_step2.html:43
 msgid "remove"
 msgstr "eliminar"
 
-#: orb/templates/orb/resource/create_step2.html:32
-#: orb/templates/orb/resource/edit_step2.html:30
+#: templates/orb/resource/create_step2.html:32
+#: templates/orb/resource/edit_step2.html:30
 msgid "There are no files for this resource"
 msgstr "No hay archivos para este recurso"
 
-#: orb/templates/orb/resource/create_step2.html:35
-#: orb/templates/orb/resource/edit_step2.html:33
+#: templates/orb/resource/create_step2.html:35
+#: templates/orb/resource/edit_step2.html:33
 msgid "URLs"
 msgstr "URL"
 
-#: orb/templates/orb/resource/create_step2.html:50
-#: orb/templates/orb/resource/edit_step2.html:48
+#: templates/orb/resource/create_step2.html:50
+#: templates/orb/resource/edit_step2.html:48
 msgid "There are no urls for this resource"
 msgstr "No hay URL para este recurso"
 
-#: orb/templates/orb/resource/create_step2.html:57
-#: orb/templates/orb/resource/edit_step2.html:55
+#: templates/orb/resource/create_step2.html:57
+#: templates/orb/resource/edit_step2.html:55
 msgid "Finished"
 msgstr "Terminado"
 
-#: orb/templates/orb/resource/create_thanks.html:8
+#: templates/orb/resource/create_thanks.html:8
 #, python-format
 msgid ""
 " Thank you for submitting \n"
@@ -2567,7 +3028,7 @@ msgstr ""
 " Gracias por enviar \n"
 "'%(r_title)s' como recurso a la plataforma de ORB"
 
-#: orb/templates/orb/resource/create_thanks.html:11
+#: templates/orb/resource/create_thanks.html:11
 msgid ""
 "Your submission with be reviewed by the Content Review Team and our Medical "
 "Expert Panel before it will be made available publicly on this site."
@@ -2576,21 +3037,20 @@ msgstr ""
 "Panel de médicos expertos antes de estar públicamente disponible en este "
 "sitio."
 
-#: orb/templates/orb/resource/edit.html:8
-#: orb/templates/orb/resource/edit.html:11
-#: orb/templates/orb/resource/edit_thanks.html:3
+#: templates/orb/resource/edit.html:8 templates/orb/resource/edit.html.py:11
+#: templates/orb/resource/edit_thanks.html:3
 msgid "Edit Resource"
 msgstr "Editar recurso"
 
-#: orb/templates/orb/resource/edit_step2.html:6
+#: templates/orb/resource/edit_step2.html:6
 msgid "Edit Resource -Step 2"
 msgstr "Editar recurso - Paso 2"
 
-#: orb/templates/orb/resource/edit_step2.html:9
+#: templates/orb/resource/edit_step2.html:9
 msgid "Edit Resource - Step 2"
 msgstr "Editar recurso - Paso 2"
 
-#: orb/templates/orb/resource/edit_step2.html:11
+#: templates/orb/resource/edit_step2.html:11
 #, python-format
 msgid ""
 "\n"
@@ -2599,11 +3059,11 @@ msgstr ""
 "\n"
 "<p>Ahora, agregue el/los archivo/s o URL para '%(title)s'.</p>\t\n"
 
-#: orb/templates/orb/resource/edit_thanks.html:6
+#: templates/orb/resource/edit_thanks.html:6
 msgid "Resource Edited"
 msgstr "Recurso editado"
 
-#: orb/templates/orb/resource/edit_thanks.html:7
+#: templates/orb/resource/edit_thanks.html:7
 #, python-format
 msgid ""
 " Your resource\n"
@@ -2612,7 +3072,7 @@ msgstr ""
 "Su recurso\n"
 "'%(r_title)s' se actualizó"
 
-#: orb/templates/orb/resource/edit_thanks.html:12
+#: templates/orb/resource/edit_thanks.html:12
 #, python-format
 msgid ""
 "You can <a href=\"%(preview)s\" class=\"alert-link\">view your updates</a> "
@@ -2623,12 +3083,12 @@ msgstr ""
 "a> o <a href=\"%(edit)s\" class=\"alert-link\">regresar y editar su recurso "
 "nuevamente</a>."
 
-#: orb/templates/orb/resource/guidelines.html:4
-#: orb/templates/orb/resource/guidelines.html:8
+#: templates/orb/resource/guidelines.html:4
+#: templates/orb/resource/guidelines.html:8
 msgid "Guidelines"
 msgstr "Pautas"
 
-#: orb/templates/orb/resource/guidelines.html:10
+#: templates/orb/resource/guidelines.html:10
 msgid ""
 "\n"
 "<p>ORB and mPowering Frontline Health Workers aim to provide high\n"
@@ -2643,27 +3103,35 @@ msgstr ""
 "herramientas de aprendizaje y videos, y organiza cursos, recursos para "
 "empleos y recursos similares.</p>\n"
 
-#: orb/templates/orb/resource/guidelines.html:17
+#: templates/orb/resource/guidelines.html:17
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "<p>All resources submitted to ORB will be evaluated, by our\n"
+#| "\tContent Review Team and Medical Expert Panel, against the following\n"
+#| "\tcriteria:</p>\n"
 msgid ""
 "\n"
-"<p>All resources submitted to ORB will be evaluated, by our\n"
-"\tContent Review Team and Medical Expert Panel, against the following\n"
-"\tcriteria:</p>\n"
+"<p>All resources submitted to ORB will be evaluated by our\n"
+"\tContent Review Team against the following criteria:</p>\n"
 msgstr ""
 "\n"
 "<p>Todos los recursos enviados a ORB serán evaluados por nuestro Equipo de "
 "revisión de contenidos y nuestro Panel de expertos médicos con respecto a "
 "los siguientes criterios:</p>\n"
 
-#: orb/templates/orb/resource/reject_form.html:5
+#: templates/orb/resource/reject_form.html:5
+#: templates/orb/review/reject_form.html:5
 msgid "Resource - Reject"
 msgstr "Recurso - Rechazo"
 
-#: orb/templates/orb/resource/reject_form.html:8
+#: templates/orb/resource/reject_form.html:8
+#: templates/orb/review/reject_form.html:8
 msgid "Reject Resource"
 msgstr "Rechazar recurso"
 
-#: orb/templates/orb/resource/reject_form.html:10
+#: templates/orb/resource/reject_form.html:10
+#: templates/orb/review/reject_form.html:10
 msgid ""
 "\n"
 "<p>Please select all of the ORB criteria that the resource failed to meet, "
@@ -2675,33 +3143,32 @@ msgstr ""
 "notas que expliquen por qué no los cumplió o de qué manera podría "
 "modificarse el recurso para que cumpla con los criterios. </p>\n"
 
-#: orb/templates/orb/resource/status_updated.html:3
-#: orb/templates/orb/resource/status_updated.html:6
+#: templates/orb/resource/status_updated.html:3
+#: templates/orb/resource/status_updated.html:6
 msgid "Status Updated"
 msgstr "Estado actualizado"
 
-#: orb/templates/orb/resource/view.html:65
-#: orb/templates/orb/resource/view.html:159
+#: templates/orb/resource/view.html:65 templates/orb/resource/view.html:159
 msgid "Bookmarked"
 msgstr "Marcado"
 
-#: orb/templates/orb/resource/view.html:153
+#: templates/orb/resource/view.html:153
 msgid "Your Rating"
 msgstr "Su calificación"
 
-#: orb/templates/orb/resource/view.html:157
+#: templates/orb/resource/view.html:157
 msgid "Bookmark"
 msgstr "Marcar"
 
-#: orb/templates/orb/resource/view.html:161
+#: templates/orb/resource/view.html:161
 msgid "Bookmark this"
 msgstr "Marcar esto"
 
-#: orb/templates/orb/resource/view.html:166
+#: templates/orb/resource/view.html:166
 msgid "Your Rating/Bookmark"
 msgstr "Su calificación/marca"
 
-#: orb/templates/orb/resource/view.html:169
+#: templates/orb/resource/view.html:169
 #, python-format
 msgid ""
 "Please <a href=\"%(login)s?next=%(nextpath)s\">login</a> or <a href="
@@ -2710,82 +3177,252 @@ msgstr ""
 "<a href=\"%(login)s?next=%(nextpath)s\">Inicie sesión</a> o <a href="
 "\"%(register)s\">regístrese</a> para calificar o marcar este recurso"
 
-#: orb/templates/orb/resource/view.html:206
+#: templates/orb/resource/view.html:206
 msgid "Links"
 msgstr "Enlaces"
 
-#: orb/templates/orb/resource/view.html:211
-#: orb/templates/orb/resource/view.html:216
+#: templates/orb/resource/view.html:211 templates/orb/resource/view.html:216
 msgid "Go to"
 msgstr "Ir a"
 
-#: orb/templates/orb/resource/view.html:237
+#: templates/orb/resource/view.html:237
 msgid "This resource is included in the following collections:"
 msgstr "Este recurso está incluido en las siguientes colecciones:"
 
-#: orb/templates/orb/resource/view.html:288
+#: templates/orb/resource/view.html:288
 msgid "License"
 msgstr "Licencia"
 
-#: orb/templates/orb/resource/view.html:303
+#: templates/orb/resource/view.html:303
 msgid "Attribution"
 msgstr "Atribución"
 
-#: orb/templates/orb/search.html:13 orb/templates/orb/tag.html:70
+#: templates/orb/review/_selected_review_criteria.html:2
+msgid "Selected Criteria"
+msgstr ""
+
+#: templates/orb/review/_selected_review_criteria.html:8
+msgid "Missing Criteria"
+msgstr ""
+
+#: templates/orb/review/assign_review.html:3
+#: templates/orb/review/assign_review.html:8
+#, fuzzy
+#| msgid "Content Review Team"
+msgid "Assign Content Review"
+msgstr "Equipo de revisión de contenido"
+
+#: templates/orb/review/review_form.html:3
+#: templates/orb/review/review_form.html:6
+#: templates/orb/review/staff_review.html:3
+#: templates/orb/review/start_review.html:3
+#, fuzzy
+#| msgid "Content Review Team"
+msgid "Content Review"
+msgstr "Equipo de revisión de contenido"
+
+#: templates/orb/review/review_form.html:13
+msgid "Please mark which resource criteria the resource meets."
+msgstr ""
+
+#: templates/orb/review/review_form.html:17
+#, fuzzy
+#| msgid "You have already uploaded a resource with this title"
+msgid "You have already reviewed this resource."
+msgstr "Ya ha cargado un recurso con este título"
+
+#: templates/orb/review/review_form.html:18
+msgid "Return to pending content."
+msgstr ""
+
+#: templates/orb/review/review_list.html:13
+msgid "Overdue Reviews"
+msgstr ""
+
+#: templates/orb/review/review_list.html:18
+#: templates/orb/review/user_review_list.html:16
+msgid "Assigned"
+msgstr ""
+
+#: templates/orb/review/review_list.html:20
+#, fuzzy
+#| msgid "Preview"
+msgid "Reviewer"
+msgstr "Vista preliminar"
+
+#: templates/orb/review/review_list.html:34
+#: templates/orb/review/review_list.html:80
+#: templates/orb/review/review_list.html:81
+#: templates/orb/review/review_list.html:149
+#: templates/orb/review/review_list.html:150
+msgid "Assignments"
+msgstr ""
+
+#: templates/orb/review/review_list.html:48
+msgid "Resources Requiring Review Assignment"
+msgstr ""
+
+#: templates/orb/review/review_list.html:87
+#: templates/orb/review/review_list.html:88
+#: templates/orb/review/review_list.html:90
+#: templates/orb/review/review_list.html:155
+#: templates/orb/review/review_list.html:156
+#: templates/orb/review/review_list.html:158
+#: templates/orb/review/user_review_list.html:38
+#, fuzzy
+#| msgid "Preview"
+msgid "Review"
+msgstr "Vista preliminar"
+
+#: templates/orb/review/review_list.html:100
+#: templates/orb/review/review_list.html:168
+#, fuzzy
+#| msgid "No resources pending CRT review"
+msgid "No resources pending review"
+msgstr "No hay recursos con revisión de CRT pendiente"
+
+#: templates/orb/review/review_list.html:105
+#, fuzzy
+#| msgid "Resources"
+msgid "All Resources"
+msgstr "Recursos"
+
+#: templates/orb/review/review_list.html:109
+msgid ""
+"To start a review that does not have an assignment matching your\n"
+"            content review role, click the 'Start a review' link next to the "
+"resource title.\n"
+"        "
+msgstr ""
+
+#: templates/orb/review/review_list.html:142
+msgid "Start a review"
+msgstr ""
+
+#: templates/orb/review/staff_review.html:6
+#, fuzzy
+#| msgid "Content Review Team"
+msgid "Staff Content Review"
+msgstr "Equipo de revisión de contenido"
+
+#: templates/orb/review/staff_review.html:16
+#, fuzzy
+#| msgid "Content Review Team"
+msgid "Content reviews"
+msgstr "Equipo de revisión de contenido"
+
+#: templates/orb/review/staff_review.html:20
+msgid "Requires assignment"
+msgstr ""
+
+#: templates/orb/review/staff_review.html:44
+msgid "Reviewer notes"
+msgstr ""
+
+#: templates/orb/review/staff_review.html:56
+#, python-format
+msgid ""
+"\n"
+"                <p>There are no reviews assigned for this resource.</p>\n"
+"                <p>You can make an immediate assessment here or <a href="
+"\"%(assignment_url)s\">assign\n"
+"                    reviewers &raquo;</a>.</p>\n"
+"            "
+msgstr ""
+
+#: templates/orb/review/staff_review.html:65
+msgid "Consider the following criteria in your review."
+msgstr ""
+
+#: templates/orb/review/staff_review.html:79
+#, python-format
+msgid ""
+"\n"
+"                <p>This resource has already been %(status)s.</p>\n"
+"                <p><a href=\"%(resource_list_url)s\">Return to submitted "
+"resource list.</a></p>\n"
+"            "
+msgstr ""
+
+#: templates/orb/review/start_review.html:6
+#, fuzzy
+#| msgid "Content Review Team"
+msgid "Start Content Review"
+msgstr "Equipo de revisión de contenido"
+
+#: templates/orb/review/start_review.html:12
+#, python-format
+msgid ""
+"\n"
+"In order to review, click \"Start\" below and this will make you the "
+"reviewer for the '%(role)s' role.\n"
+msgstr ""
+
+#: templates/orb/review/start_review.html:21
+#, python-format
+msgid ""
+"\n"
+"                Start %(role)s Review\n"
+"            "
+msgstr ""
+
+#: templates/orb/review/user_review_list.html:9
+msgid "My Reviews"
+msgstr ""
+
+#: templates/orb/review/user_review_list.html:47
+#, fuzzy
+#| msgid "No resources pending CRT review"
+msgid "No resources assigned for your review"
+msgstr "No hay recursos con revisión de CRT pendiente"
+
+#: templates/orb/search.html:13 templates/orb/tag.html:70
 msgid "Advanced search & filter"
 msgstr "Búsqueda avanzada y filtros"
 
-#: orb/templates/orb/search.html:17
+#: templates/orb/search.html:17
 msgid "results"
 msgstr "resultados"
 
-#: orb/templates/orb/search.html:27
+#: templates/orb/search.html:27
 msgid "No results found."
 msgstr "No se encontraron resultados."
 
-#: orb/templates/orb/search_advanced.html:5
+#: templates/orb/search_advanced.html:5
 msgid "Advanced Search"
 msgstr "Búsqueda avanzada"
 
-#: orb/templates/orb/search_advanced.html:9
+#: templates/orb/search_advanced.html:9
 msgid "Advanced Search & Filter"
 msgstr "Búsqueda avanzada y filtros"
 
-#: orb/templates/orb/search_advanced_results.html:4
-#: orb/templates/orb/search_advanced_results.html:9
+#: templates/orb/search_advanced_results.html:4
+#: templates/orb/search_advanced_results.html:9
 msgid "Advanced Search Results"
 msgstr "Resultados de la búsqueda avanzada"
 
-#: orb/templates/orb/search_advanced_results.html:21
-msgid "Commerical use allowed"
-msgstr "Uso comercial permitido"
-
-#: orb/templates/orb/search_advanced_results.html:21
-msgid "Derivatives allowed"
-msgstr "Creación de obras derivadas permitida"
-
-#: orb/templates/orb/search_advanced_results.html:30
+#: templates/orb/search_advanced_results.html:30
 msgid "Sorry, no resources were found matching your criteria."
 msgstr ""
 "Lo lamentamos, no se encontraron recursos que cumplan con sus criterios."
 
-#: orb/templates/orb/tag.html:42
+#: templates/orb/tag.html:42
 msgid "Website:"
 msgstr "Sitio web:"
 
-#: orb/templates/orb/tag.html:47
+#: templates/orb/tag.html:47
 msgid "Email:"
 msgstr "Correo electrónico:"
 
-#: orb/templates/orb/tag.html:59
+#: templates/orb/tag.html:59
 msgid "Order by: "
 msgstr "Ordenar por:"
 
-#: orb/templates/orb/tag.html:84
+#: templates/orb/tag.html:84
 msgid "There are no resources tagged with "
 msgstr "No hay recursos etiquetados con"
 
-#: orb/templates/orb/tag.html:88
+#: templates/orb/tag.html:88
 #, python-format
 msgid ""
 "\n"
@@ -2816,19 +3453,19 @@ msgstr ""
 "\">dedique un momento a hacerlo</a> primero.</p>\n"
 "            "
 
-#: orb/templates/orb/tag_cloud.html:4 orb/templates/orb/tag_cloud.html.py:10
+#: templates/orb/tag_cloud.html:4 templates/orb/tag_cloud.html.py:10
 msgid "Tag cloud"
 msgstr "Nube de etiqueta"
 
-#: orb/templates/orb/taxonomy.html:5 orb/templates/orb/taxonomy.html.py:10
+#: templates/orb/taxonomy.html:5 templates/orb/taxonomy.html.py:10
 msgid "Taxonomy"
 msgstr "Taxonomía"
 
-#: orb/templates/orb/terms.html:9
+#: templates/orb/terms.html:9
 msgid "Terms of Use"
 msgstr "Términos de uso"
 
-#: orb/templates/orb/terms.html:10
+#: templates/orb/terms.html:10
 msgid ""
 "\n"
 "<h3>Limitations of Liability</h3>\n"
@@ -2939,11 +3576,11 @@ msgstr ""
 "procedimiento, opinión ni otra información específica que pueda mencionarse "
 "en él.</p>\n"
 
-#: orb/templates/orb/terms.html:65
+#: templates/orb/terms.html:65
 msgid "Privacy Policy"
 msgstr "Política de privacidad"
 
-#: orb/templates/orb/terms.html:66
+#: templates/orb/terms.html:66
 msgid ""
 "\n"
 "<p>This section explains how mPowering Frontline Health Workers will\n"
@@ -3018,11 +3655,11 @@ msgstr ""
 "personalmente a terceros y que se haya compartido en este sitio.</p>\n"
 "\n"
 
-#: orb/templates/orb/thanks.html:4
+#: templates/orb/thanks.html:4
 msgid "Registration complete"
 msgstr "Registro completo"
 
-#: orb/templates/orb/thanks.html:6
+#: templates/orb/thanks.html:6
 #, python-format
 msgid ""
 "Thank you for registering. You are now logged in. <a href=\"%(orb_home)s\" "
@@ -3031,38 +3668,108 @@ msgstr ""
 "Gracias por registrarse. Su sesión se ha iniciado. <a href=\"%(orb_home)s\" "
 "class=\"alert-link\">Regresar a la página de inicio</a>"
 
-#: orb/templates/orb/toolkits/home.html:11
+#: templates/orb/toolkits/home.html:13
+msgid ""
+"Making Content Meaningful: A Guide to Adapting Existing Global Health "
+"Content for Different Audiences"
+msgstr ""
+
+#: templates/orb/toolkits/home.html:15
+msgid ""
+"\n"
+"<p>The abundance of openly accessible health content—from eLearning\n"
+"\tcourses and multimedia resources to guidance documents and research\n"
+"\tpapers—presents a remarkable opportunity for teaching, learning, and\n"
+"\tsharing. Open health content, however, is not sufficient by itself. It\n"
+"\tis important to provide it in the appropriate context and the language\n"
+"\tof the people who will use it. The Knowledge for Health (K4Health)\n"
+"\tproject developed this adaptation guide to expand the reach,\n"
+"\tusefulness, and use of evidence-based global health content,\n"
+"\tspecifically as it relates to family planning. The guide outlines a\n"
+"\tframework with key steps and questions for consideration as well as\n"
+"\tactivity sheets and an illustrative as well as real-life case studies\n"
+"\tthat will help a user in making informed decisions in the content\n"
+"\tadaptation process.</p>\n"
+msgstr ""
+
+#: templates/orb/toolkits/home.html:36
 msgid "Community Health Framework"
 msgstr "Marco de salud comunitaria"
 
-#: orb/templates/orb/toolkits/home.html:28
+#: templates/orb/toolkits/home.html:38
+msgid ""
+"\n"
+"<p>The Community Health Framework assists non-technical audiences in\n"
+"\tunderstanding community health and how it can be strengthened. An\n"
+"\tinteractive power point, published under a Creative Commons license, it\n"
+"\tdepicts the community health ecosystem as heath-specific and\n"
+"\thealth-enabling actors and structures (formal and informal) working\n"
+"\ttogether to ensure that each has the agency, access, and resources to\n"
+"\tensure the health of community members. It also includes a Toolkit with\n"
+"\tmodels and case studies as examples of good practice.</p>\n"
+msgstr ""
+
+#: templates/orb/toolkits/home.html:55
 msgid "Principles for Digital Development"
 msgstr "Principios para el desarrollo digital"
 
-#: orb/templates/orb/toolkits/home.html:45
+#: templates/orb/toolkits/home.html:57
+msgid ""
+"\n"
+"<p>The Principles for Digital Development (in English, Español,\n"
+"\tFrançais, or Português) find their roots in the efforts of individuals,\n"
+"\tdevelopment organizations, and donors alike who have called for a more\n"
+"\tconcerted effort by donors and implementing partners to\n"
+"\tinstitutionalize lessons learned in the use of information and\n"
+"\tcommunication technologies (ICTs) in development projects. They were\n"
+"\twritten by and for international development donors and their\n"
+"\timplementing partners, but are freely available for use by all. The\n"
+"\tPrinciples are intended to serve as guidance rather than edict, and to\n"
+"\tbe updated and refined over time.</p>\n"
+msgstr ""
+
+#: templates/orb/toolkits/home.html:74
 msgid ""
 "Financing Framework to End Preventable Child and Maternal Deaths (EPCMD)"
 msgstr ""
 "Marco de financiación para erradicar muertes infantiles y maternas "
 "prevenibles (End Preventable Child and Maternal Deaths, EPCMD)"
 
-#: orb/templates/search/opensearch.html:4
+#: templates/orb/toolkits/home.html:76
+msgid ""
+"\n"
+"<p>The U.S. Government is committed to achieving the once\n"
+"\tunimaginable goal of Ending Preventable Child and Maternal Deaths\n"
+"\t(EPCMD) by 2035. Achieving this goal in a sustainable fashion implies a\n"
+"\tgradual move toward solutions that mobilize both domestic and\n"
+"\tinternational resources, with the objective of putting developing\n"
+"\tcountry health systems on a trajectory toward financial sustainability.</"
+"p>\n"
+"\n"
+"<p>The Financing Framework is designed to outline ways in which\n"
+"\tadditional financial resources and tools can be utilized to support\n"
+"\tsustainability. The Framework draws on inspiration from best practices\n"
+"\tused throughout the U.S. Agency for International Development and with\n"
+"\tour health partners around the world.</p>\n"
+msgstr ""
+
+#: templates/search/opensearch.html:4
 msgid "ORB by mPowering - Search"
 msgstr "ORB por mPowering - Buscar"
 
-#: orb/views.py:79
+#: views.py:75
 msgid "Create date"
 msgstr "Crear fecha"
 
-#: orb/views.py:81
+#: views.py:77
 msgid "Rating"
 msgstr "Calificación"
 
-#: orb/views.py:82
+#: views.py:78
 msgid "Update date"
 msgstr "Fecha de actualización"
 
-#: orb/views.py:177
+#: views.py:163
 msgid ""
 "This resource is not yet approved by the ORB Content Review Team, so is not "
 "yet available for all users to view"
@@ -3071,10 +3778,41 @@ msgstr ""
 "de ORB, de modo que aún no está disponible para que todos los usuarios lo "
 "vean"
 
-#: orb/views.py:190
+#: views.py:176
 msgid "Send to MEP"
 msgstr "Enviar a MEP"
 
-#: orb/views.py:239 orb/views.py:302 orb/views.py:681
+#: views.py:224 views.py:284 views.py:625
 msgid "You need to be logged in to add a resource."
 msgstr "Debe haber iniciado sesión para agregar un recurso."
+
+#~ msgid "Pending MRT"
+#~ msgstr "MRT pendiente"
+
+#~ msgid "Medical Expert Panel"
+#~ msgstr "Panel de expertos médicos"
+
+#~ msgid ""
+#~ "\n"
+#~ "<p>Our Medical Expert Panel consists of medical professionals from\n"
+#~ "\tinternational health organisations.</p>\n"
+#~ "<p>When a submitted resource has been approved by Content Review\n"
+#~ "\tTeam, the Medical Expert Panel makes the final decision on whether a\n"
+#~ "\tresource can be included in ORB, based on the most up to date medical\n"
+#~ "\tinformation and guidelines available.</p>\n"
+#~ "\n"
+#~ msgstr ""
+#~ "\n"
+#~ "<p>Nuestro Panel de expertos médicos está compuesto por profesionales "
+#~ "médicos de organizaciones de salud internacionales.</p>\n"
+#~ "<p>Cuando el Equipo de revisión de contenido ha aprobado un recurso "
+#~ "enviado, el Panel de expertos médicos toma la decisión final respecto de "
+#~ "si se puede incluir un recurso en ORB, en función de la información "
+#~ "médica más actualizada y las pautas disponibles.</p>\n"
+#~ "\n"
+
+#~ msgid "Commerical use allowed"
+#~ msgstr "Uso comercial permitido"
+
+#~ msgid "Derivatives allowed"
+#~ msgstr "Creación de obras derivadas permitida"
