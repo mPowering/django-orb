@@ -10,4 +10,9 @@ class PeerAdmin(admin.ModelAdmin):
 
 @admin.register(PeerQueryLog)
 class PeerQueryLogAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ('peer',)
+    list_display = ('peer', 'created')
+    list_filter = ('peer',)
+
+    def has_delete_permission(self, request, obj=None):
+        return False
