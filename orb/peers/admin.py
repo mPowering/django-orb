@@ -10,9 +10,9 @@ class PeerAdmin(admin.ModelAdmin):
 
 @admin.register(PeerQueryLog)
 class PeerQueryLogAdmin(admin.ModelAdmin):
-    list_display = ('peer', 'created')
-    readonly_fields = ('peer', 'created', 'finished', 'filtered_date', 'new_resources', 'skipped_local_resources',
-                    'updated_resources', 'unchanged_resources')
+    list_display = ('peer', 'created', 'new_resources', 'skipped_local_resources', 'updated_resources')
+    readonly_fields = ('peer', 'created', 'finished', 'filtered_date', 'new_resources',
+                       'skipped_local_resources', 'updated_resources', 'unchanged_resources')
     list_filter = ('peer',)
 
     def has_delete_permission(self, request, obj=None):

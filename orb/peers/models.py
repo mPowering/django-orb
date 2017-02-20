@@ -88,7 +88,7 @@ class Peer(models.Model):
             try:
                 local_resource = Resource.resources.get(guid=api_resource['guid'])
             except Resource.DoesNotExist:
-                Resource.create_from_api(api_resource)
+                Resource.create_from_api(api_resource, peer=self)
                 resource_counts['new_resources'] += 1
                 writer(u"Created a new resource: {}".format(api_resource['title']))
             else:

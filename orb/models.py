@@ -158,7 +158,7 @@ class Resource(TimestampBase):
         return True
 
     @classmethod
-    def create_from_api(cls, api_data):
+    def create_from_api(cls, api_data, peer=None):
         """
         Creates a new Resource object and its suite of related content based
         on a dictionary of data as returned from the ORB API
@@ -179,7 +179,7 @@ class Resource(TimestampBase):
 
         import_user = get_import_user()
 
-        resource = cls.resources.create(create_user=import_user, update_user=import_user, **api_data)
+        resource = cls.resources.create(source_peer=peer, create_user=import_user, update_user=import_user, **api_data)
 
         ResourceURL.objects.bulk_create([
             ResourceURL.from_url_data(resource, resource_url_data, import_user)
