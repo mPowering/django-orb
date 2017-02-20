@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from orb_api.api import OrbClient
+from orb.peers.tasks import send_peer_sync_notification_email
 
 logger = logging.getLogger('orb')
 
@@ -70,7 +71,12 @@ class Peer(models.Model):
         def default_writer(value):
             print(value)
 
-        resource_counts = defaultdict(lambda: 0)
+        resource_counts = {
+            'new_resources': 0,
+            'skipped_local_resources': 0,
+            'updated_resources': 0,
+            'unchanged_resources': 0,
+        }
 
         if writer is None:
             writer = default_writer
@@ -102,6 +108,10 @@ class Peer(models.Model):
                         resource_counts['unchanged_resources'] += 1
 
         log_entry.finish(filtered_date=last_update, **resource_counts)
+
+        if resource_counts['new_resources'] or resource_counts['updated_resources']:
+            send_peer_sync_notification_email(self, **resource_counts)
+
         return resource_counts
 
 
