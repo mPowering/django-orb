@@ -101,8 +101,7 @@ class Peer(models.Model):
                     else:
                         resource_counts['unchanged_resources'] += 1
 
-        # TODO add JSON field for results
-        log_entry.finish()
+        log_entry.finish(filtered_date=last_update, **resource_counts)
         return resource_counts
 
 
@@ -114,6 +113,11 @@ class PeerQueryLog(models.Model):
     created = models.DateTimeField(editable=False, default=now)
     finished = models.DateTimeField(null=True, blank=True, editable=False)
     peer = models.ForeignKey('Peer', related_name='logs')
+    filtered_date = models.DateTimeField(blank=True, null=True)
+    new_resources = models.PositiveIntegerField(null=True)
+    skipped_local_resources = models.PositiveIntegerField(null=True)
+    updated_resources = models.PositiveIntegerField(null=True)
+    unchanged_resources = models.PositiveIntegerField(null=True)
 
     entries = models.Manager()
     objects = entries
@@ -124,11 +128,17 @@ class PeerQueryLog(models.Model):
     def __unicode__(self):
         return u"{} - {}".format(self.peer, self.created)
 
-    def finish(self):
+    def finish(self, filtered_date=None, new_resources=0, skipped_local_resources=0,
+               updated_resources=0, unchanged_resources=0):
         """
         Interface for updating the completion (finished) time
 
         Saves the model instance
         """
+        self.filtered_date = filtered_date
+        self.new_resources = new_resources
+        self.skipped_local_resources = skipped_local_resources
+        self.updated_resources = updated_resources
+        self.unchanged_resources = unchanged_resources
         self.finished = now()
         self.save()
