@@ -1,6 +1,7 @@
 import os
 import uuid
 
+import parsedatetime as pdt
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import urlresolvers
@@ -20,6 +21,8 @@ from orb.tags.managers import ActiveTagManager, ResourceTagManager
 from .fields import AutoSlugField
 
 models.signals.post_save.connect(create_api_key, sender=User)
+
+cal = pdt.Calendar()
 
 
 class WorkflowQueryset(models.QuerySet):
@@ -127,13 +130,12 @@ class Resource(TimestampBase):
         if self.is_local():
             raise LookupError("Cannot update a locally created resource from API data")
 
-        if api_data['guid'] != self.guid:
+        if api_data['guid'] != str(self.guid):
             raise LookupError("API GUID {} does not match local GUID {}".format(api_data['guid'], str(self.guid)))
 
-        updated_time = api_data.pop('update_date')
-        created_time = api_data.pop('create_date')
+        updated_time, result = cal.parseDT(api_data.pop('update_date'))
+        created_time, result = cal.parseDT(api_data.pop('create_date'))
 
-        updated_time.date, self.create_date.date
         if updated_time.date <= self.create_date.date:
             return False
 
