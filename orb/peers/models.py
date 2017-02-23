@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from orb_api.api import OrbClient
+from orb.peers.tasks import send_peer_sync_notification_email
 
 logger = logging.getLogger('orb')
 
@@ -70,7 +71,12 @@ class Peer(models.Model):
         def default_writer(value):
             print(value)
 
-        resource_counts = defaultdict(lambda: 0)
+        resource_counts = {
+            'new_resources': 0,
+            'skipped_local_resources': 0,
+            'updated_resources': 0,
+            'unchanged_resources': 0,
+        }
 
         if writer is None:
             writer = default_writer
@@ -82,13 +88,15 @@ class Peer(models.Model):
 
         filters = {} if last_update is None else {'updated__gte': last_update}
 
-        for api_resource in self.client.list_resources(**filters):
+        total_count, resource_list = self.client.list_resources(**filters)
+
+        for api_resource in resource_list:
             try:
-                local_resource = Resource.resources.get(uuid=api_resource['guid'])
+                local_resource = Resource.resources.get(guid=api_resource['guid'])
             except Resource.DoesNotExist:
-                Resource.create_from_api(api_resource)
+                Resource.create_from_api(api_resource, peer=self)
                 resource_counts['new_resources'] += 1
-                writer("Created a new resource: {}".format(api_resource['title']))
+                writer(u"Created a new resource: {}".format(api_resource['title']))
             else:
                 if local_resource.is_local():
                     resource_counts['skipped_local_resources'] += 1
@@ -99,8 +107,11 @@ class Peer(models.Model):
                     else:
                         resource_counts['unchanged_resources'] += 1
 
-        # TODO add JSON field for results
-        log_entry.finish()
+        log_entry.finish(filtered_date=last_update, **resource_counts)
+
+        if resource_counts['new_resources'] or resource_counts['updated_resources']:
+            send_peer_sync_notification_email(self, **resource_counts)
+
         return resource_counts
 
 
@@ -112,6 +123,11 @@ class PeerQueryLog(models.Model):
     created = models.DateTimeField(editable=False, default=now)
     finished = models.DateTimeField(null=True, blank=True, editable=False)
     peer = models.ForeignKey('Peer', related_name='logs')
+    filtered_date = models.DateTimeField(blank=True, null=True)
+    new_resources = models.PositiveIntegerField(null=True)
+    skipped_local_resources = models.PositiveIntegerField(null=True)
+    updated_resources = models.PositiveIntegerField(null=True)
+    unchanged_resources = models.PositiveIntegerField(null=True)
 
     entries = models.Manager()
     objects = entries
@@ -119,11 +135,20 @@ class PeerQueryLog(models.Model):
     class Meta:
         get_latest_by = 'finished'
 
-    def finish(self):
+    def __unicode__(self):
+        return u"{} - {}".format(self.peer, self.created)
+
+    def finish(self, filtered_date=None, new_resources=0, skipped_local_resources=0,
+               updated_resources=0, unchanged_resources=0):
         """
         Interface for updating the completion (finished) time
 
         Saves the model instance
         """
+        self.filtered_date = filtered_date
+        self.new_resources = new_resources
+        self.skipped_local_resources = skipped_local_resources
+        self.updated_resources = updated_resources
+        self.unchanged_resources = unchanged_resources
         self.finished = now()
         self.save()

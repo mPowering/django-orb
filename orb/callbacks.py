@@ -50,7 +50,7 @@ def resource_submitted_callback(sender, **kwargs):
     request = kwargs.get('request')
     resource = kwargs.get('instance')
     created = kwargs.get('created')
-    if created:
+    if created and resource.is_local():
         new_resource_submitted(request, resource)
     return
 
