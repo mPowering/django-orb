@@ -233,10 +233,17 @@ class POTranslations(object):
         counter = 1
         for klass, table_data in self.data.items():
             for pk, field_data in table_data.items():
-                instance = klass._default_manager.get(pk=pk)
-                for field_name, field_value in field_data.items():
-                    setattr(instance, field_name, field_value)
-                instance.save()
+                try:
+                    instance = klass._default_manager.get(pk=pk)
+                    for field_name, field_value in field_data.items():
+                        setattr(instance, field_name, field_value)
+                    instance.save()
+                except klass.DoesNotExist:
+                    self.output.write("Object no longer exists in database: id={0}".format(pk))
+                    for field_name, field_value in field_data.items():
+                        self.output.write(field_name)
+                        self.output.write(field_value)
+                    self.output.write("-------------------------------------")
                 counter += 1
                 if counter % 25 == 0 and self.output:
                     self.output.write("{0} rows updated...".format(counter))
