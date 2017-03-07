@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: ORBv1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-07 12:52+0200\n"
-"PO-Revision-Date: 2017-03-07 12:52+0200\n"
+"PO-Revision-Date: 2017-03-07 13:08+0200\n"
 "Last-Translator: Alex Little <alex@alexlittle.net>\n"
 "Language-Team: Spanish (https://www.transifex.com/bennylope/teams/64448/"
 "es/)\n"
@@ -653,10 +653,8 @@ msgid "Your password again should be at least 6 characters long."
 msgstr "Su nueva contraseña debe tener al menos 6 caracteres de longitud."
 
 #: profiles/forms.py:85
-#, fuzzy
-#| msgid "Password updated"
 msgid "Password again"
-msgstr "Contraseña actualizada"
+msgstr "Repite la contraseña"
 
 #: profiles/forms.py:87
 msgid "Please enter your first name."
@@ -668,7 +666,7 @@ msgstr "Su nombre debe tener al menos 2 caracteres de longitud."
 
 #: profiles/forms.py:91
 msgid "First name"
-msgstr ""
+msgstr "Nombre"
 
 #: profiles/forms.py:93
 msgid "Please enter your last name."
