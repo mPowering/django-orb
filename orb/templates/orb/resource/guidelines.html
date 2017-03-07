@@ -7,17 +7,11 @@
 
 <h2>{% trans 'Guidelines' %}</h2>
 
-{% blocktrans %}
-<p>ORB and mPowering Frontline Health Workers aim to provide high
-	quality, relevant and up to date resources that will help to improve
-	the performance of frontline health workers. ORB hosts
-	learning tools, courses, job aids, videos, and similar resources.</p>
-{% endblocktrans %} 
-
-{% blocktrans %}
-<p>All resources submitted to ORB will be evaluated by our
-	Content Review Team against the following criteria:</p>
-{% endblocktrans %} 
+<p>{% blocktrans %}ORB and mPowering Frontline Health Workers aim to provide high quality, relevant and up to date resources that will help to improve the performance of frontline health workers. ORB hosts
+learning tools, courses, job aids, videos, and similar resources.{% endblocktrans %}</p>
+ 
+<p>{% blocktrans %}All resources submitted to ORB will be evaluated by our Content Review Team against the following criteria:{% endblocktrans %}</p>
+ 
 
 <ol>
 {% for cc in criteria_categories %} 

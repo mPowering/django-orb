@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ORBv1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-07 13:58+0200\n"
-"PO-Revision-Date: 2017-03-07 13:58+0200\n"
+"POT-Creation-Date: 2017-03-07 14:12+0200\n"
+"PO-Revision-Date: 2017-03-07 14:13+0200\n"
 "Last-Translator: Alex Little <alex@alexlittle.net>\n"
 "Language-Team: Spanish (https://www.transifex.com/bennylope/teams/64448/"
 "es/)\n"
@@ -1056,8 +1056,8 @@ msgstr "Buscar recursos"
 msgid "Country Map"
 msgstr "Mapa del país"
 
-#: templates/includes/header.html:32 templates/orb/toolkits/home.html:4
-#: templates/orb/toolkits/home.html.py:8
+#: templates/includes/header.html:32 templates/orb/toolkits/home.html:5
+#: templates/orb/toolkits/home.html.py:9
 msgid "Toolkits"
 msgstr "Kits de herramientas"
 
@@ -3082,35 +3082,24 @@ msgstr "Pautas"
 
 #: templates/orb/resource/guidelines.html:10
 msgid ""
-"\n"
-"<p>ORB and mPowering Frontline Health Workers aim to provide high\n"
-"\tquality, relevant and up to date resources that will help to improve\n"
-"\tthe performance of frontline health workers. ORB hosts\n"
-"\tlearning tools, courses, job aids, videos, and similar resources.</p>\n"
+"ORB and mPowering Frontline Health Workers aim to provide high quality, "
+"relevant and up to date resources that will help to improve the performance "
+"of frontline health workers. ORB hosts\n"
+"learning tools, courses, job aids, videos, and similar resources."
 msgstr ""
-"\n"
-"<p>ORB y mPowering Frontline Health Workers tienen como objetivo brindar "
+"ORB y mPowering Frontline Health Workers tienen como objetivo brindar "
 "recursos de alta calidad, relevantes y actualizados que ayudarán a mejorar "
 "el desempeño de los trabajadores de salud de primera línea. ORB crea "
 "herramientas de aprendizaje y videos, y organiza cursos, recursos para "
-"empleos y recursos similares.</p>\n"
+"empleos y recursos similares."
 
-#: templates/orb/resource/guidelines.html:17
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "<p>All resources submitted to ORB will be evaluated, by our\n"
-#| "\tContent Review Team and Medical Expert Panel, against the following\n"
-#| "\tcriteria:</p>\n"
+#: templates/orb/resource/guidelines.html:13
 msgid ""
-"\n"
-"<p>All resources submitted to ORB will be evaluated by our\n"
-"\tContent Review Team against the following criteria:</p>\n"
+"All resources submitted to ORB will be evaluated by our Content Review Team "
+"against the following criteria:"
 msgstr ""
-"\n"
-"<p>Todos los recursos enviados a ORB serán evaluados por nuestro Equipo de "
-"revisión de contenidos y nuestro Panel de expertos médicos con respecto a "
-"los siguientes criterios:</p>\n"
+"Todos los recursos enviados a ORB serán evaluados por nuestro Equipo de "
+"revisión de contenidos  con respecto a los siguientes criterios:"
 
 #: templates/orb/resource/reject_form.html:5
 #: templates/orb/review/reject_form.html:5
@@ -3678,15 +3667,14 @@ msgstr ""
 "Gracias por registrarse. Su sesión se ha iniciado. <a href=\"%(orb_home)s\" "
 "class=\"alert-link\">Regresar a la página de inicio</a>"
 
-#: templates/orb/toolkits/home.html:13
+#: templates/orb/toolkits/home.html:14
 msgid ""
 "Making Content Meaningful: A Guide to Adapting Existing Global Health "
 "Content for Different Audiences"
 msgstr ""
 
-#: templates/orb/toolkits/home.html:16
+#: templates/orb/toolkits/home.html:17
 msgid ""
-"\n"
 "The abundance of openly accessible health content—from eLearning courses and "
 "multimedia resources to guidance documents and research papers—presents a "
 "remarkable opportunity for teaching, learning, and\n"
@@ -3699,16 +3687,15 @@ msgid ""
 "framework with key steps and questions for consideration as well as"
 "\tactivity sheets and an illustrative as well as real-life case studies that "
 "will help a user in making informed decisions in the content\n"
-"adaptation process.\n"
+"adaptation process."
 msgstr ""
 
-#: templates/orb/toolkits/home.html:30
+#: templates/orb/toolkits/home.html:29
 msgid "Community Health Framework"
 msgstr "Marco de salud comunitaria"
 
-#: templates/orb/toolkits/home.html:33
+#: templates/orb/toolkits/home.html:32
 msgid ""
-"\n"
 "The Community Health Framework assists non-technical audiences in "
 "understanding community health and how it can be strengthened. An"
 "\tinteractive power point, published under a Creative Commons license, it\n"
@@ -3716,10 +3703,10 @@ msgid ""
 "actors and structures (formal and informal) working together to ensure that "
 "each has the agency, access, and resources to\n"
 "ensure the health of community members. It also includes a Toolkit with"
-"\tmodels and case studies as examples of good practice.\n"
+"\tmodels and case studies as examples of good practice."
 msgstr ""
 
-#: templates/orb/toolkits/home.html:40
+#: templates/orb/toolkits/home.html:37
 msgid ""
 "Download the <a href=\"http://mpoweringhealth.org/wp-content/uploads/2015/11/"
 "USAID-Community-Health-Framework_Version-1-0_October-28th-2015.pdf\">PDF "
@@ -3729,48 +3716,48 @@ msgid ""
 "a> [7.7 Mb]"
 msgstr ""
 
-#: templates/orb/toolkits/home.html:46
+#: templates/orb/toolkits/home.html:43
 msgid "Principles for Digital Development"
 msgstr "Principios para el desarrollo digital"
 
-#: templates/orb/toolkits/home.html:48
+#: templates/orb/toolkits/home.html:46
 msgid ""
-"\n"
-"<p>The Principles for Digital Development (in English, Español,\n"
-"\tFrançais, or Português) find their roots in the efforts of individuals,\n"
-"\tdevelopment organizations, and donors alike who have called for a more\n"
-"\tconcerted effort by donors and implementing partners to\n"
-"\tinstitutionalize lessons learned in the use of information and\n"
-"\tcommunication technologies (ICTs) in development projects. They were\n"
-"\twritten by and for international development donors and their\n"
-"\timplementing partners, but are freely available for use by all. The\n"
-"\tPrinciples are intended to serve as guidance rather than edict, and to\n"
-"\tbe updated and refined over time.</p>\n"
+"The Principles for Digital Development (in English, Español, Français, or "
+"Português) find their roots in the efforts of individuals, development "
+"organizations, and donors alike who have called for a more\n"
+"concerted effort by donors and implementing partners to\tinstitutionalize "
+"lessons learned in the use of information and communication technologies "
+"(ICTs) in development projects. They were\twritten by and \n"
+"for international development donors and their implementing partners, but "
+"are freely available for use by all. ThePrinciples are intended to serve as "
+"guidance rather than edict, and to be updated and \n"
+"refined over time."
 msgstr ""
 
-#: templates/orb/toolkits/home.html:65
+#: templates/orb/toolkits/home.html:56
 msgid ""
 "Financing Framework to End Preventable Child and Maternal Deaths (EPCMD)"
 msgstr ""
 "Marco de financiación para erradicar muertes infantiles y maternas "
 "prevenibles (End Preventable Child and Maternal Deaths, EPCMD)"
 
-#: templates/orb/toolkits/home.html:67
+#: templates/orb/toolkits/home.html:58
 msgid ""
-"\n"
-"<p>The U.S. Government is committed to achieving the once\n"
-"\tunimaginable goal of Ending Preventable Child and Maternal Deaths\n"
-"\t(EPCMD) by 2035. Achieving this goal in a sustainable fashion implies a\n"
-"\tgradual move toward solutions that mobilize both domestic and\n"
-"\tinternational resources, with the objective of putting developing\n"
-"\tcountry health systems on a trajectory toward financial sustainability.</"
-"p>\n"
-"\n"
-"<p>The Financing Framework is designed to outline ways in which\n"
-"\tadditional financial resources and tools can be utilized to support\n"
-"\tsustainability. The Framework draws on inspiration from best practices\n"
-"\tused throughout the U.S. Agency for International Development and with\n"
-"\tour health partners around the world.</p>\n"
+"The U.S. Government is committed to achieving the once unimaginable goal of "
+"Ending Preventable Child and Maternal Deaths (EPCMD) by 2035. Achieving this "
+"goal in a sustainable fashion implies a\n"
+"gradual move toward solutions that mobilize both domestic and international "
+"resources, with the objective of putting developing\tcountry health systems "
+"on a trajectory toward financial sustainability."
+msgstr ""
+
+#: templates/orb/toolkits/home.html:62
+msgid ""
+"The Financing Framework is designed to outline ways in which\tadditional "
+"financial resources and tools can be utilized to support\tsustainability. "
+"The Framework draws on inspiration from best practices\n"
+"used throughout the U.S. Agency for International Development and with our "
+"health partners around the world."
 msgstr ""
 
 #: templates/search/opensearch.html:4
