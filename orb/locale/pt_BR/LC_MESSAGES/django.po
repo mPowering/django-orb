@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-02-04 20:53+0200\n"
+"POT-Creation-Date: 2017-03-07 12:52+0200\n"
 "PO-Revision-Date: 2016-08-30 17:05+0200\n"
 "Last-Translator: Alex Little <alex@alexlittle.net>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Poedit 1.5.4\n"
 
-#: admin.py:14
+#: admin.py:16
 msgid "is reviewer"
 msgstr ""
 
-#: admin.py:19
+#: admin.py:21
 msgid "Yes"
 msgstr ""
 
-#: admin.py:20
+#: admin.py:22
 msgid "No"
 msgstr ""
 
@@ -59,11 +59,11 @@ msgid "Please supply a string to search for"
 msgstr ""
 
 #: api/error_codes.py:38
-msgid "No resource specfified"
+msgid "No resource specified"
 msgstr ""
 
 #: api/error_codes.py:39
-msgid "No tag specfified"
+msgid "No tag specified"
 msgstr ""
 
 #: api/error_codes.py:40
@@ -300,367 +300,367 @@ msgstr ""
 msgid "Submit"
 msgstr ""
 
-#: models.py:57
+#: models.py:60
 msgid "Rejected"
 msgstr ""
 
-#: models.py:58 models.py:59
+#: models.py:61 models.py:62
 msgid "Pending"
 msgstr ""
 
-#: models.py:60
+#: models.py:63
 msgid "Approved"
 msgstr ""
 
-#: models.py:68
+#: models.py:71
 msgid "Mins"
 msgstr ""
 
-#: models.py:69
+#: models.py:72
 msgid "Hours"
 msgstr ""
 
-#: models.py:70
+#: models.py:73
 msgid "Days"
 msgstr ""
 
-#: models.py:71
+#: models.py:74
 msgid "Weeks"
 msgstr ""
 
-#: models.py:91
+#: models.py:94
 msgid "Original resource URL."
 msgstr ""
 
-#: models.py:93
+#: models.py:96
 msgid "Name of the source ORB instance where resource was sourced."
 msgstr ""
 
-#: models.py:95
+#: models.py:98
 msgid "Host URL of the original ORB instance where resource was sourced."
 msgstr ""
 
-#: models.py:97
+#: models.py:100
 msgid "The peer ORB from which the resource was downloaded."
 msgstr ""
 
-#: models.py:106 templates/orb/analytics/resource.html:60
+#: models.py:109 templates/orb/analytics/resource.html:60
 #: templates/orb/analytics/tag.html:65 templates/orb/analytics/tag.html:94
 msgid "Resource"
 msgstr ""
 
-#: models.py:107 templates/orb/analytics/tag.html:53
+#: models.py:110 templates/orb/analytics/tag.html:53
 #: templates/orb/analytics/tag.html:87
 msgid "Resources"
 msgstr ""
 
-#: models.py:429
+#: models.py:431
 msgid "is translation of"
 msgstr ""
 
-#: models.py:430
+#: models.py:432
 msgid "is derivative of"
 msgstr ""
 
-#: models.py:431
+#: models.py:433
 msgid "is contained in"
 msgstr ""
 
-#: models.py:448
+#: models.py:450
 msgid "Quality Assurance"
 msgstr ""
 
-#: models.py:449
+#: models.py:451
 msgid "Value for Frontline Health Workers (FLHW)"
 msgstr ""
 
-#: models.py:450
+#: models.py:452
 msgid "Video resources"
 msgstr ""
 
-#: models.py:451
+#: models.py:453
 msgid "Animation resources"
 msgstr ""
 
-#: models.py:452
+#: models.py:454
 msgid "Audio resources"
 msgstr ""
 
-#: models.py:453
+#: models.py:455
 msgid "Text based resources"
 msgstr ""
 
-#: models.py:460 models.py:463
+#: models.py:462 models.py:465
 msgid "deprecated"
 msgstr ""
 
-#: models.py:468
+#: models.py:470
 msgid ""
 "Used to show specific criteria to reviewers based on their role. Leave blank "
 "if criterion applies generally."
 msgstr ""
 
-#: models.py:477 views.py:400
+#: models.py:479 views.py:389
 msgid "General"
 msgstr ""
 
-#: models.py:484
+#: models.py:486
 msgid "resource criterion"
 msgstr ""
 
-#: models.py:485
+#: models.py:487
 msgid "resource criteria"
 msgstr ""
 
-#: models.py:495
+#: models.py:497
 msgid "Category"
 msgstr ""
 
-#: models.py:496
+#: models.py:498
 msgid "Categories"
 msgstr ""
 
-#: models.py:528
+#: models.py:530
 msgid "Tag"
 msgstr ""
 
-#: models.py:529 templates/orb/email/link_checker_results.html:18
+#: models.py:531 templates/orb/email/link_checker_results.html:18
 #: templates/orb/email/link_checker_results.txt:16
 msgid "Tags"
 msgstr ""
 
-#: models.py:563
+#: models.py:566
 msgid "Tag property"
 msgstr ""
 
-#: models.py:564
+#: models.py:567
 msgid "Tag properties"
 msgstr ""
 
-#: models.py:631
+#: models.py:634
 msgid "under 18"
 msgstr ""
 
-#: models.py:632
+#: models.py:635
 msgid "18-24"
 msgstr ""
 
-#: models.py:633
+#: models.py:636
 msgid "25-34"
 msgstr ""
 
-#: models.py:634
+#: models.py:637
 msgid "35-50"
 msgstr ""
 
-#: models.py:635
+#: models.py:638
 msgid "over 50"
 msgstr ""
 
-#: models.py:636 models.py:641
+#: models.py:639 models.py:644
 msgid "Prefer not to say"
 msgstr ""
 
-#: models.py:639
+#: models.py:642
 msgid "Female"
 msgstr ""
 
-#: models.py:640
+#: models.py:643
 msgid "Male"
 msgstr ""
 
-#: models.py:673
+#: models.py:676
 msgid "user profile"
 msgstr ""
 
-#: models.py:674
+#: models.py:677
 msgid "user profiles"
 msgstr ""
 
-#: models.py:701 models.py:754 templates/orb/analytics/tag.html:105
+#: models.py:700 models.py:753 templates/orb/analytics/tag.html:105
 msgid "View"
 msgstr ""
 
-#: models.py:702
+#: models.py:701
 msgid "View-api"
 msgstr ""
 
-#: models.py:703 templates/orb/analytics/tag.html:106
-#: templates/orb/profile/view.html:83 views.py:169
+#: models.py:702 templates/orb/analytics/tag.html:106
+#: templates/orb/profile/view.html:83 views.py:158
 msgid "Edit"
 msgstr ""
 
-#: models.py:704 templates/orb/resource/view.html:180
+#: models.py:703 templates/orb/resource/view.html:180
 #: templates/orb/resource/view.html:185
 msgid "Download"
 msgstr ""
 
-#: models.py:705
+#: models.py:704
 msgid "Create"
 msgstr ""
 
-#: models.py:733
+#: models.py:732
 msgid "search"
 msgstr ""
 
-#: models.py:734
+#: models.py:733
 msgid "search-api"
 msgstr ""
 
-#: models.py:735
+#: models.py:734
 msgid "search-adv"
 msgstr ""
 
-#: models.py:755
+#: models.py:754
 msgid "View-API"
 msgstr ""
 
-#: models.py:756
+#: models.py:755
 msgid "View-URL"
 msgstr ""
 
-#: models.py:781
+#: models.py:780
 msgid "Public"
 msgstr ""
 
-#: models.py:782
+#: models.py:781
 msgid "Private"
 msgstr ""
 
-#: models.py:793
+#: models.py:792
 msgid "Collection"
 msgstr ""
 
-#: models.py:794 templates/orb/resource/view.html:236
+#: models.py:793 templates/orb/resource/view.html:236
 msgid "Collections"
 msgstr ""
 
-#: models.py:812
+#: models.py:811
 msgid "Collection user"
 msgstr ""
 
-#: models.py:813
+#: models.py:812
 msgid "Collection users"
 msgstr ""
 
-#: models.py:823
+#: models.py:822
 msgid "Collection resource"
 msgstr ""
 
-#: models.py:824
+#: models.py:823
 msgid "Collection resources"
 msgstr ""
 
-#: models.py:835
+#: models.py:834
 msgid "Medical"
 msgstr ""
 
-#: models.py:836
+#: models.py:835
 msgid "Technical"
 msgstr ""
 
-#: models.py:837
+#: models.py:836
 msgid "Training"
 msgstr ""
 
-#: partners/OnemCHW/models.py:23 partners/OnemCHW/models.py:24
-msgid "CountryData"
+#: peers/tasks.py:17
+msgid "Peer Sync Complete"
 msgstr ""
 
-#: profiles/forms.py:20 profiles/forms.py:64
+#: profiles/forms.py:20 profiles/forms.py:67
 msgid "Please enter a username."
 msgstr ""
 
-#: profiles/forms.py:24 profiles/forms.py:72
-msgid "Please enter a password."
-msgstr ""
-
-#: profiles/forms.py:26
-msgid "Please note that your username and password are case-sensitive."
-msgstr ""
-
-#: profiles/forms.py:41 profiles/views.py:45 templates/includes/header.html:89
-msgid "Login"
-msgstr ""
-
-#: profiles/forms.py:44
-msgid "Forgotten password?"
-msgstr ""
-
-#: profiles/forms.py:57
-msgid "Invalid username or password. Please try again."
-msgstr ""
-
-#: profiles/forms.py:65
+#: profiles/forms.py:21 profiles/forms.py:68
 msgid "Username"
 msgstr ""
 
-#: profiles/forms.py:67 profiles/forms.py:235
-msgid "Please enter a valid e-mail address."
+#: profiles/forms.py:26 profiles/forms.py:75
+msgid "Please enter a password."
 msgstr ""
 
-#: profiles/forms.py:68
-msgid "Please enter your e-mail address."
-msgstr ""
-
-#: profiles/forms.py:70
-msgid "Email"
-msgstr ""
-
-#: profiles/forms.py:73
-msgid "Your password should be at least 6 characters long."
-msgstr ""
-
-#: profiles/forms.py:76
+#: profiles/forms.py:28 profiles/forms.py:79
 msgid "Password"
 msgstr ""
 
-#: profiles/forms.py:79
-msgid "Please enter your password again."
+#: profiles/forms.py:29
+msgid "Please note that your username and password are case-sensitive."
 msgstr ""
 
-#: profiles/forms.py:80
-msgid "Your password again should be at least 6 characters long."
+#: profiles/forms.py:44 profiles/views.py:45 templates/includes/header.html:89
+msgid "Login"
+msgstr ""
+
+#: profiles/forms.py:47
+msgid "Forgotten password?"
+msgstr ""
+
+#: profiles/forms.py:60
+msgid "Invalid username or password. Please try again."
+msgstr ""
+
+#: profiles/forms.py:70 profiles/forms.py:238
+msgid "Please enter a valid e-mail address."
+msgstr ""
+
+#: profiles/forms.py:71
+msgid "Please enter your e-mail address."
+msgstr ""
+
+#: profiles/forms.py:73
+msgid "Email"
+msgstr ""
+
+#: profiles/forms.py:76
+msgid "Your password should be at least 6 characters long."
 msgstr ""
 
 #: profiles/forms.py:82
-msgid "Password again"
+msgid "Please enter your password again."
 msgstr ""
 
-#: profiles/forms.py:84
-msgid "Please enter your first name."
+#: profiles/forms.py:83
+msgid "Your password again should be at least 6 characters long."
 msgstr ""
 
 #: profiles/forms.py:85
-msgid "Your first name should be at least 2 characters long."
+msgid "Password again"
+msgstr ""
+
+#: profiles/forms.py:87
+msgid "Please enter your first name."
 msgstr ""
 
 #: profiles/forms.py:88
-msgid "First name"
-msgstr ""
-
-#: profiles/forms.py:90
-msgid "Please enter your last name."
+msgid "Your first name should be at least 2 characters long."
 msgstr ""
 
 #: profiles/forms.py:91
-msgid "Your last name should be at least 2 characters long."
+msgid "First name"
+msgstr ""
+
+#: profiles/forms.py:93
+msgid "Please enter your last name."
 msgstr ""
 
 #: profiles/forms.py:94
+msgid "Your last name should be at least 2 characters long."
+msgstr ""
+
+#: profiles/forms.py:97
 msgid "Last name"
 msgstr ""
 
-#: profiles/forms.py:97 profiles/forms.py:256
+#: profiles/forms.py:100 profiles/forms.py:259
 msgid "Please select from the options above, or enter in the field below:"
 msgstr ""
 
-#: profiles/forms.py:98 templates/orb/profile/view.html:25
+#: profiles/forms.py:101 templates/orb/profile/view.html:25
 #: templates/orb/review/review_list.html:21
 msgid "Role"
 msgstr ""
 
-#: profiles/forms.py:104 templates/orb/analytics/home.html:102
+#: profiles/forms.py:107 templates/orb/analytics/home.html:102
 #: templates/orb/analytics/home.html:147 templates/orb/analytics/review.html:20
 #: templates/orb/analytics/review.html:58 templates/orb/profile/view.html:40
 #: templates/orb/review/review_list.html:57
@@ -669,98 +669,98 @@ msgstr ""
 msgid "Organisation"
 msgstr ""
 
-#: profiles/forms.py:107 profiles/forms.py:182 profiles/forms.py:264
+#: profiles/forms.py:110 profiles/forms.py:185 profiles/forms.py:267
 msgid "Please select an age range"
 msgstr ""
 
-#: profiles/forms.py:108
+#: profiles/forms.py:111
 msgid "Age Range"
 msgstr ""
 
-#: profiles/forms.py:111 profiles/forms.py:186 profiles/forms.py:268
+#: profiles/forms.py:114 profiles/forms.py:189 profiles/forms.py:271
 msgid "Please select a gender"
 msgstr ""
 
-#: profiles/forms.py:112
+#: profiles/forms.py:115
 msgid "Gender"
 msgstr ""
 
-#: profiles/forms.py:115
+#: profiles/forms.py:118
 msgid ""
 "Please tick the box to confirm that you have read the <a href='/terms/' "
 "target='_blank' class='prominent'>terms</a> about registering with ORB"
 msgstr ""
 
-#: profiles/forms.py:117
+#: profiles/forms.py:120
 msgid "Please tick the box to confirm that you have read the terms"
 msgstr ""
 
-#: profiles/forms.py:119
+#: profiles/forms.py:122
 msgid "Subscribe to mPowering update emails"
 msgstr ""
 
-#: profiles/forms.py:144 profiles/views.py:108
+#: profiles/forms.py:147 profiles/views.py:108
 #: templates/includes/header.html:90
 msgid "Register"
 msgstr ""
 
-#: profiles/forms.py:161
+#: profiles/forms.py:164
 msgid "Username has already been registered, please select another."
 msgstr ""
 
-#: profiles/forms.py:167
+#: profiles/forms.py:170
 msgid "Email has already been registered"
 msgstr ""
 
-#: profiles/forms.py:172 profiles/forms.py:332
+#: profiles/forms.py:175 profiles/forms.py:336
 msgid "Passwords do not match."
 msgstr ""
 
-#: profiles/forms.py:178
+#: profiles/forms.py:181
 msgid "Please select or enter a role"
 msgstr ""
 
-#: profiles/forms.py:195
+#: profiles/forms.py:198
 msgid "Please enter a username or email address."
 msgstr ""
 
-#: profiles/forms.py:209 profiles/views.py:130
+#: profiles/forms.py:212 profiles/views.py:130
 msgid "Reset password"
 msgstr ""
 
-#: profiles/forms.py:224
+#: profiles/forms.py:227
 msgid "Username/email not found"
 msgstr ""
 
-#: profiles/forms.py:230
+#: profiles/forms.py:233
 msgid "You cannot edit your API Key."
 msgstr ""
 
-#: profiles/forms.py:232
+#: profiles/forms.py:235
 msgid "You cannot edit your username."
 msgstr ""
 
-#: profiles/forms.py:240
+#: profiles/forms.py:243
 msgid "Your new password should be at least 6 characters long"
 msgstr ""
 
-#: profiles/forms.py:270
+#: profiles/forms.py:273
 msgid "Please tick the box to subscribe to mPowering update emails"
 msgstr ""
 
-#: profiles/forms.py:303
+#: profiles/forms.py:307
 msgid "Change password"
 msgstr ""
 
-#: profiles/forms.py:308
+#: profiles/forms.py:312
 msgid "API Key"
 msgstr ""
 
-#: profiles/forms.py:312
+#: profiles/forms.py:316
 msgid "Save"
 msgstr ""
 
-#: profiles/forms.py:325
+#: profiles/forms.py:329
 msgid "Email address already in use"
 msgstr ""
 
@@ -794,13 +794,13 @@ msgstr ""
 
 #: review/forms.py:113 review/forms.py:224
 #: templates/orb/analytics/home.html:123 templates/orb/analytics/home.html:166
-#: templates/orb/analytics/review.html:75 views.py:186
+#: templates/orb/analytics/review.html:75 views.py:175
 msgid "Approve"
 msgstr ""
 
 #: review/forms.py:115 review/forms.py:226
 #: templates/orb/analytics/home.html:125 templates/orb/analytics/home.html:168
-#: templates/orb/analytics/review.html:76 views.py:181
+#: templates/orb/analytics/review.html:76 views.py:170
 msgid "Reject"
 msgstr ""
 
@@ -922,7 +922,7 @@ msgid ""
 "server administrator.</p>\n"
 msgstr ""
 
-#: templates/base.html:6 templates/orb/home.html:5 views.py:52
+#: templates/base.html:6 templates/orb/home.html:5 views.py:50
 msgid "ORB by mPowering"
 msgstr ""
 
@@ -1261,7 +1261,7 @@ msgstr ""
 #: templates/orb/review/review_list.html:19
 #: templates/orb/review/review_list.html:56
 #: templates/orb/review/review_list.html:118
-#: templates/orb/review/user_review_list.html:17 views.py:76
+#: templates/orb/review/user_review_list.html:17 views.py:74
 msgid "Title"
 msgstr ""
 
@@ -1600,6 +1600,30 @@ msgid ""
 "\tInformation on how to use the ORB platform API can be found in our <a\n"
 "\t\thref=\"http://mpowering.readthedocs.org/\">documentation site</a>\n"
 "</p>\n"
+"\n"
+msgstr ""
+
+#: templates/orb/email/api_resources_updated.html:2
+#, python-format
+msgid ""
+"\n"
+"<p> The %(peer)s ORB sync successfully resulted in:</p>\n"
+"\n"
+"<ul>\n"
+"    <li>%(new_resources)s new resources require review</li>\n"
+"    <li>%(updated_resources)s updated resources</li>\n"
+"</ul>\n"
+"\n"
+msgstr ""
+
+#: templates/orb/email/api_resources_updated.txt:2
+#, python-format
+msgid ""
+"\n"
+"The %(peer)s ORB sync successfully resulted in:\n"
+"\n"
+"    - %(new_resources)s new resources require review\n"
+"    - %(updated_resources)s updated resources\n"
 "\n"
 msgstr ""
 
@@ -2046,34 +2070,6 @@ msgid ""
 "\t\tus</a>.\n"
 "</p>\n"
 "\n"
-msgstr ""
-
-#: templates/orb/includes/country_key_facts.html:5
-msgid "Key Facts"
-msgstr ""
-
-#: templates/orb/includes/country_key_facts.html:7
-msgid "Population"
-msgstr ""
-
-#: templates/orb/includes/country_key_facts.html:8
-msgid "census"
-msgstr ""
-
-#: templates/orb/includes/country_key_facts.html:9
-msgid "Number of women in childbearing age"
-msgstr ""
-
-#: templates/orb/includes/country_key_facts.html:16
-msgid "Number of children under 5"
-msgstr ""
-
-#: templates/orb/includes/country_key_facts.html:23
-msgid "Total Fertility Rate"
-msgstr ""
-
-#: templates/orb/includes/country_key_facts.html:26
-msgid "Under 5 Mortality"
 msgstr ""
 
 #: templates/orb/includes/page_navigator.html:7
@@ -2628,7 +2624,7 @@ msgstr ""
 msgid "No resources assigned for your review"
 msgstr ""
 
-#: templates/orb/search.html:13 templates/orb/tag.html:70
+#: templates/orb/search.html:13 templates/orb/tag.html:68
 msgid "Advanced search & filter"
 msgstr ""
 
@@ -2665,15 +2661,15 @@ msgstr ""
 msgid "Email:"
 msgstr ""
 
-#: templates/orb/tag.html:59
+#: templates/orb/tag.html:57
 msgid "Order by: "
 msgstr ""
 
-#: templates/orb/tag.html:84
+#: templates/orb/tag.html:82
 msgid "There are no resources tagged with "
 msgstr ""
 
-#: templates/orb/tag.html:88
+#: templates/orb/tag.html:86
 #, python-format
 msgid ""
 "\n"
@@ -2901,28 +2897,28 @@ msgstr ""
 msgid "ORB by mPowering - Search"
 msgstr ""
 
-#: views.py:75
+#: views.py:73
 msgid "Create date"
 msgstr ""
 
-#: views.py:77
+#: views.py:75
 msgid "Rating"
 msgstr ""
 
-#: views.py:78
+#: views.py:76
 msgid "Update date"
 msgstr ""
 
-#: views.py:163
+#: views.py:152
 msgid ""
 "This resource is not yet approved by the ORB Content Review Team, so is not "
 "yet available for all users to view"
 msgstr ""
 
-#: views.py:176
+#: views.py:165
 msgid "Send to MEP"
 msgstr ""
 
-#: views.py:224 views.py:284 views.py:625
+#: views.py:213 views.py:273 views.py:614
 msgid "You need to be logged in to add a resource."
 msgstr ""

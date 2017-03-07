@@ -18,11 +18,14 @@ class LoginForm(forms.Form):
     username = forms.CharField(max_length=30,
                                error_messages={'required': _(
                                    u'Please enter a username.')},
+                               label=_(u'Username'),
+                               required=True,
                                )
     password = forms.CharField(widget=forms.PasswordInput,
                                error_messages={'required': _(
                                    u'Please enter a password.'), },
                                required=True,
+                               label=_(u'Password'),
                                help_text=_('Please note that your username and password are case-sensitive.'),)
     next = forms.CharField(widget=forms.HiddenInput())
 
