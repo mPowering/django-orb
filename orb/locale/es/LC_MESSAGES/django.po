@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ORBv1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-07 12:52+0200\n"
-"PO-Revision-Date: 2017-03-07 13:08+0200\n"
+"POT-Creation-Date: 2017-03-07 13:44+0200\n"
+"PO-Revision-Date: 2017-03-07 13:44+0200\n"
 "Last-Translator: Alex Little <alex@alexlittle.net>\n"
 "Language-Team: Spanish (https://www.transifex.com/bennylope/teams/64448/"
 "es/)\n"
@@ -3144,6 +3144,10 @@ msgstr "Estado actualizado"
 msgid "Bookmarked"
 msgstr "Marcado"
 
+#: templates/orb/resource/view.html:98
+msgid "From:"
+msgstr "De:"
+
 #: templates/orb/resource/view.html:153
 msgid "Your Rating"
 msgstr "Su calificación"
@@ -3188,6 +3192,21 @@ msgstr "Licencia"
 #: templates/orb/resource/view.html:303
 msgid "Attribution"
 msgstr "Atribución"
+
+#: templates/orb/resource/view.html:318
+#, python-format
+msgid ""
+"\n"
+"Resource uploaded by <a href=\"%(create_user_url)s\">%(create_first_name)s "
+"%(create_last_name)s</a> (%(create_date)s)\n"
+"and last updated by <a href=\"%(update_user_url)s\">%(update_first_name)s "
+"%(update_last_name)s</a> (%(update_date)s)\n"
+msgstr ""
+
+#: templates/orb/resource/view.html:325
+#, python-format
+msgid "Resource viewed %(no_hits)s times"
+msgstr ""
 
 #: templates/orb/review/_selected_review_criteria.html:2
 msgid "Selected Criteria"

@@ -95,7 +95,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 {% include "includes/messages.html" %}
 
 <p style="text-align:center">
-From:
+{% trans 'From:' %}
 {% for o in resource.get_organisations %}
 	<a href="{% url 'orb_tags' o.slug %}" property="cc:attributionName" rel="cc:attributionURL dct:creator">{{ o.name }} </a>
 {% endfor %}
@@ -310,11 +310,19 @@ From:
 </div> <!-- end CC div -->
 
 <hr/>
-<small>Resource uploaded by <a href="{% url 'profile_view' resource.create_user.id %}">{{ resource.create_user.first_name }} {{ resource.create_user.last_name }}</a> ({{ resource.create_date }})
-and last updated by <a href="{% url 'profile_view' resource.update_user.id %}">{{ resource.update_user.first_name }} {{ resource.update_user.last_name }}</a> ({{ resource.update_date }})</small>
+
+{% url 'profile_view' resource.create_user.id as create_user_url %}
+{% url 'profile_view' resource.update_user.id as update_user_url %}
+
+<small>
+{% blocktrans with resource.create_user.first_name as create_first_name and resource.create_user.last_name as create_last_name and resource.create_date as create_date and resource.update_user.first_name as update_first_name and resource.update_user.last_name as update_last_name and resource.update_date as update_date%}
+Resource uploaded by <a href="{{ create_user_url }}">{{ create_first_name }} {{ create_last_name }}</a> ({{ create_date }})
+and last updated by <a href="{{ update_user_url }}">{{ update_first_name }} {{ update_last_name }}</a> ({{ update_date }})
+{% endblocktrans %}
+</small>
 
 <hr/>
-<p>Resource viewed {{ resource.get_no_hits }} times </p>
+<p>{% blocktrans with resource.get_no_hits as no_hits %}Resource viewed {{ no_hits }} times{% endblocktrans %}</p>
 
 
 {% if options_menu %}
