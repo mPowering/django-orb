@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ORBv1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-07 13:44+0200\n"
-"PO-Revision-Date: 2017-03-07 13:44+0200\n"
+"POT-Creation-Date: 2017-03-07 13:58+0200\n"
+"PO-Revision-Date: 2017-03-07 13:58+0200\n"
 "Last-Translator: Alex Little <alex@alexlittle.net>\n"
 "Language-Team: Spanish (https://www.transifex.com/bennylope/teams/64448/"
 "es/)\n"
@@ -940,7 +940,7 @@ msgstr ""
 
 #: review/views.py:250
 msgid "The resource has already been rejected."
-msgstr "El correo electrónico ya se ha registrado"
+msgstr ""
 
 #: review/views.py:258
 msgid "There was an error starting the review."
@@ -3281,7 +3281,6 @@ msgstr ""
 #: templates/orb/review/review_list.html:158
 #: templates/orb/review/user_review_list.html:38
 #, fuzzy
-#| msgid "Preview"
 msgid "Review"
 msgstr "Vista preliminar"
 
@@ -3685,46 +3684,56 @@ msgid ""
 "Content for Different Audiences"
 msgstr ""
 
-#: templates/orb/toolkits/home.html:15
+#: templates/orb/toolkits/home.html:16
 msgid ""
 "\n"
-"<p>The abundance of openly accessible health content—from eLearning\n"
-"\tcourses and multimedia resources to guidance documents and research\n"
-"\tpapers—presents a remarkable opportunity for teaching, learning, and\n"
-"\tsharing. Open health content, however, is not sufficient by itself. It\n"
-"\tis important to provide it in the appropriate context and the language\n"
-"\tof the people who will use it. The Knowledge for Health (K4Health)\n"
-"\tproject developed this adaptation guide to expand the reach,\n"
-"\tusefulness, and use of evidence-based global health content,\n"
-"\tspecifically as it relates to family planning. The guide outlines a\n"
-"\tframework with key steps and questions for consideration as well as\n"
-"\tactivity sheets and an illustrative as well as real-life case studies\n"
-"\tthat will help a user in making informed decisions in the content\n"
-"\tadaptation process.</p>\n"
+"The abundance of openly accessible health content—from eLearning courses and "
+"multimedia resources to guidance documents and research papers—presents a "
+"remarkable opportunity for teaching, learning, and\n"
+"sharing. Open health content, however, is not sufficient by itself. It is "
+"important to provide it in the appropriate context and the language of the "
+"people who will use it. The Knowledge for Health \n"
+"(K4Health)project developed this adaptation guide to expand the reach, "
+"usefulness, and use of evidence-based global health content,\tspecifically "
+"as it relates to family planning. The guide outlines a\n"
+"framework with key steps and questions for consideration as well as"
+"\tactivity sheets and an illustrative as well as real-life case studies that "
+"will help a user in making informed decisions in the content\n"
+"adaptation process.\n"
 msgstr ""
 
-#: templates/orb/toolkits/home.html:36
+#: templates/orb/toolkits/home.html:30
 msgid "Community Health Framework"
 msgstr "Marco de salud comunitaria"
 
-#: templates/orb/toolkits/home.html:38
+#: templates/orb/toolkits/home.html:33
 msgid ""
 "\n"
-"<p>The Community Health Framework assists non-technical audiences in\n"
-"\tunderstanding community health and how it can be strengthened. An\n"
+"The Community Health Framework assists non-technical audiences in "
+"understanding community health and how it can be strengthened. An"
 "\tinteractive power point, published under a Creative Commons license, it\n"
-"\tdepicts the community health ecosystem as heath-specific and\n"
-"\thealth-enabling actors and structures (formal and informal) working\n"
-"\ttogether to ensure that each has the agency, access, and resources to\n"
-"\tensure the health of community members. It also includes a Toolkit with\n"
-"\tmodels and case studies as examples of good practice.</p>\n"
+"depicts the community health ecosystem as heath-specific and health-enabling "
+"actors and structures (formal and informal) working together to ensure that "
+"each has the agency, access, and resources to\n"
+"ensure the health of community members. It also includes a Toolkit with"
+"\tmodels and case studies as examples of good practice.\n"
 msgstr ""
 
-#: templates/orb/toolkits/home.html:55
+#: templates/orb/toolkits/home.html:40
+msgid ""
+"Download the <a href=\"http://mpoweringhealth.org/wp-content/uploads/2015/11/"
+"USAID-Community-Health-Framework_Version-1-0_October-28th-2015.pdf\">PDF "
+"version</a> [4.7 Mb] or \n"
+"\t\t\t<a href=\"http://mpoweringhealth.org/wp-content/uploads/2015/11/USAID-"
+"Community-Health-Framework_Version-1-0_October-28th-2015.pptx\">PPT version</"
+"a> [7.7 Mb]"
+msgstr ""
+
+#: templates/orb/toolkits/home.html:46
 msgid "Principles for Digital Development"
 msgstr "Principios para el desarrollo digital"
 
-#: templates/orb/toolkits/home.html:57
+#: templates/orb/toolkits/home.html:48
 msgid ""
 "\n"
 "<p>The Principles for Digital Development (in English, Español,\n"
@@ -3739,14 +3748,14 @@ msgid ""
 "\tbe updated and refined over time.</p>\n"
 msgstr ""
 
-#: templates/orb/toolkits/home.html:74
+#: templates/orb/toolkits/home.html:65
 msgid ""
 "Financing Framework to End Preventable Child and Maternal Deaths (EPCMD)"
 msgstr ""
 "Marco de financiación para erradicar muertes infantiles y maternas "
 "prevenibles (End Preventable Child and Maternal Deaths, EPCMD)"
 
-#: templates/orb/toolkits/home.html:76
+#: templates/orb/toolkits/home.html:67
 msgid ""
 "\n"
 "<p>The U.S. Government is committed to achieving the once\n"
