@@ -1,14 +1,15 @@
 {% load i18n %}
+{% load static %}
 
 {% for i in "xxxxx"%}
 	{% if forloop.counter <= user_rating %}
-		<img id="rating_{{forloop.counter}}" src="{{ STATIC_URL }}orb/images/star-full.png" 
+		<img id="rating_{{forloop.counter}}" src="{% static 'orb/images/star-full.png' %}" 
 			onmouseover="ratingOnHover({{forloop.counter}});" 
 			onmouseout="ratingOffHover({{forloop.counter}});"
 			class="rating-star"
 			onclick="rateResource({{forloop.counter}})"/>
 	{% else %}
-		<img id="rating_{{forloop.counter}}" src="{{ STATIC_URL }}orb/images/star-empty.png" 
+		<img id="rating_{{forloop.counter}}" src="{% static 'orb/images/star-empty.png' %}" 
 			onmouseover="ratingOnHover({{forloop.counter}});" 
 			onmouseout="ratingOffHover({{forloop.counter}});"
 			class="rating-star"

@@ -1,4 +1,4 @@
-{% load i18n %} {% load crispy_forms_tags %}
+{% load i18n %} {% load crispy_forms_tags %}{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,20 +24,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:image"
-          content="{{ BASE_URL }}{{ STATIC_URL }}orb/images/orb-embed-200px.png">
+          content="{{ BASE_URL }}{% static 'orb/images/orb-embed-200px.png' %}">
     <link rel="search" type="application/opensearchdescription+xml"
           href="{% url 'orb_opensearch' %}" title="Add ORB search">
     {% block extra_head_feed %}{% endblock extra_head_feed %}
 
     <!-- Bootstrap -->
     <link
-            href="{{ STATIC_URL }}orb/bootstrap-3.1.1/css/bootstrap.min.css"
+            href="{% static 'orb/bootstrap-3.1.1/css/bootstrap.min.css' %}"
             rel="stylesheet"/>
 
-    <link href="{{ STATIC_URL }}orb/style.css" rel="stylesheet"/>
+    <link href="{% static 'orb/style.css' %}" rel="stylesheet"/>
 
     <link rel="shortcut icon" type="image/png"
-          href="{{ STATIC_URL }}orb/images/icon-white.png"/>
+          href="{% static 'orb/images/icon-white.png' %}"/>
     {% block extra_styles %}{% endblock extra_styles %}
     {% block extra_scripts %}{% endblock extra_scripts %}
 </head>
@@ -86,8 +86,8 @@
         </div>
     </div>
 
-    <script src="{{ STATIC_URL }}orb/js/jquery-1.11.0.min.js"></script>
-    <script src="{{ STATIC_URL }}orb/bootstrap-3.1.1/js/bootstrap.min.js"></script>
+    <script src="{% static 'orb/js/jquery-1.11.0.min.js' %}"></script>
+    <script src="{% static 'orb/bootstrap-3.1.1/js/bootstrap.min.js' %}"></script>
     <script>$("#i18n").change(function() { this.form.submit(); });</script>
 
     <script>

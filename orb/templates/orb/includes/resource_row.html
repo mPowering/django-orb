@@ -1,5 +1,7 @@
 {% load i18n %} 
 {% load thumbnail %}
+{% load static %}
+
 <div class="row"> 
 	<div class="col-md-8">
 		<h4><a href="{% url 'orb_resource' resource.slug %}">{{ resource.title }}</a></h4>
@@ -7,9 +9,9 @@
 		{% if resource.get_rating.rating and resource.get_rating.count >= ORB_RESOURCE_MIN_RATINGS %}
 			<p>{% for i in "xxxxx"%}
 				{% if forloop.counter <= resource.get_rating.rating %}
-					<img src="{{ STATIC_URL }}orb/images/star-full-small.png"/>
+					<img src="{% static 'orb/images/star-full-small.png' %}"/>
 				{% else %}
-					<img src="{{ STATIC_URL }}orb/images/star-empty-small.png"/>
+					<img src="{% static 'orb/images/star-empty-small.png' %}"/>
 				{% endif %}
 			{% endfor %}</p>
 		{% endif %}
@@ -38,7 +40,7 @@
 			{% endfor %}
 			{% if resource.study_time_number  %}
 				<div class="resource-row-study-time" title="{% trans 'Study time: ' %}{{ resource.study_time_number }} {{ resource.study_time_unit }}">
-					<img src="{{ STATIC_URL }}orb/images/study_time_30x30.png" width="30" height="30" alt="{% trans 'Study time: ' %}{{ resource.study_time_number }} {{ resource.study_time_unit }}"/>
+					<img src="{% static 'orb/images/study_time_30x30.png' %}" width="30" height="30" alt="{% trans 'Study time: ' %}{{ resource.study_time_number }} {{ resource.study_time_unit }}"/>
 					<span>{{ resource.study_time_number }} {{ resource.study_time_unit }}</span>
 				</div>
 			{% endif %}

@@ -11,7 +11,7 @@ v2.3.0 - not yet released
 * 430: Add option in django admin to search/order by username - http://github.com/mPowering/django-orb/issues/issues/430
 * 428: Remove 1mCHW data - http://github.com/mPowering/django-orb/issues/issues/428
 * 445: Test peer to peer functionality end-to-end - https://github.com/mPowering/django-orb/issues/issues/445
-
+* 437: Update templates to use django 1.8 style of static files - https://github.com/mPowering/django-orb/issues/issues/437
 
 v2.2.2 - released 5 Dec 2016
 ---------------------------------

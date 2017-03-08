@@ -1,12 +1,13 @@
 {% load i18n %} 
 {% load thumbnail %}
+{% load static %}
 <div class="row"> 
 	<div class="col-md-2"  style="display: inline-block; vertical-align: middle; min-height:40px; padding-top:7px;">
 		{% for i in "xxxxx"%}
 			{% if forloop.counter <= rating.rating %}
-				<img src="{{ STATIC_URL }}orb/images/star-full-small.png"/>
+				<img src="{% static 'orb/images/star-full-small.png' %}"/>
 			{% else %}
-				<img src="{{ STATIC_URL }}orb/images/star-empty-small.png"/>
+				<img src="{% static 'orb/images/star-empty-small.png' %}"/>
 			{% endif %}
 		{% endfor %}
 		
