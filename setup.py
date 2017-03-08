@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-orb',
-    version='2.2.2',
+    version='2.3.0',
     packages=[
         'orb',
         'orb.analytics',
@@ -38,7 +38,7 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
     ],
     install_requires=[
-        "Django>=1.7,<1.8",
+        "Django==1.8.17",
         "django-tastypie>=0.11.0,<1.13.0",
         "django-tablib>=0.9.11,<4.0",
         "django-crispy-forms>=1.4.0,<2.0",
