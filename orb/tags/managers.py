@@ -7,15 +7,32 @@ from django.contrib.auth.models import AnonymousUser
 from orb.resources.managers import approved_queryset
 
 
+class TagQuerySet(models.QuerySet):
+
+    def public(self):
+        return self.filter(published=True)
+
+    def active(self):
+        return self.filter(resourcetag__isnull=False).distinct()
+
+    def top_level(self):
+        return self.filter(category__top_level=True, parent_tag=None).order_by('order_by')
+
+    def approved(self, user=None):
+        if user is None:
+            user = AnonymousUser()
+        return approved_queryset(self.active(), user, relation="resourcetag__resource__")
+
+
 class ActiveTagManager(models.Manager):
     """Manager for working only with tags with associated resources"""
 
     def get_queryset(self):
         return super(ActiveTagManager, self).get_queryset().filter(
-            resourcetag__isnull=False,
+            resourcetag__isnull=False, published=True,
         ).distinct()
 
-    def approved(self, user=None):
+    def approved(self, user=None, qs=None):
         """
         Queryset that includes only tags with resources viewable by given user
         based on approval state.
@@ -27,10 +44,14 @@ class ActiveTagManager(models.Manager):
             QuerySet: A queryset filtered by status and/or user
 
         """
-        qs = super(ActiveTagManager, self).get_queryset()
+        qs = qs or super(ActiveTagManager, self).get_queryset()
         if user is None:
             user = AnonymousUser()
         return approved_queryset(qs, user, relation="resourcetag__resource__")
+
+    def published(self):
+        qs = self.get_queryset().filter(published=True)
+        return self.approved(qs=qs)
 
 
 class ResourceTagManager(models.Manager):

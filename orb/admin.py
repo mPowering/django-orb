@@ -107,7 +107,7 @@ class SearchTrackerAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'external_url',
-                    'slug', 'parent_tag', 'order_by', 'image')
+                    'slug', 'published', 'parent_tag', 'order_by', 'image')
     search_fields = ['name', 'description']
     raw_id_fields = ('create_user', 'update_user', 'category', 'parent_tag')
 

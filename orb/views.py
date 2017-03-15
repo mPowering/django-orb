@@ -22,28 +22,16 @@ from orb.signals import (resource_viewed, resource_url_viewed, resource_file_vie
 
 def home_view(request):
     topics = []
-    tags = Tag.objects.filter(category__top_level=True,
-                              parent_tag=None).order_by('order_by')
-    for t in tags:
-        # get child tags
-        child_tags = Tag.objects.filter(parent_tag=t).values_list('id')
+    for tag in Tag.tags.public().top_level():
 
+        child_tags = tag.children.values_list('id')
         resource_count = Resource.objects.filter(status=Resource.APPROVED).filter(
-            Q(resourcetag__tag__pk__in=child_tags) | Q(resourcetag__tag=t)).distinct().count()
-        data = {}
-        data['resource_count'] = resource_count
-        data['tag'] = t
-        topics.append(data)
+            Q(resourcetag__tag__pk__in=child_tags) | Q(resourcetag__tag=tag)).distinct().count()
 
-    '''
-    data = {}
-    data['resource_count'] = 3
-    data['custom'] = True
-    data['url'] = reverse('orb_toolkits_home')
-    data['title'] = _(u'Toolkits')
-    data['image'] = 'toolkit.png'
-    topics.append(data)
-    '''
+        topics.append({
+            'resource_count': resource_count,
+            'tag': tag,
+        })
 
     return render(request, 'orb/home.html', {
         'topics': topics,
