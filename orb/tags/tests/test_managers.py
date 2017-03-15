@@ -41,16 +41,13 @@ class ActiveManagerTests(FixtureBase):
     The active manager only returns tags with associated resources
     """
     def test_default_manager(self):
-        self.assertEqual(Tag.objects.all().count(), 4)
         self.assertEqual(Tag.tags.all().count(), 4)
 
     def test_active_manager(self):
-        self.assertEqual(Tag.active.all().count(), 2)
         self.assertEqual(Tag.tags.public().active().count(), 2)
 
     def test_approved_method(self):
         """Approved method only returns tags with approved resources"""
-        self.assertEqual(Tag.active.approved().count(), 1)
         self.assertEqual(Tag.tags.approved().count(), 1)
 
 

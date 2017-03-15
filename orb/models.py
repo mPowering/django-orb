@@ -17,7 +17,7 @@ from orb.analytics.models import UserLocationVisualization
 from orb.profiles.querysets import ProfilesQueryset
 from orb.resources.managers import ResourceURLManager, ResourceQueryset
 from orb.review.queryset import CriteriaQueryset
-from orb.tags.managers import ActiveTagManager, ResourceTagManager, TagQuerySet
+from orb.tags.managers import ResourceTagManager, TagQuerySet
 from .fields import AutoSlugField
 
 models.signals.post_save.connect(create_api_key, sender=User)
@@ -524,8 +524,7 @@ class Tag(TimestampBase):
     published = models.BooleanField(default=True, help_text="Used to toggle status of health domains.")
 
     tags = TagQuerySet.as_manager()
-    objects = tags  # backwards compatability
-    active = ActiveTagManager()
+    objects = tags  # backwards compatibility
 
     class Meta:
         verbose_name = _('Tag')

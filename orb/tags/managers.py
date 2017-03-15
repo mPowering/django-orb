@@ -24,36 +24,6 @@ class TagQuerySet(models.QuerySet):
         return approved_queryset(self.active(), user, relation="resourcetag__resource__")
 
 
-class ActiveTagManager(models.Manager):
-    """Manager for working only with tags with associated resources"""
-
-    def get_queryset(self):
-        return super(ActiveTagManager, self).get_queryset().filter(
-            resourcetag__isnull=False, published=True,
-        ).distinct()
-
-    def approved(self, user=None, qs=None):
-        """
-        Queryset that includes only tags with resources viewable by given user
-        based on approval state.
-
-        Args:
-            user (auth.User): the user to check 'permission' against
-
-        Returns:
-            QuerySet: A queryset filtered by status and/or user
-
-        """
-        qs = qs or super(ActiveTagManager, self).get_queryset()
-        if user is None:
-            user = AnonymousUser()
-        return approved_queryset(qs, user, relation="resourcetag__resource__")
-
-    def published(self):
-        qs = self.get_queryset().filter(published=True)
-        return self.approved(qs=qs)
-
-
 class ResourceTagManager(models.Manager):
     """Manager for the ResourceTag linking model"""
 
