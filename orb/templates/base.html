@@ -88,7 +88,28 @@
 
     <script src="{% static 'orb/js/jquery-1.11.0.min.js' %}"></script>
     <script src="{% static 'orb/bootstrap-3.1.1/js/bootstrap.min.js' %}"></script>
-    <script>$("#i18n").change(function() { this.form.submit(); });</script>
+
+    <script>
+        $(".language-selection").click(function(e) {
+            e.preventDefault();
+            $.ajax({
+                url : "{% url 'set_language' %}",
+                type: "POST",
+                data : {
+                    csrfmiddlewaretoken: document.getElementsByName('csrfmiddlewaretoken')[0].value,
+                    language: $(this).data("code"),
+                    next: window.location.href
+                },
+                dataType : "json",
+                success: function(){
+                    location.reload();
+                },
+                error: function(){
+                    location.reload();
+                }
+            });
+        });
+    </script>
 
     <script>
         (function (i, s, o, g, r, a, m) {
