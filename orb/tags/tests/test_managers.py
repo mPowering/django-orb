@@ -20,9 +20,11 @@ class FixtureBase(TestCase):
         used_tag = tag_factory(user=cls.user)
         second_tag = tag_factory(user=cls.user)
         unused_tag = tag_factory(user=cls.user)  # noqa
+        non_public_tag = tag_factory(user=cls.user, published=False)
         ResourceTag.objects.create(create_user=cls.user, tag=used_tag, resource=resource)
         ResourceTag.objects.create(create_user=cls.user, tag=used_tag, resource=second_resource)
         ResourceTag.objects.create(create_user=cls.user, tag=second_tag, resource=second_resource)
+        ResourceTag.objects.create(create_user=cls.user, tag=non_public_tag, resource=second_resource)
 
     @classmethod
     def tearDownClass(cls):
@@ -39,14 +41,14 @@ class ActiveManagerTests(FixtureBase):
     The active manager only returns tags with associated resources
     """
     def test_default_manager(self):
-        self.assertEqual(Tag.objects.all().count(), 3)
+        self.assertEqual(Tag.tags.all().count(), 4)
 
     def test_active_manager(self):
-        self.assertEqual(Tag.active.all().count(), 2)
+        self.assertEqual(Tag.tags.public().active().count(), 2)
 
     def test_approved_method(self):
         """Approved method only returns tags with approved resources"""
-        self.assertEqual(Tag.active.approved().count(), 1)
+        self.assertEqual(Tag.tags.approved().count(), 1)
 
 
 class ResourceTagManagerTests(FixtureBase):
@@ -55,9 +57,9 @@ class ResourceTagManagerTests(FixtureBase):
     """
 
     def test_default_queryset(self):
-        self.assertEqual(ResourceTag.objects.all().count(), 3)
+        self.assertEqual(ResourceTag.objects.all().count(), 4)
 
     def test_approved_method(self):
         """Approved method only returns tags with approved resources"""
         self.assertEqual(ResourceTag.objects.approved().count(), 1)
-        self.assertEqual(ResourceTag.objects.approved(self.user).count(), 3)
+        self.assertEqual(ResourceTag.objects.approved(self.user).count(), 4)

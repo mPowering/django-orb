@@ -17,7 +17,7 @@ from orb.analytics.models import UserLocationVisualization
 from orb.profiles.querysets import ProfilesQueryset
 from orb.resources.managers import ResourceURLManager, ResourceQueryset
 from orb.review.queryset import CriteriaQueryset
-from orb.tags.managers import ActiveTagManager, ResourceTagManager
+from orb.tags.managers import ResourceTagManager, TagQuerySet
 from .fields import AutoSlugField
 
 models.signals.post_save.connect(create_api_key, sender=User)
@@ -509,7 +509,7 @@ class Category(models.Model):
 
 class Tag(TimestampBase):
     category = models.ForeignKey(Category)
-    parent_tag = models.ForeignKey('self', blank=True, null=True, default=None)
+    parent_tag = models.ForeignKey('self', blank=True, null=True, default=None, related_name="children")
     name = models.CharField(max_length=100)
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_create_user')
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_update_user')
@@ -521,10 +521,10 @@ class Tag(TimestampBase):
     description = models.TextField(blank=True, null=True, default=None)
     summary = models.CharField(blank=True, null=True, max_length=100)
     contact_email = models.CharField(blank=True, null=True, max_length=100)
+    published = models.BooleanField(default=True, help_text="Used to toggle status of health domains.")
 
-    tags = models.Manager()
-    objects = tags  # backwards compatability
-    active = ActiveTagManager()
+    tags = TagQuerySet.as_manager()
+    objects = tags  # backwards compatibility
 
     class Meta:
         verbose_name = _('Tag')
