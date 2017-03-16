@@ -12,6 +12,8 @@ v2.3.0 - not yet released
 * 428: Remove 1mCHW data - http://github.com/mPowering/django-orb/issues/issues/428
 * 445: Test peer to peer functionality end-to-end - https://github.com/mPowering/django-orb/issues/issues/445
 * 437: Update templates to use django 1.8 style of static files - https://github.com/mPowering/django-orb/issues/issues/437
+* 405: Allow health domains to be 'hidden' - https://github.com/mPowering/django-orb/issues/issues/405
+* 438: Update location of language selection in header for mobile - https://github.com/mPowering/django-orb/issues/issues/438
 
 v2.2.2 - released 5 Dec 2016
 ---------------------------------
