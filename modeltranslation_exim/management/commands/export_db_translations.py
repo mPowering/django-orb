@@ -63,7 +63,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         language = options.get('language', None)
         if language and language not in [i[0] for i in settings.LANGUAGES]:
-            raise CommandError(u"'{}' is not a valid language choice for this installation.".format(language))
+            raise CommandError(
+                u"'{}' is not one of the available language choices for this installation.".format(language))
 
         exported = DatabaseTranslations.from_paths(language, *args)
         exported.save()
