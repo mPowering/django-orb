@@ -8,6 +8,45 @@ import polib
 from django.apps import apps
 
 
+def translated_field_list(*args):
+    """
+    Generates a dictionary of translatable model fields associated with the model.
+
+    Models and fields can be specified in `args`, thus allowing for export even before
+    fields are set up as translatable. If none are provided, then modeltranslation's
+    `translator` instance is queried for the list of *all* models and fields that are
+    registered for translation.
+
+    Args:
+        *args: optional list of fields by dotted string path
+
+    Returns:
+        a defaultdict mapping translation models to translated field names
+
+    """
+    class_and_field = defaultdict(list)
+
+    if not args:
+        from modeltranslation.translator import translator
+        for model_class in translator.get_registered_models(abstract=False):
+            class_and_field[model_class] = translator.get_options_for_model(model_class).get_field_names()
+        return class_and_field
+
+    for dotted_path in args:
+        module_name, class_name, field_name = dotted_path.rsplit(".", 2)
+
+        module = importlib.import_module(module_name)
+
+        try:
+            model_class = getattr(module, class_name)
+        except AttributeError:
+            model_class = apps.get_model(module_name, class_name)
+
+        class_and_field[model_class].append(field_name)
+
+    return class_and_field
+
+
 class DatabaseTranslations(object):
     """
     Data interface for extracting values from model fields and exporting to a
@@ -60,38 +99,27 @@ class DatabaseTranslations(object):
             self.po.append(entry)
 
     @classmethod
-    def from_paths(cls, *args):
+    def from_paths(cls, language=None, *args):
         """
         Creates a new DatabaseTranslations instance from a sequence of
         module.Class.field_name paths.
 
         Args:
+            language: optional language code specifier, e.g. "en", "pt-br"
             *args: combined module, class, field name dotted paths
 
         Returns:
             a new DatabaseTranslations instance
 
         """
-        class_and_field = defaultdict(list)
-        for dotted_path in args:
-            module_name, class_name, field_name = dotted_path.rsplit(".", 2)
-
-            module = importlib.import_module(module_name)
-
-            try:
-                model_class = getattr(module, class_name)
-            except AttributeError:
-                model_class = apps.get_model(module_name, class_name)
-
-            class_and_field[model_class].append(field_name)
-
-        return DatabaseTranslations(class_and_field)
+        return DatabaseTranslations(translated_field_list(*args), language=language)
 
     def _untranslated(self):
         """
-        Makes no attempt to return existing translations
+        Builds a list of translation strings without any translation
 
         Returns:
+            None
 
         """
         for model_class in self.models_and_fields.keys():
@@ -109,20 +137,23 @@ class DatabaseTranslations(object):
 
     def _translated(self):
         """
+        Builds a list of translation strings using the instance's target_language
 
         Returns:
+            None
 
         """
+        # local import allows users w/o modeltranslations installed to build and export PO files
         from modeltranslation.utils import build_localized_fieldname
+
         for model_class in self.models_and_fields.keys():
             class_path = ".".join([model_class.__module__, model_class.__name__])
             for instance in model_class._default_manager.all():
                 for field_name in self.models_and_fields[model_class]:
-                    field_value = getattr(instance, field_name)
-                    msgstr = getattr(instance, build_localized_fieldname(field_name, self.target_language))
+                    field_value = getattr(instance, field_name) or ""
+                    msgstr = getattr(instance, build_localized_fieldname(field_name, self.target_language)) or ""
                     self.strings[field_value]['msgstr'] = msgstr
-                    self.strings[field_value]['occurrences'].append(
-                        (".".join([class_path, field_name]), instance.pk))
+                    self.strings[field_value]['occurrences'].append((".".join([class_path, field_name]), instance.pk))
 
     def _meta(self, **kwargs):
         """
