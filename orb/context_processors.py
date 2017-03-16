@@ -5,11 +5,8 @@ from orb.models import Category, Tag, TagOwner
 
 
 def get_menu(request):
-    categories = Category.objects.filter(top_level=True).order_by('order_by')
-    for c in categories:
-        c.tags = Tag.objects.filter(
-            category=c, parent_tag=None).order_by('order_by')
-
+    topics = Tag.tags.public().top_level()
+    
     if request.user.is_authenticated():
         tags = TagOwner.objects.filter(user=request.user)
     else:
@@ -24,7 +21,7 @@ def get_menu(request):
         reviewer = False
 
     return {
-        'header_menu_categories': categories,
+        'header_menu_categories': topics,
         'header_owns_tags': tags,
         'settings': settings,
         'reviewer': reviewer,
