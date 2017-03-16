@@ -154,7 +154,7 @@ class TestUpdateFromAPI(object):
     def test_doesnt_need_updating(self, test_resource, api_data):
         """Returns False if the api_data modification <= local creation"""
         test_data = deepcopy(api_data)
-        test_data['update_date'] = datetime(2010, 1, 1)
+        test_data['update_date'] = "{}".format(datetime(2010, 1, 1))
         test_resource.guid = test_data['guid']
         test_resource.is_local = lambda: False
         assert test_resource.update_from_api(test_data) is False
