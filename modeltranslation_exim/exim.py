@@ -2,10 +2,19 @@
 
 import importlib
 import sys
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 import polib
 from django.apps import apps
+
+
+class OrderedDefaultDict(OrderedDict, defaultdict):
+    """
+    A default dict that maintains the order of insertions
+    """
+    def __init__(self, default_factory=None, *args, **kwargs):
+        super(OrderedDefaultDict, self).__init__(*args, **kwargs)
+        self.default_factory = default_factory
 
 
 def translated_field_list(*args):
@@ -24,7 +33,7 @@ def translated_field_list(*args):
         a defaultdict mapping translation models to translated field names
 
     """
-    class_and_field = defaultdict(list)
+    class_and_field = OrderedDict()
 
     if not args:
         from modeltranslation.translator import translator
@@ -42,7 +51,10 @@ def translated_field_list(*args):
         except AttributeError:
             model_class = apps.get_model(module_name, class_name)
 
-        class_and_field[model_class].append(field_name)
+        try:
+            class_and_field[model_class].append(field_name)
+        except KeyError:
+            class_and_field[model_class] = [field_name]
 
     return class_and_field
 
@@ -85,7 +97,7 @@ class DatabaseTranslations(object):
 
         """
         self.models_and_fields = model_fields
-        self.strings = defaultdict(lambda: {"msgstr": u"", "occurrences": []})
+        self.strings = OrderedDefaultDict(lambda: {"msgstr": u"", "occurrences": []})
         self.target_language = language
         self.po = polib.POFile()
         self.po.metadata = self._meta()
@@ -124,7 +136,7 @@ class DatabaseTranslations(object):
         """
         for model_class in self.models_and_fields.keys():
             class_path = ".".join([model_class.__module__, model_class.__name__])
-            for instance in model_class._default_manager.all():
+            for instance in model_class._default_manager.all().order_by('pk'):
                 for field_name in self.models_and_fields[model_class]:
                     try:
                         field_value = polib.escape(getattr(instance, field_name))
@@ -132,8 +144,7 @@ class DatabaseTranslations(object):
                         continue
                     if not field_value:
                         continue
-                    self.strings[field_value]['occurrences'].append(
-                        (".".join([class_path, field_name]), instance.pk))
+                    self.strings[field_value]['occurrences'].append((".".join([class_path, field_name]), instance.pk))
 
     def _translated(self):
         """
@@ -148,7 +159,7 @@ class DatabaseTranslations(object):
 
         for model_class in self.models_and_fields.keys():
             class_path = ".".join([model_class.__module__, model_class.__name__])
-            for instance in model_class._default_manager.all():
+            for instance in model_class._default_manager.all().order_by('pk'):
                 for field_name in self.models_and_fields[model_class]:
                     field_value = getattr(instance, field_name) or ""
                     msgstr = getattr(instance, build_localized_fieldname(field_name, self.target_language)) or ""
