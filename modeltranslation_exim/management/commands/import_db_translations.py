@@ -23,31 +23,17 @@ value of 12, and also in the `title` field of the `OtherModel` model for
 primary key 12.
 
 """
-import importlib
-import polib
-from collections import defaultdict
 
-from django.apps import apps
-from django.core.management.base import BaseCommand, CommandError
 from optparse import make_option
+
+from django.core.management.base import BaseCommand, CommandError
 
 from modeltranslation_exim import POTranslations
 
 
 class Command(BaseCommand):
     """
-    Exports translatable database fields to a PO file format
-
-    By default it should only return PO files for languages that
-    are in the site LANGUAGES. To force an additional language
-    should require an optional flag.
-
-    This should also only optionally depend on modeltranslation
-    for export, as it may be the case that you want to export
-    database content before modeltranslation has been added.
-    To that end, importing the translator should be used if and
-    only if the model/field names have not been specified in the
-    command arguments.
+    Imports translations from a PO file into database translation fields
     """
     help = "Update database translations from specially formatted PO file"
     args = "<PO file path>"

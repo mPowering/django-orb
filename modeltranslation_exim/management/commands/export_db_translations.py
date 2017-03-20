@@ -24,7 +24,9 @@ primary key 12.
 
 """
 
-from django.core.management.base import BaseCommand
+from django.core.management.base import BaseCommand, CommandError
+from django.conf import settings
+from optparse import make_option
 
 from modeltranslation_exim import DatabaseTranslations
 
@@ -44,9 +46,25 @@ class Command(BaseCommand):
     only if the model/field names have not been specified in the
     command arguments.
     """
-    help = "Create a specially formatted PO file (stdout) from database fields"
+    help = ("Create a specially formatted PO file from database fields using stdout. "
+            "This may be used to return blank msgstrs or existing translations.")
+
     args = "<module.Class.field> <module.Class.field> ... "
 
+    option_list = BaseCommand.option_list + (
+        make_option('--language',
+            dest='language',
+            help=('Language code for target language, e.g. `pt-br` (optional). '
+                  'This will return existing translations, without specification it will return '
+                  'an blank msgstr values.'),
+        ),
+    )
+
     def handle(self, *args, **options):
-        exported = DatabaseTranslations.from_paths(*args)
+        language = options.get('language', None)
+        if language and language not in [i[0] for i in settings.LANGUAGES]:
+            raise CommandError(
+                u"'{}' is not one of the available language choices for this installation.".format(language))
+
+        exported = DatabaseTranslations.from_paths(language, *args)
         exported.save()
