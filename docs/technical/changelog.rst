@@ -14,6 +14,9 @@ v2.3.0 - not yet released
 * 437: Update templates to use django 1.8 style of static files - https://github.com/mPowering/django-orb/issues/issues/437
 * 405: Allow health domains to be 'hidden' - https://github.com/mPowering/django-orb/issues/issues/405
 * 438: Update location of language selection in header for mobile - https://github.com/mPowering/django-orb/issues/issues/438
+* 448: export_db_translations - allow specifiying the language - https://github.com/mPowering/django-orb/issues/issues/448
+* 449: Strategy for db translation updates - https://github.com/mPowering/django-orb/issues/issues/449
+
 
 v2.2.2 - released 5 Dec 2016
 ---------------------------------
