@@ -6,94 +6,77 @@
 
 {% block content %}
 
-<h2>{% trans 'How to use ORB resources' %}</h2>
+<h2>{% trans 'How to use ORB' %}</h2>
 
-<h3>{% trans 'Find Resources' %}</h3>
+<h3>{% trans 'Finding Resources on ORB' %}</h3>
 
 {% url 'orb_home' as orb_browse %}
 {% url 'orb_search' as orb_search %}
 {% url 'orb_tags_filter' as orb_filter %}
 {% url 'orb_cc_faq' as orb_cc_faq %}
 
-{% blocktrans with settings.ORB_INFO_EMAIL as email %}
-<p>The ORB platform gives you several methods to help find the right
-	content for you:</p>
-
-<ul>
-	<li><a href="{{ orb_home }}">Browsing</a></li>
-	<li><a href="{{ orb_search }}">Searching</a></li>
-	<li><a href="{{ orb_filter }}">Filtering</a></li>
-</ul>
-
-<p>All the resources are free to access and, and no registration
-	is required. When you're using the resources, and especially if
-	you're adapting them, remember to keep within the terms of the license
-	and include attribution. Every resource on ORB is openly licensed,
-	however some have restrictions on creating adaptations or translations.</p>
-
-<p>
-	For helpful resources on Creative Commons licenses, visit our <a href="{{ orb_cc_faq }}">FAQs on Creative 
-	Commons Licensing for Global Health Content</a>, or the <a href="http://creativecommons.org/">Creative Commons website</a>.</p>
-
-<p>Once you've found the resources you're looking for, each resource
-	will have at least one download or web link option. Use these to save
-	the resource onto your laptop or mobile device. You can use the resources for
-	your own self-study or simply integrate them into your training
-	program or workshop.</p>
-<p>Here are some ideas for how you could use the content in your training
-	program:</p>
-<ul>
-	<li>Copy the videos onto SD cards, to distribute to health workers
-		to watch on their mobile devices</li>
-	<li>Integrate the resources into a mobile learning or eLearning
-		training course</li>
-	<li>Use as teaching aids in classroom or in-person courses</li>
-	<li>Use the videos with community members to help reinforce health
-		messages (for example about handwashing, or breastfeeding)</li>
-</ul>
-
-<p>Soon we'll be adding tools to the ORB platform to make it easy
-	for you to create mobile enabled training courses, using and adapting
-	the ORB resources.</p>
-	
-<p>For information about getting started with the Moodle elearning platform, 
-    please visit the <a href="http://docs.moodle.org/en/Getting_started_for_teachers">Moodle documentation site</a>.</p>
-
-<p>
-	We'd love to hear from you about how you've used the ORB resources. If
-	you have a story to share, please <a
-		href="mailto:{{ email }}">contact us</a>.
-</p>
+{% blocktrans %}
+<p>The ORB platform gives you several methods to help find the right content for you - <a href="{{ orb_home }}">browsing</a>, <a href="{{ orb_search }}">searching</a> and 
+   <a href="{{ orb_filter }}">filtering</a>. Watch our video on how to use each of these:</p>
 {% endblocktrans %}
 
-<h3>{% trans 'Submit Resources' %}</h3>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Wg4f1OcHr04" frameborder="0" allowfullscreen></iframe>
+
+{% blocktrans %}
+<p>All the resources are free to access. Registration is not required, but it does allow you to bookmark, rate, and contribute resources. Every resource on ORB is openly 
+	licensed, however some have restrictions on creating adaptations or translations. When you're using the resources, and especially if you're adapting them, remember to 
+	keep within the terms of the license and include attribution to the author. </p>
+
+{% endblocktrans %}
+
+
+<h3>{% trans 'Using Resources on ORB' %}</h3>
+
+{% blocktrans with settings.ORB_INFO_EMAIL as email %}
+<p>Once you've found the resources you're looking for, each resource will have at least one download or web link option. Use these to save the resource onto your laptop or 
+   mobile device. You can use the resources for your own study or integrate them into a  training program or workshop.</p>
+
+<p>Here are some ideas for how you could use the content in your training program:</p>
+
+<ul>
+<li>Copy the videos onto SD cards, to distribute to health workers to watch on their mobile devices</li>
+<li>Integrate the resources into a mobile learning or eLearning training courses</li>
+<li>Use as teaching aids in classroom or in-person courses</li>
+<li>Use the videos with community members to help reinforce health messages (for example about handwashing, or breastfeeding)</li>
+</ul>
+
+<p>You can also use ORB resources to create a structured, mobile-enabled training course. The <a href="http://open-deliver.org">Open Deliver</a> process can help you select, structure, 
+   and deliver mobile content to health workers.</p> 
+
+<p>We'd love to hear from you about how you've used the ORB resources. If you have a story to share, <a href="mailto:{{ email }}">please contact us</a>.</p>
+{% endblocktrans %}
+
+
+<h3>{% trans 'Submitting Resources to ORB' %}</h3>
 
 {% url 'orb_resource_create' as orb_add %}
 {% url 'orb_guidelines' as orb_criteria %}
+{% url 'orb_cc_faq' as orb_cc_faq %}
 {% url 'orb_partners' as orb_partners %}
 
 {% blocktrans with settings.ORB_INFO_EMAIL as email %}
-<p>
-	If you have some great resources to share, please submit them to
-	the ORB platform. To submit a resource, you'll need to register
-	(simple and free), then use the <a href="{{ orb_add }}">Add
-		Resource</a> form to submit your resource.
-</p>
 
-<p>
-	All submitted resources must meet the <a href="{{ orb_criteria }}">ORB
-		Guidelines and Criteria</a> to be made available publically through the
-	platform.
-</p>
+<p>If you have some great resources to share, please submit them to ORB. This will help your work reach our global audience. You'll need to register (simple and free), then use the 
+ <a href="{{ orb_add }}">Add Resource</a> form to submit your resource. Watch our video for  more information about submitting resources to ORB:</p>
 
-<p>
-	If you have many resources to share, then consider becoming an <a
-		href="{{ orb_partners }}">ORB Content Partner</a>. ORB Content
-	Partners get extra benefits, such as access to the ORB API, a
-	customized organization page and usage and analytics reports for their
-	resources. For more information on how to become an ORB Content
-	partner, please <a href="mailto:{{ email }}">contact
-		us</a>.
-</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/P4AK_5NnyzM" frameborder="0" allowfullscreen></iframe>
 
-{% endblocktrans %} {% endblock content %}
+<p>All submitted resources must meet the <a href="{{ orb_guidelines }}">ORB Guidelines and Criteria</a> to be made available publically through the platform. In short, we’re looking for 
+   resources that are relevant to frontline health workers, clinically accurate, usable on a mobile device, and released under a Creative Commons or Public Domain license.</p>
+
+<p>For more into on Creative Commons licenses, visit our <a href="{{ orb_cc_faq }}">FAQs on Creative Commons Licensing for Global Health Content</a>, or watch our video on Creative 
+   Commons for Global Health:</p>
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/zbqq6Gg5g3U" frameborder="0" allowfullscreen></iframe>
+
+<p>If you have many resources to share, then consider becoming an <a href="{{ orb_partners }}">ORB Content Partner</a>. ORB Content Partners get extra benefits, such as access to the ORB API, a customized organization 
+   page and usage and analytics reports for their resources. For more information on how to become an ORB Content Partner,<a href="mailto:{{ email }}"> please contact us</a>.</p>
+
+{% endblocktrans %} 
+
+{% endblock content %}

@@ -8,7 +8,6 @@ urlpatterns = [
     url(r'^$', 'orb.views.home_view', name="orb_home"),
     url(r'^robots.txt$', TemplateView.as_view(template_name="orb/robots.txt")),
     url(r'^about/$', TemplateView.as_view(template_name="orb/about.html"), name="orb_about"),
-    url(r'^developers/$', TemplateView.as_view(template_name="orb/developers.html"), name="orb_developers"),
     url(r'^feed/$', LatestEntries(), name="orb_feed"),
     url(r'^how-to/$', TemplateView.as_view(template_name="orb/how_to.html"), name="orb_how_to"),
     url(r'^cc-faq/$', TemplateView.as_view(template_name="orb/cc-faq.html"), name="orb_cc_faq"),
