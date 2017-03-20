@@ -14,8 +14,4 @@ Contents:
    manage/index
    translation/language
    technical/code
-   technical/settings
-   technical/changelog
-   technical/virus
-   api/restapi
    opendeliver
