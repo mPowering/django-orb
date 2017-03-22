@@ -236,7 +236,7 @@ class Resource(TimestampBase):
         categories = Category.objects.filter(tag__resourcetag__resource=self).exclude(
             slug='license').distinct().order_by('order_by')
         for c in categories:
-            c.tags = Tag.objects.filter(resourcetag__resource=self, category=c)
+            c.tags = Tag.tags.filter(category=c).by_resource(self)
         return categories
 
     def get_category(self, category_slug):
@@ -261,29 +261,19 @@ class Resource(TimestampBase):
         return anon + identified
 
     def get_geographies(self):
-        tags = Tag.objects.filter(
-            resourcetag__resource=self, category__slug='geography')
-        return tags
+        return Tag.tags.by_category('geography').by_resource(self)
 
     def get_devices(self):
-        tags = Tag.objects.filter(
-            resourcetag__resource=self, category__slug='device')
-        return tags
+        return Tag.tags.by_category('device').by_resource(self)
 
     def get_languages(self):
-        tags = Tag.objects.filter(
-            resourcetag__resource=self, category__slug='language')
-        return tags
+        return Tag.tags.by_category('language').by_resource(self)
 
     def get_license(self):
-        tags = Tag.objects.filter(
-            resourcetag__resource=self, category__slug='license')
-        return tags
+        return Tag.tags.by_category('license').by_resource(self)
 
     def get_health_domains(self):
-        tags = Tag.objects.filter(
-            resourcetag__resource=self, category__slug='health-domain')
-        return tags
+        return Tag.tags.by_category('health-domain').by_resource(self)
 
     def get_rating(self):
         rating = ResourceRating.objects.filter(resource=self).aggregate(
@@ -590,6 +580,7 @@ class ResourceTag(models.Model):
 
     class Meta:
         unique_together = ("resource", "tag")
+        ordering = ('id',)
 
     @classmethod
     def create_from_api_data(cls, resource, api_data, user=None):

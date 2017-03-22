@@ -23,6 +23,19 @@ class TagQuerySet(models.QuerySet):
             user = AnonymousUser()
         return approved_queryset(self.active(), user, relation="resourcetag__resource__")
 
+    def by_resource(self, resource):
+        """
+        Returns a queryset related to the specific resource
+
+        Ordering is preserved against the order in which the association between
+        each tag and the resource was added.
+        """
+        return self.filter(resourcetag__resource=resource).order_by('resourcetag__id')
+
+    def by_category(self, category_slug):
+        """"""
+        return self.filter(category__slug=category_slug)
+
 
 class ResourceTagManager(models.Manager):
     """Manager for the ResourceTag linking model"""
