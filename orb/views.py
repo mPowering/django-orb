@@ -112,6 +112,19 @@ def tag_view(request, tag_slug):
     })
 
 
+def simple_tag_list(request, **filters):
+    content = u"\n".join([tag.name.lower() for tag in Tag.tags.filter(**filters)])
+    return HttpResponse(content=content, content_type="text/plain")
+
+
+def simple_language_list(request):
+    return simple_tag_list(request, category__slug="language")
+
+
+def simple_geography_list(request):
+    return simple_tag_list(request, category__slug="geography")
+
+
 def tag_cloud_view(request):
 
     tags = Tag.objects.filter(resourcetag__resource__status=Resource.APPROVED).annotate(
