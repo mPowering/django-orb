@@ -100,17 +100,27 @@ def tag_view(request, tag_slug):
     })
 
 
-def simple_tag_list(request, **filters):
+def text_tag_list(request, **filters):
+    """
+    Returns a text list of cateogry names, newline separated
+    """
     content = u"\n".join([tag.name.lower() for tag in Tag.tags.filter(**filters)])
     return HttpResponse(content=content, content_type="text/plain")
 
 
 def simple_language_list(request):
-    return simple_tag_list(request, category__slug="language")
+    """Returns language tags"""
+    return text_tag_list(request, category__slug="language")
 
 
 def simple_geography_list(request):
-    return simple_tag_list(request, category__slug="geography")
+    """Returns geography tags"""
+    return text_tag_list(request, category__slug="geography")
+
+
+def simple_tags_list(request):
+    """Returns tags from outside of the ORB taxonomy"""
+    return text_tag_list(request, category__slug="other")
 
 
 def tag_cloud_view(request):

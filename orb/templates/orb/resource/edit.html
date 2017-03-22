@@ -40,6 +40,7 @@
            'defaultText': ''
        });
        $('#id_other_tags').tagsInput({
+           'autocomplete_url': '{% url 'orb_simple_tags_list' %}',
            'height': '45px',
            'width': '100%',
            'defaultText': ''
