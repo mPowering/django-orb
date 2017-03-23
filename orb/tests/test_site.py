@@ -23,7 +23,7 @@ class SiteTest(TestCase):
 
     def test_pages(self):
         url_names = [
-            'orb_home', 'orb_about', 'orb_developers', 'orb_how_to', 'orb_partners',
+            'orb_home', 'orb_about', 'orb_how_to', 'orb_partners',
             'orb_taxonomy', 'orb_terms', 'orb_tag_cloud', 'orb_resource_create',
             'orb_guidelines', 'orb_search', 'orb_search_advanced', 'orb_opensearch',
         ]
