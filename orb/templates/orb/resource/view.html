@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %} 
+{% load i18n %}
 {% load thumbnail %}
 {% load display_functions %}
 {% load tag_props %}
@@ -43,7 +43,7 @@ function ratingOffHover(i){
 	for (j = USER_RATING+1; j<=5 ; j++){
 		$("#rating_"+j).attr('src', '{% static 'orb/images/star-empty.png' %}');
 	}
-	
+
 }
 
 function rateResource(i){
@@ -89,7 +89,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 
 {% include 'orb/includes/search_bar.html' %}
 
-<div xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#"> 
+<div xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#">
 
 <h3 style="text-align:center"><span property="dct:title">{{ resource.title }}</span></h3>
 
@@ -98,7 +98,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 <p style="text-align:center">
 {% trans 'From:' %}
 {% for o in resource.get_organisations %}
-	<a href="{% url 'orb_tags' o.slug %}" property="cc:attributionName" rel="cc:attributionURL dct:creator">{{ o.name }} </a>
+	<a href="{% url 'orb_tags' o.slug %}" property="cc:attributionName" rel="cc:attributionURL dct:creator">{{ o.name }}</a>{% if not forloop.last %},{% endif %}
 {% endfor %}
 </p>
 
@@ -118,7 +118,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 {% if resource.image %}
 	{% thumbnail resource.image "250x180" format="PNG" padding=True as im %}
 		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-image" alt="{{ resource.title }}">
-	{% endthumbnail %}		
+	{% endthumbnail %}
 {% else %}
 	{% for c in resource.get_health_domains|slice:":1" %}
 		{% thumbnail c.image "250x180" format="PNG" padding=True as im %}
@@ -162,7 +162,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 				<span onclick="bookmarkResource()" class="bookmark"><img id="bookmark_image" src="{% static 'orb/images/mono-bookmark-add.png' %}" alt="{% trans 'Bookmark this' %}"/><span id="bookmark_text">{% trans 'Bookmark this' %}</span></span>
 			{% endif %}
 		</div>
-	</div>	
+	</div>
 {% else %}
 	<h4>{% trans 'Your Rating/Bookmark' %}</h4>
 	{% url 'profile_login' as login %}
@@ -176,16 +176,16 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 
 	{% for f in resource.get_files %}
 		<div class="row file-row">
-		
+
 			<div class="col-md-1 col-xs-3 vcenter">
 				<a href="{% url 'orb_resource_view_file' f.id %}" title="{% trans 'Download' %} {{ f.filename }}">
 					<img src="{% static 'orb/images/download_file.png' %}"/>
 				</a>
-			</div><!-- 
+			</div><!--
 			 --><div class="col-md-8 col-xs-8 vcenter" >
 				<a href="{% url 'orb_resource_view_file' f.id %}" title="{% trans 'Download' %} {{ f.filename }}">
 					{% if f.description and f.description.strip %}
-						{{ f.description }}: 
+						{{ f.description }}:
 					{% endif %}
 					{% if f.title  %}
 						{{ f.title }}
@@ -198,21 +198,21 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 			</div>
 		</div>
 	{% endfor %}
-	
+
 {% endif %}
 
 {% if resource.get_urls %}
 	<hr/>
-	
+
 	<h4>{% trans 'Links' %}</h4>
 	{% for u in resource.get_urls %}
 		<div class="row file-row">
-		
+
 			<div class="col-md-1 col-xs-3 vcenter">
 				<a href="{% url 'orb_resource_view_link' u.id %}" title="{% trans 'Go to' %} {{ u.url }}">
 					<img src="{% static 'orb/images/external_link.png' %}"/>
 				</a>
-			</div><!-- 
+			</div><!--
 			 --><div class="col-md-8 col-xs-8 vcenter">
 				<a href="{% url 'orb_resource_view_link' u.id %}" title="{% trans 'Go to' %} {{ u.url }}">
 					{% if u.title %}
@@ -227,7 +227,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 				{% if u.file_size != 0 %}
 					<br/>({{ u.file_size|filesizeformat }})
 				{% endif %}
-			</div>	
+			</div>
 		</div>
 	{% endfor %}
 {% endif %}
@@ -249,7 +249,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 	<div class="row file-row">
 		<div class="col-md-1 col-xs-3 vcenter">
 			<img src="{% static 'orb/images/study_time.png' %}"/>
-		</div><!-- 
+		</div><!--
 		--><div class="col-md-8 col-xs-8 vcenter" >
 		{{ resource.study_time_number }} {{ resource.study_time_unit}}
 		</div>
@@ -259,7 +259,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 {% if resource.get_display_categories %}
 	{% for c in resource.get_display_categories %}
 		<hr/>
-		
+
 		<h4>{{ c.name }}</h4>
 			<div class="category">
 			{% for t in c.tags %}
@@ -278,7 +278,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 							- {{ t.summary }}
 						{% endif %}
 					</div>
-				
+
 			{% endfor %}
 			</div>
 	{% endfor %}
@@ -287,7 +287,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 {% if resource.get_license %}
 		<hr/>
 		<h4>{% trans 'License' %}</h4>
-		{% for l in resource.get_license %}		
+		{% for l in resource.get_license %}
 			<div class="row file-row">
 				<div class="col-md-2 col-xs-4 vcenter">
 					{% if l|tag_property:"url" %}
@@ -297,7 +297,7 @@ window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.
 						{% endthumbnail %}
 						</a>
 					{% endif %}
-				</div><!-- 
+				</div><!--
 			 --><div class="col-md-8 col-xs-8 vcenter">
 			 	<a href="{% url 'orb_tags' l.slug %}">{{ l.name }}</a>
 				{% if resource.attribution %}
