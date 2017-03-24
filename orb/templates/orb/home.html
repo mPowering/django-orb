@@ -29,13 +29,13 @@
     			<p>No image</p>
 			{% endthumbnail %}
 			<h3 class="homepage">{{ t.tag.name }}</h3>
-			{{ t.resource_count }} resource{{ t.resource_count|pluralize }}
+			{% blocktrans count t.resource_count as resource_count %}{{ resource_count }} resource{% plural %}{{ resource_count }} resources{% endblocktrans %}
 		</a>
 		{% else %}
 		<a href="{{ t.url }}">
 			<img src="{% get_static_prefix %}orb/images/{{ t.image }}" width="220" height="150">
 			<h3 class="homepage">{{ t.title }}</h3>
-			{{ t.resource_count }} resource{{ t.resource_count|pluralize }}
+			{% blocktrans count t.resource_count as resource_count %}{{ resource_count }} resource{% plural %}{{ resource_count }} resources{% endblocktrans %}
 		</a>
 		{% endif %}
 	</div>
