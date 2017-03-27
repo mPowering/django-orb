@@ -5,7 +5,7 @@ from django.contrib.auth import (authenticate, login, views)
 from django.core.urlresolvers import reverse
 from django.core.validators import validate_email
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div

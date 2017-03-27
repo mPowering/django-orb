@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.forms import inlineformset_factory
 from django.utils.functional import cached_property
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from orb.models import (Resource, ResourceCriteria, ReviewerRole,
                         ResourceWorkflowTracker, UserProfile)

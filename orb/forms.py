@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import URLValidator
 from django.template.defaultfilters import filesizeformat
 from django.utils.html import strip_tags
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 from orb.models import Resource
 

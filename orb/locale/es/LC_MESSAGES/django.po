@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-03-27 15:01+0300\n"
-"PO-Revision-Date: 2017-03-24 11:18+0200\n"
+"PO-Revision-Date: 2017-03-27 15:32+0300\n"
 "Last-Translator: Tomás Medeot <a1projects@alphaomegatranslations.com>, 2017\n"
 "Language-Team: Spanish (https://www.transifex.com/bennylope/teams/64448/"
 "es/)\n"
@@ -140,7 +140,7 @@ msgstr "Ingrese al menos una organización"
 
 #: forms.py:32
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #: forms.py:35
 msgid "Please enter a description"
@@ -153,7 +153,7 @@ msgstr "Ingrese no más de %d palabras."
 
 #: forms.py:38
 msgid "Image"
-msgstr ""
+msgstr "Imagen"
 
 #: forms.py:43
 msgid "Health domain"
@@ -164,20 +164,16 @@ msgid "Please select at least one health domain"
 msgstr "Seleccione al menos un dominio de salud"
 
 #: forms.py:48
-#, fuzzy
-#| msgid "Resource Edited"
 msgid "Resource type"
-msgstr "Recurso editado"
+msgstr "Tipo de recurso"
 
 #: forms.py:51
 msgid "Please select at least one resource type"
 msgstr "Seleccione al menos un tipo de recurso"
 
 #: forms.py:53
-#, fuzzy
-#| msgid "Audio resources"
 msgid "Audience"
-msgstr "Recursos de audio"
+msgstr "Audiencia"
 
 #: forms.py:56
 msgid "Please select at least one audience"
@@ -185,7 +181,7 @@ msgstr "Seleccione al menos una audiencia"
 
 #: forms.py:58
 msgid "Geography"
-msgstr ""
+msgstr "Geografía"
 
 #: forms.py:60
 msgid ""
@@ -202,10 +198,8 @@ msgid "Please enter at least one geographical area"
 msgstr "Ingrese al menos un área geográfica"
 
 #: forms.py:63
-#, fuzzy
-#| msgid "Language"
 msgid "Languages"
-msgstr "Idioma"
+msgstr "Idiomas"
 
 #: forms.py:66
 msgid ""
@@ -221,7 +215,7 @@ msgstr "Ingrese al menos un idioma"
 
 #: forms.py:69
 msgid "Device"
-msgstr ""
+msgstr "Dispositivo"
 
 #: forms.py:72
 msgid "Please select at least one device"
@@ -244,10 +238,8 @@ msgstr ""
 "licencias de Creative Commons</a>"
 
 #: forms.py:80
-#, fuzzy
-#| msgid "Other Months"
 msgid "Other tags"
-msgstr "Otros meses"
+msgstr "Otras etiquetas"
 
 #: forms.py:82
 msgid ""
