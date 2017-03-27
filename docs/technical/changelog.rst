@@ -2,7 +2,11 @@ Change log
 =====================================
 
 
-v2.3.0 - not yet released
+v2.4.0 - not yet released
+----------------------------------
+
+
+v2.3.0 - Released 27 Mar 2017
 ----------------------------------
 
 * 347: Add SSL cert to site - http://github.com/mPowering/django-orb/issues/issues/347
