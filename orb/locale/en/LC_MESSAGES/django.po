@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-24 11:16+0200\n"
+"POT-Creation-Date: 2017-03-27 15:01+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,192 +108,243 @@ msgstr ""
 msgid "Link checker results"
 msgstr ""
 
-#: forms.py:24
+#: forms.py:23 templates/orb/analytics/home.html:101
+#: templates/orb/analytics/home.html:146 templates/orb/analytics/review.html:19
+#: templates/orb/analytics/review.html:57
+#: templates/orb/review/review_list.html:19
+#: templates/orb/review/review_list.html:56
+#: templates/orb/review/review_list.html:118
+#: templates/orb/review/user_review_list.html:17 views.py:62
+msgid "Title"
+msgstr ""
+
+#: forms.py:25
 msgid "Please enter a title"
 msgstr ""
 
-#: forms.py:26
-msgid "Comma separated if entering more than one organisation"
+#: forms.py:27 templates/orb/analytics/home.html:85
+#: templates/orb/analytics/home.html:225
+msgid "Organisations"
 msgstr ""
 
 #: forms.py:28
+msgid "Comma separated if entering more than one organisation"
+msgstr ""
+
+#: forms.py:30
 msgid "Please enter at least one organisation"
 msgstr ""
 
 #: forms.py:32
+msgid "Description"
+msgstr ""
+
+#: forms.py:35
 msgid "Please enter a description"
 msgstr ""
 
-#: forms.py:33
+#: forms.py:36
 #, python-format
 msgid "Please enter no more than %d words."
 msgstr ""
 
-#: forms.py:39
+#: forms.py:38
+msgid "Image"
+msgstr ""
+
+#: forms.py:43
 msgid "Health domain"
 msgstr ""
 
-#: forms.py:42
+#: forms.py:46
 msgid "Please select at least one health domain"
 msgstr ""
 
-#: forms.py:46
+#: forms.py:48
+msgid "Resource type"
+msgstr ""
+
+#: forms.py:51
 msgid "Please select at least one resource type"
 msgstr ""
 
-#: forms.py:50
+#: forms.py:53
+msgid "Audience"
+msgstr ""
+
+#: forms.py:56
 msgid "Please select at least one audience"
 msgstr ""
 
-#: forms.py:53
+#: forms.py:58
+msgid "Geography"
+msgstr ""
+
+#: forms.py:60
 msgid ""
 "The geographic area the resource is designed for, may be region e.g. "
 "(\"Africa\", \"East Africa\") or country (e.g. \"Ethiopia\", \"Mali\"). "
 "Comma separated if entering more than one geography"
 msgstr ""
 
-#: forms.py:54
+#: forms.py:61
 msgid "Please enter at least one geographical area"
 msgstr ""
 
-#: forms.py:58
+#: forms.py:63
+msgid "Languages"
+msgstr ""
+
+#: forms.py:66
 msgid ""
 "The languages the resource uses. Comma separated if entering more than one "
 "language"
 msgstr ""
 
-#: forms.py:59
+#: forms.py:67
 msgid "Please enter at least one language"
 msgstr ""
 
-#: forms.py:63
+#: forms.py:69
+msgid "Device"
+msgstr ""
+
+#: forms.py:72
 msgid "Please select at least one device"
 msgstr ""
 
-#: forms.py:67
+#: forms.py:74 templates/orb/resource/view.html:289
+msgid "License"
+msgstr ""
+
+#: forms.py:77
 msgid "Please select a license"
 msgstr ""
 
-#: forms.py:68
+#: forms.py:78
 msgid ""
 "<a href='/cc-faq' target='_blank'>More information on Creative Commons "
 "licenses</a>"
 msgstr ""
 
-#: forms.py:71
+#: forms.py:80
+msgid "Other tags"
+msgstr ""
+
+#: forms.py:82
 msgid ""
 "Please enter any other relevant tags for this resource, comma separated if "
 "entering more than one tag"
 msgstr ""
 
-#: forms.py:75
+#: forms.py:86
 msgid ""
 "Please tick the box to confirm that you have read the <a href='/resource/"
 "guidelines/' target='_blank' class='prominent'>guidelines and criteria</a> "
 "for submitting resources to ORB"
 msgstr ""
 
-#: forms.py:77
+#: forms.py:88
 msgid ""
 "Please tick the box to confirm that you have read the guidelines for "
 "submitting resources to ORB"
 msgstr ""
 
-#: forms.py:90
+#: forms.py:101
 msgid ""
 "Please enter any specific text you would like to be used for the attribution "
 "for this resource"
 msgstr ""
 
-#: forms.py:118 templates/orb/resource/view.html:248
+#: forms.py:129 templates/orb/resource/view.html:248
 msgid "Study Time"
 msgstr ""
 
-#: forms.py:149
+#: forms.py:160
 msgid "Continue &gt;&gt;"
 msgstr ""
 
-#: forms.py:161
+#: forms.py:172
 msgid "You have entered a study time, but not selected a unit."
 msgstr ""
 
-#: forms.py:169
+#: forms.py:180
 #, python-brace-format
 msgid ""
 "You have entered {no_words} words, please enter no more than {max_words}"
 msgstr ""
 
-#: forms.py:187
+#: forms.py:198
 msgid "You have entered already submitted a resource with this title."
 msgstr ""
 
-#: forms.py:216
+#: forms.py:227
 msgid "Add"
 msgstr ""
 
-#: forms.py:227
+#: forms.py:238
 msgid "Please correct the errors below and resubmit the form."
 msgstr ""
 
-#: forms.py:231
+#: forms.py:242
 msgid "Please submit a file and/or a url for this resource"
 msgstr ""
 
-#: forms.py:242
+#: forms.py:253
 #, python-format
 msgid "Currently, ORB does not allow uploading of '%s' files"
 msgstr ""
 
-#: forms.py:245
+#: forms.py:256
 #, python-format
 msgid ""
 "Please keep filesize under %(max_size)s. Current filesize %(actual_size)s"
 msgstr ""
 
-#: forms.py:258
+#: forms.py:269
 msgid "This does not appear to be a valid Url"
 msgstr ""
 
-#: forms.py:265 forms.py:284 forms.py:309
+#: forms.py:276 forms.py:295 forms.py:320
 msgid "Please enter something to search for"
 msgstr ""
 
-#: forms.py:275
+#: forms.py:286
 msgid "Go"
 msgstr ""
 
-#: forms.py:296 forms.py:356 templates/orb/search.html:5
+#: forms.py:307 forms.py:367 templates/orb/search.html:5
 #: templates/orb/search.html.py:9
 msgid "Search"
 msgstr ""
 
-#: forms.py:300
+#: forms.py:311
 msgid "Advanced search"
 msgstr ""
 
-#: forms.py:308
+#: forms.py:319
 msgid "Search terms"
 msgstr ""
 
-#: forms.py:378
+#: forms.py:389
 msgid "Please select at least a search term or a tag"
 msgstr ""
 
-#: forms.py:391
+#: forms.py:402
 msgid "Please enter a reason as to why the resource has been rejected"
 msgstr ""
 
-#: forms.py:392
+#: forms.py:403
 msgid ""
 "The text you enter here will be included in the email to the submitter of "
 "the resource, so please bear this in mind when explaining your reasoning."
 msgstr ""
 
-#: forms.py:393
+#: forms.py:404
 msgid "Reason for rejection"
 msgstr ""
 
-#: forms.py:406
+#: forms.py:417
 msgid "Submit"
 msgstr ""
 
@@ -1237,10 +1288,6 @@ msgstr ""
 msgid "Popular Resources"
 msgstr ""
 
-#: templates/orb/analytics/home.html:85 templates/orb/analytics/home.html:225
-msgid "Organisations"
-msgstr ""
-
 #: templates/orb/analytics/home.html:90 templates/orb/analytics/home.html:184
 #: templates/orb/analytics/resource.html:51 templates/orb/analytics/tag.html:56
 msgid "graph_generating"
@@ -1252,16 +1299,6 @@ msgstr ""
 #: templates/orb/review/review_list.html:55
 #: templates/orb/review/review_list.html:117
 msgid "Submitted"
-msgstr ""
-
-#: templates/orb/analytics/home.html:101 templates/orb/analytics/home.html:146
-#: templates/orb/analytics/review.html:19
-#: templates/orb/analytics/review.html:57
-#: templates/orb/review/review_list.html:19
-#: templates/orb/review/review_list.html:56
-#: templates/orb/review/review_list.html:118
-#: templates/orb/review/user_review_list.html:17 views.py:62
-msgid "Title"
 msgstr ""
 
 #: templates/orb/analytics/home.html:103 templates/orb/analytics/home.html:148
@@ -2452,10 +2489,6 @@ msgstr ""
 
 #: templates/orb/resource/view.html:238
 msgid "This resource is included in the following collections:"
-msgstr ""
-
-#: templates/orb/resource/view.html:289
-msgid "License"
 msgstr ""
 
 #: templates/orb/resource/view.html:304

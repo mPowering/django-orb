@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-24 11:16+0200\n"
+"POT-Creation-Date: 2017-03-27 15:01+0300\n"
 "PO-Revision-Date: 2017-03-24 11:18+0200\n"
 "Last-Translator: Tomás Medeot <a1projects@alphaomegatranslations.com>, 2017\n"
 "Language-Team: Spanish (https://www.transifex.com/bennylope/teams/64448/"
@@ -111,44 +111,83 @@ msgstr "Nuevo recurso enviado"
 msgid "Link checker results"
 msgstr "Resultados del verificador de enlaces"
 
-#: forms.py:24
+#: forms.py:23 templates/orb/analytics/home.html:101
+#: templates/orb/analytics/home.html:146 templates/orb/analytics/review.html:19
+#: templates/orb/analytics/review.html:57
+#: templates/orb/review/review_list.html:19
+#: templates/orb/review/review_list.html:56
+#: templates/orb/review/review_list.html:118
+#: templates/orb/review/user_review_list.html:17 views.py:62
+msgid "Title"
+msgstr "Título"
+
+#: forms.py:25
 msgid "Please enter a title"
 msgstr "Ingrese un título"
 
-#: forms.py:26
+#: forms.py:27 templates/orb/analytics/home.html:85
+#: templates/orb/analytics/home.html:225
+msgid "Organisations"
+msgstr "Organizaciones"
+
+#: forms.py:28
 msgid "Comma separated if entering more than one organisation"
 msgstr "Utilice comas para separar si ingresa más de una organización"
 
-#: forms.py:28
+#: forms.py:30
 msgid "Please enter at least one organisation"
 msgstr "Ingrese al menos una organización"
 
 #: forms.py:32
+msgid "Description"
+msgstr ""
+
+#: forms.py:35
 msgid "Please enter a description"
 msgstr "Ingrese una descripción"
 
-#: forms.py:33
+#: forms.py:36
 #, python-format
 msgid "Please enter no more than %d words."
 msgstr "Ingrese no más de %d palabras."
 
-#: forms.py:39
+#: forms.py:38
+msgid "Image"
+msgstr ""
+
+#: forms.py:43
 msgid "Health domain"
 msgstr "Dominio de salud"
 
-#: forms.py:42
+#: forms.py:46
 msgid "Please select at least one health domain"
 msgstr "Seleccione al menos un dominio de salud"
 
-#: forms.py:46
+#: forms.py:48
+#, fuzzy
+#| msgid "Resource Edited"
+msgid "Resource type"
+msgstr "Recurso editado"
+
+#: forms.py:51
 msgid "Please select at least one resource type"
 msgstr "Seleccione al menos un tipo de recurso"
 
-#: forms.py:50
+#: forms.py:53
+#, fuzzy
+#| msgid "Audio resources"
+msgid "Audience"
+msgstr "Recursos de audio"
+
+#: forms.py:56
 msgid "Please select at least one audience"
 msgstr "Seleccione al menos una audiencia"
 
-#: forms.py:53
+#: forms.py:58
+msgid "Geography"
+msgstr ""
+
+#: forms.py:60
 msgid ""
 "The geographic area the resource is designed for, may be region e.g. "
 "(\"Africa\", \"East Africa\") or country (e.g. \"Ethiopia\", \"Mali\"). "
@@ -158,11 +197,17 @@ msgstr ""
 "región, p. ej. \"África\", \"Este de África\", o un país, p. ej. \"Etiopía"
 "\", \"Malí\". Utilice comas para separar si ingresa más de un área geográfica"
 
-#: forms.py:54
+#: forms.py:61
 msgid "Please enter at least one geographical area"
 msgstr "Ingrese al menos un área geográfica"
 
-#: forms.py:58
+#: forms.py:63
+#, fuzzy
+#| msgid "Language"
+msgid "Languages"
+msgstr "Idioma"
+
+#: forms.py:66
 msgid ""
 "The languages the resource uses. Comma separated if entering more than one "
 "language"
@@ -170,19 +215,27 @@ msgstr ""
 "Los idiomas que usa el recurso. Utilice comas para separar si ingresa más de "
 "un idioma"
 
-#: forms.py:59
+#: forms.py:67
 msgid "Please enter at least one language"
 msgstr "Ingrese al menos un idioma"
 
-#: forms.py:63
+#: forms.py:69
+msgid "Device"
+msgstr ""
+
+#: forms.py:72
 msgid "Please select at least one device"
 msgstr "Seleccione al menos un dispositivo"
 
-#: forms.py:67
+#: forms.py:74 templates/orb/resource/view.html:289
+msgid "License"
+msgstr "Licencia"
+
+#: forms.py:77
 msgid "Please select a license"
 msgstr "Seleccione una licencia"
 
-#: forms.py:68
+#: forms.py:78
 msgid ""
 "<a href='/cc-faq' target='_blank'>More information on Creative Commons "
 "licenses</a>"
@@ -190,7 +243,13 @@ msgstr ""
 "<a href='/cc-faq' target='_blank'>Para obtener más información sobre "
 "licencias de Creative Commons</a>"
 
-#: forms.py:71
+#: forms.py:80
+#, fuzzy
+#| msgid "Other Months"
+msgid "Other tags"
+msgstr "Otros meses"
+
+#: forms.py:82
 msgid ""
 "Please enter any other relevant tags for this resource, comma separated if "
 "entering more than one tag"
@@ -198,7 +257,7 @@ msgstr ""
 "Ingrese cualquier otra etiqueta relevante para este recurso. Utilice comas "
 "para separar si ingresa más de una etiqueta"
 
-#: forms.py:75
+#: forms.py:86
 msgid ""
 "Please tick the box to confirm that you have read the <a href='/resource/"
 "guidelines/' target='_blank' class='prominent'>guidelines and criteria</a> "
@@ -208,7 +267,7 @@ msgstr ""
 "guidelines/' target='_blank' class='prominent'>pautas y los criterios</a> "
 "para enviar recursos a ORB"
 
-#: forms.py:77
+#: forms.py:88
 msgid ""
 "Please tick the box to confirm that you have read the guidelines for "
 "submitting resources to ORB"
@@ -216,7 +275,7 @@ msgstr ""
 "Marque la casilla para confirmar que ha leído las pautas para enviar "
 "recursos a ORB"
 
-#: forms.py:90
+#: forms.py:101
 msgid ""
 "Please enter any specific text you would like to be used for the attribution "
 "for this resource"
@@ -224,46 +283,46 @@ msgstr ""
 "Ingrese el texto específico que le gustaría que se use para la atribución de "
 "este recurso"
 
-#: forms.py:118 templates/orb/resource/view.html:248
+#: forms.py:129 templates/orb/resource/view.html:248
 msgid "Study Time"
 msgstr "Tiempo del estudio"
 
-#: forms.py:149
+#: forms.py:160
 msgid "Continue &gt;&gt;"
 msgstr "Continuar &gt;&gt;"
 
-#: forms.py:161
+#: forms.py:172
 msgid "You have entered a study time, but not selected a unit."
 msgstr "Ha ingresado un tiempo de estudio, pero no seleccionó una unidad."
 
-#: forms.py:169
+#: forms.py:180
 #, python-brace-format
 msgid ""
 "You have entered {no_words} words, please enter no more than {max_words}"
 msgstr "Ha ingresado {no_words} palabras. No ingrese más de {max_words}"
 
-#: forms.py:187
+#: forms.py:198
 msgid "You have entered already submitted a resource with this title."
 msgstr "Ya ha enviado un recurso con este título."
 
-#: forms.py:216
+#: forms.py:227
 msgid "Add"
 msgstr "Agregar"
 
-#: forms.py:227
+#: forms.py:238
 msgid "Please correct the errors below and resubmit the form."
 msgstr "Corrija los errores a continuación y vuelva a enviar el formulario."
 
-#: forms.py:231
+#: forms.py:242
 msgid "Please submit a file and/or a url for this resource"
 msgstr "Envíe un archivo o URL para este recurso"
 
-#: forms.py:242
+#: forms.py:253
 #, python-format
 msgid "Currently, ORB does not allow uploading of '%s' files"
 msgstr "Actualmente, ORB no permite cargar archivos '%s'"
 
-#: forms.py:245
+#: forms.py:256
 #, python-format
 msgid ""
 "Please keep filesize under %(max_size)s. Current filesize %(actual_size)s"
@@ -271,40 +330,40 @@ msgstr ""
 "Mantenga el tamaño de los archivos por debajo de %(max_size)s. El tamaño de "
 "archivo actual es %(actual_size)s"
 
-#: forms.py:258
+#: forms.py:269
 msgid "This does not appear to be a valid Url"
 msgstr "Esta no parece ser una URL válida"
 
-#: forms.py:265 forms.py:284 forms.py:309
+#: forms.py:276 forms.py:295 forms.py:320
 msgid "Please enter something to search for"
 msgstr "Ingrese algo para buscar"
 
-#: forms.py:275
+#: forms.py:286
 msgid "Go"
 msgstr "Ir"
 
-#: forms.py:296 forms.py:356 templates/orb/search.html:5
+#: forms.py:307 forms.py:367 templates/orb/search.html:5
 #: templates/orb/search.html.py:9
 msgid "Search"
 msgstr "Buscar"
 
-#: forms.py:300
+#: forms.py:311
 msgid "Advanced search"
 msgstr "Búsqueda avanzada"
 
-#: forms.py:308
+#: forms.py:319
 msgid "Search terms"
 msgstr "Términos de búsqueda"
 
-#: forms.py:378
+#: forms.py:389
 msgid "Please select at least a search term or a tag"
 msgstr "Seleccione al menos un término o etiqueta de búsqueda"
 
-#: forms.py:391
+#: forms.py:402
 msgid "Please enter a reason as to why the resource has been rejected"
 msgstr "Ingrese un motivo por el cual se ha rechazado el recurso"
 
-#: forms.py:392
+#: forms.py:403
 msgid ""
 "The text you enter here will be included in the email to the submitter of "
 "the resource, so please bear this in mind when explaining your reasoning."
@@ -313,11 +372,11 @@ msgstr ""
 "a quien envió el recurso, de modo que recuerde esto cuando explique sus "
 "razones."
 
-#: forms.py:393
+#: forms.py:404
 msgid "Reason for rejection"
 msgstr "Motivo del rechazo"
 
-#: forms.py:406
+#: forms.py:417
 msgid "Submit"
 msgstr "Enviar"
 
@@ -1352,10 +1411,6 @@ msgstr "Búsquedas populares"
 msgid "Popular Resources"
 msgstr "Recursos populares"
 
-#: templates/orb/analytics/home.html:85 templates/orb/analytics/home.html:225
-msgid "Organisations"
-msgstr "Organizaciones"
-
 #: templates/orb/analytics/home.html:90 templates/orb/analytics/home.html:184
 #: templates/orb/analytics/resource.html:51 templates/orb/analytics/tag.html:56
 msgid "graph_generating"
@@ -1368,16 +1423,6 @@ msgstr "graph_generating"
 #: templates/orb/review/review_list.html:117
 msgid "Submitted"
 msgstr "Enviado"
-
-#: templates/orb/analytics/home.html:101 templates/orb/analytics/home.html:146
-#: templates/orb/analytics/review.html:19
-#: templates/orb/analytics/review.html:57
-#: templates/orb/review/review_list.html:19
-#: templates/orb/review/review_list.html:56
-#: templates/orb/review/review_list.html:118
-#: templates/orb/review/user_review_list.html:17 views.py:62
-msgid "Title"
-msgstr "Título"
 
 #: templates/orb/analytics/home.html:103 templates/orb/analytics/home.html:148
 #: templates/orb/analytics/review.html:21
@@ -3153,10 +3198,6 @@ msgstr "Ir a"
 #: templates/orb/resource/view.html:238
 msgid "This resource is included in the following collections:"
 msgstr "Este recurso está incluido en las siguientes colecciones:"
-
-#: templates/orb/resource/view.html:289
-msgid "License"
-msgstr "Licencia"
 
 #: templates/orb/resource/view.html:304
 msgid "Attribution"

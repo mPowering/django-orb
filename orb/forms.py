@@ -20,18 +20,22 @@ logger = logging.getLogger('orb')
 class ResourceStep1Form(forms.Form):
 
     title = forms.CharField(
+        label=_(u'Title'),
         required=True,
         error_messages={'required': _(u'Please enter a title')},)
     organisations = forms.CharField(
+        label=_(u'Organisations'),
         help_text=_(u'Comma separated if entering more than one organisation'),
         required=True,
         error_messages={'required': _(u'Please enter at least one organisation')},)
     description = forms.CharField(
+        label=_(u'Description'),
         widget=forms.Textarea,
         required=True,
         error_messages={'required': _(u'Please enter a description')},
         help_text=_(u'Please enter no more than %d words.' % settings.ORB_RESOURCE_DESCRIPTION_MAX_WORDS), )
     image = forms.ImageField(
+        label=_(u'Image'),
         required=False,
         error_messages={},
         widget=forms.ClearableFileInput)
@@ -41,32 +45,39 @@ class ResourceStep1Form(forms.Form):
         required=True,
         error_messages={'required': _(u'Please select at least one health domain')},)
     resource_type = forms.MultipleChoiceField(
+        label=_(u'Resource type'),
         widget=forms.CheckboxSelectMultiple,
         required=True,
         error_messages={'required': _(u'Please select at least one resource type')},)
     audience = forms.MultipleChoiceField(
+        label=_(u'Audience'),
         widget=forms.CheckboxSelectMultiple,
         required=True,
         error_messages={'required': _(u'Please select at least one audience')},)
     geography = forms.CharField(
+        label=_(u'Geography'),
         required=True,
         help_text=_(u'The geographic area the resource is designed for, may be region e.g. ("Africa", "East Africa") or country (e.g. "Ethiopia", "Mali"). Comma separated if entering more than one geography'),
         error_messages={'required': _(u'Please enter at least one geographical area')},)
     languages = forms.CharField(
+        label=_(u'Languages'),
         required=True,
         help_text=_(
             u'The languages the resource uses. Comma separated if entering more than one language'),
         error_messages={'required': _(u'Please enter at least one language')},)
     device = forms.MultipleChoiceField(
+        label=_(u'Device'),
         widget=forms.CheckboxSelectMultiple,
         required=True,
         error_messages={'required': _(u'Please select at least one device')},)
     license = forms.ChoiceField(
+        label=_(u'License'),
         widget=forms.Select,
         required=True,
         error_messages={'required': _(u'Please select a license')},
         help_text=_(u"<a href='/cc-faq' target='_blank'>More information on Creative Commons licenses</a>"),)
     other_tags = forms.CharField(
+        label=_(u'Other tags'),
         help_text=_(
             u'Please enter any other relevant tags for this resource, comma separated if entering more than one tag'),
         required=False,
