@@ -459,3 +459,8 @@ select#i18n:hover {
         padding: 5px;
     }
 }
+
+
+div.tagsinput {
+    border-radius: 4px;
+}
