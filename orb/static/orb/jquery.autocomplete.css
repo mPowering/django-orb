@@ -7,6 +7,7 @@
 .acResults {
 	padding: 0px;
 	border: 1px solid WindowFrame;
+    border-radius: 4px;
 	background-color: Window;
 	overflow: hidden;
 }
@@ -15,7 +16,7 @@
 	margin: 0px;
 	padding: 0px;
 	list-style-position: outside;
-	list-style: none;	
+	list-style: none;
 }
 
 .acResults ul li {

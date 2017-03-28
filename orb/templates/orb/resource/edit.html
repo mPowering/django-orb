@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% load static i18n crispy_forms_tags wysiwyg %}
+
 {% block extra_scripts %}
 {% wysiwyg_setup %}
+<link rel="stylesheet" type="text/css" href="{% static 'orb/jquery.tagsinput.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'orb/jquery.autocomplete.css' %}" />
 {% endblock extra_scripts %}
+
 {% block extra_head_title %}{% trans 'Edit Resource' %}{% endblock extra_head_title %}
 {% block content %}
 
@@ -12,9 +16,6 @@
 
 {% wysiwyg_editor "id_description" %}
 <div id='form-errors'>{{ form_errors }}</div>
-
-<link rel="stylesheet" type="text/css" href="{% static 'orb/jquery.tagsinput.min.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'orb/jquery.autocomplete.css' %}" />
 
 
 <link href="{% static 'orb/style.css' %}" rel="stylesheet"/>

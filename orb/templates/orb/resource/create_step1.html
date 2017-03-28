@@ -1,10 +1,12 @@
 {% extends "base.html" %}
-{% load i18n %} 
-{% load crispy_forms_tags %}
-{% load wysiwyg %}
+{% load i18n static crispy_forms_tags wysiwyg %}
+
 {% block extra_scripts %}
 {% wysiwyg_setup %}
-{% endblock extra_scripts %} 
+    <link rel="stylesheet" type="text/css" href="{% static 'orb/jquery.tagsinput.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'orb/jquery.autocomplete.css' %}" />
+{% endblock extra_scripts %}
+
 {% block extra_head_title %}{% trans 'Add Resource' %}{% endblock extra_head_title %}
 {% block content %}
 
@@ -14,10 +16,36 @@
 	<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     {% blocktrans with settings.ORB_INFO_EMAIL as email %}<strong>Lots of resources to add?</strong> Please <a href="mailto:{{ email }}" class="alert-link">contact us</a> about using our API to make it easier for you to upload and maintain your resources on ORB.{% endblocktrans %}
 </div>
-	
+
 {% crispy form %}
 {% wysiwyg_editor "id_description" %}
 <div id='form-errors'>{{ form_errors }}</div>
 
 {% endblock %}
 
+
+{% block footer_js %}
+    <script src="{% static 'orb/js/jquery.autocomplete.js'%}"></script>
+    <script src="{% static 'orb/js/jquery.tagsinput.js '%}"></script>
+    <script>
+        $('#id_languages').tagsInput({
+            'autocomplete_url': '{% url 'orb_simple_language_list' %}',
+            'height': '45px',
+            'width': '100%',
+            'defaultText': ''
+        });
+        $('#id_geography').tagsInput({
+            'autocomplete_url': '{% url 'orb_simple_geography_list' %}',
+            'height': '45px',
+            'width': '100%',
+            'defaultText': ''
+        });
+        $('#id_other_tags').tagsInput({
+            'autocomplete_url': '{% url 'orb_simple_tags_list' %}',
+            'height': '45px',
+            'width': '100%',
+            'defaultText': ''
+        });
+    </script>
+
+{% endblock %}
