@@ -2,6 +2,7 @@
 from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
+from orb import views
 from orb.feeds import LatestTagEntries, LatestEntries
 
 urlpatterns = [
@@ -21,6 +22,9 @@ urlpatterns = [
     url(r'^tag/cloud/$', 'orb.views.tag_cloud_view', name="orb_tag_cloud"),
     url(r'^tag/feed/(?P<tag_slug>\w[\w/-]*)$', LatestTagEntries(), name="orb_tag_feed"),
     url(r'^tag/link/(?P<id>\d+)/$', 'orb.views.tag_link_view', name="orb_tag_view_link"),
+    url(r'^tag/languages\.txt$', views.simple_language_list, name="orb_simple_language_list"),
+    url(r'^tag/geography\.txt$', views.simple_geography_list, name="orb_simple_geography_list"),
+    url(r'^tag/other\.txt$', views.simple_tags_list, name="orb_simple_tags_list"),
 
     url(r'^resource/create/1/$', 'orb.views.resource_create_step1_view', name="orb_resource_create"),
     url(r'^resource/create/2/(?P<id>\d+)/$', 'orb.views.resource_create_step2_view', name="orb_resource_create2"),
