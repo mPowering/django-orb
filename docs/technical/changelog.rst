@@ -23,7 +23,7 @@ v2.3.0 - Released 27 Mar 2017
 * 450: Add the new videos to a page on the site & revise How to page - https://github.com/mPowering/django-orb/issues/issues/450
 * 432: Ability to preserve ordering of the tags - https://github.com/mPowering/django-orb/issues/issues/432
 * 431: Comma separator when multiple organisations listed - https://github.com/mPowering/django-orb/issues/issues/431
-
+* 459: ugettext and ugettext_lazy for crispy forms - https://github.com/mPowering/django-orb/issues/issues/459
 
 v2.2.2 - released 5 Dec 2016
 ---------------------------------

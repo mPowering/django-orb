@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-27 15:01+0300\n"
-"PO-Revision-Date: 2017-03-27 15:32+0300\n"
+"POT-Creation-Date: 2017-03-29 16:39+0300\n"
+"PO-Revision-Date: 2017-03-29 16:42+0300\n"
 "Last-Translator: Tomás Medeot <a1projects@alphaomegatranslations.com>, 2017\n"
 "Language-Team: Spanish (https://www.transifex.com/bennylope/teams/64448/"
 "es/)\n"
@@ -155,7 +155,7 @@ msgstr "Ingrese no más de %d palabras."
 msgid "Image"
 msgstr "Imagen"
 
-#: forms.py:43
+#: forms.py:43 forms.py:321
 msgid "Health domain"
 msgstr "Dominio de salud"
 
@@ -163,7 +163,7 @@ msgstr "Dominio de salud"
 msgid "Please select at least one health domain"
 msgstr "Seleccione al menos un dominio de salud"
 
-#: forms.py:48
+#: forms.py:48 forms.py:324
 msgid "Resource type"
 msgstr "Tipo de recurso"
 
@@ -171,7 +171,7 @@ msgstr "Tipo de recurso"
 msgid "Please select at least one resource type"
 msgstr "Seleccione al menos un tipo de recurso"
 
-#: forms.py:53
+#: forms.py:53 forms.py:327
 msgid "Audience"
 msgstr "Audiencia"
 
@@ -179,7 +179,7 @@ msgstr "Audiencia"
 msgid "Please select at least one audience"
 msgstr "Seleccione al menos una audiencia"
 
-#: forms.py:58
+#: forms.py:58 forms.py:330
 msgid "Geography"
 msgstr "Geografía"
 
@@ -213,7 +213,7 @@ msgstr ""
 msgid "Please enter at least one language"
 msgstr "Ingrese al menos un idioma"
 
-#: forms.py:69
+#: forms.py:69 forms.py:336
 msgid "Device"
 msgstr "Dispositivo"
 
@@ -221,7 +221,7 @@ msgstr "Dispositivo"
 msgid "Please select at least one device"
 msgstr "Seleccione al menos un dispositivo"
 
-#: forms.py:74 templates/orb/resource/view.html:289
+#: forms.py:74 forms.py:339 templates/orb/resource/view.html:289
 msgid "License"
 msgstr "Licencia"
 
@@ -347,9 +347,17 @@ msgstr "Búsqueda avanzada"
 msgid "Search terms"
 msgstr "Términos de búsqueda"
 
+#: forms.py:333 templates/includes/header.html:93
+msgid "Language"
+msgstr "Idioma"
+
 #: forms.py:389
 msgid "Please select at least a search term or a tag"
 msgstr "Seleccione al menos un término o etiqueta de búsqueda"
+
+#: forms.py:395
+msgid "Criteria"
+msgstr "Criterios"
 
 #: forms.py:402
 msgid "Please enter a reason as to why the resource has been rejected"
@@ -642,21 +650,21 @@ msgstr "Capacitación"
 msgid "Peer Sync Complete"
 msgstr "Sincronización de pares completa"
 
-#: profiles/forms.py:20 profiles/forms.py:67
+#: profiles/forms.py:20 profiles/forms.py:66
 msgid "Please enter a username."
 msgstr "Ingrese un nombre de usuario."
 
-#: profiles/forms.py:21 profiles/forms.py:68
+#: profiles/forms.py:21 profiles/forms.py:67 profiles/forms.py:235
 msgid "Username"
 msgstr "Usuario"
 
-#: profiles/forms.py:26 profiles/forms.py:75
+#: profiles/forms.py:26 profiles/forms.py:74
 msgid "Please enter a password."
 msgstr "Ingrese una contraseña."
 
-#: profiles/forms.py:28 profiles/forms.py:79
+#: profiles/forms.py:28 profiles/forms.py:78 profiles/forms.py:243
 msgid "Password"
-msgstr "Restablecimiento de contraseña"
+msgstr "Contraseña"
 
 #: profiles/forms.py:29
 msgid "Please note that your username and password are case-sensitive."
@@ -668,79 +676,80 @@ msgstr ""
 msgid "Login"
 msgstr "Iniciar sesión"
 
-#: profiles/forms.py:47
+#: profiles/forms.py:46
 msgid "Forgotten password?"
 msgstr "¿Olvidó su contraseña?"
 
-#: profiles/forms.py:60
+#: profiles/forms.py:59
 msgid "Invalid username or password. Please try again."
 msgstr "Nombre de usuario o contraseña no válidos. Inténtelo nuevamente."
 
-#: profiles/forms.py:70 profiles/forms.py:238
+#: profiles/forms.py:69 profiles/forms.py:241
 msgid "Please enter a valid e-mail address."
 msgstr "Ingrese una dirección de correo electrónico válida."
 
-#: profiles/forms.py:71
+#: profiles/forms.py:70
 msgid "Please enter your e-mail address."
 msgstr "Ingrese su dirección de correo electrónico."
 
-#: profiles/forms.py:73
+#: profiles/forms.py:72 profiles/forms.py:238
 msgid "Email"
 msgstr "Correo electrónico:"
 
-#: profiles/forms.py:76
+#: profiles/forms.py:75
 msgid "Your password should be at least 6 characters long."
 msgstr "Su contraseña debe tener al menos 6 caracteres de longitud."
 
-#: profiles/forms.py:82
+#: profiles/forms.py:81
 msgid "Please enter your password again."
 msgstr "Ingrese su contraseña nuevamente."
 
-#: profiles/forms.py:83
+#: profiles/forms.py:82
 msgid "Your password again should be at least 6 characters long."
 msgstr "Su nueva contraseña debe tener al menos 6 caracteres de longitud."
 
-#: profiles/forms.py:85
+#: profiles/forms.py:84 profiles/forms.py:248
 msgid "Password again"
 msgstr "Repite la contraseña"
 
-#: profiles/forms.py:87
+#: profiles/forms.py:86
 msgid "Please enter your first name."
 msgstr "Ingrese su nombre."
 
-#: profiles/forms.py:88
+#: profiles/forms.py:87
 msgid "Your first name should be at least 2 characters long."
 msgstr "Su nombre debe tener al menos 2 caracteres de longitud."
 
-#: profiles/forms.py:91
+#: profiles/forms.py:90 profiles/forms.py:252
 msgid "First name"
 msgstr "Nombre"
 
-#: profiles/forms.py:93
+#: profiles/forms.py:92
 msgid "Please enter your last name."
 msgstr "Ingrese su apellido."
 
-#: profiles/forms.py:94
+#: profiles/forms.py:93
 msgid "Your last name should be at least 2 characters long."
 msgstr "Su apellido debe tener al menos 2 caracteres de longitud."
 
-#: profiles/forms.py:97
+#: profiles/forms.py:96 profiles/forms.py:256
 msgid "Last name"
 msgstr "Apellido"
 
-#: profiles/forms.py:100 profiles/forms.py:259
+#: profiles/forms.py:99 profiles/forms.py:266
 msgid "Please select from the options above, or enter in the field below:"
 msgstr ""
 "Seleccione entre las opciones anteriores o ingrese en el campo a "
 "continuación:"
 
-#: profiles/forms.py:101 templates/orb/profile/view.html:25
-#: templates/orb/review/review_list.html:21
+#: profiles/forms.py:100 profiles/forms.py:263
+#: templates/orb/profile/view.html:25 templates/orb/review/review_list.html:21
 msgid "Role"
 msgstr "Rol"
 
-#: profiles/forms.py:107 templates/orb/analytics/home.html:102
-#: templates/orb/analytics/home.html:147 templates/orb/analytics/review.html:20
+#: profiles/forms.py:106 profiles/forms.py:270
+#: templates/orb/analytics/home.html:102 templates/orb/analytics/home.html:147
+#: templates/orb/analytics/review.html:20
 #: templates/orb/analytics/review.html:58 templates/orb/profile/view.html:40
 #: templates/orb/review/review_list.html:57
 #: templates/orb/review/review_list.html:119
@@ -748,23 +757,23 @@ msgstr "Rol"
 msgid "Organisation"
 msgstr "Organización"
 
-#: profiles/forms.py:110 profiles/forms.py:185 profiles/forms.py:267
+#: profiles/forms.py:109 profiles/forms.py:184 profiles/forms.py:276
 msgid "Please select an age range"
 msgstr "Seleccione un rango de edad"
 
-#: profiles/forms.py:111
+#: profiles/forms.py:110
 msgid "Age Range"
 msgstr "Rango de edad"
 
-#: profiles/forms.py:114 profiles/forms.py:189 profiles/forms.py:271
+#: profiles/forms.py:113 profiles/forms.py:188 profiles/forms.py:280
 msgid "Please select a gender"
 msgstr "Seleccione un género"
 
-#: profiles/forms.py:115
+#: profiles/forms.py:114 profiles/forms.py:277
 msgid "Gender"
 msgstr "Género"
 
-#: profiles/forms.py:118
+#: profiles/forms.py:117
 msgid ""
 "Please tick the box to confirm that you have read the <a href='/terms/' "
 "target='_blank' class='prominent'>terms</a> about registering with ORB"
@@ -772,78 +781,108 @@ msgstr ""
 "Marque la casilla para confirmar que ha leído los <a href='/terms/' "
 "target='_blank' class='prominent'>términos</a> sobre el registro en ORB"
 
-#: profiles/forms.py:120
+#: profiles/forms.py:119
 msgid "Please tick the box to confirm that you have read the terms"
 msgstr "Marque la casilla para confirmar que ha leído los términos"
 
-#: profiles/forms.py:122
+#: profiles/forms.py:121
 msgid "Subscribe to mPowering update emails"
 msgstr "Suscribirse a correos electrónicos de actualización de mPowering "
 
-#: profiles/forms.py:147 profiles/views.py:108
+#: profiles/forms.py:146 profiles/views.py:108
 #: templates/includes/header.html:86
 msgid "Register"
 msgstr "Registrarse"
 
-#: profiles/forms.py:164
+#: profiles/forms.py:163
 msgid "Username has already been registered, please select another."
 msgstr "El nombre de usuario ya se ha registrado, seleccione otro."
 
-#: profiles/forms.py:170
+#: profiles/forms.py:169
 msgid "Email has already been registered"
 msgstr "El correo electrónico ya se ha registrado"
 
-#: profiles/forms.py:175 profiles/forms.py:336
+#: profiles/forms.py:174 profiles/forms.py:348
 msgid "Passwords do not match."
 msgstr "Las contraseñas no coinciden."
 
-#: profiles/forms.py:181
+#: profiles/forms.py:180
 msgid "Please select or enter a role"
 msgstr "Seleccione o ingrese un rol"
+
+#: profiles/forms.py:195
+msgid "Username or email"
+msgstr "Usuario o dirección de correo electrónico"
 
 #: profiles/forms.py:198
 msgid "Please enter a username or email address."
 msgstr "Ingrese un nombre de usuario o dirección de correo electrónico."
 
-#: profiles/forms.py:212 profiles/views.py:130
+#: profiles/forms.py:211 profiles/views.py:130
 msgid "Reset password"
 msgstr "Restablecer contraseña"
 
-#: profiles/forms.py:227
+#: profiles/forms.py:226
 msgid "Username/email not found"
 msgstr "Nombre de usuario/correo electrónico no encontrado"
 
-#: profiles/forms.py:233
+#: profiles/forms.py:231
+msgid "API key"
+msgstr "Clave API"
+
+#: profiles/forms.py:234
 msgid "You cannot edit your API Key."
 msgstr "No puede editar su clave API."
 
-#: profiles/forms.py:235
+#: profiles/forms.py:237
 msgid "You cannot edit your username."
 msgstr "No puede editar su nombre de usuario."
 
-#: profiles/forms.py:243
+#: profiles/forms.py:247
 msgid "Your new password should be at least 6 characters long"
 msgstr "Su nueva contraseña debería tener al menos 6 caracteres de longitud"
 
+#: profiles/forms.py:260
+msgid "Photo"
+msgstr "Foto"
+
 #: profiles/forms.py:273
+msgid "Age range"
+msgstr "Rango de edad"
+
+#: profiles/forms.py:282
 msgid "Please tick the box to subscribe to mPowering update emails"
 msgstr ""
 "Marque la casilla para suscribirse a los correos electrónicos de "
 "actualización de mPowering"
 
-#: profiles/forms.py:307
+#: profiles/forms.py:285 templates/orb/profile/view.html:62
+msgid "Website"
+msgstr "Sitio web"
+
+#: profiles/forms.py:288 templates/base.html:71
+#: templates/orb/profile/view.html:73
+msgid "Twitter"
+msgstr "Twitter"
+
+#: profiles/forms.py:291 templates/base.html:75 templates/orb/about.html:4
+#: templates/orb/profile/view.html:51
+msgid "About"
+msgstr "Acerca de"
+
+#: profiles/forms.py:319
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
-#: profiles/forms.py:312
+#: profiles/forms.py:324
 msgid "API Key"
 msgstr "Clave API"
 
-#: profiles/forms.py:316
+#: profiles/forms.py:328
 msgid "Save"
 msgstr "Guardar"
 
-#: profiles/forms.py:329
+#: profiles/forms.py:341
 msgid "Email address already in use"
 msgstr "La dirección de correo electróncio ya está en uso"
 
@@ -1039,18 +1078,9 @@ msgstr "Contáctenos"
 msgid "Follow Us"
 msgstr "Síganos"
 
-#: templates/base.html:71 templates/orb/profile/view.html:73
-msgid "Twitter"
-msgstr "Twitter"
-
 #: templates/base.html:72
 msgid "Blog"
 msgstr "Blog"
-
-#: templates/base.html:75 templates/orb/about.html:4
-#: templates/orb/profile/view.html:51
-msgid "About"
-msgstr "Acerca de"
 
 #: templates/base.html:76 templates/orb/about.html:9
 msgid "About ORB"
@@ -1163,10 +1193,6 @@ msgstr "Marcadores"
 #: templates/includes/header.html:80
 msgid "Logout"
 msgstr "Cerrar sesión"
-
-#: templates/includes/header.html:93
-msgid "Language"
-msgstr "Idioma"
 
 #: templates/includes/i18n.html:7
 msgid "Change language"
@@ -2934,10 +2960,6 @@ msgstr ""
 msgid "profile"
 msgstr "perfil"
 
-#: templates/orb/profile/view.html:62
-msgid "Website"
-msgstr "Sitio web"
-
 #: templates/orb/resource/confirm_delete.html:3
 #: templates/orb/resource/confirm_delete.html:7
 msgid "Delete Resource"
@@ -2972,7 +2994,7 @@ msgstr ""
 "en ORB."
 
 #: templates/orb/resource/create_step2.html:6
-msgid "Add Resource -Step 2"
+msgid "Add Resource - Step 2"
 msgstr "Agregar recurso - Paso 2"
 
 #: templates/orb/resource/create_step2.html:9
@@ -3052,9 +3074,6 @@ msgid "Edit Resource"
 msgstr "Editar recurso"
 
 #: templates/orb/resource/edit_step2.html:6
-msgid "Edit Resource -Step 2"
-msgstr "Editar recurso - Paso 2"
-
 #: templates/orb/resource/edit_step2.html:9
 msgid "Edit Resource - Step 2"
 msgstr "Editar recurso - Paso 2"
@@ -3417,6 +3436,21 @@ msgstr "Búsqueda avanzada y filtros"
 #: templates/orb/search_advanced_results.html:9
 msgid "Advanced Search Results"
 msgstr "Resultados de la búsqueda avanzada"
+
+#: templates/orb/search_advanced_results.html:11
+#, python-format
+msgid "%(result_count)s result for "
+msgid_plural "%(result_count)s results for "
+msgstr[0] "%(result_count)s resultado para"
+msgstr[1] "%(result_count)s resultados para"
+
+#: templates/orb/search_advanced_results.html:21 views.py:842
+msgid "Commercial use allowed"
+msgstr "Uso comercial permitido"
+
+#: templates/orb/search_advanced_results.html:21 views.py:842
+msgid "Derivatives allowed"
+msgstr "Derivados permitidos"
 
 #: templates/orb/search_advanced_results.html:30
 msgid "Sorry, no resources were found matching your criteria."
@@ -3869,6 +3903,12 @@ msgstr "Enviar a MEP"
 #: views.py:201 views.py:261 views.py:602
 msgid "You need to be logged in to add a resource."
 msgstr "Debe haber iniciado sesión para agregar un recurso."
+
+#~ msgid "Commerical use allowed"
+#~ msgstr "Uso comercial permitido"
+
+#~ msgid "Edit Resource -Step 2"
+#~ msgstr "Editar recurso - Paso 2"
 
 #~ msgid "About Us"
 #~ msgstr "Acerca de nosotros"

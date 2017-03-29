@@ -8,7 +8,7 @@
 
 <h2>{% trans 'Advanced Search Results' %}</h2>
 
-<h3>{{ total_results }} results for 
+<h3>{% blocktrans count total_results as result_count %}{{ result_count }} result for {% plural %}{{ result_count }} results for {% endblocktrans %}
 {% if q %}'{{ q }}'{% endif %}{% if q and filter_tags %}, {% endif %}
 {% if filter_tags %}
 	{% for tf in filter_tags %}
@@ -18,7 +18,7 @@
 {% if q or filter_tags and license_tags %}, {% endif %}
 {% if license_tags %}
 	{% for lt in license_tags  %}
-		{% if lt == 'NC' %}Commerical use allowed{% endif %} {% if lt == 'ND' %}Derivatives allowed{% endif %}{% if not forloop.last %}, {% endif %} 
+		{% if lt == 'NC' %}{% trans 'Commercial use allowed' %}{% endif %} {% if lt == 'ND' %}{% trans 'Derivatives allowed' %}{% endif %}{% if not forloop.last %}, {% endif %} 
 	{% endfor %}
 {% endif %}
 </h3>

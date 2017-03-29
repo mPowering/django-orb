@@ -43,8 +43,7 @@ class LoginForm(forms.Form):
             Div(
                 Submit('submit', _(u'Login'),
                        css_class='btn btn-default'),
-                HTML("""<a class="btn btn-default" href="{% url 'profile_reset' %}">""" + _(
-                    u'Forgotten password?') + """</a>"""),
+                HTML(u'<a class="btn btn-default" href="%s">%s</a>' % (reverse('profile_reset'),_(u'Forgotten password?'))),
                 css_class='col-lg-offset-2 col-lg-4',
             ),
         )
@@ -97,7 +96,7 @@ class RegisterForm(forms.Form):
                                 label=_(u'Last name'))
     role = forms.ChoiceField(widget=forms.Select,
                                 required=False,
-                                help_text=_('Please select from the options above, or enter in the field below:'), 
+                                help_text=_(u'Please select from the options above, or enter in the field below:'), 
                                 label=_(u'Role'))
     role_other = forms.CharField(label='&nbsp;',
                                  max_length=100,
@@ -107,17 +106,17 @@ class RegisterForm(forms.Form):
                                    label=_(u'Organisation'))
     age_range = forms.ChoiceField(widget=forms.Select,
                                     required=True,
-                                    error_messages={'required': _('Please select an age range')},
+                                    error_messages={'required': _(u'Please select an age range')},
                                     label=_(u'Age Range'))
     gender = forms.ChoiceField(widget=forms.Select,
                                 required=True,
-                                error_messages={'required': _('Please select a gender')},
+                                error_messages={'required': _(u'Please select a gender')},
                                 label=_(u'Gender'))
 
     terms = forms.BooleanField(
         label=_(u"Please tick the box to confirm that you have read the <a href='/terms/' target='_blank' class='prominent'>terms</a> about registering with ORB"),
         required=True,
-        error_messages={'required': _('Please tick the box to confirm that you have read the terms')})
+        error_messages={'required': _(u'Please tick the box to confirm that you have read the terms')})
     mailing = forms.BooleanField(
         label=_(u"Subscribe to mPowering update emails"),
         required=False)
@@ -193,14 +192,14 @@ class RegisterForm(forms.Form):
 
 
 class ResetForm(forms.Form):
-    username = forms.CharField(max_length=100,
+    username = forms.CharField(label=_(u'Username or email'),
+                               max_length=100,
                                error_messages={'invalid': _(
                                    u'Please enter a username or email address.')},
                                required=True)
 
     def __init__(self, *args, **kwargs):
         super(ResetForm, self).__init__(*args, **kwargs)
-        self.fields['username'].label = "Username or email"
         self.helper = FormHelper()
         self.helper.form_action = reverse('profile_reset')
         self.helper.form_class = 'form-horizontal'
@@ -229,55 +228,68 @@ class ResetForm(forms.Form):
 
 
 class ProfileForm(forms.Form):
-    api_key = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}),
-                              required=False, help_text=_(u'You cannot edit your API Key.'))
-    username = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}),
+    api_key = forms.CharField(label=_(u'API key'),
+                              widget=forms.TextInput(attrs={'readonly': 'readonly'}),
+                              required=False, 
+                              help_text=_(u'You cannot edit your API Key.'))
+    username = forms.CharField(label=_(u'Username'),
+                               widget=forms.TextInput(attrs={'readonly': 'readonly'}),
                                required=False, help_text=_(u'You cannot edit your username.'))
-    email = forms.CharField(validators=[validate_email],
+    email = forms.CharField(label=_(u'Email'),
+                            validators=[validate_email],
                             error_messages={'invalid': _(
                                 u'Please enter a valid e-mail address.')},
                             required=True)
-    password = forms.CharField(widget=forms.PasswordInput,
+    password = forms.CharField(label=_(u'Password'),
+                               widget=forms.PasswordInput,
                                required=False,
                                min_length=6,
                                error_messages={'min_length': _(u'Your new password should be at least 6 characters long')},)
-    password_again = forms.CharField(widget=forms.PasswordInput,
+    password_again = forms.CharField(label=_(u'Password again'),
+                                     widget=forms.PasswordInput,
                                      required=False,
                                      min_length=6)
-    first_name = forms.CharField(max_length=100,
+    first_name = forms.CharField(label=_(u'First name'),
+                                 max_length=100,
                                  min_length=2,
                                  required=True)
-    last_name = forms.CharField(max_length=100,
+    last_name = forms.CharField(label=_(u'Last name'),
+                                max_length=100,
                                 min_length=2,
                                 required=True)
-    photo = forms.ImageField(
-        required=False,
-        error_messages={},)
-    role = forms.ChoiceField(
-        widget=forms.Select,
-        required=False,
-        help_text=_('Please select from the options above, or enter in the field below:'), )
+    photo = forms.ImageField(label=_(u'Photo'),
+                                required=False,
+                                error_messages={},)
+    role = forms.ChoiceField(label=_(u'Role'),
+                                widget=forms.Select,
+                                required=False,
+                                help_text=_(u'Please select from the options above, or enter in the field below:'), )
     role_other = forms.CharField(label='&nbsp;',
                                  max_length=100,
                                  required=False)
-    organisation = forms.CharField(max_length=100, required=False)
-    age_range = forms.ChoiceField(
+    organisation = forms.CharField(label=_(u'Organisation'),
+                                    max_length=100, 
+                                    required=False)
+    age_range = forms.ChoiceField(label=_(u'Age range'),
                                 widget=forms.Select,
                                 required=True,
-                                error_messages={'required': _('Please select an age range')},)
-    gender = forms.ChoiceField(
+                                error_messages={'required': _(u'Please select an age range')},)
+    gender = forms.ChoiceField(label=_(u'Gender'),
                                 widget=forms.Select,
                                 required=True,
-                                error_messages={'required': _('Please select a gender')},)
+                                error_messages={'required': _(u'Please select a gender')},)
     mailing = forms.BooleanField(
                                 label=_(u"Please tick the box to subscribe to mPowering update emails"),
                                 required=False)
 
-    website = forms.CharField(max_length=100,
+    website = forms.CharField(label=_(u'Website'),
+                              max_length=100,
                               required=False)
-    twitter = forms.CharField(max_length=100,
+    twitter = forms.CharField(label=_(u'Twitter'),
+                              max_length=100,
                               required=False)
-    about = forms.CharField(widget=forms.Textarea, 
+    about = forms.CharField(label=_(u'About'),
+                            widget=forms.Textarea, 
                             required=False)
 
     def __init__(self, *args, **kwargs):
@@ -304,12 +316,12 @@ class ProfileForm(forms.Form):
             'twitter',
             'mailing',
             Div(
-                HTML("""<h3>""" + _(u'Change password') + """</h3>"""),
+                HTML(u'<h3>%s</h3>' % _(u'Change password')),
             ),
             'password',
             'password_again',
             Div(
-                HTML("""<h3>""" + _(u'API Key') + """</h3>"""),
+                HTML(u'<h3>%s</h3>' % _(u'API Key')),
             ),
             'api_key',
             Div(

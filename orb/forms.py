@@ -126,7 +126,7 @@ class ResourceStep1Form(forms.Form):
                 Div(
                     HTML(
                         u"<label class='control-label' style='float:right; padding-right:10px;'>{0}</label>".format(
-                            _("Study Time")
+                            _(u"Study Time")
                         )),
                     css_class='col-lg-2 '
                 ),
@@ -318,27 +318,27 @@ class AdvancedSearchForm(forms.Form):
         required=False,
         label=_(u'Search terms'),
         error_messages={'required': _(u'Please enter something to search for')},)
-    health_topic = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        required=False,)
-    resource_type = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        required=False,)
-    audience = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        required=False,)
-    geography = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        required=False,)
-    language = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        required=False,)
-    device = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        required=False,)
-    license = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        required=False,)
+    health_topic = forms.MultipleChoiceField(label=_(u'Health domain'),
+                                            widget=forms.CheckboxSelectMultiple,
+                                            required=False,)
+    resource_type = forms.MultipleChoiceField(label=_(u'Resource type'),
+                                                widget=forms.CheckboxSelectMultiple,
+                                                required=False,)
+    audience = forms.MultipleChoiceField(label=_(u'Audience'),
+                                            widget=forms.CheckboxSelectMultiple,
+                                            required=False,)
+    geography = forms.MultipleChoiceField(label=_(u'Geography'),
+                                            widget=forms.CheckboxSelectMultiple,
+                                            required=False,)
+    language = forms.MultipleChoiceField(label=_(u'Language'),
+                                            widget=forms.CheckboxSelectMultiple,
+                                            required=False,)
+    device = forms.MultipleChoiceField(label=_(u'Device'),
+                                        widget=forms.CheckboxSelectMultiple,
+                                        required=False,)
+    license = forms.MultipleChoiceField(label=_(u'License'),
+                                        widget=forms.CheckboxSelectMultiple,
+                                        required=False,)
 
     def __init__(self, *args, **kwargs):
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
@@ -392,16 +392,16 @@ class AdvancedSearchForm(forms.Form):
 
 
 class ResourceRejectForm(forms.Form):
-    criteria = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        required=True,)
+    criteria = forms.MultipleChoiceField(label=_(u'Criteria'),
+                                        widget=forms.CheckboxSelectMultiple,
+                                        required=True,)
     notes = forms.CharField(
-        widget=forms.Textarea,
-        required=True,
-        error_messages={'required': _(
-            u'Please enter a reason as to why the resource has been rejected')},
-        help_text=_(u'The text you enter here will be included in the email to the submitter of the resource, so please bear this in mind when explaining your reasoning.'),
-        label=_(u"Reason for rejection")
+                        widget=forms.Textarea,
+                        required=True,
+                        error_messages={'required': _(
+                            u'Please enter a reason as to why the resource has been rejected')},
+                        help_text=_(u'The text you enter here will be included in the email to the submitter of the resource, so please bear this in mind when explaining your reasoning.'),
+                        label=_(u"Reason for rejection")
     )
 
     def __init__(self, *args, **kwargs):

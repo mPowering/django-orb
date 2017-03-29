@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.db.models import Count, Max, Min, Q, Avg
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from haystack.query import SearchQuerySet
 
 from orb.forms import (ResourceStep1Form, ResourceStep2Form, SearchForm,
@@ -839,7 +839,7 @@ def advanced_search_form_set_choices(form):
             category__slug=slug, resourcetag__resource__status=Resource.APPROVED).distinct().order_by('order_by', 'name')]
 
     form.fields['license'].choices = [
-        ('ND', 'Derivatives allowed'), ('NC', 'Commerical use allowed')]
+        ('ND', _(u'Derivatives allowed')), ('NC', _(u'Commercial use allowed'))]
     return form
 
 
