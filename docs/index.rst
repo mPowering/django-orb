@@ -12,6 +12,6 @@ Contents:
    :maxdepth: 1
 
    manage/index
-   translation/language
+   translation/index
    technical/code
    opendeliver
