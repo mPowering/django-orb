@@ -1,6 +1,6 @@
-====================
-Internationalization
-====================
+========================================
+Internationalization - Technical Set-up
+========================================
 
 Translating source content
 ==========================

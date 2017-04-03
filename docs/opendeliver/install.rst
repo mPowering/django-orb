@@ -1,5 +1,5 @@
-Open Deliver
-==============
+Installation
+============================
 
 
 To assist with setting up the Open Deliver process, mPowering has created an Amazon Machine Image (AMI) on Amazon Web Services (AWS), which already has the 3 key components set up and configured on one machine:
