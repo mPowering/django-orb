@@ -113,13 +113,15 @@ The documentation for managing the internationalisation and translations is desc
 Update logo and information for an organisation
 ------------------------------------------------
 
-All organisations are stored as 'tags'
+All organisations are stored as 'tags', see :ref:`faqUpdateTag`
 
 
-.. _faqUpdateIcon: 
+.. _faqUpdateGeoLangIcon: 
 
 Update the icon for geography or language
 -------------------------------------------
+
+All geographies and languages are stored as 'tags', see :ref:`faqUpdateTag`
 
 
 .. _faqOrganisationAnalytics: 
@@ -127,8 +129,31 @@ Update the icon for geography or language
 Give access to organisation analytics
 ----------------------------------------
 
+Users can be given permissions to view the analytics for all the resources published under their organisations.
+
+* Go to the ORB admin pages
+* Under the ORB section select 'Tag Owners'
+* Click on 'Add tag owner' and select the user and tag to give permissions to, then save
+
+Usually we'd give users access to tags that are organisations, although you could assign users to any tag.
+
 
 .. _faqAddUpdateCollection:
 
 Create/Update a collection of resources
 ----------------------------------------
+
+Collections may be resources that are part of a particular curriculum (eg OpenWASH).
+
+* Go to the ORB admin pages
+* Under the ORB section select 'Collections'
+* Either click to edit an existing collection, or click to 'Add Collection'
+* Enter a title and description and then save
+
+Now to add/edit the resources in the collection:
+
+* Go to the ORB admin pages
+* Under the ORB section select 'Collection resources'
+* Click on 'Add Collection resource'
+* Select the resource and the collection to add it to, optionally add an 'order by' number
+* Click save, repeat for each resource to add to the collection
