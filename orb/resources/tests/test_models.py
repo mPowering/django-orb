@@ -116,10 +116,11 @@ class TestResourceLocality(object):
         test_resource.source_peer = test_peer
         assert not test_resource.is_local()
 
-    def test_sourced_resource(self, test_resource):
+    def test_sourced_resource(self, test_resource, test_peer):
         """Both a source name and host should mark a resource as not local"""
         test_resource.source_name = "Another ORB"
         test_resource.source_host = "http://www.yahoo.com"
+        test_resource.source_peer = test_peer
         assert not test_resource.is_local()
 
 
