@@ -14,8 +14,8 @@ from orb.resources.tests.factory import resource_factory
 pytestmark = pytest.mark.django_db
 
 
-@pytest.fixture(scope="session")
-def test_user():
+@pytest.fixture
+def testing_user():
     user, _ = User.objects.get_or_create(username="tester")
     yield user
 
@@ -26,27 +26,26 @@ def import_user():
     yield user
 
 
-
-@pytest.fixture(scope="session")
-def test_category():
+@pytest.fixture
+def sample_category():
     category, _ = Category.objects.get_or_create(name="test category")
     yield category
 
 
-@pytest.fixture(scope="session")
-def test_tag(test_category, test_user):
+@pytest.fixture
+def sample_tag(sample_category, testing_user):
     tag, _ = Tag.objects.get_or_create(name="test tag", defaults={
-        "category": test_category,
-        "create_user": test_user,
-        "update_user": test_user,
+        "category": sample_category,
+        "create_user": testing_user,
+        "update_user": testing_user,
     })
     yield tag
 
 
-@pytest.fixture(scope="session")
-def test_resource(test_user):
+@pytest.fixture
+def test_resource(testing_user):
     yield resource_factory(
-        user=test_user,
+        user=testing_user,
         title=u"Básica salud del recién nacido",
         description=u"Básica salud del recién nacido",
     )

@@ -911,16 +911,35 @@ def resource_add_free_text_tags(resource, tag_text, user, category_slug):
     category = Category.objects.get(slug=category_slug)
 
     for tag_name in free_text_tags:
-        tag, created = Tag.tags.get_or_create(name=tag_name, defaults={
-            'category': category,
-            'create_user': user,
-            'update_user': user,
-        })
+        try:
+            tag = Tag.tags.rewrite(False).get(name=tag_name)
+        except Tag.DoesNotExist:
+            try:
+                tag = Tag.tags.get(name=tag_name)
+            except Tag.DoesNotExist:
+                tag = Tag.tags.create(
+                    name=tag_name,
+                    category=category,
+                    create_user=user,
+                    update_user=user,
+                )
         ResourceTag.objects.get_or_create(
             tag=tag, resource=resource, defaults={'create_user': user})
 
 
 def resource_add_tags(request, form, resource):
+    """
+    Adds structured tags to the resource
+
+    Args:
+        request: the HttpRequest
+        form: Resource add/edit form that has the tag data
+        resource: the resource to add the tags
+
+    Returns:
+        None
+
+    """
     tag_categories = ["health_topic", "resource_type", "audience", "device"]
     for tc in tag_categories:
         tag_category = form.cleaned_data.get(tc)

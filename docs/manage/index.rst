@@ -7,6 +7,6 @@ Managing an ORB installation
    :maxdepth: 2
    
    content_review
-   faqs
+   kmtasks
    peers
    analytics

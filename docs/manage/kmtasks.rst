@@ -29,11 +29,25 @@ Add a new health domain
 Add a new content reviewer
 -----------------------------
 
+The new reviewer should register on ORB first and let us have their username so we can then assign them permissions.
+
 * Go to the ORB admin pages
 * Under the ORB section select 'User profiles'
 * Search or browse for the user and click to edit their details
 * Under the reviewer roles, select the role(s) to give this user
 * Click 'save'
+
+
+.. _faqContentReviewers:
+
+View Content Reviewers
+-----------------------------
+
+If you need to find out who is currently listed as being a content reviewer, and for which roles:
+
+* Go to the ORB admin pages
+* Under the ORB section select 'User profiles'
+* From the filtering menu on the right hand side, you can filter the users by the reviewer roles 
 
 
 .. _faqUpdateTag:
@@ -113,13 +127,15 @@ The documentation for managing the internationalisation and translations is desc
 Update logo and information for an organisation
 ------------------------------------------------
 
-All organisations are stored as 'tags'
+All organisations are stored as 'tags', see :ref:`faqUpdateTag`
 
 
-.. _faqUpdateIcon: 
+.. _faqUpdateGeoLangIcon: 
 
 Update the icon for geography or language
 -------------------------------------------
+
+All geographies and languages are stored as 'tags', see :ref:`faqUpdateTag`
 
 
 .. _faqOrganisationAnalytics: 
@@ -127,8 +143,31 @@ Update the icon for geography or language
 Give access to organisation analytics
 ----------------------------------------
 
+Users can be given permissions to view the analytics for all the resources published under their organisations.
+
+* Go to the ORB admin pages
+* Under the ORB section select 'Tag Owners'
+* Click on 'Add tag owner' and select the user and tag to give permissions to, then save
+
+Usually we'd give users access to tags that are organisations, although you could assign users to any tag.
+
 
 .. _faqAddUpdateCollection:
 
 Create/Update a collection of resources
 ----------------------------------------
+
+Collections may be resources that are part of a particular curriculum (eg OpenWASH).
+
+* Go to the ORB admin pages
+* Under the ORB section select 'Collections'
+* Either click to edit an existing collection, or click to 'Add Collection'
+* Enter a title and description and then save
+
+Now to add/edit the resources in the collection:
+
+* Go to the ORB admin pages
+* Under the ORB section select 'Collection resources'
+* Click on 'Add Collection resource'
+* Select the resource and the collection to add it to, optionally add an 'order by' number
+* Click save, repeat for each resource to add to the collection
