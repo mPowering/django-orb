@@ -52,9 +52,19 @@
 
 
         {% if STAGING %}
-            <div class="alert alert-danger">
+            <div class="alert alert-danger alert-dismissable">
+            	<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 {% trans 'This is the development server, anything added here will not be shared on the live site' %}
             </div>
+        {% endif %}
+        
+        {% if NOTICES %}
+        	{% for n in NOTICES %}
+        		<div class="alert alert-info alert-dismissable">
+  					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+  					{{ n|safe }}
+				</div>
+        	{% endfor %}
         {% endif %}
         {% block content %} {% endblock content %}
     </div><!--  end main -->

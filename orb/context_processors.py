@@ -1,5 +1,7 @@
 # orb/context_processors.py
+from datetime import date
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 import orb
 from orb.models import Category, Tag, TagOwner
 
@@ -19,12 +21,13 @@ def get_menu(request):
             reviewer = False
     else:
         reviewer = False
-
+    
     return {
         'header_menu_categories': topics,
         'header_owns_tags': tags,
         'settings': settings,
         'reviewer': reviewer,
+        
     }
 
 
@@ -37,10 +40,15 @@ def get_version(request):
     else:
         staging = False
 
+    notices = []
+    #if date.today() >= date(2017, 04, 05) and date.today() <= date(2017, 04, 30):
+    #    notices.append(_(u'<strong>ORB Survey.</strong> We\'re looking for your feedback on ORB, take our survey now... '))
+        
     return {'version': version,
             'ORB_GOOGLE_ANALYTICS_CODE': settings.ORB_GOOGLE_ANALYTICS_CODE,
             'ORB_RESOURCE_MIN_RATINGS': settings.ORB_RESOURCE_MIN_RATINGS,
-            'STAGING': staging}
+            'STAGING': staging,
+            'NOTICES': notices,}
 
 
 def base_context_processor(request):
