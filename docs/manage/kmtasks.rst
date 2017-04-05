@@ -29,11 +29,25 @@ Add a new health domain
 Add a new content reviewer
 -----------------------------
 
+The new reviewer should register on ORB first and let us have their username so we can then assign them permissions.
+
 * Go to the ORB admin pages
 * Under the ORB section select 'User profiles'
 * Search or browse for the user and click to edit their details
 * Under the reviewer roles, select the role(s) to give this user
 * Click 'save'
+
+
+.. _faqContentReviewers:
+
+View Content Reviewers
+-----------------------------
+
+If you need to find out who is currently listed as being a content reviewer, and for which roles:
+
+* Go to the ORB admin pages
+* Under the ORB section select 'User profiles'
+* From the filtering menu on the right hand side, you can filter the users by the reviewer roles 
 
 
 .. _faqUpdateTag:
