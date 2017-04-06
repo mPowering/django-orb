@@ -14,7 +14,8 @@ def modify(settings):
                                    'django.contrib.humanize',
                                    'modeltranslation',
                                    'modeltranslation_exim',
-                                   'orb.peers', )
+                                   'orb.peers', 
+                                   'orb.toolkits',)
     settings['MIDDLEWARE_CLASSES'] += ('orb.middleware.SearchFormMiddleware',)
     settings['TEMPLATES'][0]['OPTIONS']['context_processors'] += ('orb.context_processors.get_menu',)
     settings['TEMPLATES'][0]['OPTIONS']['context_processors'] += ('orb.context_processors.get_version',)

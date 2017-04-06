@@ -136,13 +136,9 @@ Now to add/edit the resources in the collection:
 
 Add or update a toolkit
 ~~~~~~~~~~~~~~~~~~~~~~~
-
-.. note::
-   Currently the toolkits are hard coded, but they will move to being stored in the database soon - these instructions 
-   relate to how it will work when they are managed in the database.
  
 * Go to the ORB admin pages
-* Under the ORB section select 'Toolkits' 
+* Under the 'Toolkits' section select 'Toolkits' 
 * Search or browse for the toolkit and click to edit the details
 
 
