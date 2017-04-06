@@ -170,13 +170,5 @@ Updates from core code repositories
 
 The AWS AMI is a point-in-time snapshot of the core code for ORB, Moodle and OppiaMobile, so you should ensure that the code for each of these is kept up to date.
 
-OpenDeliver AMI - v1
-----------------------
-
-The first version of the OpenDeliver AMI consists of the following versions:
-
-* ORB v2.2.2
-* Moodle v3.2
-* OppiaMobile server v0.9.8
 
 

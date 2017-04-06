@@ -91,13 +91,13 @@ class Resource(TimestampBase):
     attribution = models.TextField(blank=True, null=True, default=None)
 
     # Tracking fields
-    source_url = models.URLField(null=True, blank=True, help_text=_("Original resource URL."))
+    source_url = models.URLField(null=True, blank=True, help_text=_(u"Original resource URL."))
     source_name = models.CharField(null=True, blank=True, max_length=200,
-                                   help_text=_("Name of the source ORB instance where resource was sourced."))
+                                   help_text=_(u"Name of the source ORB instance where resource was sourced."))
     source_host = models.URLField(null=True, blank=True,
-                                   help_text=_("Host URL of the original ORB instance where resource was sourced."))
+                                   help_text=_(u"Host URL of the original ORB instance where resource was sourced."))
     source_peer = models.ForeignKey('peers.Peer', null=True, blank=True, related_name="resources",
-                                    help_text=_("The peer ORB from which the resource was downloaded."))
+                                    help_text=_(u"The peer ORB from which the resource was downloaded."))
 
     resources = ResourceQueryset.as_manager()
     objects = resources  # alias
@@ -106,8 +106,8 @@ class Resource(TimestampBase):
     API_EXCLUDED_FIELDS = ['id', 'guid']
 
     class Meta:
-        verbose_name = _('Resource')
-        verbose_name_plural = _('Resources')
+        verbose_name = _(u'Resource')
+        verbose_name_plural = _(u'Resources')
         ordering = ('title',)
 
     def __unicode__(self):
@@ -457,8 +457,8 @@ class ResourceCriteria(models.Model):
         'orb.ReviewerRole',
         related_name="criteria",
         blank=True, null=True,
-        help_text=_("Used to show specific criteria to reviewers based on their role. "
-                    "Leave blank if criterion applies generally."),
+        help_text=_(u"Used to show specific criteria to reviewers based on their role. "
+                    u"Leave blank if criterion applies generally."),
     )
 
     criteria = CriteriaQueryset.as_manager()
@@ -511,7 +511,7 @@ class Tag(TimestampBase):
     description = models.TextField(blank=True, null=True, default=None)
     summary = models.CharField(blank=True, null=True, max_length=100)
     contact_email = models.CharField(blank=True, null=True, max_length=100)
-    published = models.BooleanField(default=True, help_text="Used to toggle status of health domains.")
+    published = models.BooleanField(default=True, help_text=_(u"Used to toggle status of health domains."))
 
     tags = TagQuerySet.as_manager()
     objects = tags  # backwards compatibility
@@ -553,8 +553,8 @@ class TagProperty(models.Model):
     value = models.TextField(blank=False, null=False)
 
     class Meta:
-        verbose_name = _('Tag property')
-        verbose_name_plural = _('Tag properties')
+        verbose_name = _(u'Tag property')
+        verbose_name_plural = _(u'Tag properties')
         ordering = ('tag', 'name', 'value')
 
     def __unicode__(self):
@@ -622,17 +622,17 @@ class ResourceTag(models.Model):
 
 class UserProfile(TimestampBase):
     AGE_RANGE = (
-        ('under_18', _('under 18')),
-        ('18_25', _('18-24')),
-        ('25_35', _('25-34')),
-        ('35_50', _('35-50')),
-        ('over_50', _('over 50')),
-        ('none', _('Prefer not to say')),
+        ('under_18', _(u'under 18')),
+        ('18_25', _(u'18-24')),
+        ('25_35', _(u'25-34')),
+        ('35_50', _(u'35-50')),
+        ('over_50', _(u'over 50')),
+        ('none', _(u'Prefer not to say')),
     )
     GENDER = (
-        ('female', _('Female')),
-        ('male', _('Male')),
-        ('none', _('Prefer not to say')),
+        ('female', _(u'Female')),
+        ('male', _(u'Male')),
+        ('none', _(u'Prefer not to say')),
     )
 
     user = models.OneToOneField(User)
@@ -655,8 +655,8 @@ class UserProfile(TimestampBase):
     age_range = models.CharField(
         max_length=50, choices=AGE_RANGE, default='none')
     mailing = models.BooleanField(default=False, blank=False)
-    crt_member = models.BooleanField(default=False, blank=False)
-    mep_member = models.BooleanField(default=False, blank=False)
+    crt_member = models.BooleanField(default=False, blank=False, help_text=_(u'deprecated'))
+    mep_member = models.BooleanField(default=False, blank=False, help_text=_(u'deprecated'))
     reviewer_roles = models.ManyToManyField('ReviewerRole', blank=True, related_name="profiles")
 
     profiles = ProfilesQueryset.as_manager()
@@ -664,8 +664,8 @@ class UserProfile(TimestampBase):
 
     class Meta:
         db_table = "orb_userprofile"
-        verbose_name = _("user profile")
-        verbose_name_plural = _("user profiles")
+        verbose_name = _(u"user profile")
+        verbose_name_plural = _(u"user profiles")
 
     def __unicode__(self):
         return self.user.get_full_name()
@@ -771,17 +771,24 @@ class Collection(TimestampBase):
         (PUBLIC, _(u'Public')),
         (PRIVATE, _(u'Private')),
     )
-    title = models.TextField(blank=False, null=False)
-    description = models.TextField(blank=True, null=True, default=None)
+    title = models.TextField(blank=False, 
+                            null=False,
+                            help_text=_(u"A title for the collection"))
+    description = models.TextField(blank=True, 
+                                   null=True, 
+                                   default=None,
+                                   help_text=_(u"A description of the collection"))
     visibility = models.CharField(
-        max_length=50, choices=VISIBILITY_TYPES, default=PRIVATE)
+                            max_length=50, 
+                            choices=VISIBILITY_TYPES, 
+                            default=PRIVATE)
     image = models.ImageField(
         upload_to='collection/%Y/%m/%d', null=True, blank=True)
     slug = AutoSlugField(populate_from='title', max_length=255, blank=True, null=True)
 
     class Meta:
-        verbose_name = _('Collection')
-        verbose_name_plural = _('Collections')
+        verbose_name = _(u'Collection')
+        verbose_name_plural = _(u'Collections')
         ordering = ('title',)
 
     def __unicode__(self):

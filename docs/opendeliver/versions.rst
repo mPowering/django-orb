@@ -8,6 +8,9 @@ OpenDeliver AMI Versions
 OpenDeliver AMI - v2 - 
 ------------------------------------
 
+* ORB v2.3.0
+* Moodle v3.2.2
+* OppiaMobile server v0.9.8
 
 
 .. _opendeliver-amiv1:

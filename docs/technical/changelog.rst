@@ -7,6 +7,7 @@ Change log
 v2.4.0 - not yet released
 ----------------------------------
 
+* 463: Add some additional help info on the model fields - https://github.com/mPowering/django-orb/issues/issues/463
 
 .. _orb-v2-3-0:
 
