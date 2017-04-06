@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
+from orb.toolkits import views
 
 urlpatterns = [
-    url(r'^$', 'orb.toolkits.views.toolkit_home_view', name="orb_toolkits_home"),
+    url(r'^$', view=views.ToolkitsView.as_view(), name="orb_toolkits"),
 ]
