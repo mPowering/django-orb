@@ -224,6 +224,14 @@ STAGING = False  # used for version context processor
 DJANGO_WYSIWYG_FLAVOR = "tinymce_advanced"
 CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
+TINYMCE_DEFAULT_CONFIG = {
+    'theme': "advanced", # default value
+    'relative_urls': False, # default value
+    'width': '100%',
+    'height': 300,
+    'position': 'top',
+}
+
 
 try:
     from local_settings import *  # noqa
