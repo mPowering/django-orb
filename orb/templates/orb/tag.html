@@ -9,17 +9,6 @@
           href="{% url 'orb_tag_feed' tag.slug %}">
 {% endblock extra_head_feed %}
 
-{% block extra_scripts %}
-    <script type="text/javascript">
-        function OnOrderChange(dropdown) {
-            var myindex = dropdown.selectedIndex;
-            var selValue = dropdown.options[myindex].value;
-            top.location.href = selValue;
-            return true;
-        }
-    </script>
-{% endblock extra_scripts %}
-
 {% block content %}
 
     {% include 'orb/includes/search_bar.html' %}
@@ -53,17 +42,10 @@
 
     {% if page.object_list %}
         <div class="orderby">
-            <form method="get">
+            <form method="GET" action="." id="params-form">
                 {% trans 'Order by: ' %}
-                <select name="order" onchange="OnOrderChange(this.form.order);">
-                    {% for k,v in ordering %}
-                        <option value="{% add_get order=k %}"
-                                {% if k == current_order %}selected="selected" {% endif %}>
-                            {{ v }}
-                        </option>
-                    {% endfor %}
-                </select>
-
+                {{ params_form.order }}
+                {{ params_form.page }}
                 {% if show_filter_link == True %}
                     <a href="{% url 'orb_search_advanced_prefill' tag.id %}">{% trans 'Advanced search & filter' %}</a>
                 {% endif %}
@@ -97,4 +79,14 @@
         </div>
     {% endif %}
 
+{% endblock %}
+
+{% block footer_js %}
+<script>
+//id_order
+//<!--<select name="order" onchange="OnOrderChange(this.form.order);">-->
+$("select#id_order").change(function(){
+    window.location.search = "?order=" + this.value + "&page=" + ($("input#id_page").value || 1);
+});
+</script>
 {% endblock %}

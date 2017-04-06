@@ -18,6 +18,7 @@ from orb.models import ReviewerRole
 from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, TagTracker, SearchTracker
 from orb.signals import (resource_viewed, resource_url_viewed, resource_file_viewed,
                          search, resource_workflow, resource_submitted, tag_viewed)
+from orb.tags.forms import TagPageForm
 
 
 def home_view(request):
@@ -48,54 +49,43 @@ def partner_view(request):
 
 
 def tag_view(request, tag_slug):
+    """
+    Renders a tag detail page.
 
+    Allows the user to paginate resultes and sort by preselected options.
+
+    Args:
+        request: HttpRequest
+        tag_slug: the identifier for the tag
+
+    Returns:
+        Rendered response with a tag's resource list
+
+    """
     tag = get_object_or_404(Tag, slug=tag_slug)
-    child_tags = Tag.objects.filter(parent_tag=tag, resourcetag__resource__status=Resource.APPROVED).annotate(
-        resource_count=Count('resourcetag__resource')).order_by('order_by', 'name')
+    filter_params = {
+        'page': 1,
+        'order': TagPageForm.CREATED,
+    }
 
-    CREATED = u'-create_date'
-    TITLE = u'title'
-    UPDATED = u'-update_date'
-    RATING = u'-rating'
-    ORDER_OPTIONS = (
-        (CREATED, _(u'Create date')),
-        (TITLE, _(u'Title')),
-        (RATING, _(u'Rating')),
-        (UPDATED, _(u'Update date')),
-    )
+    params_form = TagPageForm(data=request.GET)
+    if params_form.is_valid():
+        filter_params.update(params_form.cleaned_data)
 
-    order_by = request.GET.get('order', CREATED)
-
-    if order_by == RATING:
-        data = []
-        data_top = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).annotate(rating=Avg(
-            'resourcerating__rating'), rate_count=Count('resourcerating')).exclude(rate_count__lt=settings.ORB_RESOURCE_MIN_RATINGS).order_by(order_by)
-        for d in data_top:
-            data.append(d)
-
-        data_bottom = Resource.objects.filter(resourcetag__tag=tag, status=Resource.APPROVED).annotate(rating=Avg(
-            'resourcerating__rating'), rate_count=Count('resourcerating')).exclude(rate_count__gte=settings.ORB_RESOURCE_MIN_RATINGS).order_by(order_by)
-        for d in data_bottom:
-            data.append(d)
+    order_by = filter_params['order']
+    if order_by == TagPageForm.RATING:
+        data = Resource.resources.approved().with_ratings(tag).order_by(order_by)
     else:
-        data = Resource.objects.filter(
-            resourcetag__tag=tag, status=Resource.APPROVED).order_by(order_by)
+        data = Resource.resources.approved().for_tag(tag).order_by(order_by)
 
     paginator = Paginator(data, settings.ORB_PAGINATOR_DEFAULT)
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        page = int(request.GET.get('page', '1'))
-    except ValueError:
-        page = 1
 
     try:
-        resources = paginator.page(page)
+        resources = paginator.page(filter_params['page'])
     except (EmptyPage, InvalidPage):
         resources = paginator.page(paginator.num_pages)
 
-    show_filter_link = False
-    if tag.category.slug in [slug for name, slug in settings.ADVANCED_SEARCH_CATEGORIES]:
-        show_filter_link = True
+    show_filter_link = tag.category.slug in [slug for name, slug in settings.ADVANCED_SEARCH_CATEGORIES]
 
     tag_viewed.send(sender=tag, tag=tag, request=request)
 
@@ -103,10 +93,8 @@ def tag_view(request, tag_slug):
 
     return render(request, 'orb/tag.html', {
         'tag': tag,
-        'child_tags': child_tags,
         'page': resources,
-        'ordering': ORDER_OPTIONS,
-        'current_order': order_by,
+        'params_form': params_form,
         'show_filter_link': show_filter_link,
         'is_geo_tag': is_geo_tag,
     })
