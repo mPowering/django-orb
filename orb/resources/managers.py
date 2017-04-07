@@ -4,6 +4,8 @@ Manager classes for resource-related models
 
 from django.contrib.auth.models import AnonymousUser
 from django.db import models
+from django.conf import settings
+from django.db.models import Count, Max, Min, Q, Avg, Case, When, Value
 
 
 def approved_queryset(queryset, user=AnonymousUser, status="approved", relation=""):
@@ -68,6 +70,26 @@ class ResourceQueryset(models.QuerySet):
             models.Q(status="approved") |
             models.Q(status="rejected")
         )
+
+    def for_tag(self, tag):
+        return self.filter(resourcetag__tag=tag)
+
+    def with_ratings(self, tag):
+        """
+        Adds annotations f
+
+        Orders first by whether this exceeds the minimum
+        """
+        return self.for_tag(tag).annotate(
+            rating=Avg('resourcerating__rating'),
+            rate_count=Count('resourcerating'),
+        ).annotate(
+            exceeds_minimum=Case(
+                When(rate_count__gte=settings.ORB_RESOURCE_MIN_RATINGS, then=Value(True)),
+                default=Value(False),
+                output_field=models.BooleanField(),
+            ),
+        ).order_by('exceeds_minimum')
 
 
 class ResourceURLManager(models.Manager):

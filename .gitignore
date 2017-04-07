@@ -84,3 +84,5 @@ Vagrantfile.local
 ###############
 docs/_build
 userdocs/build
+
+.hypothesis
