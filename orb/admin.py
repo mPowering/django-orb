@@ -7,6 +7,8 @@ from orb.models import Category, Tag, Resource, ResourceURL, TagProperty
 from orb.models import Collection, CollectionUser, CollectionResource, ReviewerRole
 from orb.models import ResourceFile, ResourceTag, UserProfile, ResourceCriteria
 from orb.models import ResourceTracker, SearchTracker, TagOwner, ResourceWorkflowTracker, ResourceRating
+from django.shortcuts import render
+from orb.actions import merge_selected_tags
 
 
 class ReviewerFilter(admin.SimpleListFilter):
@@ -110,6 +112,12 @@ class TagAdmin(admin.ModelAdmin):
                     'slug', 'published', 'parent_tag', 'order_by', 'image')
     search_fields = ['name', 'description']
     raw_id_fields = ('create_user', 'update_user', 'category', 'parent_tag')
+    list_filter = ['category']
+    actions = [merge_selected_tags]
+
+    def merge_tags(self, request, queryset):
+        return render(request, "orb/merge_tags_confirmation.html", {})
+    merge_tags.short_description = "Merge selected tags"
 
 
 @admin.register(TagProperty)
