@@ -1,14 +1,26 @@
+from django import forms
+from django.conf.urls import url
 from django.contrib import admin
+from django.contrib import messages
 from django.db.models import Value as V, F
 from django.db.models.functions import Concat
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.translation import ugettext_lazy as _
 
+from orb.actions import merge_selected_tags
 from orb.models import Category, Tag, Resource, ResourceURL, TagProperty
 from orb.models import Collection, CollectionUser, CollectionResource, ReviewerRole
 from orb.models import ResourceFile, ResourceTag, UserProfile, ResourceCriteria
 from orb.models import ResourceTracker, SearchTracker, TagOwner, ResourceWorkflowTracker, ResourceRating
-from django.shortcuts import render
-from orb.actions import merge_selected_tags
+
+
+class TagMergeForm(forms.Form):
+    tag = forms.ModelChoiceField(queryset=Tag.tags.all(), label=_('Winner'))
+
+    def __init__(self, other=None, *args, **kwargs):
+        super(TagMergeForm, self).__init__(*args, **kwargs)
+        if other:
+            self.fields['tag'].queryset = Tag.tags.exclude(pk=other.pk)
 
 
 class ReviewerFilter(admin.SimpleListFilter):
@@ -115,9 +127,33 @@ class TagAdmin(admin.ModelAdmin):
     list_filter = ['category']
     actions = [merge_selected_tags]
 
-    def merge_tags(self, request, queryset):
-        return render(request, "orb/merge_tags_confirmation.html", {})
-    merge_tags.short_description = "Merge selected tags"
+    def get_urls(self):
+        urls = super(TagAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<object_id>\d+)/merge/$', self.admin_site.admin_view(self.merge_tags), name="merge_tags"),
+        ]
+        return my_urls + urls
+
+    def merge_tags(self, request, object_id):
+        tag = get_object_or_404(Tag, pk=object_id)
+
+        form = TagMergeForm(tag)
+
+        if request.method == 'POST':
+            form = TagMergeForm(tag, data=request.POST)
+            if form.is_valid():
+                winner = form.cleaned_data['tag']
+                winner.merge(tag)
+                messages.success(request, u"The tag '{}' was merged into '{}'".format(tag, winner))
+                return redirect('admin:orb_tag_changelist')
+
+        context = dict(
+            self.admin_site.each_context(request),
+            app_label='orb',
+            tag=tag,
+            form=form,
+        )
+        return render(request, "admin/orb/tag/merge_tag_form.html", context)
 
 
 @admin.register(TagProperty)

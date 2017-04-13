@@ -68,4 +68,4 @@ def merge_selected_tags(modeladmin, request, queryset):
 
     request.current_app = modeladmin.admin_site.name
 
-    return render(request, "orb/merge_tags_confirmation.html", context)
+    return render(request, "orb/templates/admin/orb/tag/merge_tags_confirmation.html", context)
