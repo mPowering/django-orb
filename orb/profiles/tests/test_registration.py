@@ -131,19 +131,3 @@ class PasswordUpdateTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.client.logout()
         self.client.login(username='standarduser', password=new_password)
-
-
-class ProfileUpdateTest(TestCase):
-    fixtures = ['user.json', 'orb.json']
-
-    def setUp(self):
-        self.client = Client()
-
-    # check can't change profile of another user
-
-
-class PasswordResetTest(TestCase):
-    fixtures = ['user.json', 'orb.json']
-
-    def setUp(self):
-        self.client = Client()
