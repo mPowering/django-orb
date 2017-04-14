@@ -98,6 +98,7 @@ class Resource(TimestampBase):
                                    help_text=_(u"Host URL of the original ORB instance where resource was sourced."))
     source_peer = models.ForeignKey('peers.Peer', null=True, blank=True, related_name="resources",
                                     help_text=_(u"The peer ORB from which the resource was downloaded."))
+    tags = models.ManyToManyField('Tag', through='ResourceTag', blank=True)
 
     resources = ResourceQueryset.as_manager()
     objects = resources  # alias
@@ -248,9 +249,6 @@ class Resource(TimestampBase):
         tags = Tag.objects.filter(
             resourcetag__resource=self, category__slug='type')
         return tags
-
-    def tags(self):
-        return Tag.objects.filter(resourcetag__resource=self)
 
     def get_no_hits(self):
         anon = ResourceTracker.objects.filter(resource=self, user=None).values_list('ip',
