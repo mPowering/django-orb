@@ -98,6 +98,7 @@ class Resource(TimestampBase):
                                    help_text=_(u"Host URL of the original ORB instance where resource was sourced."))
     source_peer = models.ForeignKey('peers.Peer', null=True, blank=True, related_name="resources",
                                     help_text=_(u"The peer ORB from which the resource was downloaded."))
+    tags = models.ManyToManyField('Tag', through='ResourceTag', blank=True)
 
     resources = ResourceQueryset.as_manager()
     objects = resources  # alias
@@ -248,10 +249,6 @@ class Resource(TimestampBase):
         tags = Tag.objects.filter(
             resourcetag__resource=self, category__slug='type')
         return tags
-
-    # TODO make this an M2M field with a defined through model
-    def tags(self):
-        return Tag.objects.filter(resourcetag__resource=self)
 
     def get_no_hits(self):
         anon = ResourceTracker.objects.filter(resource=self, user=None).values_list('ip',
@@ -546,9 +543,33 @@ class Tag(TimestampBase):
         props = TagProperty.objects.filter(tag=self, name=name)
         return props
 
+    def merge(self, other):
+        """
+        Merges another tag into this one
+
+        In doing so it 'merges' relations by ensuring tagged resources are maintained
+
+        Args:
+            other: the 'loser' Tag instance
+
+        Returns:
+            None
+
+        """
+        # The following is a more sensible query-based way of updating, however
+        # due to a limitation in MySQL this is not possible (MySQL Error 1093):
+        # >>> other.resourcetag.exclude(resource__resourcetag__tag=self).update(tag=self)
+
+        for resource_tag in other.resourcetag.exclude(resource__resourcetag__tag=self):
+            resource_tag.tag = self
+            resource_tag.save()
+
+        other.tracker.all().update(tag=self)
+        other.delete()
+
 
 class TagProperty(models.Model):
-    tag = models.ForeignKey(Tag)
+    tag = models.ForeignKey(Tag, related_name="properties")
     name = models.TextField(blank=False, null=False)
     value = models.TextField(blank=False, null=False)
 
@@ -563,7 +584,7 @@ class TagProperty(models.Model):
 
 class TagOwner(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL)
-    tag = models.ForeignKey(Tag)
+    tag = models.ForeignKey(Tag, related_name="owner")
 
     class Meta:
         unique_together = ("user", "tag")
@@ -572,9 +593,8 @@ class TagOwner(models.Model):
 class ResourceTag(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     resource = models.ForeignKey(Resource)
-    tag = models.ForeignKey(Tag)
-    create_user = models.ForeignKey(
-        User, related_name='resourcetag_create_user')
+    tag = models.ForeignKey(Tag, related_name="resourcetag")
+    create_user = models.ForeignKey(User, related_name='resourcetag_create_user')
 
     objects = ResourceTagManager()
 
@@ -640,10 +660,8 @@ class UserProfile(TimestampBase):
         upload_to='userprofile/%Y/%m/%d', max_length=200, blank=True, null=True)
     about = models.TextField(blank=True, null=True, default=None)
     job_title = models.TextField(blank=True, null=True, default=None)
-    organisation = models.ForeignKey(
-        Tag, related_name='organisation', blank=True, null=True, default=None)
-    role = models.ForeignKey(Tag, related_name='role',
-                             blank=True, null=True, default=None)
+    organisation = models.ForeignKey(Tag, related_name='organisation', blank=True, null=True, default=None)
+    role = models.ForeignKey(Tag, related_name='role', blank=True, null=True, default=None)
     role_other = models.TextField(blank=True, null=True, default=None)
     phone_number = models.TextField(blank=True, null=True, default=None)
     website = models.CharField(
@@ -748,7 +766,7 @@ class TagTracker(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
                              default=None, on_delete=models.SET_NULL)
     type = models.CharField(max_length=50, choices=TRACKER_TYPES, default=VIEW)
-    tag = models.ForeignKey(Tag, blank=True, null=True,
+    tag = models.ForeignKey(Tag, blank=True, null=True, related_name="tracker",
                             default=None, on_delete=models.SET_NULL)
     access_date = models.DateTimeField(auto_now_add=True)
     ip = models.GenericIPAddressField(blank=True, null=True, default=None)
@@ -771,16 +789,16 @@ class Collection(TimestampBase):
         (PUBLIC, _(u'Public')),
         (PRIVATE, _(u'Private')),
     )
-    title = models.TextField(blank=False, 
+    title = models.TextField(blank=False,
                             null=False,
                             help_text=_(u"A title for the collection"))
-    description = models.TextField(blank=True, 
-                                   null=True, 
+    description = models.TextField(blank=True,
+                                   null=True,
                                    default=None,
                                    help_text=_(u"A description of the collection"))
     visibility = models.CharField(
-                            max_length=50, 
-                            choices=VISIBILITY_TYPES, 
+                            max_length=50,
+                            choices=VISIBILITY_TYPES,
                             default=PRIVATE)
     image = models.ImageField(
         upload_to='collection/%Y/%m/%d', null=True, blank=True)
@@ -852,3 +870,4 @@ def get_import_user():
         user.is_active = False
         user.save()
         return user
+
