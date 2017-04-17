@@ -2,7 +2,7 @@
 Manager classes for tag-related models
 """
 
-from django.db import models
+from django.db import models, IntegrityError
 from django.contrib.auth.models import AnonymousUser
 from orb.resources.managers import approved_queryset
 

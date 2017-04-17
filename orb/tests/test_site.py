@@ -570,6 +570,9 @@ class AnalyticsPageTest(TestCase):
     def test_tags(self):
 
         tags = Tag.objects.all()
+        if FAST_TESTS:
+            tags = tags[:1]
+
         for t in tags:
             # for anon user
             response = self.client.get(
@@ -615,21 +618,3 @@ class AnalyticsPageTest(TestCase):
             else:
                 self.assertEqual(response.status_code, 401)
             self.client.logout()
-
-        """
-        response = self.client.get(reverse('orb_analytics_download'))
-        self.assertEqual(response.status_code, 401)
-        """
-
-
-@unittest.skip("Incomplete TestCase")
-class FeedTest(TestCase):
-    fixtures = ['user.json', 'orb.json']
-
-    def setUp(self):
-        self.client = Client()
-
-    """
-    orb_feed
-    orb_tag_feed
-    """
