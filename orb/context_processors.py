@@ -41,8 +41,8 @@ def get_version(request):
         staging = False
 
     notices = []
-    #if date.today() >= date(2017, 04, 05) and date.today() <= date(2017, 04, 30):
-    #    notices.append(_(u'<strong>ORB Survey.</strong> We\'re looking for your feedback on ORB, take our survey now... '))
+    if date.today() >= date(2017, 04, 05) and date.today() <= date(2017, 05, 21):
+        notices.append(_(u'<strong>ORB Survey.</strong> We would like to hear from you on your experience using ORB as a training tool. Please fill out our short survey and enter in to win a $25 Amazon gift card! <strong><a href="https://goo.gl/forms/mPML9uiRZpjSeQkJ3">Take the survey</a></strong>'))
         
     return {'version': version,
             'ORB_GOOGLE_ANALYTICS_CODE': settings.ORB_GOOGLE_ANALYTICS_CODE,
