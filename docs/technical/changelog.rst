@@ -8,6 +8,8 @@ v2.4.0 - not yet released
 ----------------------------------
 
 * 463: Add some additional help info on the model fields - https://github.com/mPowering/django-orb/issues/issues/463
+* 439: Tag view error: FieldError: Cannot resolve keyword u'discount' into field. - https://github.com/mPowering/django-orb/issues/issues/439
+* 425: Toolkits - move to being a database model instead - https://github.com/mPowering/django-orb/issues/issues/425
 
 .. _orb-v2-3-0:
 
