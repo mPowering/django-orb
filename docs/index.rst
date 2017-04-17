@@ -8,5 +8,5 @@ Contents:
 
    manage/index
    translation/index
-   technical/code
+   technical/index
    opendeliver/index

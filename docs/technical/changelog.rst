@@ -7,6 +7,9 @@ Change log
 v2.4.0 - not yet released
 ----------------------------------
 
+* 463: Add some additional help info on the model fields - https://github.com/mPowering/django-orb/issues/issues/463
+* 439: Tag view error: FieldError: Cannot resolve keyword u'discount' into field. - https://github.com/mPowering/django-orb/issues/issues/439
+* 425: Toolkits - move to being a database model instead - https://github.com/mPowering/django-orb/issues/issues/425
 
 .. _orb-v2-3-0:
 
@@ -28,6 +31,7 @@ v2.3.0 - Released 27 Mar 2017
 * 432: Ability to preserve ordering of the tags - https://github.com/mPowering/django-orb/issues/issues/432
 * 431: Comma separator when multiple organisations listed - https://github.com/mPowering/django-orb/issues/issues/431
 * 459: ugettext and ugettext_lazy for crispy forms - https://github.com/mPowering/django-orb/issues/issues/459
+* 458: Integrity error when adding a new resource in Spanish - https://github.com/mPowering/django-orb/issues/issues/458
 
 v2.2.2 - released 5 Dec 2016
 ---------------------------------

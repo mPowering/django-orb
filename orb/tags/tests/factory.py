@@ -1,7 +1,14 @@
 import uuid
 
-from orb.categories.tests.factory import category_factory
-from orb.models import Tag
+from orb.models import Tag, Category
+
+
+def category_factory(**kwargs):
+    defaults = {
+        "name": "Test category",
+    }
+    defaults.update(kwargs)
+    return Category.objects.create(**defaults)
 
 
 def tag_factory(**kwargs):
