@@ -2,9 +2,18 @@ Change log
 =====================================
 
 
+.. _orb-v2-5-0:
+
+v2.5.0 - not yet released
+----------------------------------
+
+* 368: Add auto complete on "other tags" - https://github.com/mPowering/django-orb/issues/issues/368
+* 468: Styling enhancements for auto-complete functionality - https://github.com/mPowering/django-orb/issues/issues/468
+* 182: Auto complete for geography and languages - https://github.com/mPowering/django-orb/issues/issues/182
+
 .. _orb-v2-4-0:
 
-v2.4.0 - not yet released
+v2.4.0 - Released 17 Apr 2017
 ----------------------------------
 
 * 463: Add some additional help info on the model fields - https://github.com/mPowering/django-orb/issues/issues/463
