@@ -8,7 +8,11 @@
 	padding: 0px;
 	border: 1px solid WindowFrame;
     border-radius: 4px;
-	background-color: Window;
+
+	/*background-color: Window;*/
+
+	background-color: #d9edf7;
+
 	overflow: hidden;
 }
 
@@ -21,11 +25,18 @@
 
 .acResults ul li {
 	margin: 0px;
-	padding: 2px 5px;
+
+	/*padding: 2px 5px;
 	cursor: pointer;
 	display: block;
 	font: menu;
-	font-size: 12px;
+	font-size: 12px;*/
+
+	padding: 3px 5px;
+	cursor: pointer;
+	display: block;
+	font: menu;
+	font-size: 14px;
 	overflow: hidden;
 }
 
@@ -34,6 +45,11 @@
 }
 
 .acSelect {
+<<<<<<< HEAD
 	background-color: Highlight;
 	color: HighlightText;
+=======
+	background-color: #fff;
+	color: #31708f;
+>>>>>>> feecd2c4fd956a23dc6bee049ac0dfc258761b84
 }

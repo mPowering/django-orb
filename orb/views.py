@@ -104,8 +104,8 @@ def text_tag_list(request, **filters):
     """
     Returns a text list of cateogry names, newline separated
     """
-    content = u"\n".join([tag.name.lower() for tag in Tag.tags.filter(**filters)])
-    return HttpResponse(content=content, content_type="text/plain")
+    content = u"\n".join([tag.name for tag in Tag.tags.filter(**filters)])
+    return HttpResponse(content=content, content_type="text/plain; charset=utf-8")
 
 
 def simple_language_list(request):
