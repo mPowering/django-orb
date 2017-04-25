@@ -24,6 +24,11 @@ def simple_geography_list(request):
     return text_tag_list(request, category__slug="geography")
 
 
+def simple_orgs_list(request):
+    """Returns organisation tags"""
+    return text_tag_list(request, category__slug="organisation")
+
+
 def simple_tags_list(request):
     """Returns tags from outside of the ORB taxonomy"""
     return text_tag_list(request, category__slug="other")
