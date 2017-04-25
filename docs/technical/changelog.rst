@@ -2,9 +2,16 @@ Change log
 =====================================
 
 
+.. _orb-v2-6-0:
+
+v2.6.0 - not yet released
+----------------------------------
+
+
+
 .. _orb-v2-5-0:
 
-v2.5.0 - not yet released
+v2.5.0 - Released 25 Apr 2017
 ----------------------------------
 
 * 368: Add auto complete on "other tags" - https://github.com/mPowering/django-orb/issues/issues/368
