@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.core.urlresolvers import reverse
-from django.db.models import Count, Max, Min, Q, Avg
+from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
@@ -15,7 +15,7 @@ from orb.forms import (ResourceStep1Form, ResourceStep2Form, SearchForm,
 from orb.models import Collection
 from orb.models import ResourceFile, ResourceTag, ResourceCriteria, ResourceRating
 from orb.models import ReviewerRole
-from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, TagTracker, SearchTracker
+from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, SearchTracker
 from orb.signals import (resource_viewed, resource_url_viewed, resource_file_viewed,
                          search, resource_workflow, resource_submitted, tag_viewed)
 from orb.tags.forms import TagPageForm
@@ -98,39 +98,6 @@ def tag_view(request, tag_slug):
         'show_filter_link': show_filter_link,
         'is_geo_tag': is_geo_tag,
     })
-
-
-def text_tag_list(request, **filters):
-    """
-    Returns a text list of cateogry names, newline separated
-    """
-    content = u"\n".join([tag.name for tag in Tag.tags.filter(**filters)])
-    return HttpResponse(content=content, content_type="text/plain; charset=utf-8")
-
-
-def simple_language_list(request):
-    """Returns language tags"""
-    return text_tag_list(request, category__slug="language")
-
-
-def simple_geography_list(request):
-    """Returns geography tags"""
-    return text_tag_list(request, category__slug="geography")
-
-
-def simple_tags_list(request):
-    """Returns tags from outside of the ORB taxonomy"""
-    return text_tag_list(request, category__slug="other")
-
-
-def tag_cloud_view(request):
-
-    tags = Tag.objects.filter(resourcetag__resource__status=Resource.APPROVED).annotate(
-        dcount=Count('resourcetag__resource')).order_by('name')
-    max = tags.aggregate(max=Max('dcount'))
-    min = tags.aggregate(min=Min('dcount'))
-    diff = max['max'] - min['min']
-    return render(request, 'orb/tag_cloud.html', {'tags': tags, 'diff': diff})
 
 
 def taxonomy_view(request):
@@ -792,14 +759,6 @@ def search_advanced_results_view(request):
         'page': resources,
         'total_results': paginator.count,
     })
-
-
-def tag_link_view(request, id):
-    tag = get_object_or_404(Tag, pk=id)
-
-    tag_viewed.send(sender=tag, tag=tag, request=request,
-                    data=tag.external_url, type=TagTracker.VIEW_URL)
-    return HttpResponseRedirect(tag.external_url)
 
 
 def collection_view(request, collection_slug):
