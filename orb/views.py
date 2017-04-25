@@ -739,10 +739,10 @@ def search_advanced_results_view(request):
             dcount=Count('resource')).filter(dcount=len(tag_ids)).values('resource')
 
         licenses = form.cleaned_data.get('license')
-        print licenses
-        licenses_exclude = ResourceTag.objects.filter(
-            tag__tagproperty__name='feature:shortname', tag__tagproperty__value__in=licenses).values('resource')
-        print licenses_exclude
+
+        license_tags = Tag.tags.filter(properties__name="feature:shortname", properties__value__in=licenses)
+
+        licenses_exclude = ResourceTag.objects.filter(tag=license_tags).values('resource')
 
         if q == '' and len(resource_tags) > 0:
             results = Resource.objects.filter(
