@@ -1,0 +1,29 @@
+{% load static from staticfiles %}
+    <script src="{% static 'orb/js/jquery.autocomplete.js'%}"></script>
+    <script src="{% static 'orb/js/jquery.tagsinput.js'%}"></script>
+    <script>
+        $('#id_organisations').tagsInput({
+            'autocomplete_url': '{% url 'orb_simple_orgs_list' %}',
+            'height': '45px',
+            'width': '100%',
+            'defaultText': ''
+        });
+       $('#id_languages').tagsInput({
+           'autocomplete_url': '{% url 'orb_simple_language_list' %}',
+           'height': '45px',
+           'width': '100%',
+           'defaultText': ''
+       });
+       $('#id_geography').tagsInput({
+           'autocomplete_url': '{% url 'orb_simple_geography_list' %}',
+           'height': '45px',
+           'width': '100%',
+           'defaultText': ''
+       });
+       $('#id_other_tags').tagsInput({
+           'autocomplete_url': '{% url 'orb_simple_tags_list' %}',
+           'height': '45px',
+           'width': '100%',
+           'defaultText': ''
+       });
+    </script>
