@@ -3,6 +3,7 @@
 import os
 import unittest
 
+import pytest
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -11,8 +12,13 @@ from django.test.client import Client
 from orb.models import Tag, Resource, TagOwner, TagTracker, ResourceTracker
 from orb.tests.utils import login_client
 
-
 FAST_TESTS = bool(os.environ.get('FAST_TESTS'))
+
+
+@pytest.mark.django_db
+def test_advanced_search_view(client):
+    response = client.get(reverse('orb_search_advanced_results') + "?q=tset")
+    assert response.status_code == 200
 
 
 class SiteTest(TestCase):
