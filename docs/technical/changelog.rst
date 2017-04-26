@@ -2,12 +2,13 @@ Change log
 =====================================
 
 
-.. _orb-v2-6-0:
+.. _orb-v2-5-1:
 
-v2.6.0 - not yet released
+v2.5.1 - Released 26 Apr 2017
 ----------------------------------
 
-
+* 469: Add auto-complete to the organisation field too - https://github.com/mPowering/django-orb/issues/issues/469
+* 477: Advanced search error - Field error: Relation fields do not support nested lookups - https://github.com/mPowering/django-orb/issues/issues/477
 
 .. _orb-v2-5-0:
 
