@@ -27,7 +27,7 @@ class ResourceTests(TestCase):
         cls.staff = User.objects.create(username="staff", is_staff=True)
         role = ReviewerRole.objects.create(name="Medical")
         cls.crt_user = User.objects.create(username="crt")
-        profile = UserProfile.objects.create(user=cls.crt_user, crt_member=True)
+        profile = UserProfile.objects.create(user=cls.crt_user)
         profile.reviewer_roles.add(role)
 
         approved = resource_factory(

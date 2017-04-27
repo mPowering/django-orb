@@ -673,8 +673,6 @@ class UserProfile(TimestampBase):
     age_range = models.CharField(
         max_length=50, choices=AGE_RANGE, default='none')
     mailing = models.BooleanField(default=False, blank=False)
-    crt_member = models.BooleanField(default=False, blank=False, help_text=_(u'deprecated'))
-    mep_member = models.BooleanField(default=False, blank=False, help_text=_(u'deprecated'))
     reviewer_roles = models.ManyToManyField('ReviewerRole', blank=True, related_name="profiles")
 
     profiles = ProfilesQueryset.as_manager()
