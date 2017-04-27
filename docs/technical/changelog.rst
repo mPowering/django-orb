@@ -1,6 +1,12 @@
 Change log
 =====================================
 
+.. _orb-v2-6-0:
+
+v2.6.0 - not yet released
+----------------------------------
+
+* 472: Remove crt_member & mep_member fields from UserProfile model - https://github.com/mPowering/django-orb/issues/issues/472
 
 .. _orb-v2-5-1:
 
