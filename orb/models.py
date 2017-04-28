@@ -52,15 +52,17 @@ def pop_fields(input, *fieldnames):
 
 class Resource(TimestampBase):
     REJECTED = 'rejected'
+    APPROVED = 'approved'
+    ARCHIVED = 'archived'
     PENDING_CRT = 'pending_crt'
     PENDING = PENDING_CRT
     PENDING_MRT = 'pending_mrt'
-    APPROVED = 'approved'
     STATUS_TYPES = (
         (REJECTED, _('Rejected')),
         (PENDING_CRT, _('Pending')),
         (PENDING_MRT, _('Pending')),  # TODO data migration for all existin MRT review
         (APPROVED, _('Approved')),
+        (ARCHIVED, _('Archived')),
     )
 
     MINS = 'mins'
