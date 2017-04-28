@@ -77,8 +77,7 @@
     <h2>{% trans 'Analytics' %}</h2>
 
     <p><a href="#ag">{% trans 'Activity Graph' %}</a>
-        | <a href="#pc">{% trans 'Pending CRT' %}</a>
-        | <a href="#pm">{% trans 'Pending MEP' %}</a>
+        | <a href="#pc">{% trans 'Pending Review' %}</a>
         | <a href="#reg">{% trans 'User Registrations' %}</a>
         | <a href="#ps">{% trans 'Popular Searches' %}</a>
         | <a href="#pr">{% trans 'Popular Resources' %}</a>
@@ -90,9 +89,9 @@
     <div id="activity_chart_div" class="graph">{% trans 'graph_generating' %}</div>
 
     <a name="pc" class="named-anchor"></a>
-    <h3>{% trans 'Pending CRT' %}</h3>
+    <h3>{% trans 'Pending Review' %}</h3>
 
-    {% if pending_crt_resources %}
+    {% if pending_resources %}
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>
@@ -104,7 +103,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% for pr in pending_crt_resources %}
+                {% for pr in pending_resources %}
                     <tr>
                         <td>{{ pr.create_date }}</td>
                         <td>{{ pr.title }}</td>
@@ -117,12 +116,14 @@
                         <td>
                             <a target="_blank"
                                href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
-                            | <a target="_blank"
-                                 href="{% url 'orb_resource_pending_mep' pr.id %}">{% trans 'Pending MEP' %}</a>
-                            | <a target="_blank"
-                                 href="{% url 'orb_resource_approve' pr.id %}">{% trans 'Approve' %}</a>
-                            | <a target="_blank"
-                                 href="{% url 'orb_resource_reject' pr.id %}">{% trans 'Reject' %}</a>
+
+                            <a href="{% url 'orb_staff_review' pr.pk %}">
+                                <button class="btn btn-xs btn-default">
+                                    <span class="glyphicon glyphicon-ok" aria-hidden="true" title="{% trans 'Review' %}"></span>
+                                    <span class="glyphicon glyphicon-remove" aria-hidden="true" title="{% trans 'Review' %}"></span>
+                                </button>
+                                <span class="sr-only">{% trans 'Review' %}</span>
+                            </a>
                         </td>
 
                     </tr>
@@ -131,50 +132,7 @@
             </table>
         </div>
     {% else %}
-        <p>{% trans 'No resources pending CRT review' %}</p>
-    {% endif %}
-
-    <a name="pm" class="named-anchor"></a>
-    <h3>{% trans 'Pending MEP' %}</h3>
-
-    {% if pending_mep_resources %}
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>{% trans 'Submitted' %}</th>
-                    <th>{% trans 'Title' %}</th>
-                    <th>{% trans 'Organisation' %}</th>
-                    <th>{% trans 'Options' %}</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for pr in pending_mep_resources %}
-                    <tr>
-                        <td>{{ pr.create_date }}</td>
-                        <td>{{ pr.title }}</td>
-                        <td>
-                            {% for o in pr.get_organisations %}
-                                {{ o.name }}
-
-                            {% endfor %}
-                        </td>
-                        <td>
-                            <a target="_blank"
-                               href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
-                            | <a target="_blank"
-                                 href="{% url 'orb_resource_approve' pr.id %}">{% trans 'Approve' %}</a>
-                            | <a target="_blank"
-                                 href="{% url 'orb_resource_reject' pr.id %}">{% trans 'Reject' %}</a>
-                        </td>
-
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    {% else %}
-        <p>{% trans 'No resources pending MEP review' %}</p>
+        <p>{% trans 'No resources pending review' %}</p>
     {% endif %}
 
     <a name="reg" class="named-anchor"></a>
