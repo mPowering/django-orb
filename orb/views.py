@@ -129,22 +129,16 @@ def resource_view(request, resource_slug):
         om['url'] = reverse('orb_resource_edit', args=[resource.id])
         options_menu.append(om)
 
-    if request.user.is_staff:
-        if resource.status == Resource.PENDING:
-            om = {}
-            om['title'] = _(u'Send to MEP')
-            om['url'] = reverse('orb_resource_pending_mep', args=[resource.id])
-            options_menu.append(om)
-        if resource.status == Resource.PENDING or resource.status == Resource.PENDING_MRT:
-            om = {}
-            om['title'] = _(u'Reject')
-            om['url'] = reverse('orb_resource_reject', args=[resource.id])
-            options_menu.append(om)
+    if request.user.is_staff and resource.status == Resource.PENDING:
+        om = {}
+        om['title'] = _(u'Reject')
+        om['url'] = reverse('orb_resource_reject', args=[resource.id])
+        options_menu.append(om)
 
-            om = {}
-            om['title'] = _(u'Approve')
-            om['url'] = reverse('orb_resource_approve', args=[resource.id])
-            options_menu.append(om)
+        om = {}
+        om['title'] = _(u'Approve')
+        om['url'] = reverse('orb_resource_approve', args=[resource.id])
+        options_menu.append(om)
 
     resource_viewed.send(sender=resource, resource=resource, request=request)
 
@@ -427,11 +421,11 @@ def resource_pending_mep_view(request, id):
         return HttpResponse(status=401, content="Not Authorized")
 
     resource = Resource.objects.get(pk=id)
-    resource.status = Resource.PENDING_MRT
+    resource.status = Resource.PENDING
     resource.save()
 
     resource_workflow.send(sender=resource, resource=resource, request=request,
-                           status=Resource.PENDING_MEP, notes="")
+                           status=Resource.PENDING, notes="")
     return render(request, 'orb/resource/status_updated.html', {'resource': resource})
 
 

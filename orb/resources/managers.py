@@ -66,10 +66,7 @@ class ResourceQueryset(models.QuerySet):
         return approved_queryset(self, user)
 
     def pending(self):
-        return self.exclude(
-            models.Q(status="approved") |
-            models.Q(status="rejected")
-        )
+        return self.filter(status="pending")
 
     def for_tag(self, tag):
         return self.filter(resourcetag__tag=tag)

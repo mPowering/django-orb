@@ -685,7 +685,7 @@
 },
 {
     "fields": {
-        "status": "pending_crt",
+        "status": "pending",
         "update_date": "2015-05-01T23:22:18Z",
         "study_time_number": 0,
         "create_date": "2015-05-01T23:22:17Z",
@@ -721,7 +721,7 @@
 },
 {
     "fields": {
-        "status": "pending_crt",
+        "status": "pending",
         "update_date": "2015-05-01T23:22:56Z",
         "study_time_number": 0,
         "create_date": "2015-05-01T23:22:56Z",
@@ -739,7 +739,7 @@
 },
 {
     "fields": {
-        "status": "pending_mep",
+        "status": "pending",
         "create_date": "2015-05-07T00:13:56Z",
         "notes": "",
         "owner_email_sent": false,

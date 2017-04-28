@@ -208,7 +208,7 @@ class ResourceResourceTest(ApiTestFixture, ResourceTestCase):
             self.url, format='json', data=resource, authentication=auth)
         self.assertHttpCreated(resp)
         self.assertValidJSON(resp.content)
-        self.assertEqual(self.deserialize(resp)['status'], 'pending_crt')
+        self.assertEqual(self.deserialize(resp)['status'], 'pending')
 
 
 # Tag API

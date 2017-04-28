@@ -25,10 +25,7 @@ def home_view(request):
     start_date = timezone.now() - datetime.timedelta(days=31)
     end_date = timezone.now()
 
-    pending_crt_resources = Resource.objects.filter(
-        status=Resource.PENDING_CRT).order_by('create_date')
-    pending_mep_resources = Resource.objects.filter(
-        status=Resource.PENDING_MRT).order_by('create_date')
+    pending_resources = Resource.resources.pending().order_by('create_date')
     popular_searches = SearchTracker.objects.filter(access_date__gte=start_date).exclude(
         query='').values('query').annotate(total_hits=Count('id')).order_by('-total_hits')[:10]
     popular_resources = ResourceTracker.objects.filter(access_date__gte=start_date).exclude(resource=None).values(
@@ -93,8 +90,7 @@ def home_view(request):
         'country_name', flat=True).distinct().order_by('country_name')
 
     return render(request, 'orb/analytics/home.html', {
-        'pending_crt_resources': pending_crt_resources,
-        'pending_mep_resources': pending_mep_resources,
+        'pending_resources': pending_resources,
         'popular_searches': popular_searches,
         'popular_tags': popular_tags,
         'popular_resources': popular_resources,
@@ -414,26 +410,6 @@ def resource_view(request, id):
         'resource': resource,
         'recent_activity': recent_activity,
         'page': trackers,
-    })
-
-
-@login_required
-def review_view(request):
-
-    if (request.user.is_staff or
-          (request.user.userprofile and request.user.userprofile.is_reviewer)):
-        pass
-    else:
-        return HttpResponse(status=401, content="Not Authorized")
-
-    pending_crt_resources = Resource.objects.filter(
-        status=Resource.PENDING_CRT).order_by('create_date')
-    pending_mep_resources = Resource.objects.filter(
-        status=Resource.PENDING_MRT).order_by('create_date')
-
-    return render(request, 'orb/analytics/review.html', {
-        'pending_crt_resources': pending_crt_resources,
-        'pending_mep_resources': pending_mep_resources,
     })
 
 
