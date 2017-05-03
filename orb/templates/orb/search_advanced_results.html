@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %} 
+{% load i18n %}
 {% load add_get_parameter %}
 {% block extra_head_title %}{% trans 'Advanced Search Results' %}{% endblock extra_head_title %}
 {% block content %}
@@ -9,19 +9,9 @@
 <h2>{% trans 'Advanced Search Results' %}</h2>
 
 <h3>{% blocktrans count total_results as result_count %}{{ result_count }} result for {% plural %}{{ result_count }} results for {% endblocktrans %}
-{% if q %}'{{ q }}'{% endif %}{% if q and filter_tags %}, {% endif %}
-{% if filter_tags %}
-	{% for tf in filter_tags %}
-		{{ tf.name }}{% if not forloop.last %}, {% endif %} 
-	{% endfor %}
-{% endif %}
-{% if q or filter_tags and license_tags %}, {% endif %}
-{% if license_tags %}
-	{% for lt in license_tags  %}
-		{% if lt == 'NC' %}{% trans 'Commercial use allowed' %}{% endif %} {% if lt == 'ND' %}{% trans 'Derivatives allowed' %}{% endif %}{% if not forloop.last %}, {% endif %} 
-	{% endfor %}
-{% endif %}
+{% if q %}'{{ q }}'{% endif %}{% if q and filter_tags %}, {% endif %}{% for tf in filter_tags %}{{ tf.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% if q or filter_tags and license_tags %}, {% endif %}{% for lt in license_tags  %}{% if lt == 'NC' %}{% trans 'Commercial use allowed' %}{% endif %} {% if lt == 'ND' %}{% trans 'Derivatives allowed' %}{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %}
 </h3>
+
 {% include "orb/includes/page_navigator.html" %}
 
 {% for resource in page.object_list %}

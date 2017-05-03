@@ -671,7 +671,6 @@ def search_advanced_view(request, tag_id=None):
 
     if request.method == 'POST':
         form = AdvancedSearchForm(request.POST)
-        advanced_search_form_set_choices(form)
         if form.is_valid():
             urlparams = request.POST.copy()
             # delete these from params as not required
@@ -679,14 +678,7 @@ def search_advanced_view(request, tag_id=None):
             del urlparams['submit']
             return HttpResponseRedirect(reverse('orb_search_advanced_results') + "?" + urlparams.urlencode())
     else:
-        data = {}
-        if tag_id:
-            tag = get_object_or_404(Tag, pk=tag_id)
-            for name, slug in settings.ADVANCED_SEARCH_CATEGORIES:
-                if tag.category.slug == slug:
-                    data[name] = tag.id
-        form = AdvancedSearchForm(initial=data)
-        advanced_search_form_set_choices(form)
+        form = AdvancedSearchForm()
 
     return render(request, 'orb/search_advanced.html', {'form': form})
 
@@ -694,46 +686,18 @@ def search_advanced_view(request, tag_id=None):
 def search_advanced_results_view(request):
 
     form = AdvancedSearchForm(request.GET)
-    advanced_search_form_set_choices(form)
-    q = request.GET.get('q', '').strip()
 
     if form.is_valid():
-        tag_ids = []
-        for name, slug in settings.ADVANCED_SEARCH_CATEGORIES:
-            for i in form.cleaned_data.get(name):
-                tag_ids.append(i)
-        resource_tags = ResourceTag.objects.filter(tag__pk__in=tag_ids).values('resource').annotate(
-            dcount=Count('resource')).filter(dcount=len(tag_ids)).values('resource')
+        q = form.cleaned_data.get('q')
 
-        licenses = form.cleaned_data.get('license')
-
-        license_tags = Tag.tags.filter(properties__name="feature:shortname", properties__value__in=licenses)
-
-        licenses_exclude = ResourceTag.objects.filter(tag=license_tags).values('resource')
-
-        if q == '' and len(resource_tags) > 0:
-            results = Resource.objects.filter(
-                pk__in=resource_tags, status=Resource.APPROVED).exclude(pk__in=licenses_exclude)
-        elif q != '' and len(resource_tags) > 0:
-            search_results = SearchQuerySet().filter(content=q).models(
-                Resource).values_list('pk', flat=True)
-            results = Resource.objects.filter(pk__in=resource_tags, status=Resource.APPROVED).filter(
-                pk__in=search_results).exclude(pk__in=licenses_exclude)
-        elif q != '' and len(resource_tags) == 0:
-            search_results = SearchQuerySet().filter(content=q).models(
-                Resource).values_list('pk', flat=True)
-            results = Resource.objects.filter(
-                pk__in=search_results, status=Resource.APPROVED).exclude(pk__in=licenses_exclude)
-        elif q == '' and len(resource_tags) == 0 and len(licenses_exclude) == 0:
-            results = Resource.objects.none()
-        elif q == '' and len(resource_tags) == 0 and len(licenses_exclude) > 0:
-            results = Resource.objects.filter(
-                status=Resource.APPROVED).exclude(pk__in=licenses_exclude)
+        results, filter_tags = form.search()
+        if q:
+            search_results = SearchQuerySet().filter(content=q).models(Resource).values_list('pk', flat=True)
+            results = results.filter(pk__in=search_results)
 
         paginator = Paginator(results, settings.ORB_PAGINATOR_DEFAULT)
-        # Make sure page request is an int. If not, deliver first page.
         try:
-            page = int(request.GET.get('page', '1'))
+            page = int(request.GET.get('page', 1))
         except ValueError:
             page = 1
 
@@ -742,20 +706,19 @@ def search_advanced_results_view(request):
         except (EmptyPage, InvalidPage):
             resources = paginator.page(paginator.num_pages)
 
-        filter_tags = Tag.objects.filter(pk__in=tag_ids)
-
-        search.send(sender=results, query=q, no_results=results.count(
-        ), request=request, type=SearchTracker.SEARCH_ADV, page=page)
+        search.send(sender=results, query=q, no_results=results.count(),
+                    request=request, type=SearchTracker.SEARCH_ADV, page=page)
+        license_tags = form.cleaned_data['license']
     else:
         filter_tags = Tag.objects.filter(pk=None)
+        license_tags = []
         resources = Resource.objects.filter(pk=None)
-        licenses = None
         paginator = Paginator(resources, settings.ORB_PAGINATOR_DEFAULT)
 
     return render(request, 'orb/search_advanced_results.html', {
         'filter_tags': filter_tags,
-        'license_tags': licenses,
-        'q': q,
+        'license_tags': license_tags,
+        'q': form.cleaned_data.get('q'),
         'page': resources,
         'total_results': paginator.count,
     })
