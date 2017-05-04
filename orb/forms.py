@@ -8,11 +8,12 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.core.validators import URLValidator
+from django.utils.functional import cached_property
 from django.template.defaultfilters import filesizeformat
 from django.utils.html import strip_tags
 from django.utils.translation import ugettext_lazy as _
 
-from orb.models import Resource
+from orb.models import Resource, Tag
 
 logger = logging.getLogger('orb')
 
@@ -318,30 +319,57 @@ class AdvancedSearchForm(forms.Form):
         required=False,
         label=_(u'Search terms'),
         error_messages={'required': _(u'Please enter something to search for')},)
-    health_topic = forms.MultipleChoiceField(label=_(u'Health domain'),
-                                            widget=forms.CheckboxSelectMultiple,
-                                            required=False,)
-    resource_type = forms.MultipleChoiceField(label=_(u'Resource type'),
-                                                widget=forms.CheckboxSelectMultiple,
-                                                required=False,)
-    audience = forms.MultipleChoiceField(label=_(u'Audience'),
-                                            widget=forms.CheckboxSelectMultiple,
-                                            required=False,)
-    geography = forms.MultipleChoiceField(label=_(u'Geography'),
-                                            widget=forms.CheckboxSelectMultiple,
-                                            required=False,)
-    language = forms.MultipleChoiceField(label=_(u'Language'),
-                                            widget=forms.CheckboxSelectMultiple,
-                                            required=False,)
-    device = forms.MultipleChoiceField(label=_(u'Device'),
-                                        widget=forms.CheckboxSelectMultiple,
-                                        required=False,)
-    license = forms.MultipleChoiceField(label=_(u'License'),
-                                        widget=forms.CheckboxSelectMultiple,
-                                        required=False,)
+    health_topic = forms.ModelMultipleChoiceField(
+        queryset=Tag.tags.all(),
+        label=_(u'Health domain'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+    resource_type = forms.ModelMultipleChoiceField(
+        queryset=Tag.tags.all(),
+        label=_(u'Resource type'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+    audience = forms.ModelMultipleChoiceField(
+        queryset=Tag.tags.all(),
+        label=_(u'Audience'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+    geography = forms.ModelMultipleChoiceField(
+        queryset=Tag.tags.all(),
+        label=_(u'Geography'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+    language = forms.ModelMultipleChoiceField(
+        queryset=Tag.tags.all(),
+        label=_(u'Language'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+    device = forms.ModelMultipleChoiceField(
+        queryset=Tag.tags.all(),
+        label=_(u'Device'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
+    license = forms.MultipleChoiceField(
+        choices=[('ND', _(u'Derivatives allowed')), ('NC', _(u'Commercial use allowed'))],
+        label=_(u'License'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+    )
 
     def __init__(self, *args, **kwargs):
         super(AdvancedSearchForm, self).__init__(*args, **kwargs)
+        self.fields['health_topic'].queryset = Tag.tags.approved().by_category('health-domain').top_level()
+        self.fields['resource_type'].queryset = Tag.tags.approved().by_category('type')
+        self.fields['audience'].queryset = Tag.tags.approved().by_category('audience')
+        self.fields['geography'].queryset = Tag.tags.approved().by_category('geography')
+        self.fields['language'].queryset = Tag.tags.approved().by_category('language')
+        self.fields['device'].queryset = Tag.tags.approved().by_category('device')
         self.helper = FormHelper()
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
@@ -389,6 +417,40 @@ class AdvancedSearchForm(forms.Form):
                 _(u"Please select at least a search term or a tag"))
 
         return self.cleaned_data
+
+    def clean_q(self):
+        return self.cleaned_data.get('q', '').strip()
+
+    @cached_property
+    def licence_tags(self):
+        try:
+            return Tag.tags.filter(
+                properties__name="feature:shortname",
+                properties__value__in=self.cleaned_data['license'],
+            )
+        except AttributeError:
+            return []
+
+    def search(self):
+        """
+        Implements the filtered search
+        
+        Returns:
+            a tuple of a queryset and list of Tags
+
+        """
+        qs = Resource.resources.approved()
+        clean_data = self.cleaned_data
+        filter_tags = []
+        for field_name in ['health_topic', 'resource_type', 'audience', 'geography', 'language', 'device']:
+            if clean_data.get(field_name):
+                qs = qs.filter(tags__in=clean_data[field_name])
+                filter_tags += clean_data[field_name]
+
+        if clean_data.get('licenses'):
+            qs.exclude(tags__in=self.license_tags)
+
+        return qs.distinct(), filter_tags
 
 
 class ResourceRejectForm(forms.Form):

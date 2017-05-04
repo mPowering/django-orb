@@ -91,6 +91,28 @@ class ResourceQueryset(models.QuerySet):
             ),
         ).order_by('exceeds_minimum')
 
+    def search(self, search_form_data):
+        """
+        
+        Args:
+            search_form_data: a dictionary of cleaned field data
+
+        Returns:
+
+        """
+        from orb.models import Tag
+        qs = self.all()
+        for field_name in ['health_topic', 'resource_type', 'audience', 'geography', 'language', 'device']:
+            if search_form_data.get(field_name):
+                qs = qs.filter(tags__in=search_form_data[field_name])
+
+        if search_form_data.get('licenses'):
+            license_tags = Tag.tags.filter(
+                properties__name="feature:shortname", properties__value__in=search_form_data['license'])
+            qs.exclude(tags__in=license_tags)
+
+        return qs.distinct()
+
 
 class ResourceURLManager(models.Manager):
 
