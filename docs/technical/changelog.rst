@@ -6,7 +6,14 @@ Change log
 v2.6.0 - not yet released
 ----------------------------------
 
+
+.. _orb-v2-5-2:
+
+v2.5.2 - Released 4 May 2017
+----------------------------------
+
 * 472: Remove crt_member & mep_member fields from UserProfile model - https://github.com/mPowering/django-orb/issues/issues/472
+* 482: On advanced search, combining filters gives zero results - https://github.com/mPowering/django-orb/issues/482
 
 .. _orb-v2-5-1:
 
