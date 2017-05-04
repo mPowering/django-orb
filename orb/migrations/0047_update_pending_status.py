@@ -18,4 +18,14 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(update_status),
+        migrations.AlterField(
+            model_name='resource',
+            name='status',
+            field=models.CharField(default=b'pending', max_length=50, choices=[(b'approved', 'Approved'), (b'pending', 'Pending'), (b'rejected', 'Rejected'), (b'archived', 'Archived')]),
+        ),
+        migrations.AlterField(
+            model_name='resourceworkflowtracker',
+            name='status',
+            field=models.CharField(default=b'pending', max_length=50, choices=[(b'approved', 'Approved'), (b'pending', 'Pending'), (b'rejected', 'Rejected'), (b'archived', 'Archived')]),
+        ),
     ]
