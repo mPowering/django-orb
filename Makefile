@@ -15,7 +15,10 @@ python-deps:  ## Install all dependencies, for running app, dev, and testing
 test: test-django lint  ## Run Django tests and flake8
 
 test-django:  ## Run Django tests
-	FAST_TESTS=True pytest
+	pytest
+
+test-fast:  ## Run Django tests without search dependencies
+	pytest -m "not solr"
 
 lint:  ## Run flake8 over app
 	flake8 orb

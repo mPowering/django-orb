@@ -1,7 +1,7 @@
 """
 API Resource specific tests for the ORB API
 """
-
+import pytest
 import uuid
 
 from django.contrib.auth.models import User
@@ -90,7 +90,7 @@ class SearchResourceTest(ApiTestFixture, ResourceTestCase):
             tracker_count_end = SearchTracker.objects.all().count()
             self.assertEqual(tracker_count_start + 1, tracker_count_end)
 
-    # check results are returned
+    @pytest.mark.solr
     def test_search_results(self):
         for u in self.user_set:
             data = u

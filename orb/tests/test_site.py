@@ -12,7 +12,7 @@ from django.test.client import Client
 from orb.models import Tag, Resource, TagOwner, TagTracker, ResourceTracker
 from orb.tests.utils import login_client
 
-FAST_TESTS = bool(os.environ.get('FAST_TESTS'))
+FAST_TESTS = True
 
 
 @pytest.mark.django_db
