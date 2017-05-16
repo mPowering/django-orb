@@ -7,7 +7,7 @@ from django.http.response import Http404
 from django.utils.html import strip_tags
 from haystack.query import SearchQuerySet
 from tastypie import fields
-from tastypie.authentication import ApiKeyAuthentication
+from tastypie.authentication import ApiKeyAuthentication, MultiAuthentication, SessionAuthentication
 from tastypie.constants import ALL
 from tastypie.exceptions import Unauthorized
 from tastypie.resources import ModelResource
@@ -75,7 +75,7 @@ class ResourceResource(ModelResource):
         resource_name = 'resource'
         excludes = ['source_peer']
         allowed_methods = ['get', 'post', 'put']
-        authentication = ApiKeyAuthentication()
+        authentication = MultiAuthentication(ApiKeyAuthentication(), SessionAuthentication())
         authorization = ORBResourceAuthorization()
         serializer = ResourceSerializer()
         always_return_data = True
