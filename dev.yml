@@ -8,10 +8,15 @@ services:
 
   mysql:
     image: mysql:5.6
+    ports:
+     - "3306:3308"
     environment:
-      - MYSQL_ROOT_PASSWORD=verysecret
+        MYSQL_ROOT_PASSWORD: verysecret
+        MYSQL_DATABASE: orb
+        MYSQL_USER: orb
+        MYSQL_PASSWORD: orb
     volumes:
-      - mysql_data_dev:/var/lib/mysql
+      - ./local_data/docker-mysql:/var/lib/mysql
 
   solr:
     image: solr:5.4.1
@@ -31,12 +36,14 @@ services:
     command: /start-dev.sh
     depends_on:
       - mysql
+      - solr
     environment:
       - MYSQL_USER=orb
       - USE_DOCKER=yes
+      - DATABASE_URL="mysql://root@localhost:3308/orb"
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - "8000:8085"
     links:
       - mysql
