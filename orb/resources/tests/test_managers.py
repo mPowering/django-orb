@@ -47,6 +47,12 @@ class ResourceTests(TestCase):
             title=u"Staff resource",
             description=u"Unapproved, owned by staff user",
         )
+        archived_resource = resource_factory(
+            user=cls.staff,
+            title=u"Archived",
+            description=u"Archived, owned by staff user",
+            status=Resource.ARCHIVED,
+        )
 
         resource_url_factory(resource=approved, user=cls.user)
         resource_url_factory(resource=unapproved_user, user=cls.user)
@@ -61,7 +67,7 @@ class ResourceTests(TestCase):
 
     def test_default_manager(self):
         """Sanity check on defaults"""
-        self.assertEqual(Resource.objects.all().count(), 3)
+        self.assertEqual(Resource.objects.all().count(), 4)
 
     def test_approved(self):
         self.assertEqual(Resource.objects.approved().count(), 1)
@@ -80,11 +86,11 @@ class ResourceTests(TestCase):
 
     def test_approved_staff(self):
         """Staff should include all resources regardless of status"""
-        self.assertEqual(Resource.objects.approved(user=self.staff).count(), 3)
+        self.assertEqual(Resource.objects.approved(user=self.staff).count(), 4)
 
     def test_approved_reviewer(self):
         """Reviewer should include all resources regardless of status"""
-        self.assertEqual(Resource.objects.approved(user=self.crt_user).count(), 3)
+        self.assertEqual(Resource.objects.approved(user=self.crt_user).count(), 4)
 
     # Tests for the ApprovalManager
 

@@ -64,6 +64,7 @@ class ResourceAdmin(admin.ModelAdmin):
     list_display = ('title', 'status', 'create_user', 'create_date', 'slug')
     search_fields = ['title', 'description']
     raw_id_fields = ('create_user', 'update_user')
+    list_filter = ('status',)
 
 
 @admin.register(ResourceCriteria)

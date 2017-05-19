@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('title', models.TextField()),
                 ('description', models.TextField()),
                 ('image', models.ImageField(max_length=200, null=True, upload_to=b'resourceimage/%Y/%m/%d', blank=True)),
-                ('status', models.CharField(default=b'pending_crt', max_length=50, choices=[(b'rejected', 'Rejected'), (b'pending_crt', 'Pending CRT'), (b'pending_mrt', 'Pending MRT'), (b'approved', 'Approved')])),
+                ('status', models.CharField(default=b'pending', max_length=50, choices=[(b'rejected', 'Rejected'), (b'pending', 'Pending CRT'), (b'pending_mrt', 'Pending MRT'), (b'approved', 'Approved')])),
                 ('create_date', models.DateTimeField(auto_now_add=True)),
                 ('update_date', models.DateTimeField(auto_now=True)),
                 ('slug', models.CharField(max_length=100, null=True, blank=True)),

@@ -16,7 +16,7 @@ class FixtureBase(TestCase):
     def setUpClass(cls):
         cls.user = User.objects.create(username="McTester")
         resource = resource_factory(user=cls.user, status='approved')
-        second_resource= resource_factory(user=cls.user, status='pending_crt')
+        second_resource= resource_factory(user=cls.user, status='pending')
         used_tag = tag_factory(user=cls.user)
         second_tag = tag_factory(user=cls.user)
         unused_tag = tag_factory(user=cls.user)  # noqa

@@ -52,15 +52,15 @@ def pop_fields(input, *fieldnames):
 
 class Resource(TimestampBase):
     REJECTED = 'rejected'
-    PENDING_CRT = 'pending_crt'
-    PENDING = PENDING_CRT
-    PENDING_MRT = 'pending_mrt'
     APPROVED = 'approved'
+    PENDING = 'pending'
+    ARCHIVED = 'archived'
+
     STATUS_TYPES = (
-        (REJECTED, _('Rejected')),
-        (PENDING_CRT, _('Pending')),
-        (PENDING_MRT, _('Pending')),  # TODO data migration for all existin MRT review
         (APPROVED, _('Approved')),
+        (PENDING, _('Pending')),
+        (REJECTED, _('Rejected')),
+        (ARCHIVED, _('Archived')),
     )
 
     MINS = 'mins'
@@ -80,7 +80,7 @@ class Resource(TimestampBase):
     image = models.ImageField(
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
     status = models.CharField(
-        max_length=50, choices=STATUS_TYPES, default=PENDING_CRT)
+        max_length=50, choices=STATUS_TYPES, default=PENDING)
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_create_user')
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_update_user')
     slug = AutoSlugField(populate_from='title', max_length=100, blank=True, null=True)

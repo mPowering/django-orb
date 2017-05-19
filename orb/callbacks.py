@@ -66,7 +66,7 @@ def resource_workflow_callback(sender, **kwargs):
     email_sent = False
     # if status is pending CRT (i.e new) and owner hasn't submitted before
     # then send email
-    if status == Resource.PENDING_CRT:
+    if status == Resource.PENDING:
         no_previous_resources = ResourceWorkflowTracker.objects.filter(
             create_user=request.user).count()
         if no_previous_resources == 0:

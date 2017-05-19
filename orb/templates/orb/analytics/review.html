@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load i18n %} 
+{% load i18n %}
 
 {% block extra_head_title %}{% trans 'Pending Resources' %}{% endblock extra_head_title %}
 
@@ -8,9 +8,8 @@
 <h2>{% trans 'Pending Resources' %}</h2>
 
 <a name="pc" class="named-anchor"></a>
-<h3>{% trans 'Pending CRT' %}</h3>
 
-{% if pending_crt_resources %}
+{% if pending_resources %}
 <div class="table-responsive">
          <table class="table table-striped">
          	 <thead>
@@ -22,67 +21,27 @@
                 </tr>
               </thead>
               <tbody>
-			{% for pr in pending_crt_resources %}
+			{% for pr in pending_resources %}
  			 <tr>
  			 	  <td>{{ pr.create_date }}</td>
                   <td>{{ pr.title }}</td>
                   <td>
                   	{% for o in pr.get_organisations %}
                   		{{ o.name }}
-                  	
+
                   	{% endfor %}
                   </td>
                   <td>
                   <a target="_blank" href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
                   </td>
-                
+
                 </tr>
  			{% endfor %}
  			</tbody>
  		</table>
 	</div>
 {% else %}
-	<p>{% trans 'No resources pending CRT review' %}</p>
-{% endif%}
-
-<a name="pm" class="named-anchor"></a>
-<h3>{% trans 'Pending MEP' %}</h3>
-
-{% if pending_mep_resources %}
-<div class="table-responsive">
-         <table class="table table-striped">
-         	 <thead>
-                <tr>
-                  <th>{% trans 'Submitted' %}</th>
-                  <th>{% trans 'Title' %}</th>
-                  <th>{% trans 'Organisation' %}</th>
-                  <th>{% trans 'Options' %}</th>
-                </tr>
-              </thead>
-              <tbody>
-			{% for pr in pending_mep_resources %}
- 			 <tr>
- 			 	  <td>{{ pr.create_date }}</td>
-                  <td>{{ pr.title }}</td>
-                  <td>
-                  	{% for o in pr.get_organisations %}
-                  		{{ o.name }}
-                  	
-                  	{% endfor %}
-                  </td>
-                  <td>
-                  <a target="_blank" href="{% url 'orb_resource' pr.slug %}">{% trans 'Preview' %}</a>
-					| <a target="_blank" href="{% url 'orb_resource_approve' pr.id %}">{% trans 'Approve' %}</a>
-					| <a target="_blank" href="{% url 'orb_resource_reject' pr.id %}">{% trans 'Reject' %}</a> 
-                  </td>
-                
-                </tr>
- 			{% endfor %}
- 			</tbody>
- 		</table>
-	</div>
-{% else %}
-	<p>{% trans 'No resources pending MEP review' %}</p>
+	<p>{% trans 'No resources pending review' %}</p>
 {% endif%}
 
 {% endblock %}
