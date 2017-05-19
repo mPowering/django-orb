@@ -6,6 +6,8 @@ Change log
 v2.6.0 - not yet released
 ----------------------------------
 
+* 462: Add option to archive a resource - https://github.com/mPowering/django-orb/issues/issues/462
+* add defusedxml==0.5.0 as package requirement
 
 .. _orb-v2-5-2:
 
