@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'orb.review',
     'orb.analytics',
     'orb.toolkits',
+    'orb.courses',
     'modeltranslation_exim',
     'django_extensions',
 ]

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n review_tags %}
+
+{% block extra_head_title %}{{ course.title }}{% endblock extra_head_title %}
+
+{% block extra_scripts %}
+
+<script>
+var course = {
+    "title": {{ course.title }},
+    "sections": {{ course.sections|safe }}
+};
+
+</script>
+
+{% endblock extra_scripts %}
+
+{% block content %}
+
+    <h2>{{ course.title }}</h2>
+
+    {% include "includes/messages.html" %}
+
+
+{% endblock %}

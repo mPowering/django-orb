@@ -10,7 +10,6 @@ from django.db import models
 from django.db.models import Avg, Count
 from django.utils.translation import ugettext_lazy as _
 from modeltranslation.utils import build_localized_fieldname
-from tastypie.models import create_api_key
 
 from orb import signals
 from orb.analytics.models import UserLocationVisualization
@@ -19,8 +18,6 @@ from orb.resources.managers import ResourceURLManager, ResourceQueryset
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ResourceTagManager, TagQuerySet
 from .fields import AutoSlugField
-
-models.signals.post_save.connect(create_api_key, sender=User)
 
 cal = pdt.Calendar()
 
