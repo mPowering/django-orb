@@ -16,7 +16,8 @@ services:
         MYSQL_USER: orb
         MYSQL_PASSWORD: orb
     volumes:
-      - ./local_data/docker-mysql:/var/lib/mysql
+      - ./local_data/mysql-data:/var/lib/mysql
+      - ./local_data/mysql-init:/docker-entrypoint-initdb.d
 
   solr:
     image: solr:5.4.1
@@ -40,10 +41,11 @@ services:
     environment:
       - MYSQL_USER=orb
       - USE_DOCKER=yes
-      - DATABASE_URL="mysql://root@localhost:3308/orb"
+      - DATABASE_URL="mysql://orb:orb@mysql:3308/orb"
     volumes:
       - .:/app
     ports:
-      - "8000:8085"
+      - "8000:8000"
     links:
       - mysql
+      - solr
