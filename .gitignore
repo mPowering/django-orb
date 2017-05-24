@@ -61,7 +61,6 @@ collectedstatic/
 collectedstaticfiles/
 media/
 nbproject/
-local_data/
 *.psd
 *.orig
 .idea
