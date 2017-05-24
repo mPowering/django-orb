@@ -30,6 +30,48 @@ The settings included are designed to be as simple and sensible for baseline
 development as possible. It is *highly* recommended that the local settings
 file be used to specify database settings.
 
+Docker containers
+-----------------
+
+The Docker container system is *mostly* there, and at this point allows basic
+use and development using Docker Compose (using version 2 config).
+
+With Docker and Docker Compose installed, add this line to the `.env` file in
+your project root (adding it if absent):
+
+    COMPOSE_FILE=dev.yml
+
+Add any seed data in the form of a SQL dump to `local_data/mysql-init/`. All SQL
+files found here will be executed when the container is *first* created.
+
+Then run:
+
+    docker-compose up
+
+This will bring up three containers:
+
+1. MySQL
+2. Solr
+3. Django application
+
+The Solr container will be up but for reasons of configuration to be completed
+is not a working search backend yet.
+
+To shutdown the containers run:
+
+    docker-compose down
+
+If the Django application is unresponsive because of a missing database then run:
+
+    docker-compose restart django
+
+It may be the case that the container finished loading before the MySQL container
+and service were available.
+
+To run a Django command, use the following:
+
+    docker-compose run django python manage.py <command>
+
 Testing
 =======
 
