@@ -13,4 +13,3 @@ class ORBConfig(AppConfig):
         Resource = self.get_model('Resource')
         post_save.connect(callbacks.resource_submitted_callback, sender=Resource)
         post_save.connect(create_api_key, sender=get_user_model())
-        post_save.connect(callbacks.create_profile, sender=get_user_model())
