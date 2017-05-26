@@ -33,7 +33,8 @@ class Course(TimestampBase):
 
     title = models.CharField(max_length=200)
 
-    sections = models.TextField(default="[]")
+    # Previous work with a third party JSON field was unsuccessufl
+    sections = models.TextField(default="[]")  # TODO use a proper JSON field
 
     courses = CourseQueryset.as_manager()
     objects = courses

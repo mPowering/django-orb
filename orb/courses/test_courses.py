@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """
 Tests for the courses app
 """
@@ -25,7 +27,7 @@ def course(testing_user):
 
 def test_anon_users(client):
     response = client.get(reverse('courses_list'))
-    assert response.status_code == 302
+    assert response.status_code == 200
 
 
 def test_authd_users(admin_client):

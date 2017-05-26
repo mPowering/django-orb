@@ -9,7 +9,9 @@
 
     {% include "includes/messages.html" %}
 
-    <button><a href="{% url 'courses_create' %}">Add a new course</a></button>
+    {% if user.is_authenticated %}
+    <button><a href="{% url 'courses_create' %}">{% trans 'Add a new course' %}</a></button>
+    {% endif %}
 
     <div>
     {% for course in courses %}
@@ -19,7 +21,7 @@
 
         </div>
     {% empty %}
-        <h3>No courses currently available.</h3>
+        <h3>{% trans 'No courses currently available.' %}</h3>
     {% endfor %}
 
     </div>
