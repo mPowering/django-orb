@@ -24,6 +24,18 @@ lint:  ## Run flake8 over app
 	flake8 orb
 
 ###################################
+### Docker shortcuts
+
+run:  ## Runs the dev containers
+	docker-compose -f dev.yml up
+
+build:  ## Builds all available containers
+	docker-compose -f dev.yml build
+
+test-docker:  ## Runs tests in the Django container
+	docker-compose -f dev.yml run django pytest
+
+###################################
 ### Language
 makemessages:  ## Make PO messages files
 	./manage.py makemessages -l es -l pt_BR
