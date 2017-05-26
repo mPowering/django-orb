@@ -51,11 +51,11 @@ INSTALLED_APPS = [
     'haystack',
     'sorl.thumbnail',
     'orb',
+    'orb.courses',
     'orb.peers',
     'orb.review',
     'orb.analytics',
     'orb.toolkits',
-    'orb.courses',
     'modeltranslation_exim',
     'django_extensions',
 ]
