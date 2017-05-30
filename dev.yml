@@ -20,15 +20,14 @@ services:
       - ./local_data/mysql-init:/docker-entrypoint-initdb.d
 
   solr:
-    image: solr:5.4.1
+    #image: mxr576/apachesolr-4.x-drupal-docker
+    build:
+      context: .
+      dockerfile: ./compose/solr/Dockerfile
     ports:
      - "8983:8983"
     volumes:
       - solr_data_dev:/opt/solr/server/solr/mycores
-    entrypoint:
-      - docker-entrypoint.sh
-      - solr-precreate
-      - mycore
 
   django:
     build:
