@@ -85,3 +85,5 @@ docs/_build
 userdocs/build
 
 .hypothesis
+.vscode
+vue/coverage

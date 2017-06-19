@@ -1,26 +1,27 @@
 {% extends "base.html" %}
-{% load i18n review_tags %}
+{% load i18n review_tags static %}
 
 {% block extra_head_title %}{{ course.title }}{% endblock extra_head_title %}
 
 {% block extra_scripts %}
-
-<script>
-var ORBCourse = {
-    "title": "{{ course.title }}",
-    "sections": {{ course.sections|safe }}
-};
-console.log(ORBCourse);
-
-</script>
-
+{% comment %}vue is included in course_build script for now{% endcomment %}
 {% endblock extra_scripts %}
 
 {% block content %}
-
-    <h2>{{ course.title }}</h2>
-
     {% include "includes/messages.html" %}
+    {% comment %}{{ course.sections|safe|default:'[]' }}{% endcomment %}
+    <div id="app">
+        <course-editor
+            title="{{ course.title }}"
+            :sections="[[],[],[]]"
+            csrf="{{ csrf_token }}"
+        >
+        </course-editor>
+    </div>
+{% endblock %}
 
 
+{% block footer_js %}
+{{ super }}
+<script src="{% static 'orb/js/course_builder.js'  %}"></script>
 {% endblock %}

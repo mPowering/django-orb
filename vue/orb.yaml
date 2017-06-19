@@ -1,0 +1,6 @@
+project: Django-ORB
+src: ./
+build: ../orb/static/orb/
+publicPath: js/
+entries:
+    course_builder: ./components/course_builder.js

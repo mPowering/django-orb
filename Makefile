@@ -9,6 +9,9 @@ python-deps:  ## Install all dependencies, for running app, dev, and testing
 	pip install -r requirements/frozen.txt
 	pip install -r requirements/test.txt
 
+vue-deps: ## Install front-end dependencies
+	cd ./vue && yarn install
+
 ###################################
 ### Testing
 
@@ -22,6 +25,9 @@ test-fast:  ## Run Django tests without search dependencies
 
 lint:  ## Run flake8 over app
 	flake8 orb
+
+test-vue: ## Run front-end JS tests
+	cd ./vue && yarn run unit
 
 ###################################
 ### Docker shortcuts
@@ -69,3 +75,9 @@ clean:  ## Removes extraneous files and build artifacts
 
 help:
 	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+
+dev-js:
+	cd ./vue && yarn run dev
+
+build-js:
+	cd ./vue && yarn run build
