@@ -58,7 +58,7 @@ class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
 
         """
         try:
-            data = json.loads(request.content)
+            data = json.loads(request.body)
         except ValueError:
             return http.JsonResponse({'errors': _('JSON decoding error')}, status=400)
 
@@ -120,7 +120,7 @@ class CourseView(generic.DetailView):
             return http.JsonResponse({'errors': _('You do not have permission to edit this course')}, status=403)
 
         try:
-            data = json.loads(request.content)
+            data = json.loads(request.body)
         except ValueError:
             return http.JsonResponse({'errors': _('JSON decoding error')}, status=400)
 
