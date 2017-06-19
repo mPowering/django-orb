@@ -9,10 +9,6 @@ export default {
     props: {
         title: String,
         sections: Array,
-        csrf: {
-            type: String,
-            required: true
-        },
         labels: {
             type: Object,
             default: () => {
@@ -43,7 +39,6 @@ export default {
             let course = {
                 title: this.course_title,
                 sections: this.course_sections,
-                csrfmiddlewaretoken: this.csrf
             }
 
             console.log(course)
@@ -78,43 +73,50 @@ export default {
 </script>
 
 <template>
-  <div class="course-editor container-fluid">
-    <header class="course-editor-hdr row">
-        <div class="input-group col-lg-4">
-        <template v-if="edit_head">
-            <input class="form-control" @blur="saveTitle" v-model="course_title">
-            <span class="input-group-btn">
-                <button 
-                    class="btn btn-default" 
-                    v-text="labels.save_title" 
-                    @click="saveTitle"
-                >
-                </button>
-            </span>
-        </template>
-        <template v-else>
-            <h3 @click="editTitle" class="course-editor-hed col-md-4">
-                <span v-text="course_title"></span>
-            </h3>
-            <span class="input-group-btn">
-                <button 
-                    class="btn btn-default btn-xs" 
-                    v-text="labels.edit_title" 
-                    @click="editTitle"
-                >
-                </button>
-            </span>
-        </template>
+    <div class="course-editor container-fluid">
+        <div class="row">
+            <div class="course-editor col-lg-4">
+                <header class="course-editor-hdr">
+                    <div class="input-group">
+                        <template v-if="edit_head">
+                            <input 
+                                class="form-control" 
+                                @blur="saveTitle" 
+                                v-model="course_title"
+                            >
+                            <span class="input-group-btn">
+                                <button 
+                                    class="btn btn-default" 
+                                    v-text="labels.save_title" 
+                                    @click="saveTitle"
+                                ></button>
+                            </span>
+                        </template>
+                        <template v-else>
+                            <h3 
+                                @click="editTitle" 
+                                class="course-editor-hed"
+                                v-text="course_title"
+                            ></h3>
+                            <span class="input-group-btn">
+                                <button 
+                                    class="btn btn-default btn-xs" 
+                                    v-text="labels.edit_title" 
+                                    @click="editTitle"
+                                ></button>
+                            </span>
+                        </template>
+                    </div>
+                </header>
+                <ul class="list-group">
+                    <li class="list-group-item" v-for="section in course_sections">
+                        <course-section :resources="section" :labels="labels"></course-section>
+                    </li>
+                </ul>
+                <button class="btn btn-default" v-text="labels.add_section" @click="addSection"></button>
+                <button class="btn btn-default" v-text="labels.save" @click="saveCourse"></button>
+                <button class="btn btn-default" v-text="labels.search" @click="getResource"></button>
+            </div>
         </div>
-    </header>
-    
-    <ul class="list-group">
-        <li class="list-group-item" v-for="section in course_sections">
-            <course-section :resources="section" :labels="labels"></course-section>
-        </li>
-    </ul>
-    <button class="btn btn-default" v-text="labels.add_section" @click="addSection"></button>
-    <button class="btn btn-default" v-text="labels.save" @click="saveCourse"></button>
-    <button class="btn btn-default" v-text="labels.search" @click="getResource"></button>
-  </div>
+    </div>
 </template>

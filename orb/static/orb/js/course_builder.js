@@ -10641,10 +10641,6 @@ exports.default = {
     props: {
         title: String,
         sections: Array,
-        csrf: {
-            type: String,
-            required: true
-        },
         labels: {
             type: Object,
             default: function _default() {
@@ -10681,8 +10677,7 @@ exports.default = {
         saveCourse: function saveCourse() {
             var course = {
                 title: this.course_title,
-                sections: this.course_sections,
-                csrfmiddlewaretoken: this.csrf
+                sections: this.course_sections
             };
 
             console.log(course);
@@ -11972,10 +11967,14 @@ module.exports = Component.exports
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "course-editor container-fluid"
-  }, [_c('header', {
-    staticClass: "course-editor-hdr row"
   }, [_c('div', {
-    staticClass: "input-group col-lg-4"
+    staticClass: "row"
+  }, [_c('div', {
+    staticClass: "course-editor col-lg-4"
+  }, [_c('header', {
+    staticClass: "course-editor-hdr"
+  }, [_c('div', {
+    staticClass: "input-group"
   }, [(_vm.edit_head) ? [_c('input', {
     directives: [{
       name: "model",
@@ -12005,15 +12004,14 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       "click": _vm.saveTitle
     }
   })])] : [_c('h3', {
-    staticClass: "course-editor-hed col-md-4",
+    staticClass: "course-editor-hed",
+    domProps: {
+      "textContent": _vm._s(_vm.course_title)
+    },
     on: {
       "click": _vm.editTitle
     }
-  }, [_c('span', {
-    domProps: {
-      "textContent": _vm._s(_vm.course_title)
-    }
-  })]), _vm._v(" "), _c('span', {
+  }), _vm._v(" "), _c('span', {
     staticClass: "input-group-btn"
   }, [_c('button', {
     staticClass: "btn btn-default btn-xs",
@@ -12058,7 +12056,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     on: {
       "click": _vm.getResource
     }
-  })])
+  })])])])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
