@@ -3,7 +3,7 @@
 """
 Courseware display and management views
 
-Course data is stored and transferred as JSON 
+Course data is stored and transferred as JSON
 """
 
 from __future__ import unicode_literals
@@ -16,6 +16,7 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
 
 from orb import mixins
 from orb.courses import forms
@@ -40,14 +41,18 @@ class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
     fields = '__all__'
     template_name = "orb/courses/course_form.html"
 
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(CourseCreateView, self).dispatch(request, *args, **kwargs)
+
     def post(self, request, *args, **kwargs):
         """
         Handles a JSON request to save the course data
-        
+
         Args:
-            request: 
-            *args: 
-            **kwargs: 
+            request:
+            *args:
+            **kwargs:
 
         Returns:
 
@@ -75,13 +80,17 @@ class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
 class CourseView(generic.DetailView):
     """
     View for displaying and editing a course
-    
+
     The GET method is based entirely on rendered template HTML
-    
+
     The POST method is entirely AJAX/JSON based
     """
     queryset = models.Course.courses.active()
     template_name = "orb/courses/course_form.html"
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super(CourseView, self).dispatch(request, *args, **kwargs)
 
     def user_can_edit(self, user):
         """Checks if the user has the right to edit this course"""
@@ -96,11 +105,11 @@ class CourseView(generic.DetailView):
     def post(self, request, *args, **kwargs):
         """
         Handles a JSON request to save the course data
-        
+
         Args:
-            request: 
-            *args: 
-            **kwargs: 
+            request:
+            *args:
+            **kwargs:
 
         Returns:
 
