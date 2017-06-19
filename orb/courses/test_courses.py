@@ -45,6 +45,20 @@ def test_form_invalid_json_data(admin_user):
     assert not form.is_valid()
 
 
+def test_save_course_form(admin_user, testing_user):
+    form = forms.CourseForm(user=admin_user, data={'sections': '[]', 'title': 'Hello World'})
+    assert form.is_valid()
+    course = form.save()
+
+    assert course.create_user == course.update_user == admin_user
+
+    form = forms.CourseForm(user=testing_user, data={'sections': '[]', 'title': 'Hello World'}, instance=course)
+    assert form.is_valid()
+    course = form.save()
+    assert course.create_user == admin_user
+    assert course.update_user == testing_user
+
+
 @pytest.mark.django_db
 def test_admin_can_edit_course(course, admin_client, rf):
     response = admin_client.get(reverse('courses_edit', kwargs={'pk': course.pk}))

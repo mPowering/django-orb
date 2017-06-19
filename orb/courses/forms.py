@@ -30,6 +30,12 @@ class CourseForm(forms.ModelForm):
         self.user = kwargs.pop('user', None)
         super(CourseForm, self).__init__(*args, **kwargs)
 
+    def save(self, **kwargs):
+        if not getattr(self.instance, 'pk', None):
+            self.instance.create_user = self.user
+        self.instance.update_user = self.user
+        return super(CourseForm, self).save(**kwargs)
+
     def clean_sections(self):
         data = self.cleaned_data.get("sections", "[]")
         try:
