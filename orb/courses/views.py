@@ -9,6 +9,7 @@ Course data is stored and transferred as JSON
 from __future__ import unicode_literals
 
 import json
+import logging
 
 from django import http
 from django.contrib.auth.decorators import login_required
@@ -21,6 +22,9 @@ from django.views.decorators.csrf import csrf_exempt
 from orb import mixins
 from orb.courses import forms
 from orb.courses import models
+
+
+logger = logging.getLogger(__name__)
 
 
 class CoursesListView(generic.ListView):
@@ -59,7 +63,8 @@ class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
         """
         try:
             data = json.loads(request.body)
-        except ValueError:
+        except ValueError as e:
+            logger.debug(e)
             return http.JsonResponse({'errors': _('JSON decoding error')}, status=400)
 
         form = forms.CourseForm(user=request.user, data=data)
@@ -121,7 +126,8 @@ class CourseView(generic.DetailView):
 
         try:
             data = json.loads(request.body)
-        except ValueError:
+        except ValueError as e:
+            logger.debug(e)
             return http.JsonResponse({'errors': _('JSON decoding error')}, status=400)
 
         form = forms.CourseForm(data=data, instance=self.object, user=request.user)
