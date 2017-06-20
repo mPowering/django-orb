@@ -26,10 +26,10 @@ test-fast:  ## Run Django tests without search dependencies
 lint:  ## Run flake8 over app
 	flake8 orb
 
-test-vue: ## Run front-end JS tests
+vue-test: ## Run front-end JS tests
 	cd ./vue && yarn run unit
 
-test-vue-dev: ## Run front-end JS tests
+vue-test-dev: ## Run front-end JS tests
 	cd ./vue && yarn run unit-dev
 
 ###################################
@@ -79,8 +79,8 @@ clean:  ## Removes extraneous files and build artifacts
 help:
 	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-dev-js:
+vue-dev:
 	cd ./vue && yarn run dev
 
-build-js:
+vue-build:
 	cd ./vue && yarn run build
