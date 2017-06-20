@@ -1,8 +1,12 @@
 
-from django import forms
 import json
+import logging
+
+from django import forms
 
 from orb.courses import models
+
+logger = logging.getLogger(__name__)
 
 
 class CourseAdminForm(forms.ModelForm):
@@ -39,7 +43,8 @@ class CourseForm(forms.ModelForm):
     def clean_sections(self):
         data = self.cleaned_data.get("sections", "[]")
         try:
-            json.loads(data)
-        except ValueError:
+            json.dumps(data)
+        except ValueError as e:
+            logger.debug(e)
             raise forms.ValidationError("Invalid JSON")
         return data
