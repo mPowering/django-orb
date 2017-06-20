@@ -29,6 +29,9 @@ lint:  ## Run flake8 over app
 test-vue: ## Run front-end JS tests
 	cd ./vue && yarn run unit
 
+test-vue-dev: ## Run front-end JS tests
+	cd ./vue && yarn run unit-dev
+
 ###################################
 ### Docker shortcuts
 
