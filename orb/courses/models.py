@@ -6,6 +6,8 @@ Models for ORB courses
 
 from __future__ import unicode_literals
 
+import json
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -44,3 +46,6 @@ class Course(TimestampBase):
 
     def get_absolute_url(self):
         return reverse("courses_edit", kwargs={"pk": self.pk})
+
+    def sections_as_json(self):
+        return json.dumps(json.loads(self.sections))
