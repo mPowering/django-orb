@@ -46,6 +46,3 @@ class Course(TimestampBase):
 
     def get_absolute_url(self):
         return reverse("courses_edit", kwargs={"pk": self.pk})
-
-    def sections_as_json(self):
-        return json.dumps(json.loads(self.sections))

@@ -67,7 +67,8 @@ class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
             logger.debug(e)
             return http.JsonResponse({'errors': _('JSON decoding error')}, status=400)
 
-        form = forms.CourseForm(user=request.user, data=data)
+        form_data = {'sections': json.dumps(data['sections']), 'title': data['title']}
+        form = forms.CourseForm(user=request.user, data=form_data)
 
         if form.is_valid():
             course = form.save()  # Any checks against resource keys should happen here
