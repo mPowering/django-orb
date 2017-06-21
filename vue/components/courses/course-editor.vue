@@ -11,8 +11,14 @@ export default {
         CourseResource
     },
     props: {
-        title: String,
-        sections: Array,
+        title: {
+            type: String,
+            default: 'New Course'
+        },
+        sections: {
+            type: Array,
+            default: () => []
+        },
         labels: {
             type: Object,
             default: () => {
@@ -20,20 +26,22 @@ export default {
                     edit_title: 'Edit Course Title',
                     save_title: 'Save Course Title',
                     add_section: 'Add Course Section',
-                    add_resource: 'Add Section Resource',
+                    remove_section: 'Remove Course Section',
+                    add_activity: 'Add Text Activity',
                     save: 'Save Course',
-                    search: 'Search'
+                    search: 'Search',
+                    new_course_title: 'New Course'
                 }
             }
         }
     },
     data () {
         return {
-            course_title: 'New Course',
-            course_sections: [],
+            course_title: this.title,
+            course_sections: this.sections,
             edit_head: false,
             q: '',
-            resource_api: 'http://localhost:8000/api/v1/',
+            resource_api: '/api/v1/',
             available_resources: []
         }
     },
@@ -63,10 +71,18 @@ export default {
                 )
         },
         searchResources () {
+            console.log({
+                format: 'json',
+                q: this.q
+            })
+
             this.$http.get(
-                `${this.resource_api}resource`,
+                `${this.resource_api}resource/search/`,
                 {
-                    format: 'json'
+                    params: {
+                        format: 'json',
+                        q: this.q
+                    }
                 }
             )
                 .then(
@@ -81,12 +97,9 @@ export default {
         }
     },
     beforeMount () {
-        this.course_title = (this.title)
-            ? this.title
-            : this.course_title
-        this.course_sections = (this.sections && this.sections instanceof Array)
-            ? this.sections
-            : this.course_sections
+        if (this.labels.new_course_title && !this.title) {
+            this.course_title = this.labels.new_course_title
+        }
     }
 }
 </script>
@@ -135,7 +148,12 @@ export default {
                             :resources="section" 
                             :labels="labels"
                         >
-                            <button class="btn btn-warning" @click="removeSection(index)">Remove Section</button>
+                            <button
+                                slot="section-footer-controls"
+                                class="btn btn-warning"
+                                @click="removeSection(index)"
+                                v-text="labels.remove_section"
+                            ></button>
                         </course-section>
                     </draggable>
                 </div>

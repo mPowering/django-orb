@@ -55,7 +55,7 @@ module.exports = (env) => {
             }),
             new notifier({
                 title: CFG.project,
-                alwaysNotify: true,
+                alwaysNotify: false,
                 skipFirstNotification: false
             }),
             new friendly_errors(),

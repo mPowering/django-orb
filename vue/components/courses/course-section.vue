@@ -1,10 +1,12 @@
 <script>
 import CourseResource from '@/courses/course-resource'
+import CourseActivity from '@/courses/course-activity'
 import draggable from 'vuedraggable'
 
 export default {
     name: 'course-section',
     components: {
+        CourseActivity,
         CourseResource,
         draggable
     },
@@ -25,10 +27,11 @@ export default {
         }
     },
     methods: {
-        addResource () {
+        addActivity () {
             this.course_resources.push(
                 {
-                    title: 'Unnamed Text Slide'
+                    type: 'CourseActivity',
+                    title: 'Unnamed Text Activity'
                 }
             )
         },
@@ -38,7 +41,11 @@ export default {
                     return index !== id
                 }
             )
-        },
+        }
+        // updateResource (obj) {
+        //     console.log(obj)
+        // }
+        // @update="updateResource"
     },
     beforeMount () {
         this.course_resources = (this.resources && this.resources instanceof Array)
@@ -52,17 +59,20 @@ export default {
   <div class="course-section">
     <div class="well list-group">
         <draggable :list="course_resources" :options="{group:'resources'}">
-            <course-resource
+            <!-- can be CourseActivity or CourseResource -->
+            <component
+                :is="resource.type"
                 class="list-group-item"
                 v-for="resource, index in course_resources"
                 :key="resource"
-                :title="resource.title"
+                :instance="resource"
+                
             >
-                <button class="btn btn-warning" @click="removeResource(index)">Remove Resource</button>
-            </course-resource>
+                <button slot="resource-footer-controls" class="btn btn-warning" @click="removeResource(index)">Remove Resource</button>
+            </component>
         </draggable>
     </div>
-    <button class="btn btn-primary" v-text="labels.add_resource" @click="addResource"></button>
-    <slot></slot>
+    <button class="btn btn-primary" v-text="labels.add_activity" @click="addActivity"></button>
+    <slot name="section-footer-controls"></slot>
   </div>
 </template>
