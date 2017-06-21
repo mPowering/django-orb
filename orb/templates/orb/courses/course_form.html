@@ -9,13 +9,12 @@
 
 {% block content %}
     {% include "includes/messages.html" %}
-    <h1>{{ course.sections }}</h1>
     <div id="app">
         <course-editor
             {% if course.title %}
                 title="{{ course.title }}"
             {% endif %}
-            
+
             {% if course.sections %}
             :sections="{{ course.sections|default:'[]' }}"
             {% endif %}

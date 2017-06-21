@@ -131,7 +131,8 @@ class CourseView(generic.DetailView):
             logger.debug(e)
             return http.JsonResponse({'errors': _('JSON decoding error')}, status=400)
 
-        form = forms.CourseForm(data=data, instance=self.object, user=request.user)
+        form_data = {'sections': json.dumps(data['sections']), 'title': data['title']}
+        form = forms.CourseForm(data=form_data, instance=self.object, user=request.user)
 
         if form.is_valid():
             form.save()  # Any checks against resource keys should happen here
