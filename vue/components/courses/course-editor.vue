@@ -104,6 +104,8 @@ export default {
 }
 </script>
 
+
+
 <template>
     <div class="course-editor">
         <header class="course-editor-hdr row">
@@ -111,7 +113,6 @@ export default {
                 <div class="input-group col-sm-6">
                     <input 
                         class="form-control" 
-                        
                         v-model="course_title"
                     >
                     <span class="input-group-btn">
@@ -139,26 +140,52 @@ export default {
         </header>
         <div class="row">
             <div class="course-editor col-sm-9">
-                <div class="list-group">
-                    <draggable :list="course_sections">
+                <div>
+                    <draggable :list="course_sections" :options="{handle: '.handle'}" >
                         <course-section 
-                            class="list-group-item"
                             v-for="section, index in course_sections"
                             :key="section"
                             :resources="section" 
                             :labels="labels"
-                        >
+                        >   
                             <button
-                                slot="section-footer-controls"
-                                class="btn btn-warning"
+                                slot="section-preheading"
+                                class="handle"
+                                :class="[$style.glyph]"
+                            >
+                                <span
+                                    class="glyphicon glyphicon-move"
+                                    aria-hidden="true"
+                                ></span>
+                            </button>
+                            <button
+                                slot="section-postheading"
+                                :class="[$style.glyph, $style['iso--xStartAuto']]" 
                                 @click="removeSection(index)"
-                                v-text="labels.remove_section"
-                            ></button>
+                            >
+                                <span class="sr-only" v-text="labels.remove_section"></span>
+                                <span
+                                    class="glyphicon glyphicon-remove"
+                                    aria-hidden="true"
+                                ></span>
+                            </button>
                         </course-section>
                     </draggable>
+                    
+                    <div 
+                        class="panel panel-default" 
+                        @click="addSection"
+                    >
+                        <button 
+                            class="panel-heading"
+                            :class="[$style['row--pStart--sMiddle'], $style['rhy--xStart25'], $style['fake-btn']]"
+                        >
+                            <span class="glyphicon glyphicon-plus text-muted" aria-hidden="true"></span>
+                            <span class="text-muted" v-text="labels.add_section"></span>
+                        </button>
+                    </div>
                 </div>
                 <div class="btn-group">
-                    <button class="btn btn-success" v-text="labels.add_section" @click="addSection"></button>
                     <button 
                         class="btn btn-success" 
                         v-text="labels.save" 
@@ -195,3 +222,40 @@ export default {
         </div>
     </div>
 </template>
+
+
+
+<style module>
+    .row--pStart--sMiddle {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .rhy--xStart25 > :nth-child(2n){
+        margin-left: 3px
+    }
+
+    .iso--xStartAuto {
+        margin-left: auto
+    }
+
+    .glyph {
+        border: 0;
+        background: 0;
+        color: #000;
+        opacity: .25;
+    }
+    
+    .glyph:hover {
+        opacity: 1;
+    }
+
+    .fake-btn {
+        display: block;
+        width: 100%;
+        text-align: left;
+        border-right: inherit;
+    }
+
+</style>
