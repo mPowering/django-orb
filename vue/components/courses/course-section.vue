@@ -84,7 +84,10 @@ export default {
             </draggable>
         </div>
         <footer class="panel-footer">
-            <button class="btn btn-primary" v-text="labels.add_activity" @click="addActivity"></button>
+            <button class="btn btn-primary" @click="addActivity">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                <span v-text="labels.add_activity"></span>
+            </button>
             <slot name="section-footer-controls"></slot>
         </footer>
     </div>

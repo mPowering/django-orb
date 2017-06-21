@@ -14800,13 +14800,19 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     staticClass: "panel-footer"
   }, [_c('button', {
     staticClass: "btn btn-primary",
-    domProps: {
-      "textContent": _vm._s(_vm.labels.add_activity)
-    },
     on: {
       "click": _vm.addActivity
     }
-  }), _vm._v(" "), _vm._t("section-footer-controls")], 2)])
+  }, [_c('span', {
+    staticClass: "glyphicon glyphicon-plus",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  }), _vm._v(" "), _c('span', {
+    domProps: {
+      "textContent": _vm._s(_vm.labels.add_activity)
+    }
+  })]), _vm._v(" "), _vm._t("section-footer-controls")], 2)])
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
