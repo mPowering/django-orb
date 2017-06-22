@@ -5,6 +5,8 @@
 export default {
     name: 'course-resource',
     props: {
+        id: Number,
+        template: String,
         instance: {
             type: Object,
             default: () => {
@@ -25,6 +27,7 @@ export default {
     },
     data () {
         return {
+            type: 'CourseResource',
             edittable: false
         }
     },
@@ -36,6 +39,8 @@ export default {
             this.edit()
         }
     },
-    beforeMount () {}
+    beforeMount () {
+        this.instance.type = this.$data.type
+    }
 }
 </script>

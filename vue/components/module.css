@@ -50,8 +50,16 @@
     margin-left: auto
 }
 
+.iso--yEnd25 {
+    margin-bottom: 6px;
+}
+
 .iso--yEnd0 {
     margin-bottom: 0;
+}
+
+.iso--xEnd25 {
+    margin-right: 6px;
 }
 
 .hl--xy {
@@ -76,6 +84,10 @@
 
 .glyph:hover {
     opacity: 1;
+}
+
+.label {
+    font-size: 90%
 }
 
 .fake-btn {

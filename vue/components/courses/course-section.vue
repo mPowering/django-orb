@@ -45,10 +45,6 @@ export default {
                 }
             )
         }
-        // updateResource (obj) {
-        //     console.log(obj)
-        // }
-        // @update="updateResource"
     },
     beforeMount () {
         this.course_resources = (this.resources && this.resources instanceof Array)

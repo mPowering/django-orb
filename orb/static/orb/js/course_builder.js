@@ -11805,6 +11805,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = {
     name: 'course-resource',
     props: {
+        id: Number,
+        template: String,
         instance: {
             type: Object,
             default: function _default() {
@@ -11825,6 +11827,7 @@ exports.default = {
     },
     data: function data() {
         return {
+            type: 'CourseResource',
             edittable: false
         };
     },
@@ -11837,7 +11840,9 @@ exports.default = {
             this.edit();
         }
     },
-    beforeMount: function beforeMount() {}
+    beforeMount: function beforeMount() {
+        this.instance.type = this.$data.type;
+    }
 };
 
 /***/ }),
@@ -11916,7 +11921,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "\n._6EkEdtb4jLjAN0ue1utwe {\n    display: flex;\n    justify-content: flex-start;\n    align-items: center;\n}\n.vY2mJmisXGV7-t9AVeAxW {\n    display: flex;\n    justify-content: flex-start;\n    align-items: baseline;\n}\n._2MfR4zAgXfMRMqOuTzaSsf {\n    display: flex;\n    justify-content: flex-end;\n    align-items: center;\n}\n._8p-nfsLtEu9bfmo97CrFl > :nth-child(2n){\n    margin-left: 6px\n}\n._3HksJVyB-WveiBgeN-52Zr > :nth-child(2n){\n    margin-left: 12px\n}\n._2j2n_9NHc6yYUJVymjcL3p > :nth-child(2n){\n    margin-left: 24px\n}\n.dEYSybLuPdLNPwhBfPeAw {\n    padding-top: 0;\n    padding-bottom: 0;\n}\n._3Pjhw_Rmce4ICsrEGTAfab {\n    padding-bottom: 0;\n}\n._3ZfueElo8dcEX0OlTIyPl6 {\n    padding-left: 6px;\n    padding-right: 6px;\n}\n.qPHBEEQ_nfMj_vY9Z-4Ff {\n    padding: 6px;\n}\n._3tC7PLzvphCU3NfSRlnpbw {\n    margin-left: auto\n}\n.G7XFZHnr31H2-tvOit1Mb {\n    margin-bottom: 0;\n}\n._14Uf610sBxFhIhEAN25f7E {\n    border: 1px solid #ccc\n}\n._3VM28HYseX4o4V07a3iqoT {\n    background: transparent;\n    transition: background .3s ease-in-out;\n}\n._3VM28HYseX4o4V07a3iqoT:hover {\n    background: #d9edf7;\n}\n._2Jl43E1o2KdSj4s-8j259Z {\n    border: 0;\n    background: 0;\n    color: #000;\n    opacity: .25;\n}\n._2Jl43E1o2KdSj4s-8j259Z:hover {\n    opacity: 1;\n}\n.bF6wosaC-J-5Du-vBLH3V {\n    display: block;\n    width: 100%;\n    padding: 6px 12px;\n    text-align: left;\n    background: none;\n    border: 0;\n    color: #999\n}\n.bF6wosaC-J-5Du-vBLH3V:hover {\n    color: #666\n}\n", ""]);
+exports.push([module.i, "\n._6EkEdtb4jLjAN0ue1utwe {\n    display: flex;\n    justify-content: flex-start;\n    align-items: center;\n}\n.vY2mJmisXGV7-t9AVeAxW {\n    display: flex;\n    justify-content: flex-start;\n    align-items: baseline;\n}\n._2MfR4zAgXfMRMqOuTzaSsf {\n    display: flex;\n    justify-content: flex-end;\n    align-items: center;\n}\n._8p-nfsLtEu9bfmo97CrFl > :nth-child(2n){\n    margin-left: 6px\n}\n._3HksJVyB-WveiBgeN-52Zr > :nth-child(2n){\n    margin-left: 12px\n}\n._2j2n_9NHc6yYUJVymjcL3p > :nth-child(2n){\n    margin-left: 24px\n}\n.dEYSybLuPdLNPwhBfPeAw {\n    padding-top: 0;\n    padding-bottom: 0;\n}\n._3Pjhw_Rmce4ICsrEGTAfab {\n    padding-bottom: 0;\n}\n._3ZfueElo8dcEX0OlTIyPl6 {\n    padding-left: 6px;\n    padding-right: 6px;\n}\n.qPHBEEQ_nfMj_vY9Z-4Ff {\n    padding: 6px;\n}\n._3tC7PLzvphCU3NfSRlnpbw {\n    margin-left: auto\n}\n.oLPWR8jd0V75KvstjUsIl {\n    margin-bottom: 6px;\n}\n.G7XFZHnr31H2-tvOit1Mb {\n    margin-bottom: 0;\n}\n._1HPDDaCm1YhwLeiiUAaaFa {\n    margin-right: 6px;\n}\n._14Uf610sBxFhIhEAN25f7E {\n    border: 1px solid #ccc\n}\n._3VM28HYseX4o4V07a3iqoT {\n    background: transparent;\n    transition: background .3s ease-in-out;\n}\n._3VM28HYseX4o4V07a3iqoT:hover {\n    background: #d9edf7;\n}\n._2Jl43E1o2KdSj4s-8j259Z {\n    border: 0;\n    background: 0;\n    color: #000;\n    opacity: .25;\n}\n._2Jl43E1o2KdSj4s-8j259Z:hover {\n    opacity: 1;\n}\n.hLXyq0EoVHUhZLbitMyJX {\n    font-size: 90%\n}\n.bF6wosaC-J-5Du-vBLH3V {\n    display: block;\n    width: 100%;\n    padding: 6px 12px;\n    text-align: left;\n    background: none;\n    border: 0;\n    color: #999\n}\n.bF6wosaC-J-5Du-vBLH3V:hover {\n    color: #666\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -11931,10 +11936,13 @@ exports.locals = {
 	"pad--x25": "_3ZfueElo8dcEX0OlTIyPl6",
 	"pad--xy25": "qPHBEEQ_nfMj_vY9Z-4Ff",
 	"iso--xStartAuto": "_3tC7PLzvphCU3NfSRlnpbw",
+	"iso--yEnd25": "oLPWR8jd0V75KvstjUsIl",
 	"iso--yEnd0": "G7XFZHnr31H2-tvOit1Mb",
+	"iso--xEnd25": "_1HPDDaCm1YhwLeiiUAaaFa",
 	"hl--xy": "_14Uf610sBxFhIhEAN25f7E",
 	"rxn--info": "_3VM28HYseX4o4V07a3iqoT",
 	"glyph": "_2Jl43E1o2KdSj4s-8j259Z",
+	"label": "hLXyq0EoVHUhZLbitMyJX",
 	"fake-btn": "bF6wosaC-J-5Du-vBLH3V"
 };
 
@@ -11947,7 +11955,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "\n._6EkEdtb4jLjAN0ue1utwe {\n    display: flex;\n    justify-content: flex-start;\n    align-items: center;\n}\n.vY2mJmisXGV7-t9AVeAxW {\n    display: flex;\n    justify-content: flex-start;\n    align-items: baseline;\n}\n._2MfR4zAgXfMRMqOuTzaSsf {\n    display: flex;\n    justify-content: flex-end;\n    align-items: center;\n}\n._8p-nfsLtEu9bfmo97CrFl > :nth-child(2n){\n    margin-left: 6px\n}\n._3HksJVyB-WveiBgeN-52Zr > :nth-child(2n){\n    margin-left: 12px\n}\n._2j2n_9NHc6yYUJVymjcL3p > :nth-child(2n){\n    margin-left: 24px\n}\n.dEYSybLuPdLNPwhBfPeAw {\n    padding-top: 0;\n    padding-bottom: 0;\n}\n._3Pjhw_Rmce4ICsrEGTAfab {\n    padding-bottom: 0;\n}\n._3ZfueElo8dcEX0OlTIyPl6 {\n    padding-left: 6px;\n    padding-right: 6px;\n}\n.qPHBEEQ_nfMj_vY9Z-4Ff {\n    padding: 6px;\n}\n._3tC7PLzvphCU3NfSRlnpbw {\n    margin-left: auto\n}\n.G7XFZHnr31H2-tvOit1Mb {\n    margin-bottom: 0;\n}\n._14Uf610sBxFhIhEAN25f7E {\n    border: 1px solid #ccc\n}\n._3VM28HYseX4o4V07a3iqoT {\n    background: transparent;\n    transition: background .3s ease-in-out;\n}\n._3VM28HYseX4o4V07a3iqoT:hover {\n    background: #d9edf7;\n}\n._2Jl43E1o2KdSj4s-8j259Z {\n    border: 0;\n    background: 0;\n    color: #000;\n    opacity: .25;\n}\n._2Jl43E1o2KdSj4s-8j259Z:hover {\n    opacity: 1;\n}\n.bF6wosaC-J-5Du-vBLH3V {\n    display: block;\n    width: 100%;\n    padding: 6px 12px;\n    text-align: left;\n    background: none;\n    border: 0;\n    color: #999\n}\n.bF6wosaC-J-5Du-vBLH3V:hover {\n    color: #666\n}\n", ""]);
+exports.push([module.i, "\n._6EkEdtb4jLjAN0ue1utwe {\n    display: flex;\n    justify-content: flex-start;\n    align-items: center;\n}\n.vY2mJmisXGV7-t9AVeAxW {\n    display: flex;\n    justify-content: flex-start;\n    align-items: baseline;\n}\n._2MfR4zAgXfMRMqOuTzaSsf {\n    display: flex;\n    justify-content: flex-end;\n    align-items: center;\n}\n._8p-nfsLtEu9bfmo97CrFl > :nth-child(2n){\n    margin-left: 6px\n}\n._3HksJVyB-WveiBgeN-52Zr > :nth-child(2n){\n    margin-left: 12px\n}\n._2j2n_9NHc6yYUJVymjcL3p > :nth-child(2n){\n    margin-left: 24px\n}\n.dEYSybLuPdLNPwhBfPeAw {\n    padding-top: 0;\n    padding-bottom: 0;\n}\n._3Pjhw_Rmce4ICsrEGTAfab {\n    padding-bottom: 0;\n}\n._3ZfueElo8dcEX0OlTIyPl6 {\n    padding-left: 6px;\n    padding-right: 6px;\n}\n.qPHBEEQ_nfMj_vY9Z-4Ff {\n    padding: 6px;\n}\n._3tC7PLzvphCU3NfSRlnpbw {\n    margin-left: auto\n}\n.oLPWR8jd0V75KvstjUsIl {\n    margin-bottom: 6px;\n}\n.G7XFZHnr31H2-tvOit1Mb {\n    margin-bottom: 0;\n}\n._1HPDDaCm1YhwLeiiUAaaFa {\n    margin-right: 6px;\n}\n._14Uf610sBxFhIhEAN25f7E {\n    border: 1px solid #ccc\n}\n._3VM28HYseX4o4V07a3iqoT {\n    background: transparent;\n    transition: background .3s ease-in-out;\n}\n._3VM28HYseX4o4V07a3iqoT:hover {\n    background: #d9edf7;\n}\n._2Jl43E1o2KdSj4s-8j259Z {\n    border: 0;\n    background: 0;\n    color: #000;\n    opacity: .25;\n}\n._2Jl43E1o2KdSj4s-8j259Z:hover {\n    opacity: 1;\n}\n.hLXyq0EoVHUhZLbitMyJX {\n    font-size: 90%\n}\n.bF6wosaC-J-5Du-vBLH3V {\n    display: block;\n    width: 100%;\n    padding: 6px 12px;\n    text-align: left;\n    background: none;\n    border: 0;\n    color: #999\n}\n.bF6wosaC-J-5Du-vBLH3V:hover {\n    color: #666\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -11962,10 +11970,13 @@ exports.locals = {
 	"pad--x25": "_3ZfueElo8dcEX0OlTIyPl6",
 	"pad--xy25": "qPHBEEQ_nfMj_vY9Z-4Ff",
 	"iso--xStartAuto": "_3tC7PLzvphCU3NfSRlnpbw",
+	"iso--yEnd25": "oLPWR8jd0V75KvstjUsIl",
 	"iso--yEnd0": "G7XFZHnr31H2-tvOit1Mb",
+	"iso--xEnd25": "_1HPDDaCm1YhwLeiiUAaaFa",
 	"hl--xy": "_14Uf610sBxFhIhEAN25f7E",
 	"rxn--info": "_3VM28HYseX4o4V07a3iqoT",
 	"glyph": "_2Jl43E1o2KdSj4s-8j259Z",
+	"label": "hLXyq0EoVHUhZLbitMyJX",
 	"fake-btn": "bF6wosaC-J-5Du-vBLH3V"
 };
 
@@ -11978,7 +11989,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "\n._6EkEdtb4jLjAN0ue1utwe {\n    display: flex;\n    justify-content: flex-start;\n    align-items: center;\n}\n.vY2mJmisXGV7-t9AVeAxW {\n    display: flex;\n    justify-content: flex-start;\n    align-items: baseline;\n}\n._2MfR4zAgXfMRMqOuTzaSsf {\n    display: flex;\n    justify-content: flex-end;\n    align-items: center;\n}\n._8p-nfsLtEu9bfmo97CrFl > :nth-child(2n){\n    margin-left: 6px\n}\n._3HksJVyB-WveiBgeN-52Zr > :nth-child(2n){\n    margin-left: 12px\n}\n._2j2n_9NHc6yYUJVymjcL3p > :nth-child(2n){\n    margin-left: 24px\n}\n.dEYSybLuPdLNPwhBfPeAw {\n    padding-top: 0;\n    padding-bottom: 0;\n}\n._3Pjhw_Rmce4ICsrEGTAfab {\n    padding-bottom: 0;\n}\n._3ZfueElo8dcEX0OlTIyPl6 {\n    padding-left: 6px;\n    padding-right: 6px;\n}\n.qPHBEEQ_nfMj_vY9Z-4Ff {\n    padding: 6px;\n}\n._3tC7PLzvphCU3NfSRlnpbw {\n    margin-left: auto\n}\n.G7XFZHnr31H2-tvOit1Mb {\n    margin-bottom: 0;\n}\n._14Uf610sBxFhIhEAN25f7E {\n    border: 1px solid #ccc\n}\n._3VM28HYseX4o4V07a3iqoT {\n    background: transparent;\n    transition: background .3s ease-in-out;\n}\n._3VM28HYseX4o4V07a3iqoT:hover {\n    background: #d9edf7;\n}\n._2Jl43E1o2KdSj4s-8j259Z {\n    border: 0;\n    background: 0;\n    color: #000;\n    opacity: .25;\n}\n._2Jl43E1o2KdSj4s-8j259Z:hover {\n    opacity: 1;\n}\n.bF6wosaC-J-5Du-vBLH3V {\n    display: block;\n    width: 100%;\n    padding: 6px 12px;\n    text-align: left;\n    background: none;\n    border: 0;\n    color: #999\n}\n.bF6wosaC-J-5Du-vBLH3V:hover {\n    color: #666\n}\n", ""]);
+exports.push([module.i, "\n._6EkEdtb4jLjAN0ue1utwe {\n    display: flex;\n    justify-content: flex-start;\n    align-items: center;\n}\n.vY2mJmisXGV7-t9AVeAxW {\n    display: flex;\n    justify-content: flex-start;\n    align-items: baseline;\n}\n._2MfR4zAgXfMRMqOuTzaSsf {\n    display: flex;\n    justify-content: flex-end;\n    align-items: center;\n}\n._8p-nfsLtEu9bfmo97CrFl > :nth-child(2n){\n    margin-left: 6px\n}\n._3HksJVyB-WveiBgeN-52Zr > :nth-child(2n){\n    margin-left: 12px\n}\n._2j2n_9NHc6yYUJVymjcL3p > :nth-child(2n){\n    margin-left: 24px\n}\n.dEYSybLuPdLNPwhBfPeAw {\n    padding-top: 0;\n    padding-bottom: 0;\n}\n._3Pjhw_Rmce4ICsrEGTAfab {\n    padding-bottom: 0;\n}\n._3ZfueElo8dcEX0OlTIyPl6 {\n    padding-left: 6px;\n    padding-right: 6px;\n}\n.qPHBEEQ_nfMj_vY9Z-4Ff {\n    padding: 6px;\n}\n._3tC7PLzvphCU3NfSRlnpbw {\n    margin-left: auto\n}\n.oLPWR8jd0V75KvstjUsIl {\n    margin-bottom: 6px;\n}\n.G7XFZHnr31H2-tvOit1Mb {\n    margin-bottom: 0;\n}\n._1HPDDaCm1YhwLeiiUAaaFa {\n    margin-right: 6px;\n}\n._14Uf610sBxFhIhEAN25f7E {\n    border: 1px solid #ccc\n}\n._3VM28HYseX4o4V07a3iqoT {\n    background: transparent;\n    transition: background .3s ease-in-out;\n}\n._3VM28HYseX4o4V07a3iqoT:hover {\n    background: #d9edf7;\n}\n._2Jl43E1o2KdSj4s-8j259Z {\n    border: 0;\n    background: 0;\n    color: #000;\n    opacity: .25;\n}\n._2Jl43E1o2KdSj4s-8j259Z:hover {\n    opacity: 1;\n}\n.hLXyq0EoVHUhZLbitMyJX {\n    font-size: 90%\n}\n.bF6wosaC-J-5Du-vBLH3V {\n    display: block;\n    width: 100%;\n    padding: 6px 12px;\n    text-align: left;\n    background: none;\n    border: 0;\n    color: #999\n}\n.bF6wosaC-J-5Du-vBLH3V:hover {\n    color: #666\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -11993,10 +12004,13 @@ exports.locals = {
 	"pad--x25": "_3ZfueElo8dcEX0OlTIyPl6",
 	"pad--xy25": "qPHBEEQ_nfMj_vY9Z-4Ff",
 	"iso--xStartAuto": "_3tC7PLzvphCU3NfSRlnpbw",
+	"iso--yEnd25": "oLPWR8jd0V75KvstjUsIl",
 	"iso--yEnd0": "G7XFZHnr31H2-tvOit1Mb",
+	"iso--xEnd25": "_1HPDDaCm1YhwLeiiUAaaFa",
 	"hl--xy": "_14Uf610sBxFhIhEAN25f7E",
 	"rxn--info": "_3VM28HYseX4o4V07a3iqoT",
 	"glyph": "_2Jl43E1o2KdSj4s-8j259Z",
+	"label": "hLXyq0EoVHUhZLbitMyJX",
 	"fake-btn": "bF6wosaC-J-5Du-vBLH3V"
 };
 
@@ -14989,7 +15003,8 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
       tag: "component",
       attrs: {
         "instance": resource,
-        "id": index
+        "id": index,
+        "template": "panel"
       }
     }, [_c('button', {
       staticClass: "handle",
@@ -15212,7 +15227,7 @@ exports = module.exports = __webpack_require__(3)(undefined);
 
 
 // module
-exports.push([module.i, "\n._6EkEdtb4jLjAN0ue1utwe {\n    display: flex;\n    justify-content: flex-start;\n    align-items: center;\n}\n.vY2mJmisXGV7-t9AVeAxW {\n    display: flex;\n    justify-content: flex-start;\n    align-items: baseline;\n}\n._2MfR4zAgXfMRMqOuTzaSsf {\n    display: flex;\n    justify-content: flex-end;\n    align-items: center;\n}\n._8p-nfsLtEu9bfmo97CrFl > :nth-child(2n){\n    margin-left: 6px\n}\n._3HksJVyB-WveiBgeN-52Zr > :nth-child(2n){\n    margin-left: 12px\n}\n._2j2n_9NHc6yYUJVymjcL3p > :nth-child(2n){\n    margin-left: 24px\n}\n.dEYSybLuPdLNPwhBfPeAw {\n    padding-top: 0;\n    padding-bottom: 0;\n}\n._3Pjhw_Rmce4ICsrEGTAfab {\n    padding-bottom: 0;\n}\n._3ZfueElo8dcEX0OlTIyPl6 {\n    padding-left: 6px;\n    padding-right: 6px;\n}\n.qPHBEEQ_nfMj_vY9Z-4Ff {\n    padding: 6px;\n}\n._3tC7PLzvphCU3NfSRlnpbw {\n    margin-left: auto\n}\n.G7XFZHnr31H2-tvOit1Mb {\n    margin-bottom: 0;\n}\n._14Uf610sBxFhIhEAN25f7E {\n    border: 1px solid #ccc\n}\n._3VM28HYseX4o4V07a3iqoT {\n    background: transparent;\n    transition: background .3s ease-in-out;\n}\n._3VM28HYseX4o4V07a3iqoT:hover {\n    background: #d9edf7;\n}\n._2Jl43E1o2KdSj4s-8j259Z {\n    border: 0;\n    background: 0;\n    color: #000;\n    opacity: .25;\n}\n._2Jl43E1o2KdSj4s-8j259Z:hover {\n    opacity: 1;\n}\n.bF6wosaC-J-5Du-vBLH3V {\n    display: block;\n    width: 100%;\n    padding: 6px 12px;\n    text-align: left;\n    background: none;\n    border: 0;\n    color: #999\n}\n.bF6wosaC-J-5Du-vBLH3V:hover {\n    color: #666\n}\n", ""]);
+exports.push([module.i, "\n._6EkEdtb4jLjAN0ue1utwe {\n    display: flex;\n    justify-content: flex-start;\n    align-items: center;\n}\n.vY2mJmisXGV7-t9AVeAxW {\n    display: flex;\n    justify-content: flex-start;\n    align-items: baseline;\n}\n._2MfR4zAgXfMRMqOuTzaSsf {\n    display: flex;\n    justify-content: flex-end;\n    align-items: center;\n}\n._8p-nfsLtEu9bfmo97CrFl > :nth-child(2n){\n    margin-left: 6px\n}\n._3HksJVyB-WveiBgeN-52Zr > :nth-child(2n){\n    margin-left: 12px\n}\n._2j2n_9NHc6yYUJVymjcL3p > :nth-child(2n){\n    margin-left: 24px\n}\n.dEYSybLuPdLNPwhBfPeAw {\n    padding-top: 0;\n    padding-bottom: 0;\n}\n._3Pjhw_Rmce4ICsrEGTAfab {\n    padding-bottom: 0;\n}\n._3ZfueElo8dcEX0OlTIyPl6 {\n    padding-left: 6px;\n    padding-right: 6px;\n}\n.qPHBEEQ_nfMj_vY9Z-4Ff {\n    padding: 6px;\n}\n._3tC7PLzvphCU3NfSRlnpbw {\n    margin-left: auto\n}\n.oLPWR8jd0V75KvstjUsIl {\n    margin-bottom: 6px;\n}\n.G7XFZHnr31H2-tvOit1Mb {\n    margin-bottom: 0;\n}\n._1HPDDaCm1YhwLeiiUAaaFa {\n    margin-right: 6px;\n}\n._14Uf610sBxFhIhEAN25f7E {\n    border: 1px solid #ccc\n}\n._3VM28HYseX4o4V07a3iqoT {\n    background: transparent;\n    transition: background .3s ease-in-out;\n}\n._3VM28HYseX4o4V07a3iqoT:hover {\n    background: #d9edf7;\n}\n._2Jl43E1o2KdSj4s-8j259Z {\n    border: 0;\n    background: 0;\n    color: #000;\n    opacity: .25;\n}\n._2Jl43E1o2KdSj4s-8j259Z:hover {\n    opacity: 1;\n}\n.hLXyq0EoVHUhZLbitMyJX {\n    font-size: 90%\n}\n.bF6wosaC-J-5Du-vBLH3V {\n    display: block;\n    width: 100%;\n    padding: 6px 12px;\n    text-align: left;\n    background: none;\n    border: 0;\n    color: #999\n}\n.bF6wosaC-J-5Du-vBLH3V:hover {\n    color: #666\n}\n", ""]);
 
 // exports
 exports.locals = {
@@ -15227,10 +15242,13 @@ exports.locals = {
 	"pad--x25": "_3ZfueElo8dcEX0OlTIyPl6",
 	"pad--xy25": "qPHBEEQ_nfMj_vY9Z-4Ff",
 	"iso--xStartAuto": "_3tC7PLzvphCU3NfSRlnpbw",
+	"iso--yEnd25": "oLPWR8jd0V75KvstjUsIl",
 	"iso--yEnd0": "G7XFZHnr31H2-tvOit1Mb",
+	"iso--xEnd25": "_1HPDDaCm1YhwLeiiUAaaFa",
 	"hl--xy": "_14Uf610sBxFhIhEAN25f7E",
 	"rxn--info": "_3VM28HYseX4o4V07a3iqoT",
 	"glyph": "_2Jl43E1o2KdSj4s-8j259Z",
+	"label": "hLXyq0EoVHUhZLbitMyJX",
 	"fake-btn": "bF6wosaC-J-5Du-vBLH3V"
 };
 
@@ -15240,7 +15258,28 @@ exports.locals = {
 
 module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
-    staticClass: "course-resource",
+    staticClass: "course-resource"
+  }, [(_vm.template == 'panel') ? [_c('div', {
+    staticClass: "panel panel-success",
+    class: _vm.$style['hl--xy']
+  }, [_c('header', {
+    staticClass: "course-activity-hdr panel-heading",
+    class: [_vm.$style['row--pStart--sMiddle'], _vm.$style['rhy--xStart25']]
+  }, [_vm._t("prehed"), _vm._v(" "), _c('h5', {
+    domProps: {
+      "textContent": _vm._s(_vm.instance.title)
+    }
+  }), _vm._v(" "), _vm._t("posthed")], 2), _vm._v(" "), (_vm.instance.tags) ? _c('div', {
+    staticClass: "panel-body"
+  }, _vm._l((_vm.instance.tags), function(tag) {
+    return _c('span', {
+      staticClass: "label label-info pull-left",
+      class: [_vm.$style['label'], _vm.$style['iso--xEnd25'], _vm.$style['iso--yEnd25']],
+      domProps: {
+        "textContent": _vm._s(tag.tag.name)
+      }
+    })
+  })) : _vm._e()])] : [_c('div', {
     class: [
       _vm.$style['row--pStart--sBase'],
       _vm.$style['rhy--xStart25'],
@@ -15251,7 +15290,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     domProps: {
       "textContent": _vm._s(_vm.instance.title)
     }
-  })], 2)
+  })], 2)]], 2)
 },staticRenderFns: []}
 module.exports.render._withStripped = true
 if (false) {
