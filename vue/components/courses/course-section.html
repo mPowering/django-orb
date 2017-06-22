@@ -13,13 +13,13 @@
         class="panel-body"
         :class="$style['pad--yEnd0']"
     >
-        <draggable :list="course_resources" :options="{handle: '.handle', group:'resources'}">
+        <draggable :list="instance.resources" :options="{handle: '.handle', group:'resources'}">
             <!-- can be CourseActivity or CourseResource -->
             <component
                 :is="resource.type"
-                v-for="resource, index in course_resources"
+                v-for="resource, index in instance.resources"
                 :key="resource"
-                :instance="resource"
+                :instance.sync="resource"
                 :id="index"                  
                 template="panel"
             >
@@ -47,7 +47,7 @@
             </component>
             <div
                 class="alert alert-warning"
-                v-if="course_resources.length == 0"
+                v-if="instance.resources.length == 0"
             >
                 <p>Drop in a Resource or create an Activity</p>
             </div>

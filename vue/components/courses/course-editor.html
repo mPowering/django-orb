@@ -43,7 +43,7 @@
                     <course-section 
                         v-for="section, index in course_sections"
                         :key="section"
-                        :resources="section" 
+                        :instance.sync="section"
                         :labels="labels"
                     >   
                         <button

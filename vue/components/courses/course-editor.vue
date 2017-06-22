@@ -19,23 +19,21 @@ export default {
             default: 'New Course'
         },
         sections: {
-            type: Array,
-            default: () => []
+            type: [Array, Object],
+            default: () => ({})
         },
         labels: {
             type: Object,
-            default: () => {
-                return {
-                    edit_title: 'Edit Course Title',
-                    save_title: 'Save Course Title',
-                    add_section: 'Add Course Section',
-                    remove_section: 'Remove Course Section',
-                    add_activity: 'Add Text Activity',
-                    save: 'Save Course',
-                    search: 'Search',
-                    new_course_title: 'New Course'
-                }
-            }
+            default: () => ({
+                edit_title: 'Edit Course Title',
+                save_title: 'Save Course Title',
+                add_section: 'Add Course Section',
+                remove_section: 'Remove Course Section',
+                add_activity: 'Add Text Activity',
+                save: 'Save Course',
+                search: 'Search',
+                new_course_title: 'New Course'
+            })
         }
     },
     data () {
@@ -51,7 +49,11 @@ export default {
     methods: {
         editTitle () { this.edit_head = true },
         saveTitle () { this.edit_head = false },
-        addSection () { this.course_sections.push([]) },
+        addSection () {
+            this.course_sections.push({
+                resources: []
+            })
+        },
         removeSection (id) {
             this.course_sections = this.course_sections.filter(
                 (section, index) => {
@@ -74,11 +76,6 @@ export default {
                 )
         },
         searchResources () {
-            console.log({
-                format: 'json',
-                q: this.q
-            })
-
             this.$http.get(
                 `${this.resource_api}resource/search/`,
                 {

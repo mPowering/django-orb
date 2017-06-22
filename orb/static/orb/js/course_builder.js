@@ -11706,9 +11706,9 @@ exports.default = {
             default: 'New Course'
         },
         sections: {
-            type: Array,
+            type: [Array, Object],
             default: function _default() {
-                return [];
+                return {};
             }
         },
         labels: {
@@ -11746,7 +11746,9 @@ exports.default = {
             this.edit_head = false;
         },
         addSection: function addSection() {
-            this.course_sections.push([]);
+            this.course_sections.push({
+                resources: []
+            });
         },
         removeSection: function removeSection(id) {
             this.course_sections = this.course_sections.filter(function (section, index) {
@@ -11767,11 +11769,6 @@ exports.default = {
         },
         searchResources: function searchResources() {
             var _this = this;
-
-            console.log({
-                format: 'json',
-                q: this.q
-            });
 
             this.$http.get(this.resource_api + 'resource/search/', {
                 params: {
@@ -11878,7 +11875,14 @@ exports.default = {
         draggable: _vuedraggable2.default
     },
     props: {
-        resources: Array,
+        instance: {
+            type: Object,
+            default: function _default() {
+                return {
+                    resources: []
+                };
+            }
+        },
         labels: {
             type: Object,
             default: function _default() {
@@ -11889,27 +11893,23 @@ exports.default = {
         }
     },
     data: function data() {
-        return {
-            course_resources: []
-        };
+        return {};
     },
 
     methods: {
         addActivity: function addActivity() {
-            this.course_resources.push({
+            this.instance.resources.push({
                 type: 'CourseActivity',
                 title: 'Unnamed Text Activity'
             });
         },
         removeResource: function removeResource(id) {
-            this.course_resources = this.course_resources.filter(function (section, index) {
+            this.instance.resources = this.instance.resources.filter(function (section, index) {
                 return index !== id;
             });
         }
     },
-    beforeMount: function beforeMount() {
-        this.course_resources = this.resources && this.resources instanceof Array ? this.resources : this.course_resources;
-    }
+    beforeMount: function beforeMount() {}
 };
 
 /***/ }),
@@ -14832,8 +14832,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     return _c('course-section', {
       key: section,
       attrs: {
-        "resources": section,
+        "instance": section,
         "labels": _vm.labels
+      },
+      on: {
+        "update:instance": function($event) {
+          section = $event
+        }
       }
     }, [_c('button', {
       staticClass: "handle",
@@ -14991,13 +14996,13 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     class: _vm.$style['pad--yEnd0']
   }, [_c('draggable', {
     attrs: {
-      "list": _vm.course_resources,
+      "list": _vm.instance.resources,
       "options": {
         handle: '.handle',
         group: 'resources'
       }
     }
-  }, [_vm._l((_vm.course_resources), function(resource, index) {
+  }, [_vm._l((_vm.instance.resources), function(resource, index) {
     return _c(resource.type, {
       key: resource,
       tag: "component",
@@ -15005,6 +15010,11 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "instance": resource,
         "id": index,
         "template": "panel"
+      },
+      on: {
+        "update:instance": function($event) {
+          resource = $event
+        }
       }
     }, [_c('button', {
       staticClass: "handle",
@@ -15031,7 +15041,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "aria-hidden": "true"
       }
     })])])
-  }), _vm._v(" "), (_vm.course_resources.length == 0) ? _c('div', {
+  }), _vm._v(" "), (_vm.instance.resources.length == 0) ? _c('div', {
     staticClass: "alert alert-warning"
   }, [_c('p', [_vm._v("Drop in a Resource or create an Activity")])]) : _vm._e()], 2)], 1), _vm._v(" "), _c('footer', {
     staticClass: "panel-footer",

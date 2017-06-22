@@ -14,24 +14,25 @@ export default {
         draggable
     },
     props: {
-        resources: Array,
+        instance: {
+            type: Object,
+            default: () => ({
+                resources: []
+            })
+        },
         labels: {
             type: Object,
-            default: () => {
-                return {
-                    add_resource: 'Add Section Resource'
-                }
-            }
+            default: () => ({
+                add_resource: 'Add Section Resource'
+            })
         }
     },
     data () {
-        return {
-            course_resources: [],
-        }
+        return {}
     },
     methods: {
         addActivity () {
-            this.course_resources.push(
+            this.instance.resources.push(
                 {
                     type: 'CourseActivity',
                     title: 'Unnamed Text Activity'
@@ -39,17 +40,13 @@ export default {
             )
         },
         removeResource (id) {
-            this.course_resources = this.course_resources.filter(
+            this.instance.resources = this.instance.resources.filter(
                 (section, index) => {
                     return index !== id
                 }
             )
         }
     },
-    beforeMount () {
-        this.course_resources = (this.resources && this.resources instanceof Array)
-            ? this.resources
-            : this.course_resources
-    }
+    beforeMount () {}
 }
 </script>

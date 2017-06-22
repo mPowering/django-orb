@@ -8,21 +8,17 @@ export default {
         id: Number,
         instance: {
             type: Object,
-            default: () => {
-                return {
-                    title: 'Unnamed Course Activity',
-                    description: ''
-                }
-            }
+            default: () => ({
+                title: 'Unnamed Course Activity',
+                description: ''
+            })
         },
         labels: {
             type: Object,
-            default: () => {
-                return {
-                    edit_resource: 'Edit Section Resource',
-                    save_resource: 'Save Section Resource'
-                }
-            }
+            default: () => ({
+                edit_resource: 'Edit Section Resource',
+                save_resource: 'Save Section Resource'
+            })
         }
     },
     data () {
