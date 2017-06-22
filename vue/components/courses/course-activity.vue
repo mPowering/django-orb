@@ -1,7 +1,11 @@
+<template src="./course-activity.html"></template>
+<style module src="../module.css"></style>
+
 <script>
 export default {
     name: 'course-activity',
     props: {
+        id: Number,
         instance: {
             type: Object,
             default: () => {
@@ -31,34 +35,10 @@ export default {
             this.edittable = !this.edittable
         },
         update () {
-            // this.$emit('update', this.activity)
             this.edit()
         }
     },
-    // watch: {
-    //     title () {
-    //         this.activity_title = this.title
-    //     }
-    // },
     beforeMount () {}
 }
 </script>
-
-<template>
-  <div class="course-activity">
-    <template v-if="edittable">
-        <input class="form-control" v-model="instance.title">
-        <textarea class="form-control" v-model="instance.description">
-        </textarea>
-        <button class="btn btn-success" type="button" @click="update">Save</button>
-    </template>
-    <template v-else>
-        <h5 v-text="instance.title"></h5>
-        <div v-text="instance.description"></div>
-        <button class="btn btn-primary" type="button" @click="edit">Edit</button>
-        <slot name="resource-footer-controls"></slot>
-    </template>
-    
-  </div>
-</template>
 

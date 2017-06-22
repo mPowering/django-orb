@@ -1,0 +1,68 @@
+<div class="course-section panel panel-primary">
+    <header
+        class="course-section-hdr panel-heading"
+        :class="[$style['row--pStart--sMiddle'], $style['rhy--xStart25']]"
+    >   
+        <slot name="section-preheading"></slot>
+        <h4 class="panel-title">Section</h4>
+        <slot name="section-postheading"></slot>
+    </header>
+
+
+    <div 
+        class="panel-body"
+        :class="$style['pad--yEnd0']"
+    >
+        <draggable :list="course_resources" :options="{handle: '.handle', group:'resources'}">
+            <!-- can be CourseActivity or CourseResource -->
+            <component
+                :is="resource.type"
+                v-for="resource, index in course_resources"
+                :key="resource"
+                :instance="resource"
+                :id="index"                  
+            >
+                <button
+                    slot="prehed"
+                    class="handle"
+                    :class="[$style['glyph'], $style['pad--y0'], $style['pad--x25']]"
+                >
+                    <span
+                        class="glyphicon glyphicon-move"
+                        aria-hidden="true"
+                    ></span>
+                </button>
+                <button
+                    slot="posthed"
+                    :class="[$style.glyph, $style['iso--xStartAuto']]" 
+                    @click="removeResource(index)"
+                >
+                    <span class="sr-only" v-text=""></span>
+                    <span
+                        class="glyphicon glyphicon-remove"
+                        aria-hidden="true"
+                    ></span>
+                </button>
+            </component>
+            <div
+                class="alert alert-warning"
+                v-if="course_resources.length == 0"
+            >
+                <p>Drop in a Resource or create an Activity</p>
+            </div>
+        </draggable>
+    </div>
+
+
+    <footer 
+        class="panel-footer"
+        :class="[$style['row--pEnd--sMiddle']]"
+    >
+        <button class="btn btn-primary" @click="addActivity">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            <span v-text="labels.add_activity"></span>
+        </button>
+
+        <slot name="section-footer-controls"></slot>
+    </footer>
+</div>
