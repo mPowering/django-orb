@@ -1,3 +1,6 @@
+<template src="./course-resource.html"></template>
+<style module src="../module.css"></style>
+
 <script>
 export default {
     name: 'course-resource',
@@ -6,7 +9,7 @@ export default {
             type: Object,
             default: () => {
                 return {
-                    title: 'Unnamed Course Activity',
+                    title: 'Unnamed Resource',
                 }
             }
         },
@@ -26,15 +29,13 @@ export default {
         }
     },
     methods: {
+        edit () {
+            this.edittable = !this.edittable
+        },
+        update () {
+            this.edit()
+        }
     },
     beforeMount () {}
 }
 </script>
-
-<template>
-    <div class="course-resource">
-        <h5 v-text="instance.title"></h5>
-        <slot name="resource-footer-controls"></slot>
-    </div>
-</template>
-

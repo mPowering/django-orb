@@ -1,0 +1,12 @@
+<div 
+    class="course-resource"
+    :class="[
+        $style['row--pStart--sBase'],
+        $style['rhy--xStart25'],
+        $style['pad--xy25'],
+        $style['rxn--info']
+    ]"
+>
+    <slot name="prehed"></slot>
+    <span v-text="instance.title"></span>
+</div>

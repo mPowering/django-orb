@@ -4,6 +4,12 @@
     align-items: center;
 }
 
+.row--pStart--sBase {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+}
+
 .row--pEnd--sMiddle {
     display: flex;
     justify-content: flex-end;
@@ -36,6 +42,10 @@
     padding-right: 6px;
 }
 
+.pad--xy25 {
+    padding: 6px;
+}
+
 .iso--xStartAuto {
     margin-left: auto
 }
@@ -46,6 +56,15 @@
 
 .hl--xy {
     border: 1px solid #ccc
+}
+
+.rxn--info {
+    background: transparent;
+    transition: background .3s ease-in-out;
+}
+
+.rxn--info:hover {
+    background: #d9edf7;
 }
 
 .glyph {

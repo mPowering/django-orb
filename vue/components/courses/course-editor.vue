@@ -64,7 +64,7 @@ export default {
                 title: this.course_title,
                 sections: this.course_sections,
             }
-            console.log(JSON.stringify(course))
+
             this.$http.post('.', course)
                 .then(
                     (response) => console.log(response)
@@ -90,7 +90,6 @@ export default {
             )
                 .then(
                     (response) => {
-                        console.log(response)
                         this.available_resources = response.data.objects
                     }
                 )
