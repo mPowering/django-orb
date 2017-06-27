@@ -8,6 +8,7 @@ v2.6.0 - not yet released
 
 * 462: Add option to archive a resource - https://github.com/mPowering/django-orb/issues/issues/462
 * add defusedxml==0.5.0 as package requirement
+* 489: Add new/updated icons - https://github.com/mPowering/django-orb/issues/issues/489
 
 .. _orb-v2-5-2:
 

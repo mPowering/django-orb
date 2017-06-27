@@ -533,7 +533,15 @@ class Tag(TimestampBase):
         # add generic language icon if not specified
         if self.category.slug == 'language' and not self.image:
             self.image = 'tag/language_default.png'
+            
+        # add generic organization icon if not specified
+        if self.category.slug == 'organisation' and not self.image:
+            self.image = 'tag/organisation_default.png'
 
+        # add generic other icon if not specified
+        if self.category.slug == 'other' and not self.image:
+            self.image = 'tag/other_default.png'
+            
         super(Tag, self).save(*args, **kwargs)
 
     def image_filename(self):
