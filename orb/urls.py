@@ -58,6 +58,7 @@ urlpatterns = [
     url(r'^opensearch/$', TemplateView.as_view(template_name="search/opensearch.html"), name="orb_opensearch"),
 
     url(r'^api/', include('orb.api.urls')),
+    url(r'^courses/', include('orb.courses.urls')),
 
     url(r'^resource/rate/', include('orb.rating.urls')),
     url(r'^resource/bookmark/', include('orb.bookmark.urls')),

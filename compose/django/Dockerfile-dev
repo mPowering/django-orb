@@ -1,0 +1,25 @@
+FROM python:2.7
+
+ENV PYTHONUNBUFFERED 1
+
+# Requirements have to be pulled and installed here, otherwise caching won't work
+COPY ./requirements.txt /requirements.txt
+COPY ./requirements /requirements
+RUN pip install -r /requirements.txt  # Get our pinned version of Djagno
+RUN pip install -r /requirements/test.txt
+
+COPY ./compose/django/wait-for-it.sh /wait-for-it.sh
+RUN sed -i 's/\r//' /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
+COPY ./compose/django/entrypoint.sh /entrypoint.sh
+RUN sed -i 's/\r//' /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+COPY ./compose/django/start-dev.sh /start-dev.sh
+RUN sed -i 's/\r//' /start-dev.sh
+RUN chmod +x /start-dev.sh
+
+WORKDIR /app
+
+ENTRYPOINT ["/entrypoint.sh"]

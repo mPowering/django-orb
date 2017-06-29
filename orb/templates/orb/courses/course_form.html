@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n review_tags static %}
+
+{% block extra_head_title %}{% if course %}{{ course.title }}{% else %}{% trans 'New Course' %}{% endif %}{% endblock extra_head_title %}
+
+{% block extra_scripts %}
+{% comment %}vue is included in course_build script for now{% endcomment %}
+{% endblock extra_scripts %}
+
+{% block content %}
+    {% include "includes/messages.html" %}
+    <div id="app">
+        <course-editor
+            {% if course.title %}
+                title="{{ course.title }}"
+            {% endif %}
+
+            {% if course.sections %}
+            :sections="{{ course.sections|default:'[]' }}"
+            {% endif %}
+        >
+        </course-editor>
+    </div>
+{% endblock %}
+
+
+{% block footer_js %}
+{{ super }}
+<script src="{% static 'orb/js/course_builder.js'  %}"></script>
+{% endblock %}

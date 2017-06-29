@@ -7,7 +7,7 @@ from django.http.response import Http404
 from django.utils.html import strip_tags
 from haystack.query import SearchQuerySet
 from tastypie import fields
-from tastypie.authentication import ApiKeyAuthentication
+from tastypie.authentication import ApiKeyAuthentication, MultiAuthentication, SessionAuthentication
 from tastypie.constants import ALL
 from tastypie.exceptions import Unauthorized
 from tastypie.resources import ModelResource
@@ -75,7 +75,7 @@ class ResourceResource(ModelResource):
         resource_name = 'resource'
         excludes = ['source_peer']
         allowed_methods = ['get', 'post', 'put']
-        authentication = ApiKeyAuthentication()
+        authentication = MultiAuthentication(ApiKeyAuthentication(), SessionAuthentication())
         authorization = ORBResourceAuthorization()
         serializer = ResourceSerializer()
         always_return_data = True
@@ -146,8 +146,11 @@ class ResourceResource(ModelResource):
         if q == '':
             raise ORBAPIBadRequest(ERROR_CODE_SEARCH_NO_QUERY)
 
-        # Do the query.
-        sqs = SearchQuerySet().models(Resource).load_all().auto_query(q)
+        # Allow basic search without Solr based on local configuration
+        if getattr(settings, 'SEARCH_DB', False):
+            sqs = Resource.resources.approved().text_search(q)
+        else:
+            sqs = SearchQuerySet().models(Resource).load_all().auto_query(q)
         paginator = Paginator(sqs, 20)
 
         try:
@@ -159,7 +162,12 @@ class ResourceResource(ModelResource):
 
         for result in page.object_list:
             if result:
-                bundle = self.build_bundle(obj=result.object, request=request)
+                if getattr(settings, 'SEARCH_DB', False):
+                    # Search performed directly against database
+                    bundle = self.build_bundle(obj=result, request=request)
+                else:
+                    # Search performed against search engine
+                    bundle = self.build_bundle(obj=result.object, request=request)
                 bundle = self.full_dehydrate(bundle)
                 objects.append(bundle)
 

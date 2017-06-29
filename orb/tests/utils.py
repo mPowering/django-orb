@@ -91,8 +91,6 @@ class LoginClient(object):
                     )
 
     """
-
-
     def __init__(self, test_case=None, username=None, password=None):
         self.test_case = test_case
         self.username = username
