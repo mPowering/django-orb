@@ -9,6 +9,7 @@ from tastypie.models import ApiKey
 from tastypie.test import ResourceTestCase
 
 from orb.models import SearchTracker
+from orb.tests.utils import login_client
 
 
 class ApiTestFixture(object):
@@ -78,7 +79,16 @@ class SearchResourceTest(ApiTestFixture, ResourceTestCase):
         self.assertHttpUnauthorized(self.api_client.get(
             self.url, format='json', data=data))
 
-    # check authorized
+    def test_session_authorized(self):
+        with login_client(self, username='standarduser', password='password'):
+            data = {'q': 'medical'}
+            tracker_count_start = SearchTracker.objects.all().count()
+            resp = self.client.get(self.url, format='json', data=data)
+            self.assertHttpOK(resp)
+            self.assertValidJSON(resp.content)
+            tracker_count_end = SearchTracker.objects.all().count()
+            self.assertEqual(tracker_count_start + 1, tracker_count_end)
+
     def test_authorized(self):
         for u in self.user_set:
             data = u
@@ -103,7 +113,6 @@ class SearchResourceTest(ApiTestFixture, ResourceTestCase):
             tracker_count_end = SearchTracker.objects.all().count()
             self.assertEqual(tracker_count_start + 1, tracker_count_end)
 
-# Resource API
 
 
 class ResourceResourceTest(ApiTestFixture, ResourceTestCase):
