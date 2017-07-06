@@ -25,7 +25,7 @@ OpenDeliver AMI - v2 - released 6 Apr 2017
 
 .. _opendeliver-amiv1:
 
-OpenDeliver AMI - v1 - released Dec 2017
+OpenDeliver AMI - v1 - released Jan 2017
 ------------------------------------------
 
 * ORB v2.2.2
