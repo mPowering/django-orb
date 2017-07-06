@@ -15,7 +15,8 @@ def modify(settings):
                                    'modeltranslation',
                                    'modeltranslation_exim',
                                    'orb.peers', 
-                                   'orb.toolkits',)
+                                   'orb.toolkits',
+                                   'orb.courses',)
     settings['MIDDLEWARE_CLASSES'] += ('orb.middleware.SearchFormMiddleware',)
     settings[
         'TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_menu',)
