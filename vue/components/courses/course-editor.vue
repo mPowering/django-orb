@@ -19,8 +19,8 @@ export default {
             default: 'New Course'
         },
         sections: {
-            type: [Array, Object],
-            default: () => ({})
+            type: Array,
+            default: () => ([])
         },
         labels: {
             type: Object,
@@ -69,7 +69,7 @@ export default {
 
             this.$http.post('.', course)
                 .then(
-                    (response) => console.log(response)
+                    (response) => {}
                 )
                 .catch(
                     (error) => console.error(error)
