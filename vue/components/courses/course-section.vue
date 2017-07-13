@@ -1,6 +1,3 @@
-<template src="./course-section.html"></template>
-<style module src="../module.css"></style>
-
 <script>
 import CourseResource from '@/courses/course-resource'
 import CourseActivity from '@/courses/course-activity'
@@ -47,6 +44,10 @@ export default {
             )
         }
     },
-    beforeMount () {}
+    beforeMount () { }
 }
 </script>
+
+<style module src="../module.css"></style>
+<template src="./course-section.html"></template>
+
