@@ -39,23 +39,26 @@
     <div class="row">
         <div class="course-editor col-sm-9">
             <div>
-                <draggable :list="course_sections" :options="{handle: '.handle'}" >
+                <draggable :list="course_sections" :options="{handle: '.handle'}">
                     <course-section 
                         v-for="section, index in course_sections"
                         :key="section"
                         :instance.sync="section"
                         :labels="labels"
                     >   
-                        <button
+                        <span
+                            role="button"
                             slot="section-preheading"
                             class="handle"
                             :class="[$style['glyph'], $style['pad--y0'], $style['pad--x25']]"
                         >
-                            <span
-                                class="glyphicon glyphicon-move"
-                                aria-hidden="true"
-                            ></span>
-                        </button>
+                            <img
+                                src="/static/orb/images/glyphicons-move.png"
+                                height="16"
+                                width="16"
+                                style="margin-top:-5px"
+                            />
+                        </span>
                         <button
                             slot="section-postheading"
                             :class="[$style.glyph, $style['iso--xStartAuto']]" 
@@ -135,16 +138,19 @@
                         :instance="resource"
                         :title="resource.title_en"
                     >
-                        <button
+                        <span
+                            role="button"
                             slot="prehed"
                             class="handle"
                             :class="[$style['glyph'], $style['pad--y0'], $style['pad--x25']]"
                         >
-                            <span
-                                class="glyphicon glyphicon-move"
-                                aria-hidden="true"
-                            ></span>
-                        </button>
+                            <img
+                                src="/static/orb/images/glyphicons-move.png"
+                                height="16"
+                                width="16"
+                                style="margin-top:-5px"
+                            />
+                        </span>
                     </course-resource>
                 </draggable>
             </div>

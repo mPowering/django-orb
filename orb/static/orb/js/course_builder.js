@@ -14898,14 +14898,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           section = $event
         }
       }
-    }, [_c('button', {
+    }, [_c('span', {
       staticClass: "handle",
       class: [_vm.$style['glyph'], _vm.$style['pad--y0'], _vm.$style['pad--x25']],
-      slot: "section-preheading"
-    }, [_c('span', {
-      staticClass: "glyphicon glyphicon-move",
       attrs: {
-        "aria-hidden": "true"
+        "role": "button"
+      },
+      slot: "section-preheading"
+    }, [_c('img', {
+      staticStyle: {
+        "margin-top": "-5px"
+      },
+      attrs: {
+        "src": "/static/orb/images/glyphicons-move.png",
+        "height": "16",
+        "width": "16"
       }
     })]), _vm._v(" "), _c('button', {
       class: [_vm.$style.glyph, _vm.$style['iso--xStartAuto']],
@@ -15017,14 +15024,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
         "instance": resource,
         "title": resource.title_en
       }
-    }, [_c('button', {
+    }, [_c('span', {
       staticClass: "handle",
       class: [_vm.$style['glyph'], _vm.$style['pad--y0'], _vm.$style['pad--x25']],
-      slot: "prehed"
-    }, [_c('span', {
-      staticClass: "glyphicon glyphicon-move",
       attrs: {
-        "aria-hidden": "true"
+        "role": "button"
+      },
+      slot: "prehed"
+    }, [_c('img', {
+      staticStyle: {
+        "margin-top": "-5px"
+      },
+      attrs: {
+        "src": "/static/orb/images/glyphicons-move.png",
+        "height": "16",
+        "width": "16"
       }
     })])])
   }))], 1)])])])
@@ -15074,14 +15088,21 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
           resource = $event
         }
       }
-    }, [_c('button', {
+    }, [_c('span', {
       staticClass: "handle",
       class: [_vm.$style['glyph'], _vm.$style['pad--y0'], _vm.$style['pad--x25']],
-      slot: "prehed"
-    }, [_c('span', {
-      staticClass: "glyphicon glyphicon-move",
       attrs: {
-        "aria-hidden": "true"
+        "role": "button"
+      },
+      slot: "prehed"
+    }, [_c('img', {
+      staticStyle: {
+        "margin-top": "-5px"
+      },
+      attrs: {
+        "src": "/static/orb/images/glyphicons-move.png",
+        "height": "16",
+        "width": "16"
       }
     })]), _vm._v(" "), _c('button', {
       class: [_vm.$style.glyph, _vm.$style['iso--xStartAuto']],
@@ -15101,7 +15122,7 @@ module.exports={render:function (){var _vm=this;var _h=_vm.$createElement;var _c
     })])])
   }), _vm._v(" "), (_vm.instance.resources.length == 0) ? _c('div', {
     staticClass: "alert alert-warning"
-  }, [_c('p', [_vm._v("Drop in a Resource or create an Activity")])]) : _vm._e()], 2)], 1), _vm._v(" "), _c('footer', {
+  }, [_vm._v("`\n                "), _c('p', [_vm._v("Drop in a Resource or create an Activity")])]) : _vm._e()], 2)], 1), _vm._v(" "), _c('footer', {
     staticClass: "panel-footer",
     class: [_vm.$style['row--pEnd--sMiddle']]
   }, [_c('button', {

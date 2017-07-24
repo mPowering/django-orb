@@ -23,16 +23,19 @@
                 :id="index"                  
                 template="panel"
             >
-                <button
+                <span
                     slot="prehed"
+                    role="button"
                     class="handle"
                     :class="[$style['glyph'], $style['pad--y0'], $style['pad--x25']]"
                 >
-                    <span
-                        class="glyphicon glyphicon-move"
-                        aria-hidden="true"
-                    ></span>
-                </button>
+                    <img
+                        src="/static/orb/images/glyphicons-move.png"
+                        height="16"
+                        width="16"
+                        style="margin-top:-5px"
+                    />
+                </span>
                 <button
                     slot="posthed"
                     :class="[$style.glyph, $style['iso--xStartAuto']]" 
@@ -48,7 +51,7 @@
             <div
                 class="alert alert-warning"
                 v-if="instance.resources.length == 0"
-            >
+            >`
                 <p>Drop in a Resource or create an Activity</p>
             </div>
         </draggable>
