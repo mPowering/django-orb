@@ -11,13 +11,8 @@
     {% include "includes/messages.html" %}
     <div id="app">
         <course-editor
-            {% if course.title %}
-                title="{{ course.title }}"
-            {% endif %}
-
-            {% if course.sections %}
-            :sections="{{ course.sections|default:'[]' }}"
-            {% endif %}
+            title="{{ course.title|default:'New Course'}}"
+            :sections="{{ course.sections|default:'[{resources: []}]' }}"
         >
         </course-editor>
     </div>
