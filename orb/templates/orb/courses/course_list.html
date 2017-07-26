@@ -10,7 +10,16 @@
     {% include "includes/messages.html" %}
 
     {% if user.is_authenticated %}
-    <button><a href="{% url 'courses_create' %}">{% trans 'Add a new course' %}</a></button>
+    <a 
+        class="btn btn-primary btn-xs" 
+        href="{% url 'courses_create' %}"
+    >
+        <span
+            class="glyphicon glyphicon-edit"
+            aria-hidden="true"
+        ></span>
+        <span>{% trans 'Add a new course' %}</span>
+    </a>
     {% endif %}
 
     <div>
