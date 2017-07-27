@@ -6,11 +6,11 @@ delete webpackConfig.entry
 
 module.exports = function (config) {
     config.set({
-        browsers: ['PhantomJS'],
+        browsers: ['jsdom'],
         singleRun: false,
         autoWatch: true,
         autoWatchBatchDelay: 300,
-        frameworks: ['jasmine', 'chai', 'phantomjs-shim', 'es6-shim'],
+        frameworks: ['jasmine', 'phantomjs-shim', 'es6-shim'],
         reporters: ['spec', 'coverage'],
         files: ['./test.js'],
         preprocessors: {
@@ -18,6 +18,13 @@ module.exports = function (config) {
         },
         // use the webpack config
         webpack: {
+            resolve: {
+                extensions: [".js", ".json", '.yaml', '.yml', '.vue'],
+                alias: {
+                    '@': path.join(__dirname, `./components`),
+                    'vue$': 'vue/dist/vue.common.js'
+                }
+            },
             module: {
                 rules: [
                     require('./rules/rules.vue'),

@@ -6,6 +6,16 @@ import CourseSection from '@/courses/course-section'
 import CourseResource from '@/courses/course-resource'
 import draggable from 'vuedraggable'
 
+const defaults = {
+    sections: [{resources: []}],
+    endpoints: {
+        api: '/api/v1/',
+        resource_search: `/api/v1/resource/search/`,
+        create: '.',
+        update: '/courses/:id/'
+    }
+}
+
 export default {
     name: 'course-editor',
     components: {
@@ -14,13 +24,14 @@ export default {
         CourseResource
     },
     props: {
+        id: String,
         title: {
             type: String,
             default: 'New Course'
         },
         sections: {
             type: Array,
-            default: () => ([])
+            default: () => (defaults.sections)
         },
         labels: {
             type: Object,
@@ -30,19 +41,25 @@ export default {
                 add_section: 'Add Course Section',
                 remove_section: 'Remove Course Section',
                 add_activity: 'Add Text Activity',
+                create: 'Create Course',
                 save: 'Save Course',
                 search: 'Search',
                 new_course_title: 'New Course'
             })
+        },
+        action: {
+            type: String,
+            default: 'update'
         }
     },
     data () {
         return {
+            course_id: this.id || false,
             course_title: this.title,
             course_sections: this.sections,
+            save_action: this.action,
             edit_head: false,
             q: '',
-            resource_api: '/api/v1/',
             available_resources: []
         }
     },
@@ -67,9 +84,12 @@ export default {
                 sections: this.course_sections,
             }
 
-            this.$http.post('.', course)
+            return this.$http.post(this.savepoint, course)
                 .then(
-                    (response) => {}
+                    (response) => {
+                        this.course_id = response.data.course_id
+                        this.save_action = 'update'
+                    }
                 )
                 .catch(
                     (error) => console.error(error)
@@ -77,7 +97,7 @@ export default {
         },
         searchResources () {
             this.$http.get(
-                `${this.resource_api}resource/search/`,
+                defaults.endpoints.resource_search,
                 {
                     params: {
                         format: 'json',
@@ -95,9 +115,21 @@ export default {
                 )
         }
     },
-    beforeMount () {
+    computed: {
+        savepoint () {
+            let savepoint = (this.save_action === 'update') ? defaults.endpoints.update : defaults.endpoints.create
+            return savepoint.replace(':id', this.course_id)
+        },
+        save_label () {
+            return (this.save_action === 'update') ? this.labels.save : this.labels.create
+        }
+    },
+    created () {
         if (this.labels.new_course_title && !this.title) {
             this.course_title = this.labels.new_course_title
+        }
+        if (this.sections.length === 0) {
+            this.course_sections = defaults.sections
         }
     }
 }

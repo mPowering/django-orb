@@ -73,6 +73,7 @@ class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
         if form.is_valid():
             course = form.save()  # Any checks against resource keys should happen here
             return http.JsonResponse({
+                'course_id': course.id,
                 'status': 'ok',
                 'url': course.get_absolute_url(),
             }, status=201)
@@ -135,8 +136,11 @@ class CourseView(generic.DetailView):
         form = forms.CourseForm(data=form_data, instance=self.object, user=request.user)
 
         if form.is_valid():
-            form.save()  # Any checks against resource keys should happen here
-            return http.JsonResponse({'status': 'ok'})
+            course = form.save()  # Any checks against resource keys should happen here
+            return http.JsonResponse({
+                'course_id': course.id,
+                'status': 'ok'
+            })
 
         else:
             # form.errors is a dictionary with field names for keys and
