@@ -8,7 +8,7 @@
                 >
                 <span class="input-group-btn">
                     <button 
-                        class="btn btn-default" 
+                        class="course-editor-hed-save btn btn-default" 
                         v-text="labels.save_title" 
                         @click="saveTitle"
                     ></button>
@@ -22,7 +22,7 @@
             >
                 <span v-text="course_title"></span>
                 <button 
-                    class="btn btn-primary btn-xs" 
+                    class="course-editor-hed-edit btn btn-primary btn-xs" 
                     type="button" 
                     :class="[$style['rhy--xStart25']]"
                     @click="editTitle"
@@ -37,25 +37,28 @@
         </template>
     </header>
     <div class="row">
-        <div class="course-editor col-sm-9">
+        <div class="course-sections col-sm-9">
             <div>
-                <draggable :list="course_sections" :options="{handle: '.handle'}" >
+                <draggable :list="course_sections" :options="{handle: '.handle'}">
                     <course-section 
                         v-for="section, index in course_sections"
-                        :key="section"
+                        :key="index"
                         :instance.sync="section"
                         :labels="labels"
                     >   
-                        <button
+                        <span
+                            role="button"
                             slot="section-preheading"
                             class="handle"
                             :class="[$style['glyph'], $style['pad--y0'], $style['pad--x25']]"
                         >
-                            <span
-                                class="glyphicon glyphicon-move"
-                                aria-hidden="true"
-                            ></span>
-                        </button>
+                            <img
+                                src="/static/orb/images/glyphicons-move.png"
+                                height="16"
+                                width="16"
+                                style="margin-top:-5px"
+                            />
+                        </span>
                         <button
                             slot="section-postheading"
                             :class="[$style.glyph, $style['iso--xStartAuto']]" 
@@ -71,7 +74,7 @@
                 </draggable>
                 
                 <div 
-                    class="panel panel-default" 
+                    class="course-sections-add panel panel-default" 
                     @click="addSection"
                 >
                     <button 
@@ -86,7 +89,7 @@
             
             <div class="btn-group">
                 <button 
-                    class="btn btn-success" 
+                    class="course-save-ctrl btn btn-success" 
                     @click="saveCourse"
                     :disabled="course_sections.length < 1"
                     :class="[$style['rhy--xStart25']]"
@@ -95,7 +98,10 @@
                         class="glyphicon glyphicon-ok-circle"
                         aria-hidden="true"
                     ></span>
-                    <span v-text="labels.save"></span>
+                    <span 
+                        class="course-save-ctrl-label"
+                        v-text="save_label"
+                    ></span>
                 </button>
             </div>
         </div>
@@ -131,20 +137,23 @@
                     <course-resource 
                         class="list-group-item"
                         v-for="resource, index in available_resources"
-                        :key="resource"
+                        :key="index"
                         :instance="resource"
                         :title="resource.title_en"
                     >
-                        <button
+                        <span
+                            role="button"
                             slot="prehed"
                             class="handle"
                             :class="[$style['glyph'], $style['pad--y0'], $style['pad--x25']]"
                         >
-                            <span
-                                class="glyphicon glyphicon-move"
-                                aria-hidden="true"
-                            ></span>
-                        </button>
+                            <img
+                                src="/static/orb/images/glyphicons-move.png"
+                                height="16"
+                                width="16"
+                                style="margin-top:-5px"
+                            />
+                        </span>
                     </course-resource>
                 </draggable>
             </div>
