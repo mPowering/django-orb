@@ -9,6 +9,8 @@ v2.6.0 - not yet released
 * 462: Add option to archive a resource - https://github.com/mPowering/django-orb/issues/issues/462
 * add defusedxml==0.5.0 as package requirement
 * 489: Add new/updated icons - https://github.com/mPowering/django-orb/issues/issues/489
+* 493: Can't drag resources into a course - https://github.com/mPowering/django-orb/issues/493
+* 494: Add course button not functioning - https://github.com/mPowering/django-orb/issues/issues/494
 
 .. _orb-v2-5-2:
 
