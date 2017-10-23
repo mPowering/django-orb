@@ -10,9 +10,9 @@ from __future__ import unicode_literals
 
 import json
 import logging
-
 from django import http
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
@@ -22,7 +22,6 @@ from django.views.decorators.csrf import csrf_exempt
 from orb import mixins
 from orb.courses import forms
 from orb.courses import models
-
 
 logger = logging.getLogger(__name__)
 
@@ -148,4 +147,17 @@ class CourseView(generic.DetailView):
             return http.JsonResponse({'errors': form.errors}, status=400)
 
 
+class ExportView(generic.DetailView):
+    """
+    Exports a course to a Moodle backup format
+    """
+    queryset = models.Course.courses.active()
+    http_method_names = ['get']
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        response = HttpResponse(content_type='application/vnd.moodle.backup')
+        response['Content-Disposition'] = 'attachment; filename=%s' % self.object.moodle_file_name
+        response.content = self.object.moodle_backup()
+        return response
 

@@ -97,3 +97,63 @@ def test_non_owner_cannot_edit_course(importer_profile, client):
             content_type="application/json",
         )
         assert response.status_code == 403
+
+
+def test_moodle_name():
+    course = models.Course(title="Thé Best Course")
+    assert course.moodle_file_name == "the-best-course-backup.mbz"
+
+
+def test_section_data():
+    data = [{
+        "resources": [{
+            "type": "CourseActivity",
+            "description": "Hello world",
+            "title": "First slide"
+        }, {
+            "type": "CourseActivity",
+            "description": "Olé!",
+            "title": "Intermission"
+        }]
+    }, {
+        "resources": [{
+            "type": "CourseActivity",
+            "description": "Second section description",
+            "title": "Second section title"
+        }]
+    }]
+    course = models.Course(sections=json.dumps(data))
+    assert course.section_data() == data
+
+
+def test_moodle_activities():
+    data = [{
+        "resources": [{
+            "type": "CourseActivity",
+            "description": "Hello world",
+            "title": "First slide"
+        }, {
+            "type": "CourseActivity",
+            "description": "Olé!",
+            "title": "Intermission"
+        }]
+    }, {
+        "resources": [{
+            "type": "CourseActivity",
+            "description": "Second section description",
+            "title": "Second section title"
+        }]
+    }]
+    course = models.Course(sections=json.dumps(data))
+    sections, activities = course.moodle_activities()
+
+    assert sections == [
+        {'id': 1, 'sequence': [1, 2]},
+        {'id': 2, 'sequence': [3]},
+    ]
+
+    assert activities == [
+        {'id': 1, 'type': 'page', 'intro': 'First slide', 'content': 'Hello world', 'section': 1},
+        {'id': 2, 'type': 'page', 'intro': 'Intermission', 'content': 'Olé!', 'section': 1},
+        {'id': 3, 'type': 'page', 'intro': 'Second section title', 'content': 'Second section description', 'section': 2},
+    ]

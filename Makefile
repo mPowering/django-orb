@@ -9,7 +9,7 @@ python-deps:  ## Install all dependencies, for running app, dev, and testing
 	pip install -r requirements/frozen.txt
 	pip install -r requirements/test.txt
 
-vue-deps: ## Install front-end dependencies
+vue-deps:  ## Install front-end dependencies
 	cd ./vue && yarn install
 
 ###################################
@@ -26,10 +26,10 @@ test-fast:  ## Run Django tests without search dependencies
 lint:  ## Run flake8 over app
 	flake8 orb
 
-vue-test: ## Run front-end JS tests
+vue-test:  ## Run front-end JS tests
 	cd ./vue && yarn run unit
 
-vue-test-dev: ## Run front-end JS tests
+vue-test-dev:  ## Run front-end JS tests
 	cd ./vue && yarn run unit-dev
 
 ###################################
@@ -38,7 +38,7 @@ vue-test-dev: ## Run front-end JS tests
 run:  ## Runs the dev containers
 	docker-compose -f dev.yml up
 
-build:  ## Builds all available containers
+build-docker:  ## Builds all available containers
 	docker-compose -f dev.yml build
 
 test-docker:  ## Runs tests in the Django container
