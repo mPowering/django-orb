@@ -11,6 +11,9 @@ v2.6.0 - not yet released
 * 489: Add new/updated icons - https://github.com/mPowering/django-orb/issues/issues/489
 * 493: Can't drag resources into a course - https://github.com/mPowering/django-orb/issues/493
 * 494: Add course button not functioning - https://github.com/mPowering/django-orb/issues/issues/494
+* 496: Courses created twice - https://github.com/mPowering/django-orb/issues/issues/496
+* Update search bots list
+
 
 .. _orb-v2-5-2:
 
