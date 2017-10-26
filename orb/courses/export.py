@@ -3,7 +3,7 @@
 """
 Exports a course to Moodle format
 
-Course content looks like this:
+Incoming course content is expected to look like this:
 
     [{
         "resources": [{
@@ -23,10 +23,14 @@ Course content looks like this:
         }]
     }]
 
+The MoodleCourse class is used to export
+
 """
+from __future__ import unicode_literals
 
 import hashlib
 import sys
+import markdown
 import time
 from StringIO import StringIO
 from zipfile import ZipFile
@@ -35,6 +39,14 @@ from dicttoxml import dicttoxml
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
 from django.utils.safestring import SafeText  # noqa
+
+
+def format_page(activity):
+    # type: (dict) -> unicode
+    """Create an HTML formatted page from a simple course activity"""
+    header = "# {}\n\n".format(activity['intro'])
+    content = header + activity['content']
+    return markdown.markdown(content)
 
 
 def sequenced_string(sequence):

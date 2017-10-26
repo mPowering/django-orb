@@ -9,6 +9,7 @@ from __future__ import unicode_literals
 import pytest
 
 from orb.courses.export import MoodleCourse
+from orb.courses.export import format_page
 
 
 @pytest.fixture
@@ -155,3 +156,11 @@ def test_course_settings(short_course):
     ]
 
     assert sorted(short_course.course_settings(), key=settings_sorter) == sorted(expected, key=settings_sorter)
+
+
+def test_page_activity_formatting():
+    """Should render as HTML"""
+    activity = {'id': 1, 'type': 'page', 'intro': 'First slide', 'content': 'Hello world!\n\nFoo bar.', 'section': 1}
+    expected = """<h1>First slide</h1>\n<p>Hello world!</p>\n<p>Foo bar.</p>"""
+    result = format_page(activity).strip()
+    assert expected == result
