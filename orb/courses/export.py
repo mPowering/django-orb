@@ -26,7 +26,6 @@ Incoming course content is expected to look like this:
 The MoodleCourse class is used to export
 
 """
-
 import hashlib
 from django.utils.html import escape
 import sys
