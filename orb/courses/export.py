@@ -26,9 +26,9 @@ Incoming course content is expected to look like this:
 The MoodleCourse class is used to export
 
 """
-from __future__ import unicode_literals
 
 import hashlib
+from django.utils.html import escape
 import sys
 import markdown
 import time
@@ -451,7 +451,7 @@ class MoodleCourse(object):
             contextid=activity['id'],
             name=activity['intro'],
             intro_html=activity['intro'],
-            content_html=activity['content'],  # TODO make HTML!
+            content_html=escape(format_page(activity)),
             timestamp="{}".format(int(time.time())),
         )
 
