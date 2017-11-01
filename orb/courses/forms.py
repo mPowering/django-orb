@@ -18,7 +18,7 @@ class CourseAdminForm(forms.ModelForm):
     def clean_sections(self):
         data = self.cleaned_data.get("sections", "[]")
         try:
-            json.dumps(data)
+            json.loads(data)
         except ValueError:
             raise forms.ValidationError("Invalid JSON. Try checking this using https://jsonlint.com/")
         return data
@@ -43,7 +43,7 @@ class CourseForm(forms.ModelForm):
     def clean_sections(self):
         data = self.cleaned_data.get("sections", "[]")
         try:
-            json.dumps(data)
+            json.loads(data)
         except ValueError as e:
             logger.debug(e)
             raise forms.ValidationError("Invalid JSON")
