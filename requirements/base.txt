@@ -38,3 +38,4 @@ dicttoxml==1.7.4
 git+https://github.com/mPowering/orb-api-python.git@v0.1.1#orb_api
 
 Markdown==2.6.9
+enum34==1.1.6

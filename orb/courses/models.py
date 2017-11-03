@@ -7,30 +7,74 @@ Models for ORB courses
 from __future__ import unicode_literals
 
 import json
+
 from autoslug.settings import slugify
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
+from enum import Enum
 
-from orb.models import TimestampBase
 from orb.courses.export import MoodleCourse
+from orb.models import TimestampBase
+
+
+class BaseChoices(Enum):
+    @classmethod
+    def as_choices(cls):
+        return [
+            (child.name, child.value)
+            for child in cls
+        ]
+
+
+class CourseStatus(BaseChoices):
+    draft = _("Draft")
+    published = _("Published")
+    archived = _("Archived")
 
 
 class CourseQueryset(models.QuerySet):
 
     def active(self):
-        return self.filter(status='active')
+        return self.exclude(status=CourseStatus.archived)
+
+    def published(self):
+        return self.filter(status=CourseStatus.published)
+
+    def archived(self):
+        return self.filter(status=CourseStatus.archived)
+
+    def viewable(self, user):
+        """Returns only those itesm the given user should be able to see"""
+        if user == AnonymousUser():
+            return self.published()
+        if user.is_staff:
+            return self.active()
+        return self.filter(
+            models.Q(status=CourseStatus.published) |
+            models.Q(status=CourseStatus.draft, create_user=user)
+        )
 
     def editable(self, user):
-        return self.all() if user.is_staff else self.filter(create_user=user)
+        """Returns only those itesm the given user should be able to edit"""
+        if user == AnonymousUser():
+            return self.none()
+        if user.is_staff:
+            return self.active()
+        return self.active().filter(create_user=user)
 
 
 class Course(TimestampBase):
     """
     Data container for a user-created course
     """
-    STATUS_CHOICES = [('active', 'active'), ('archived', 'archived')]
-    status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='active')
+    status = models.CharField(
+        max_length=50,
+        choices=CourseStatus.as_choices(),
+        default=CourseStatus.draft,
+    )
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='course_create_user')
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='course_update_user')
 

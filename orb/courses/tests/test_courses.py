@@ -9,20 +9,61 @@ from __future__ import unicode_literals
 import json
 
 import pytest
+from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
 
-from orb.tests.utils import login_client
 from orb.courses import forms
 from orb.courses import models
+from orb.tests.utils import login_client
 
 
 @pytest.fixture
 def course(testing_user):
+    """Returns a published course"""
     return models.Course.courses.create(
         create_user=testing_user,
         update_user=testing_user,
         title="My first course",
+        status=models.CourseStatus.published,
     )
+
+
+@pytest.fixture
+def draft_course(testing_user):
+    """Returns a draft course"""
+    return models.Course.courses.create(
+        create_user=testing_user,
+        update_user=testing_user,
+        title="Draft course",
+        status=models.CourseStatus.draft,
+    )
+
+
+@pytest.fixture
+def archived_course(testing_user):
+    """Returns an archived course"""
+    return models.Course.courses.create(
+        create_user=testing_user,
+        update_user=testing_user,
+        title="Archived course",
+        status=models.CourseStatus.archived,
+    )
+
+
+@pytest.mark.django_db
+def test_editable_queryset(course, draft_course, archived_course, testing_user, import_user, admin_user):
+    assert [course, draft_course] == list(models.Course.courses.editable(testing_user))
+    assert [course, draft_course] == list(models.Course.courses.editable(admin_user))
+    assert [] == list(models.Course.courses.editable(import_user))
+    assert [] == list(models.Course.courses.editable(AnonymousUser()))
+
+
+@pytest.mark.django_db
+def test_viewable_queryset(course, draft_course, archived_course, testing_user, import_user, admin_user):
+    assert [course, draft_course] == list(models.Course.courses.viewable(testing_user))
+    assert [course, draft_course] == list(models.Course.courses.viewable(admin_user))
+    assert [course] == list(models.Course.courses.viewable(import_user))
+    assert [course] == list(models.Course.courses.viewable(AnonymousUser()))
 
 
 @pytest.mark.django_db
