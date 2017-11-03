@@ -91,16 +91,20 @@ class CourseView(generic.DetailView):
 
     The POST method is entirely AJAX/JSON based
     """
-    queryset = models.Course.courses.active()
+    base_queryset = models.Course.courses.active()
     template_name = "orb/courses/course_form.html"
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(CourseView, self).dispatch(request, *args, **kwargs)
 
+    def get_queryset(self):
+        return self.base_queryset.viewable(self.request.user)
+
     def user_can_edit(self, user):
         """Checks if the user has the right to edit this course"""
-        return user.is_staff or user == self.object.create_user
+        # return user.is_staff or user == self.object.create_user
+        return self.base_queryset.editable(user).filter(pk=self.object.pk).exists()
 
     def get_context_data(self, **kwargs):
         context = super(CourseView, self).get_context_data(**kwargs)
@@ -111,14 +115,6 @@ class CourseView(generic.DetailView):
     def post(self, request, *args, **kwargs):
         """
         Handles a JSON request to save the course data
-
-        Args:
-            request:
-            *args:
-            **kwargs:
-
-        Returns:
-
         """
         self.object = self.get_object()
 
