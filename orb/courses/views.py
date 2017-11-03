@@ -111,12 +111,25 @@ class CourseView(generic.DetailView):
         context.update({'can_edit': self.user_can_edit(self.request.user)})
         return context
 
+    def course_save_message(self, original_status, updated_status):
+        # type: (unicode, unicode) -> unicode
+        """Returns a """
+        messages = {
+            'same': _("Your changes have been saved."),
+            models.CourseStatus.published: _("Your course is now public."),
+            models.CourseStatus.draft: _("Your course is now in draft status."),
+            models.CourseStatus.archived: _("Your course has been removed."),
+        }
+        status = 'same' if original_status == updated_status else updated_status
+        return messages[status]
+
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """
         Handles a JSON request to save the course data
         """
         self.object = self.get_object()
+        original_status = self.object.status
 
         if not self.user_can_edit(request.user):
             return http.JsonResponse({'errors': _('You do not have permission to edit this course')}, status=403)
@@ -134,7 +147,8 @@ class CourseView(generic.DetailView):
             course = form.save()  # Any checks against resource keys should happen here
             return http.JsonResponse({
                 'course_id': course.id,
-                'status': 'ok'
+                'status': 'ok',
+                'message': self.course_save_message(original_status, course.status),
             })
 
         else:
