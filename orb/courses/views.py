@@ -26,18 +26,22 @@ from orb.courses import models
 logger = logging.getLogger(__name__)
 
 
+response_messages = {
+    'error_saving': _('There was an error trying to save your course'),
+    'json_error': _('JSON decoding error'),
+    'permission_error': _('You do not have permission to edit this course'),
+    'same': _("Your changes have been saved."),
+    models.CourseStatus.published: _("Your course is now public."),
+    models.CourseStatus.draft: _("Your course is now in draft status."),
+    models.CourseStatus.archived: _("Your course has been removed."),
+}
+
+
 def course_save_message(original_status, updated_status):
     # type: (unicode, unicode) -> unicode
-    """Returns a """
-    messages = {
-        'same': _("Your changes have been saved."),
-        models.CourseStatus.published: _("Your course is now public."),
-        models.CourseStatus.draft: _("Your course is now in draft status."),
-        models.CourseStatus.archived: _("Your course has been removed."),
-    }
+    """Returns a message suitable for saving a course"""
     status = 'same' if original_status == updated_status else updated_status
-    return messages[status]
-
+    return response_messages[status]
 
 
 class CoursesListView(generic.ListView):
@@ -95,7 +99,11 @@ class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
         else:
             # form.errors is a dictionary with field names for keys and
             # the values of each is a list of errors in string format
-            return http.JsonResponse({'errors': form.errors}, status=400)
+            return http.JsonResponse({
+                'message': response_messages['error_saving'],
+                'status': 'error',
+                'errors': form.errors,
+            }, status=400)
 
 
 class CourseView(generic.DetailView):
@@ -135,13 +143,21 @@ class CourseView(generic.DetailView):
         original_status = self.object.status
 
         if not self.user_can_edit(request.user):
-            return http.JsonResponse({'errors': _('You do not have permission to edit this course')}, status=403)
+            return http.JsonResponse({
+                'message': response_messages['permission_error'],
+                'status': 'error',
+                'errors': response_messages['permission_error'],
+            }, status=403)
 
         try:
             data = json.loads(request.body)
         except ValueError as e:
             logger.debug(e)
-            return http.JsonResponse({'errors': _('JSON decoding error')}, status=400)
+            return http.JsonResponse({
+                'message': response_messages['json_error'],
+                'status': 'error',
+                'errors': response_messages['json_error'],
+            }, status=400)
 
         form_data = {'sections': json.dumps(data['sections']), 'title': data['title']}
         form = forms.CourseForm(data=form_data, instance=self.object, user=request.user)
@@ -157,7 +173,11 @@ class CourseView(generic.DetailView):
         else:
             # form.errors is a dictionary with field names for keys and
             # the values of each is a list of errors in string format
-            return http.JsonResponse({'errors': form.errors}, status=400)
+            return http.JsonResponse({
+                'message': response_messages['error_saving'],
+                'status': 'error',
+                'errors': form.errors,
+            }, status=400)
 
 
 class ExportView(generic.DetailView):
