@@ -26,6 +26,20 @@ from orb.courses import models
 logger = logging.getLogger(__name__)
 
 
+def course_save_message(original_status, updated_status):
+    # type: (unicode, unicode) -> unicode
+    """Returns a """
+    messages = {
+        'same': _("Your changes have been saved."),
+        models.CourseStatus.published: _("Your course is now public."),
+        models.CourseStatus.draft: _("Your course is now in draft status."),
+        models.CourseStatus.archived: _("Your course has been removed."),
+    }
+    status = 'same' if original_status == updated_status else updated_status
+    return messages[status]
+
+
+
 class CoursesListView(generic.ListView):
     model = models.Course
 
@@ -75,6 +89,7 @@ class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
                 'course_id': course.id,
                 'status': 'ok',
                 'url': course.get_absolute_url(),
+                'message': course_save_message(course.status, course.status),
             }, status=201)
 
         else:
@@ -111,18 +126,6 @@ class CourseView(generic.DetailView):
         context.update({'can_edit': self.user_can_edit(self.request.user)})
         return context
 
-    def course_save_message(self, original_status, updated_status):
-        # type: (unicode, unicode) -> unicode
-        """Returns a """
-        messages = {
-            'same': _("Your changes have been saved."),
-            models.CourseStatus.published: _("Your course is now public."),
-            models.CourseStatus.draft: _("Your course is now in draft status."),
-            models.CourseStatus.archived: _("Your course has been removed."),
-        }
-        status = 'same' if original_status == updated_status else updated_status
-        return messages[status]
-
     @method_decorator(login_required)
     def post(self, request, *args, **kwargs):
         """
@@ -148,7 +151,7 @@ class CourseView(generic.DetailView):
             return http.JsonResponse({
                 'course_id': course.id,
                 'status': 'ok',
-                'message': self.course_save_message(original_status, course.status),
+                'message': course_save_message(original_status, course.status),
             })
 
         else:
