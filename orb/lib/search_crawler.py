@@ -96,6 +96,7 @@ def is_search_crawler(user_agent):
                'Yeti',
                'ExtLinksBot',
                'OpenHoseBot',
+               'ltx71'
                }
     for s in spiders:
         if s.lower() in user_agent.lower():
