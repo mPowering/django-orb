@@ -91,6 +91,7 @@ class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
             course = form.save()  # Any checks against resource keys should happen here
             return http.JsonResponse({
                 'course_id': course.id,
+                'course_status': course.status,
                 'status': 'ok',
                 'url': course.get_absolute_url(),
                 'message': course_save_message(course.status, course.status),
@@ -166,6 +167,7 @@ class CourseView(generic.DetailView):
             course = form.save()  # Any checks against resource keys should happen here
             return http.JsonResponse({
                 'course_id': course.id,
+                'course_status': course.status,
                 'status': 'ok',
                 'message': course_save_message(original_status, course.status),
             })
