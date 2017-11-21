@@ -4,6 +4,7 @@
 <script>
 import CourseSection from '@/courses/course-section'
 import CourseResource from '@/courses/course-resource'
+import PublishControl from '@/courses/course-publish-control'
 import draggable from 'vuedraggable'
 
 const defaults = {
@@ -21,13 +22,18 @@ export default {
     components: {
         draggable,
         CourseSection,
-        CourseResource
+        CourseResource,
+        PublishControl
     },
     props: {
         id: String,
         title: {
             type: String,
             default: 'New Course'
+        },
+        status: {
+            type: String,
+            default: 'draft'
         },
         sections: {
             type: Array,
@@ -56,6 +62,7 @@ export default {
         return {
             course_id: this.id || false,
             course_title: this.title,
+            course_status: this.status,
             course_sections: this.sections,
             save_action: this.action,
             edit_head: false,
@@ -64,23 +71,25 @@ export default {
         }
     },
     methods: {
+        updateStatus () {
+            this.course_status = (this.course_status === 'draft')
+                ? 'published'
+                : 'draft'
+
+            this.saveCourse()
+        },
         editTitle () { this.edit_head = true },
         saveTitle () { this.edit_head = false },
-        addSection () {
-            this.course_sections.push({
-                resources: []
-            })
-        },
+        addSection () { this.course_sections.push({ resources: [] }) },
         removeSection (id) {
             this.course_sections = this.course_sections.filter(
-                (section, index) => {
-                    return index !== id
-                }
+                (section, index) => (index !== id)
             )
         },
         saveCourse () {
             let course = {
                 title: this.course_title,
+                status: this.course_status,
                 sections: this.course_sections,
             }
 
@@ -89,6 +98,7 @@ export default {
                     (response) => {
                         this.course_id = response.data.course_id
                         this.save_action = 'update'
+                        console.log(response)
                     }
                 )
                 .catch(
