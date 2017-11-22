@@ -102,6 +102,7 @@ export default {
                 .then(
                     (response) => {
                         this.course_id = response.data.course_id
+                        this.redirectOnCreate()
                         this.save_action = 'update'
                     }
                 )
@@ -128,8 +129,15 @@ export default {
                     (error) => console.error(error)
                 )
         },
+        redirectOnCreate () {
+            const logicCheck = (this.initialCourseView && this.course_id)
+            if (logicCheck) window.location.replace(this.savepoint)
+        }
     },
     computed: {
+        initialCourseView () {
+            return (this.action === 'create')
+        },
         savepoint () {
             let savepoint = (this.save_action === 'update') ? defaults.endpoints.update : defaults.endpoints.create
             return savepoint.replace(':id', this.course_id)

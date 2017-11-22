@@ -12263,6 +12263,7 @@ exports.default = {
 
             return this.$http.post(this.savepoint, course).then(function (response) {
                 _this.course_id = response.data.course_id;
+                _this.redirectOnCreate();
                 _this.save_action = 'update';
             }).catch(function (error) {
                 return console.error(error);
@@ -12281,9 +12282,16 @@ exports.default = {
             }).catch(function (error) {
                 return console.error(error);
             });
+        },
+        redirectOnCreate: function redirectOnCreate() {
+            var logicCheck = this.initialCourseView && this.course_id;
+            if (logicCheck) window.location.replace(this.savepoint);
         }
     },
     computed: {
+        initialCourseView: function initialCourseView() {
+            return this.action === 'create';
+        },
         savepoint: function savepoint() {
             var savepoint = this.save_action === 'update' ? defaults.endpoints.update : defaults.endpoints.create;
             return savepoint.replace(':id', this.course_id);
