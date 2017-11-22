@@ -13,7 +13,7 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext
 from enum import Enum
 
 from orb.courses.export import MoodleCourse
@@ -30,21 +30,21 @@ class BaseChoices(Enum):
 
 
 class CourseStatus(BaseChoices):
-    draft = _("Draft")
-    published = _("Published")
-    archived = _("Archived")
+    draft = ugettext("Draft")
+    published = ugettext("Published")
+    archived = ugettext("Archived")
 
 
 class CourseQueryset(models.QuerySet):
 
     def active(self):
-        return self.exclude(status=CourseStatus.archived)
+        return self.exclude(status=CourseStatus.archived.value)
 
     def published(self):
-        return self.filter(status=CourseStatus.published)
+        return self.filter(status=CourseStatus.published.value)
 
     def archived(self):
-        return self.filter(status=CourseStatus.archived)
+        return self.filter(status=CourseStatus.archived.value)
 
     def viewable(self, user):
         """Returns only those itesm the given user should be able to see"""
@@ -53,8 +53,8 @@ class CourseQueryset(models.QuerySet):
         if user.is_staff:
             return self.active()
         return self.filter(
-            models.Q(status=CourseStatus.published) |
-            models.Q(status=CourseStatus.draft, create_user=user)
+            models.Q(status=CourseStatus.published.value) |
+            models.Q(status=CourseStatus.draft.value, create_user=user)
         )
 
     def editable(self, user):
@@ -73,7 +73,7 @@ class Course(TimestampBase):
     status = models.CharField(
         max_length=50,
         choices=CourseStatus.as_choices(),
-        default=CourseStatus.draft,
+        default=CourseStatus.draft.value,
     )
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='course_create_user')
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='course_update_user')
