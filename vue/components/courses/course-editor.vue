@@ -144,7 +144,7 @@ export default {
                 .then(
                     (response) => {
                         this.course_id = response.data.course_id
-                        this.redirectOnCreate()
+                        this.redirectOnCreate(response.data.url)
                         return response
                     }
                 )
@@ -180,9 +180,9 @@ export default {
                     (error) => console.error(error)
                 )
         },
-        redirectOnCreate () {
+        redirectOnCreate (url) {
             const logicCheck = (this.initialCourseView && this.course_id)
-            if (logicCheck) window.location.replace(this.savepoint)
+            if (logicCheck) window.location.replace(url)
         }
     },
     computed: {
