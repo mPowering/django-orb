@@ -24,7 +24,7 @@ class BaseChoices(Enum):
     @classmethod
     def as_choices(cls):
         return [
-            (child.name, child.value)
+            (child.name, child.name)
             for child in cls
         ]
 
@@ -38,13 +38,13 @@ class CourseStatus(BaseChoices):
 class CourseQueryset(models.QuerySet):
 
     def active(self):
-        return self.exclude(status=CourseStatus.archived.value)
+        return self.exclude(status=CourseStatus.archived.name)
 
     def published(self):
-        return self.filter(status=CourseStatus.published.value)
+        return self.filter(status=CourseStatus.published.name)
 
     def archived(self):
-        return self.filter(status=CourseStatus.archived.value)
+        return self.filter(status=CourseStatus.archived.name)
 
     def viewable(self, user):
         """Returns only those itesm the given user should be able to see"""
@@ -53,8 +53,8 @@ class CourseQueryset(models.QuerySet):
         if user.is_staff:
             return self.active()
         return self.filter(
-            models.Q(status=CourseStatus.published.value) |
-            models.Q(status=CourseStatus.draft.value, create_user=user)
+            models.Q(status=CourseStatus.published.name) |
+            models.Q(status=CourseStatus.draft.name, create_user=user)
         )
 
     def editable(self, user):
@@ -73,7 +73,7 @@ class Course(TimestampBase):
     status = models.CharField(
         max_length=50,
         choices=CourseStatus.as_choices(),
-        default=CourseStatus.draft.value,
+        default=CourseStatus.draft.name,
     )
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='course_create_user')
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='course_update_user')

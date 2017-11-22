@@ -33,14 +33,15 @@ def response_messages(key):
         'json_error': _('JSON decoding error'),
         'permission_error': _('You do not have permission to edit this course'),
         'same': _("Your changes have been saved."),
-        models.CourseStatus.published: _("Your course is now public."),
-        models.CourseStatus.draft: _("Your course is now in draft status."),
-        models.CourseStatus.archived: _("Your course has been removed."),
+        models.CourseStatus.published.name: _("Your course is now public."),
+        models.CourseStatus.draft.name: _("Your course is now in draft status."),
+        models.CourseStatus.archived.name: _("Your course has been removed."),
     }
     try:
         return unicode(messages.get(key))
     except KeyError:
         logger.error("No such message key '{}'".format(key))
+        return key
 
 
 def course_save_message(original_status, updated_status):
