@@ -12164,6 +12164,10 @@ var defaults = {
         resource_search: '/api/v1/resource/search/',
         create: '.',
         update: '/courses/:id/'
+    },
+    status: {
+        active: 'published',
+        inactive: 'draft'
     }
 };
 
@@ -12226,8 +12230,11 @@ exports.default = {
     },
 
     methods: {
+        mapStatus: function mapStatus(givenStatus) {
+            return defaults.status[givenStatus];
+        },
         updateStatus: function updateStatus() {
-            this.course_status = this.course_status === 'draft' ? 'published' : 'draft';
+            this.course_status = this.mappedStatus === 'active' ? this.mapStatus('inactive') : this.mapStatus('active');
 
             this.saveCourse();
         },
@@ -12257,7 +12264,6 @@ exports.default = {
             return this.$http.post(this.savepoint, course).then(function (response) {
                 _this.course_id = response.data.course_id;
                 _this.save_action = 'update';
-                console.log(response);
             }).catch(function (error) {
                 return console.error(error);
             });
@@ -12284,6 +12290,9 @@ exports.default = {
         },
         save_label: function save_label() {
             return this.save_action === 'update' ? this.labels.save : this.labels.create;
+        },
+        mappedStatus: function mappedStatus() {
+            return this.course_status === defaults.status.active ? 'active' : 'inactive';
         }
     },
     created: function created() {
@@ -15479,14 +15488,14 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     domProps: {
       "textContent": _vm._s(_vm.save_label)
     }
-  })]), _vm._v(" "), _c('publish-control', {
+  })]), _vm._v(" "), (_vm.course_id) ? _c('publish-control', {
     attrs: {
-      "course-status": _vm.course_status
+      "course-status": _vm.mappedStatus
     },
     on: {
-      "toggle": _vm.updateStatus
+      "genericAction": _vm.updateStatus
     }
-  })], 1)]), _vm._v(" "), _c('div', {
+  }) : _vm._e()], 1)]), _vm._v(" "), _c('div', {
     staticClass: "resource-search col-sm-3"
   }, [_c('div', {
     staticClass: "form-group"
@@ -15898,14 +15907,14 @@ exports.default = {
     props: {
         courseStatus: {
             type: String,
-            default: 'draft'
+            default: 'inactive'
         },
         labels: {
             type: Object,
             default: function _default() {
                 return {
-                    draft: 'Publish',
-                    published: 'Set to Draft'
+                    inactive: 'Publish',
+                    active: 'Set to Draft'
                 };
             }
         }
@@ -15915,8 +15924,8 @@ exports.default = {
     },
 
     methods: {
-        commitAction: function commitAction() {
-            this.$emit('toggle');
+        commitGenericAction: function commitGenericAction() {
+            this.$emit('genericAction');
         }
     },
     computed: {
@@ -15924,7 +15933,7 @@ exports.default = {
             return this.courseStatus;
         },
         isDraft: function isDraft() {
-            return this.status === 'draft';
+            return this.status === 'inactive';
         },
         iconClass: function iconClass() {
             return {
@@ -16058,7 +16067,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticClass: "course-publish-ctrl btn",
     class: [_vm.$style['rhy--xStart25'], _vm.btnClass],
     on: {
-      "click": _vm.commitAction
+      "click": _vm.commitGenericAction
     }
   }, [_c('span', {
     staticClass: "glyphicon",

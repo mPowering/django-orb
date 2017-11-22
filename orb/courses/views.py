@@ -195,4 +195,3 @@ class ExportView(generic.DetailView):
         response['Content-Disposition'] = 'attachment; filename=%s' % self.object.moodle_file_name
         response.content = self.object.moodle_backup()
         return response
-

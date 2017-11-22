@@ -99,13 +99,14 @@
                         aria-hidden="true"
                     ></span>
                     <span
-                        class="course-save-ctrl-label"
-                        v-text="save_label"
+                      class="course-save-ctrl-label"
+                      v-text="save_label"
                     ></span>
                 </button>
                 <publish-control
-                  :course-status="course_status"
-                  v-on:toggle="updateStatus"
+                  :course-status="mappedStatus"
+                  v-on:genericAction="updateStatus"
+                  v-if="course_id"
                 ></publish-control>
             </div>
         </div>

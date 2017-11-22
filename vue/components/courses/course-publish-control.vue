@@ -5,7 +5,7 @@
     <button
         class="course-publish-ctrl btn"
         :class="[$style['rhy--xStart25'], btnClass]"
-        @click="commitAction"
+        @click="commitGenericAction"
     >
         <span
             class="glyphicon"
@@ -26,13 +26,13 @@ export default {
     props: {
         courseStatus: {
             type: String,
-            default: 'draft'
+            default: 'inactive'
         },
         labels: {
             type: Object,
             default: () => ({
-                draft: 'Publish',
-                published: 'Set to Draft'
+                inactive: 'Publish',
+                active: 'Set to Draft'
             })
         }
     },
@@ -40,14 +40,14 @@ export default {
         return { }
     },
     methods: {
-        commitAction () {
-            this.$emit('toggle')
+        commitGenericAction () {
+            this.$emit('genericAction')
         }
     },
     computed: {
         status () { return this.courseStatus },
         isDraft () {
-            return (this.status === 'draft')
+            return (this.status === 'inactive')
         },
         iconClass () {
             return {

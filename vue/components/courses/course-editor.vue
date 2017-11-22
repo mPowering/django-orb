@@ -14,6 +14,10 @@ const defaults = {
         resource_search: `/api/v1/resource/search/`,
         create: '.',
         update: '/courses/:id/'
+    },
+    status: {
+        active: 'published',
+        inactive: 'draft'
     }
 }
 
@@ -71,10 +75,11 @@ export default {
         }
     },
     methods: {
+        mapStatus (givenStatus) { return (defaults.status[givenStatus]) },
         updateStatus () {
-            this.course_status = (this.course_status === 'draft')
-                ? 'published'
-                : 'draft'
+            this.course_status = (this.mappedStatus === 'active')
+                ? this.mapStatus('inactive')
+                : this.mapStatus('active')
 
             this.saveCourse()
         },
@@ -98,7 +103,6 @@ export default {
                     (response) => {
                         this.course_id = response.data.course_id
                         this.save_action = 'update'
-                        console.log(response)
                     }
                 )
                 .catch(
@@ -123,7 +127,7 @@ export default {
                 .catch(
                     (error) => console.error(error)
                 )
-        }
+        },
     },
     computed: {
         savepoint () {
@@ -132,6 +136,11 @@ export default {
         },
         save_label () {
             return (this.save_action === 'update') ? this.labels.save : this.labels.create
+        },
+        mappedStatus () {
+            return (this.course_status === defaults.status.active)
+                ? 'active'
+                : 'inactive'
         }
     },
     created () {

@@ -10,6 +10,7 @@
 {% block content %}
     {% include "includes/messages.html" %}
     <div id="app">
+        <p>{{ course.status }}</p>
         <course-editor
             id="{{ course.id|default:'' }}"
             title="{{ course.title|default:'New Course' }}"
