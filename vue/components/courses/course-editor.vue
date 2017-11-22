@@ -31,7 +31,7 @@ const defaults = {
     alerts: {
         '200': {
             status: 'success',
-            message: 'The course has been saved successfully.'
+            message: 'The course was saved successfully.'
         },
         '200-publish': {
             status: 'success',
@@ -44,8 +44,7 @@ const defaults = {
         '500': {
             status: 'danger',
             message: `
-                Your course was not saved at this time.
-                We have been notified of the issue. Thank you!
+                Your course was not saved at this time due to an error.
             `
         }
     }
