@@ -28,6 +28,12 @@ class BaseChoices(Enum):
             for child in cls
         ]
 
+    @classmethod
+    def initial(cls):
+        """By default returns the first item"""
+        for child in cls:
+            return child.name
+
 
 class CourseStatus(BaseChoices):
     draft = ugettext("Draft")

@@ -26,6 +26,12 @@ class CourseAdminForm(forms.ModelForm):
 
 class CourseForm(forms.ModelForm):
 
+    status = forms.ChoiceField(
+        choices=models.CourseStatus.as_choices(),
+        required=False,
+        initial=models.CourseStatus.initial(),
+    )
+
     class Meta:
         model = models.Course
         fields = ['title', 'sections', 'status']
