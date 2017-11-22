@@ -28,7 +28,7 @@ class CourseForm(forms.ModelForm):
 
     class Meta:
         model = models.Course
-        fields = ['title', 'sections']
+        fields = ['title', 'sections', 'status']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)

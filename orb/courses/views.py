@@ -166,7 +166,7 @@ class CourseView(generic.DetailView):
                 'errors': response_messages('json_error'),
             }, status=400)
 
-        form_data = {'sections': json.dumps(data['sections']), 'title': data['title']}
+        form_data = {'sections': json.dumps(data['sections']), 'title': data['title'], 'status': data['status']}
         form = forms.CourseForm(data=form_data, instance=self.object, user=request.user)
 
         if form.is_valid():
