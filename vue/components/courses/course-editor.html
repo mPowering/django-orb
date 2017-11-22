@@ -38,6 +38,14 @@
     </header>
     <div class="row">
         <div class="course-sections col-sm-9">
+            <transition name="fade">
+            <course-notification
+              :status="alertStatus"
+              :message="alertMessage"
+              v-on:dismissed="resetAlert"
+              v-if="alertUser"
+            ></course-notification>
+            </transition>
             <div>
                 <draggable :list="course_sections" :options="{handle: '.handle'}">
                     <course-section

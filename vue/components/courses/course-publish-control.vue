@@ -2,6 +2,7 @@
 
 
 <template>
+
     <button
         class="course-publish-ctrl btn"
         :class="[$style['rhy--xStart25'], btnClass]"
@@ -17,6 +18,7 @@
             v-text="publishLabel"
         ></span>
     </button>
+
 </template>
 
 

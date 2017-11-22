@@ -1,9 +1,18 @@
 <template src="./course-editor.html"></template>
 <style module src="../module.css"></style>
+<style>
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+    opacity: 0;
+}
+</style>
 
 <script>
 import CourseSection from '@/courses/course-section'
 import CourseResource from '@/courses/course-resource'
+import CourseNotification from '@/notifications/dismissable'
 import PublishControl from '@/courses/course-publish-control'
 import draggable from 'vuedraggable'
 
@@ -18,6 +27,27 @@ const defaults = {
     status: {
         active: 'published',
         inactive: 'draft'
+    },
+    alerts: {
+        '200': {
+            status: 'success',
+            message: 'The course has been saved successfully.'
+        },
+        '200-publish': {
+            status: 'success',
+            message: 'The course is now published.'
+        },
+        '200-draft': {
+            status: 'success',
+            message: 'The course is now in draft status.'
+        },
+        '500': {
+            status: 'danger',
+            message: `
+                Your course was not saved at this time.
+                We have been notified of the issue. Thank you!
+            `
+        }
     }
 }
 
@@ -27,6 +57,7 @@ export default {
         draggable,
         CourseSection,
         CourseResource,
+        CourseNotification,
         PublishControl
     },
     props: {
@@ -71,10 +102,22 @@ export default {
             save_action: this.action,
             edit_head: false,
             q: '',
-            available_resources: []
+            available_resources: [],
+            alertUser: false,
+            alertStatus: 'info',
+            alertMessage: ''
         }
     },
     methods: {
+        resetAlert () { this.alertUser = false },
+        showAlert (status, givenMessage = null) {
+            const systemAlert = defaults.alerts[status]
+            if (systemAlert) {
+                this.alertStatus = systemAlert.status
+                this.alertMessage = givenMessage || systemAlert.message
+                this.alertUser = true
+            }
+        },
         mapStatus (givenStatus) { return (defaults.status[givenStatus]) },
         updateStatus () {
             this.course_status = (this.mappedStatus === 'active')
@@ -103,11 +146,20 @@ export default {
                     (response) => {
                         this.course_id = response.data.course_id
                         this.redirectOnCreate()
+                        return response
+                    }
+                )
+                .then(
+                    (response) => {
+                        this.showAlert('200', response.data.message)
                         this.save_action = 'update'
                     }
                 )
                 .catch(
-                    (error) => console.error(error)
+                    (error) => {
+                        console.error(error)
+                        this.showAlert('500')
+                    }
                 )
         },
         searchResources () {
