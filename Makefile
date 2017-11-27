@@ -76,8 +76,8 @@ database:  ## Migrate the database
 help:
 	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-vue-dev:
+vue-dev: ## run vue compiler in dev version
 	cd ./vue && yarn run dev
 
-vue-build:
+vue-build: ## run vue compiler for production
 	cd ./vue && yarn run build
