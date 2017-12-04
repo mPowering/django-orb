@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Axios from 'axios'
-import CourseEditor from '@/courses/course-editor'
+import CourseEditor from '@cmp/course-editor/course-editor'
 
 Vue.prototype.$http = Axios
 

@@ -12,16 +12,21 @@ module.exports = function (config) {
         autoWatchBatchDelay: 300,
         frameworks: ['jasmine', 'phantomjs-shim', 'es6-shim'],
         reporters: ['spec', 'coverage'],
-        files: ['./test.js'],
+        files: [
+            './test.js'
+        ],
         preprocessors: {
         './test.js': ['webpack', 'sourcemap']
+        },
+        client: {
+            captureConsole: false
         },
         // use the webpack config
         webpack: {
             resolve: {
                 extensions: [".js", ".json", '.yaml', '.yml', '.vue'],
                 alias: {
-                    '@': path.join(__dirname, `./components`),
+                    '@cmp': path.join(__dirname, `./components`),
                     'vue$': 'vue/dist/vue.common.js'
                 }
             },

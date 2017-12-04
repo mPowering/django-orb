@@ -15,7 +15,7 @@ const friendly_errors = require('friendly-errors-webpack-plugin')
 
 
 module.exports = (env) => {
-    
+
     let CFG = env.init ? require(`${__dirname}/${env.init}`) : null
     let PROD = CFG.PROD = env.production ? true : false
     let DJANGO = CFG.DJANGO = env.django ? true : false
@@ -43,11 +43,11 @@ module.exports = (env) => {
         resolve: {
             extensions: [".js", ".json", '.yaml', '.yml', '.vue'],
             alias: {
-                '@': path.join(__dirname, `${CFG.src}/components`),
+                '@cmp': path.join(__dirname, `${CFG.src}/components`),
                 'vue$': 'vue/dist/vue.common.js'
             }
         },
-        plugins: [ 
+        plugins: [
             new webpack.DefinePlugin({
                 'process.env': {
                     NODE_ENV: PROD ? '"production"' : '"development"'

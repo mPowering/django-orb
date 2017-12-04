@@ -13,6 +13,7 @@
         <course-editor
             id="{{ course.id|default:'' }}"
             title="{{ course.title|default:'New Course' }}"
+            status="{{ course.status|default:'draft' }}"
             :sections="{{ course.sections|default:'[{resources: []}]' }}"
             {% if not course.id %}action="create"{% endif %}
         >

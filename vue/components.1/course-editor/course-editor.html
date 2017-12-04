@@ -1,0 +1,175 @@
+<div class="course-editor">
+    <header class="course-editor-hdr row">
+        <template v-if="edit_head">
+            <div class="input-group col-sm-6">
+                <input
+                    class="form-control"
+                    v-model="course_title"
+                >
+                <span class="input-group-btn">
+                    <button
+                        class="course-editor-hed-save btn btn-default"
+                        v-text="labels.save_title"
+                        @click="saveTitle"
+                    ></button>
+                </span>
+            </div>
+        </template>
+        <template v-else>
+            <h3
+                class="course-editor-hed col-sm-6"
+                @click="editTitle"
+            >
+                <span v-text="course_title"></span>
+                <button
+                    class="course-editor-hed-edit btn btn-primary btn-xs"
+                    type="button"
+                    :class="[$style['rhy--xStart25']]"
+                    @click="editTitle"
+                >
+                    <span
+                        class="glyphicon glyphicon-edit"
+                        aria-hidden="true"
+                    ></span>
+                    <span class="sr-only" v-text="labels.edit_title" ></span>
+                </button>
+            </h3>
+        </template>
+    </header>
+    <div class="row">
+        <div class="course-sections col-sm-9">
+            <transition name="fade">
+            <course-notification
+              :status="alertStatus"
+              :message="alertMessage"
+              v-on:dismissed="resetAlert"
+              v-if="alertUser"
+            ></course-notification>
+            </transition>
+            <div>
+                <draggable :list="course_sections" :options="{handle: '.handle'}">
+                    <course-section
+                        v-for="section, index in course_sections"
+                        :key="index"
+                        :instance.sync="section"
+                        :labels="labels"
+                    >
+                        <span
+                            role="button"
+                            slot="section-preheading"
+                            class="handle"
+                            :class="[$style['glyph'], $style['pad--y0'], $style['pad--x25']]"
+                        >
+                            <img
+                                src="/static/orb/images/glyphicons-move.png"
+                                height="16"
+                                width="16"
+                                style="margin-top:-5px"
+                            />
+                        </span>
+                        <button
+                            slot="section-postheading"
+                            :class="[$style.glyph, $style['iso--xStartAuto']]"
+                            @click="removeSection(index)"
+                        >
+                            <span class="sr-only" v-text="labels.remove_section"></span>
+                            <span
+                                class="glyphicon glyphicon-remove"
+                                aria-hidden="true"
+                            ></span>
+                        </button>
+                    </course-section>
+                </draggable>
+
+                <div
+                    class="course-sections-add panel panel-default"
+                    @click="addSection"
+                >
+                    <button
+                        type="button"
+                        :class="[$style['row--pStart--sMiddle'], $style['fake-btn']]"
+                    >
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        <span v-text="labels.add_section"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button
+                    class="course-save-ctrl btn btn-success"
+                    @click="saveCourse"
+                    :disabled="course_sections.length < 1"
+                    :class="[$style['rhy--xStart25']]"
+                >
+                    <span
+                        class="glyphicon glyphicon-ok-circle"
+                        aria-hidden="true"
+                    ></span>
+                    <span
+                      class="course-save-ctrl-label"
+                      v-text="save_label"
+                    ></span>
+                </button>
+                <publish-control
+                  :course-status="mappedStatus"
+                  v-on:genericAction="updateStatus"
+                  v-if="course_id"
+                ></publish-control>
+            </div>
+        </div>
+        <div class="resource-search col-sm-3">
+            <div class="form-group">
+                <label>Resource Search</label>
+                <div class="input-group">
+                    <input
+                        class="form-control"
+                        v-model="q"
+                    >
+                    <span class="input-group-btn">
+                        <button
+                            class="btn btn-info"
+                            @click="searchResources"
+                        >Search</button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="list-group">
+                <draggable
+                    :list="available_resources"
+                    :options="{
+                        handle: '.handle',
+                        group: {
+                            name: 'resources',
+                            pull: 'clone',
+                            put: false
+                        }
+                    }"
+                >
+                    <course-resource
+                        class="list-group-item"
+                        v-for="resource, index in available_resources"
+                        :key="index"
+                        :instance="resource"
+                        :title="resource.title_en"
+                    >
+                        <span
+                            role="button"
+                            slot="prehed"
+                            class="handle"
+                            :class="[$style['glyph'], $style['pad--y0'], $style['pad--x25']]"
+                        >
+                            <img
+                                src="/static/orb/images/glyphicons-move.png"
+                                height="16"
+                                width="16"
+                                style="margin-top:-5px"
+                            />
+                        </span>
+                    </course-resource>
+                </draggable>
+            </div>
+        </div>
+    </div>
+</div>

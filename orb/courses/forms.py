@@ -18,7 +18,7 @@ class CourseAdminForm(forms.ModelForm):
     def clean_sections(self):
         data = self.cleaned_data.get("sections", "[]")
         try:
-            json.dumps(data)
+            json.loads(data)
         except ValueError:
             raise forms.ValidationError("Invalid JSON. Try checking this using https://jsonlint.com/")
         return data
@@ -26,9 +26,15 @@ class CourseAdminForm(forms.ModelForm):
 
 class CourseForm(forms.ModelForm):
 
+    status = forms.ChoiceField(
+        choices=models.CourseStatus.as_choices(),
+        required=False,
+        initial=models.CourseStatus.initial(),
+    )
+
     class Meta:
         model = models.Course
-        fields = ['title', 'sections']
+        fields = ['title', 'sections', 'status']
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -43,7 +49,7 @@ class CourseForm(forms.ModelForm):
     def clean_sections(self):
         data = self.cleaned_data.get("sections", "[]")
         try:
-            json.dumps(data)
+            json.loads(data)
         except ValueError as e:
             logger.debug(e)
             raise forms.ValidationError("Invalid JSON")
