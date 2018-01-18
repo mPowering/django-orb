@@ -1,4 +1,4 @@
-# orb/profile/forms.py
+from __future__ import unicode_literals
 
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div
@@ -18,15 +18,15 @@ from orb.models import UserProfile
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=30,
                                error_messages={'required': _(
-                                   u'Please enter a username.')},
-                               label=_(u'Username'),
+                                   'Please enter a username.')},
+                               label=_('Username'),
                                required=True,
                                )
     password = forms.CharField(widget=forms.PasswordInput,
                                error_messages={'required': _(
-                                   u'Please enter a password.'), },
+                                   'Please enter a password.'), },
                                required=True,
-                               label=_(u'Password'),
+                               label=_('Password'),
                                help_text=_('Please note that your username and password are case-sensitive.'),)
     next = forms.CharField(widget=forms.HiddenInput())
 
@@ -42,9 +42,9 @@ class LoginForm(forms.Form):
             'password',
             'next',
             Div(
-                Submit('submit', _(u'Login'),
+                Submit('submit', _('Login'),
                        css_class='btn btn-default'),
-                HTML(u'<a class="btn btn-default" href="%s">%s</a>' % (reverse('profile_reset'),_(u'Forgotten password?'))),
+                HTML('<a class="btn btn-default" href="%s">%s</a>' % (reverse('profile_reset'),_('Forgotten password?'))),
                 css_class='col-lg-offset-2 col-lg-4',
             ),
         )
@@ -57,61 +57,61 @@ class LoginForm(forms.Form):
         user = authenticate(username=username, password=password)
         if user is None or not user.is_active:
             raise forms.ValidationError(
-                _(u"Invalid username or password. Please try again."))
+                _("Invalid username or password. Please try again."))
         return cleaned_data
 
 
 class RegisterForm(forms.Form):
-    email = forms.EmailField(required=True, label=_(u'Email'))
+    email = forms.EmailField(required=True, label=_('Email'))
     password = forms.CharField(widget=forms.PasswordInput,
-                               error_messages={'required': _(u'Please enter a password.'),
-                                               'min_length': _(u'Your password should be at least 6 characters long.')},
+                               error_messages={'required': _('Please enter a password.'),
+                                               'min_length': _('Your password should be at least 6 characters long.')},
                                min_length=6,
                                required=True,
-                               label=_(u'Password'))
+                               label=_('Password'))
     password_again = forms.CharField(widget=forms.PasswordInput,
                                      min_length=6,
-                                     error_messages={'required': _(u'Please enter your password again.'),
-                                                     'min_length': _(u'Your password again should be at least 6 characters long.')},
+                                     error_messages={'required': _('Please enter your password again.'),
+                                                     'min_length': _('Your password again should be at least 6 characters long.')},
                                      required=True,
-                                     label=_(u'Password again'))
+                                     label=_('Password again'))
     first_name = forms.CharField(max_length=100,
-                                 error_messages={'required': _(u'Please enter your first name.'),
-                                                 'min_length': _(u'Your first name should be at least 2 characters long.')},
+                                 error_messages={'required': _('Please enter your first name.'),
+                                                 'min_length': _('Your first name should be at least 2 characters long.')},
                                  min_length=2,
                                  required=True,
-                                 label=_(u'First name'))
+                                 label=_('First name'))
     last_name = forms.CharField(max_length=100,
-                                error_messages={'required': _(u'Please enter your last name.'),
-                                                'min_length': _(u'Your last name should be at least 2 characters long.')},
+                                error_messages={'required': _('Please enter your last name.'),
+                                                'min_length': _('Your last name should be at least 2 characters long.')},
                                 min_length=2,
                                 required=True,
-                                label=_(u'Last name'))
+                                label=_('Last name'))
     role = forms.ChoiceField(widget=forms.Select,
                                 required=False,
-                                help_text=_(u'Please select from the options above, or enter in the field below:'),
-                                label=_(u'Role'))
+                                help_text=_('Please select from the options above, or enter in the field below:'),
+                                label=_('Role'))
     role_other = forms.CharField(label='&nbsp;',
                                  max_length=100,
                                  required=False)
     organisation = forms.CharField(max_length=100,
                                    required=True,
-                                   label=_(u'Organisation'))
+                                   label=_('Organisation'))
     age_range = forms.ChoiceField(
                                     required=False,
-                                    error_messages={'required': _(u'Please select an age range')},
-                                    label=_(u'Age Range'))
+                                    error_messages={'required': _('Please select an age range')},
+                                    label=_('Age Range'))
     gender = forms.ChoiceField(
                                 required=False,
-                                error_messages={'required': _(u'Please select a gender')},
-                                label=_(u'Gender'))
+                                error_messages={'required': _('Please select a gender')},
+                                label=_('Gender'))
 
     terms = forms.BooleanField(
-        label=_(u"Please tick the box to confirm that you have read the <a href='/terms/' target='_blank' class='prominent'>terms</a> about registering with ORB"),
+        label=_("Please tick the box to confirm that you have read the <a href='/terms/' target='_blank' class='prominent'>terms</a> about registering with ORB"),
         required=True,
-        error_messages={'required': _(u'Please tick the box to confirm that you have read the terms')})
+        error_messages={'required': _('Please tick the box to confirm that you have read the terms')})
     mailing = forms.BooleanField(
-        label=_(u"Subscribe to mPowering update emails"),
+        label=_("Subscribe to mPowering update emails"),
         required=False)
     survey = forms.BooleanField(
         label=_("I allow mPowering to ask me to participate in surveys about my usage of ORB resources"),
@@ -142,7 +142,7 @@ class RegisterForm(forms.Form):
             'survey',
             'terms',
             Div(
-                Submit('submit', _(u'Register'),
+                Submit('submit', _('Register'),
                        css_class='btn btn-default'),
                 css_class='col-lg-offset-2 col-lg-4',
             ),
@@ -178,34 +178,34 @@ class RegisterForm(forms.Form):
         password_again = cleaned_data.get("password_again")
 
         if User.objects.filter(username__iexact=email).exists():
-            raise forms.ValidationError(_(u"Username has already been registered, please select another."))
+            raise forms.ValidationError(_("Username has already been registered, please select another."))
 
         if User.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError(_(u"Email has already been registered"))
+            raise forms.ValidationError(_("Email has already been registered"))
 
         if password and password_again and (password != password_again):
-            raise forms.ValidationError(_(u"Passwords do not match."))
+            raise forms.ValidationError(_("Passwords do not match."))
 
         # Check either a role is selected or other is entered
         role = cleaned_data.get("role")
         role_other = cleaned_data.get("role_other")
         if role == '0' and role_other == '':
-            raise forms.ValidationError(_(u"Please select or enter a role"))
+            raise forms.ValidationError(_("Please select or enter a role"))
 
         if cleaned_data.get("age_range") == '0':
-            raise forms.ValidationError(_(u"Please select an age range"))
+            raise forms.ValidationError(_("Please select an age range"))
 
         if cleaned_data.get("gender") == '0':
-            raise forms.ValidationError(_(u"Please select a gender"))
+            raise forms.ValidationError(_("Please select a gender"))
 
         return cleaned_data
 
 
 class ResetForm(forms.Form):
-    username = forms.CharField(label=_(u'Username or email'),
+    username = forms.CharField(label=_('Username or email'),
                                max_length=100,
                                error_messages={'invalid': _(
-                                   u'Please enter a username or email address.')},
+                                   'Please enter a username or email address.')},
                                required=True)
 
     def __init__(self, *args, **kwargs):
@@ -218,7 +218,7 @@ class ResetForm(forms.Form):
         self.helper.layout = Layout(
             'username',
             Div(
-                Submit('submit', _(u'Reset password'),
+                Submit('submit', _('Reset password'),
                        css_class='btn btn-default'),
                 css_class='col-lg-offset-2 col-lg-4',
             ),
@@ -233,72 +233,72 @@ class ResetForm(forms.Form):
             try:
                 user = User.objects.get(email__exact=username)
             except User.DoesNotExist:
-                raise forms.ValidationError(_(u"Username/email not found"))
+                raise forms.ValidationError(_("Username/email not found"))
         return cleaned_data
 
 
 class ProfileForm(forms.Form):
-    api_key = forms.CharField(label=_(u'API key'),
+    api_key = forms.CharField(label=_('API key'),
                               widget=forms.TextInput(attrs={'readonly': 'readonly'}),
                               required=False,
-                              help_text=_(u'You cannot edit your API Key.'))
-    username = forms.CharField(label=_(u'Username'),
+                              help_text=_('You cannot edit your API Key.'))
+    username = forms.CharField(label=_('Username'),
                                widget=forms.TextInput(attrs={'readonly': 'readonly'}),
-                               required=False, help_text=_(u'You cannot edit your username.'))
-    email = forms.CharField(label=_(u'Email'),
+                               required=False, help_text=_('You cannot edit your username.'))
+    email = forms.CharField(label=_('Email'),
                             validators=[validate_email],
                             error_messages={'invalid': _(
-                                u'Please enter a valid e-mail address.')},
+                                'Please enter a valid e-mail address.')},
                             required=True)
-    password = forms.CharField(label=_(u'Password'),
+    password = forms.CharField(label=_('Password'),
                                widget=forms.PasswordInput,
                                required=False,
                                min_length=6,
-                               error_messages={'min_length': _(u'Your new password should be at least 6 characters long')},)
-    password_again = forms.CharField(label=_(u'Password again'),
+                               error_messages={'min_length': _('Your new password should be at least 6 characters long')},)
+    password_again = forms.CharField(label=_('Password again'),
                                      widget=forms.PasswordInput,
                                      required=False,
                                      min_length=6)
-    first_name = forms.CharField(label=_(u'First name'),
+    first_name = forms.CharField(label=_('First name'),
                                  max_length=100,
                                  min_length=2,
                                  required=True)
-    last_name = forms.CharField(label=_(u'Last name'),
+    last_name = forms.CharField(label=_('Last name'),
                                 max_length=100,
                                 min_length=2,
                                 required=True)
-    photo = forms.ImageField(label=_(u'Photo'),
+    photo = forms.ImageField(label=_('Photo'),
                                 required=False,
                                 error_messages={},)
-    role = forms.ChoiceField(label=_(u'Role'),
+    role = forms.ChoiceField(label=_('Role'),
                                 widget=forms.Select,
                                 required=False,
-                                help_text=_(u'Please select from the options above, or enter in the field below:'), )
+                                help_text=_('Please select from the options above, or enter in the field below:'), )
     role_other = forms.CharField(label='&nbsp;',
                                  max_length=100,
                                  required=False)
-    organisation = forms.CharField(label=_(u'Organisation'),
+    organisation = forms.CharField(label=_('Organisation'),
                                     max_length=100,
                                     required=False)
-    age_range = forms.ChoiceField(label=_(u'Age range'),
+    age_range = forms.ChoiceField(label=_('Age range'),
                                 widget=forms.Select,
                                 required=True,
-                                error_messages={'required': _(u'Please select an age range')},)
-    gender = forms.ChoiceField(label=_(u'Gender'),
+                                error_messages={'required': _('Please select an age range')},)
+    gender = forms.ChoiceField(label=_('Gender'),
                                 widget=forms.Select,
                                 required=True,
-                                error_messages={'required': _(u'Please select a gender')},)
+                                error_messages={'required': _('Please select a gender')},)
     mailing = forms.BooleanField(
-                                label=_(u"Please tick the box to subscribe to mPowering update emails"),
+                                label=_("Please tick the box to subscribe to mPowering update emails"),
                                 required=False)
 
-    website = forms.CharField(label=_(u'Website'),
+    website = forms.CharField(label=_('Website'),
                               max_length=100,
                               required=False)
-    twitter = forms.CharField(label=_(u'Twitter'),
+    twitter = forms.CharField(label=_('Twitter'),
                               max_length=100,
                               required=False)
-    about = forms.CharField(label=_(u'About'),
+    about = forms.CharField(label=_('About'),
                             widget=forms.Textarea,
                             required=False)
 
@@ -326,16 +326,16 @@ class ProfileForm(forms.Form):
             'twitter',
             'mailing',
             Div(
-                HTML(u'<h3>%s</h3>' % _(u'Change password')),
+                HTML('<h3>%s</h3>' % _('Change password')),
             ),
             'password',
             'password_again',
             Div(
-                HTML(u'<h3>%s</h3>' % _(u'API Key')),
+                HTML('<h3>%s</h3>' % _('API Key')),
             ),
             'api_key',
             Div(
-                Submit('submit', _(u'Save'), css_class='btn btn-default'),
+                Submit('submit', _('Save'), css_class='btn btn-default'),
                 css_class='col-lg-offset-2 col-lg-4',
             ),
         )
@@ -348,13 +348,13 @@ class ProfileForm(forms.Form):
         num_rows = User.objects.exclude(
             username__exact=username).filter(email=email).count()
         if num_rows != 0:
-            raise forms.ValidationError(_(u"Email address already in use"))
+            raise forms.ValidationError(_("Email address already in use"))
 
         # if password entered then check they are the same
         password = cleaned_data.get("password")
         password_again = cleaned_data.get("password_again")
         if password and password_again:
             if password != password_again:
-                raise forms.ValidationError(_(u"Passwords do not match."))
+                raise forms.ValidationError(_("Passwords do not match."))
 
         return cleaned_data
