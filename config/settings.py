@@ -236,6 +236,10 @@ TINYMCE_DEFAULT_CONFIG = {
     'position': 'top',
 }
 
+# Simple settings flags for download features
+DOWNLOAD_LOGIN_REQUIRED = True
+DOWNLOAD_EXTRA_INFO = True
+
 
 try:
     from local_settings import *  # noqa
