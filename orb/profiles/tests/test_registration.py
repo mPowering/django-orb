@@ -1,4 +1,6 @@
-# orb.test_profile.py
+"""Tests for user registration"""
+
+from __future__ import unicode_literals
 
 import uuid
 
@@ -56,19 +58,21 @@ class ProfilePageTest(TestCase):
 
 class RegisterTest(TestCase):
     fixtures = ['user.json', 'orb.json']
-    new_user_data = {'username': 'newuser',
-                     'password': 'secret',
-                     'password_again': 'secret',
-                     'email': 'newuser@example.org',
-                     'first_name': 'demo',
-                     'last_name': 'user',
-                     'gender': 'none',
-                     'age_range': 'none',
-                     'mailing': 1,
-                     'terms': 1,
-                     'role_other': 'programmer',
-                     'role': '0',
-                     'organisation': 'My Organisation'}
+    new_user_data = {
+        'email': 'newuser@example.org',
+        'password': 'secret',
+        'password_again': 'secret',
+        'first_name': 'demo',
+        'last_name': 'user',
+        'gender': 'none',
+        'age_range': 'none',
+        'mailing': 1,
+        'terms': 1,
+        'role_other': 'programmer',
+        'role': '0',
+        'organisation': 'My Organisation',
+        'allow_survey': True,
+    }
 
     def setUp(self):
         self.client = Client()
@@ -78,8 +82,7 @@ class RegisterTest(TestCase):
         no_keys_start = ApiKey.objects.all().count()
         no_profiles_start = UserProfile.objects.all().count()
 
-        response = self.client.post(
-            reverse('profile_register'), self.new_user_data)
+        response = self.client.post(reverse('profile_register'), self.new_user_data)
         self.assertEqual(response.status_code, 302)
 
         no_users_end = User.objects.all().count()
@@ -109,8 +112,7 @@ class RegisterTest(TestCase):
         self.assertEqual(no_profiles_start, no_profiles_end)
 
     def test_login(self):
-        response = self.client.post(
-            '/profile/login/', {'username': 'demo', 'password': 'secret'})
+        response = self.client.post('/profile/login/', {'username': 'newuser@example.org', 'password': 'secret'})
         self.assertEqual(response.status_code, 200)
 
 

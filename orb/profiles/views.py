@@ -51,19 +51,9 @@ def register(request):
         form = RegisterForm(request.POST)
         build_form_options(form)
 
-        if form.is_valid():  # All validation rules pass
-            # Create new user
-            username = form.cleaned_data.get("username")
-            email = form.cleaned_data.get("email")
-            password = form.cleaned_data.get("password")
-            first_name = form.cleaned_data.get("first_name")
-            last_name = form.cleaned_data.get("last_name")
-            user = User.objects.create_user(username, email, password)
-            user.first_name = first_name
-            user.last_name = last_name
-            user.save()
-            user_profile = UserProfile()
-            user_profile.user = user
+        if form.is_valid():
+            user_profile = form.save_profile()
+
             if form.cleaned_data.get("gender") != '0':
                 user_profile.gender = form.cleaned_data.get("gender")
             if form.cleaned_data.get("age_range") != '0':
@@ -82,27 +72,23 @@ def register(request):
                     organisation = Tag()
                     organisation.name = form.cleaned_data.get("organisation")
                     organisation.category = category
-                    organisation.create_user = user
-                    organisation.update_user = user
+                    organisation.create_user = user_profile.user
+                    organisation.update_user = user_profile.user
                     organisation.save()
                 user_profile.organisation = organisation
-
-            user_profile.mailing = form.cleaned_data.get("mailing")
 
             user_profile.save()
 
             # send welcome email
-            user_registered.send(sender=user, user=user, request=request)
+            user_registered.send(sender=user_profile.user, user=user_profile.user, request=request)
 
-            u = authenticate(username=username, password=password)
-            if u is not None:
-                if u.is_active:
-                    login(request, u)
-                    return HttpResponseRedirect('thanks/')
-            return HttpResponseRedirect('thanks/')  # Redirect after POST
+            authd_user= form.authenticate_user()
+            if authd_user and authd_user.is_active:
+                login(request, authd_user)
+
+            return HttpResponseRedirect(reverse('profile_register_thanks'))
     else:
-        form = RegisterForm(
-            initial={'next': request.GET.get('next'), 'mailing': True})
+        form = RegisterForm(initial={'next': request.GET.get('next'), 'mailing': True})
         build_form_options(form)
 
     return render(request, 'orb/form.html', {'form': form, 'title': _(u'Register')})

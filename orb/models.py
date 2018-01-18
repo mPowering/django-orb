@@ -533,7 +533,7 @@ class Tag(TimestampBase):
         # add generic language icon if not specified
         if self.category.slug == 'language' and not self.image:
             self.image = 'tag/language_default.png'
-            
+
         # add generic organization icon if not specified
         if self.category.slug == 'organisation' and not self.image:
             self.image = 'tag/organisation_default.png'
@@ -541,7 +541,7 @@ class Tag(TimestampBase):
         # add generic other icon if not specified
         if self.category.slug == 'other' and not self.image:
             self.image = 'tag/other_default.png'
-            
+
         super(Tag, self).save(*args, **kwargs)
 
     def image_filename(self):
@@ -681,6 +681,7 @@ class UserProfile(TimestampBase):
     age_range = models.CharField(
         max_length=50, choices=AGE_RANGE, default='none')
     mailing = models.BooleanField(default=False, blank=False)
+    survey = models.BooleanField(default=False, blank=False)
     reviewer_roles = models.ManyToManyField('ReviewerRole', blank=True, related_name="profiles")
 
     profiles = ProfilesQueryset.as_manager()

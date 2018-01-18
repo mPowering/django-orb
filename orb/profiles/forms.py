@@ -1,17 +1,18 @@
 # orb/profile/forms.py
 
-from django import forms
-from django.contrib.auth import (authenticate, login, views)
-from django.core.urlresolvers import reverse
-from django.core.validators import validate_email
-from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
-
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div
 from crispy_forms.layout import HTML
 from crispy_forms.layout import Layout
 from crispy_forms.layout import Submit
+from django import forms
+from django.contrib.auth import authenticate
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.core.validators import validate_email
+from django.utils.translation import ugettext_lazy as _
+
+from orb.models import UserProfile
 
 
 class LoginForm(forms.Form):
@@ -61,15 +62,7 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
-    username = forms.CharField(max_length=30,
-                               min_length=4,
-                               error_messages={'required': _(u'Please enter a username.')},
-                               label=_(u'Username'))
-    email = forms.CharField(validators=[validate_email],
-                            error_messages={'invalid': _(u'Please enter a valid e-mail address.'),
-                                            'required': _(u'Please enter your e-mail address.')},
-                            required=True,
-                            label=_(u'Email'))
+    email = forms.EmailField(required=True, label=_(u'Email'))
     password = forms.CharField(widget=forms.PasswordInput,
                                error_messages={'required': _(u'Please enter a password.'),
                                                'min_length': _(u'Your password should be at least 6 characters long.')},
@@ -96,20 +89,20 @@ class RegisterForm(forms.Form):
                                 label=_(u'Last name'))
     role = forms.ChoiceField(widget=forms.Select,
                                 required=False,
-                                help_text=_(u'Please select from the options above, or enter in the field below:'), 
+                                help_text=_(u'Please select from the options above, or enter in the field below:'),
                                 label=_(u'Role'))
     role_other = forms.CharField(label='&nbsp;',
                                  max_length=100,
                                  required=False)
-    organisation = forms.CharField(max_length=100, 
-                                   required=False,
+    organisation = forms.CharField(max_length=100,
+                                   required=True,
                                    label=_(u'Organisation'))
-    age_range = forms.ChoiceField(widget=forms.Select,
-                                    required=True,
+    age_range = forms.ChoiceField(
+                                    required=False,
                                     error_messages={'required': _(u'Please select an age range')},
                                     label=_(u'Age Range'))
-    gender = forms.ChoiceField(widget=forms.Select,
-                                required=True,
+    gender = forms.ChoiceField(
+                                required=False,
                                 error_messages={'required': _(u'Please select a gender')},
                                 label=_(u'Gender'))
 
@@ -120,6 +113,11 @@ class RegisterForm(forms.Form):
     mailing = forms.BooleanField(
         label=_(u"Subscribe to mPowering update emails"),
         required=False)
+    survey = forms.BooleanField(
+        label=_("I allow mPowering to ask me to participate in surveys about my usage of ORB resources"),
+        required=False,
+        initial=True,
+    )
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
@@ -135,12 +133,13 @@ class RegisterForm(forms.Form):
             'password_again',
             'first_name',
             'last_name',
+            'organisation',
             'role',
             'role_other',
-            'organisation',
             'age_range',
             'gender',
             'mailing',
+            'survey',
             'terms',
             Div(
                 Submit('submit', _(u'Register'),
@@ -149,29 +148,43 @@ class RegisterForm(forms.Form):
             ),
         )
 
+    def save_profile(self):
+        """Creates User and UserProfile pair from form and returns UserProfile"""
+        email = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
+        first_name = self.cleaned_data.get("first_name")
+        last_name = self.cleaned_data.get("last_name")
+        user = User.objects.create_user(email, email, password)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+        return UserProfile.objects.create(
+            user=user,
+            mailing=self.cleaned_data['mailing'],
+            survey=self.cleaned_data['survey'],
+        )
+
+    def authenticate_user(self):
+        """Returns an authenticated user given email and password in form
+
+        This must be run after the user has been created
+        """
+        return authenticate(username=self.cleaned_data['email'], password=self.cleaned_data['password'])
+
     def clean(self):
         cleaned_data = self.cleaned_data
         email = cleaned_data.get("email")
         password = cleaned_data.get("password")
         password_again = cleaned_data.get("password_again")
-        username = cleaned_data.get("username")
 
-        # check the username not already used
-        num_rows = User.objects.filter(username=username).count()
-        if num_rows != 0:
-            raise forms.ValidationError(
-                _(u"Username has already been registered, please select another."))
+        if User.objects.filter(username__iexact=email).exists():
+            raise forms.ValidationError(_(u"Username has already been registered, please select another."))
 
-        # check the email address not already used
-        num_rows = User.objects.filter(email=email).count()
-        if num_rows != 0:
-            raise forms.ValidationError(
-                _(u"Email has already been registered"))
+        if User.objects.filter(email__iexact=email).exists():
+            raise forms.ValidationError(_(u"Email has already been registered"))
 
-        # check the password are the same
-        if password and password_again:
-            if password != password_again:
-                raise forms.ValidationError(_(u"Passwords do not match."))
+        if password and password_again and (password != password_again):
+            raise forms.ValidationError(_(u"Passwords do not match."))
 
         # Check either a role is selected or other is entered
         role = cleaned_data.get("role")
@@ -179,15 +192,12 @@ class RegisterForm(forms.Form):
         if role == '0' and role_other == '':
             raise forms.ValidationError(_(u"Please select or enter a role"))
 
-        age_range = cleaned_data.get("age_range")
-        if age_range == '0':
+        if cleaned_data.get("age_range") == '0':
             raise forms.ValidationError(_(u"Please select an age range"))
 
-        gender = cleaned_data.get("gender")
-        if gender == '0':
+        if cleaned_data.get("gender") == '0':
             raise forms.ValidationError(_(u"Please select a gender"))
 
-        # Always return the full collection of cleaned data.
         return cleaned_data
 
 
@@ -230,7 +240,7 @@ class ResetForm(forms.Form):
 class ProfileForm(forms.Form):
     api_key = forms.CharField(label=_(u'API key'),
                               widget=forms.TextInput(attrs={'readonly': 'readonly'}),
-                              required=False, 
+                              required=False,
                               help_text=_(u'You cannot edit your API Key.'))
     username = forms.CharField(label=_(u'Username'),
                                widget=forms.TextInput(attrs={'readonly': 'readonly'}),
@@ -268,7 +278,7 @@ class ProfileForm(forms.Form):
                                  max_length=100,
                                  required=False)
     organisation = forms.CharField(label=_(u'Organisation'),
-                                    max_length=100, 
+                                    max_length=100,
                                     required=False)
     age_range = forms.ChoiceField(label=_(u'Age range'),
                                 widget=forms.Select,
@@ -289,7 +299,7 @@ class ProfileForm(forms.Form):
                               max_length=100,
                               required=False)
     about = forms.CharField(label=_(u'About'),
-                            widget=forms.Textarea, 
+                            widget=forms.Textarea,
                             required=False)
 
     def __init__(self, *args, **kwargs):
