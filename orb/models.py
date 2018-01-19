@@ -5,7 +5,8 @@ import parsedatetime as pdt
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import urlresolvers
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.urlresolvers import reverse
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Avg, Count
 from django.utils.translation import ugettext_lazy as _
@@ -15,7 +16,7 @@ from tastypie.models import create_api_key
 from orb import signals
 from orb.analytics.models import UserLocationVisualization
 from orb.profiles.querysets import ProfilesQueryset
-from orb.resources.managers import ResourceURLManager, ResourceQueryset
+from orb.resources.managers import ResourceQueryset, ResourceURLManager
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ResourceTagManager, TagQuerySet
 from .fields import AutoSlugField
@@ -329,6 +330,9 @@ class ResourceURL(TimestampBase):
     def __unicode__(self):
         return self.url
 
+    def get_absolute_url(self):
+        return reverse('orb_resource_view_link', kwargs={'id': self.id})
+
     @classmethod
     def from_url_data(cls, resource, api_data, user=None):
         """
@@ -395,6 +399,9 @@ class ResourceFile(TimestampBase):
 
     def __unicode__(self):
         return self.title or self.file.name
+
+    def get_absolute_url(self):
+        return reverse('orb_resource_view_file', kwargs={'id': self.id})
 
     def filename(self):
         return os.path.basename(self.file.name)

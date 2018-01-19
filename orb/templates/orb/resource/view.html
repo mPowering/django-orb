@@ -194,22 +194,26 @@
                 <a href="{{ register }}">register</a> to rate or bookmark this resource{% endblocktrans %}
         {% endif %}
 
+
         {% if resource.get_files %}
             <hr/>
+
+            {% if not user.is_authenticated %}
+                {% register_or_login 'files' %}
+            {% endif %}
+
             <h4>{% trans 'Files' %}</h4>
 
             {% for f in resource.get_files %}
                 <div class="row file-row">
-
+                    <a name="file-{{ f.guid }}"></a>
                     <div class="col-md-1 col-xs-3 vcenter">
-                        <a href="{% url 'orb_resource_view_file' f.id %}"
-                           title="{% trans 'Download' %} {{ f.filename }}">
+                        <a {% resourcefile_link f '#files-notice' %}>
                             <img src="{% static 'orb/images/download_file.png' %}"/>
                         </a>
                     </div>
                     <div class="col-md-8 col-xs-8 vcenter">
-                        <a href="{% url 'orb_resource_view_file' f.id %}"
-                           title="{% trans 'Download' %} {{ f.filename }}">
+                        <a {% resourcefile_link f '#files-notice' %}>
                             {% if f.description and f.description.strip %}
                                 {{ f.description }}:
                             {% endif %}
@@ -230,17 +234,21 @@
         {% if resource.get_urls %}
             <hr/>
 
+            {% if not user.is_authenticated %}
+                {% register_or_login 'urls' %}
+            {% endif %}
+
             <h4>{% trans 'Links' %}</h4>
             {% for u in resource.get_urls %}
                 <div class="row file-row">
 
                     <div class="col-md-1 col-xs-3 vcenter">
-                        <a href="{% url 'orb_resource_view_link' u.id %}" title="{% trans 'Go to' %} {{ u.url }}">
+                        <a {% resourceurl_link u '#links-notice' %}>
                             <img src="{% static 'orb/images/external_link.png' %}"/>
                         </a>
                     </div>
                     <div class="col-md-8 col-xs-8 vcenter">
-                        <a href="{% url 'orb_resource_view_link' u.id %}" title="{% trans 'Go to' %} {{ u.url }}">
+                        <a {% resourceurl_link u '#links-notice' %}>
                             {% if u.title %}
                                 {{ u.title }}
                             {% else %}
