@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('orb', '0048_add_registration_flag'),
+        ('orb', '0047_update_pending_status'),
     ]
 
     operations = [
