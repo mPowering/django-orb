@@ -741,10 +741,7 @@ class ResourceTracker(models.Model):
     survey_health_worker_cadre = models.CharField(max_length=50, blank=True, null=True)
 
     def get_location(self):
-        try:
-            return UserLocationVisualization.objects.filter(ip=self.ip).first()
-        except UserLocationVisualization.DoesNotExist:
-            return None
+        return UserLocationVisualization.objects.filter(ip=self.ip).first()
 
 
 class SearchTracker(models.Model):
