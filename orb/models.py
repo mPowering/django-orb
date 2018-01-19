@@ -726,19 +726,19 @@ class ResourceTracker(models.Model):
         (DOWNLOAD, _(u'Download')),
         (CREATE, _(u'Create')),
     )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
-                             default=None, on_delete=models.SET_NULL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     type = models.CharField(max_length=50, choices=TRACKER_TYPES, default=VIEW)
-    resource = models.ForeignKey(
-        Resource, blank=True, null=True, default=None, on_delete=models.SET_NULL)
-    resource_file = models.ForeignKey(
-        ResourceFile, blank=True, null=True, default=None, on_delete=models.SET_NULL)
-    resource_url = models.ForeignKey(
-        ResourceURL, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    resource = models.ForeignKey(Resource, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    resource_file = models.ForeignKey(ResourceFile, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    resource_url = models.ForeignKey(ResourceURL, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     access_date = models.DateTimeField(auto_now_add=True)
     ip = models.GenericIPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
     extra_data = models.TextField(blank=True, null=True, default=None)
+    survey_intended_use = models.CharField(max_length=50, blank=True, null=True)
+    survey_intended_use_other = models.TextField(blank=True, null=True, default="")
+    survey_health_worker_count = models.IntegerField(blank=True, null=True)
+    survey_health_worker_cadre = models.CharField(max_length=50, blank=True, null=True)
 
     def get_location(self):
         try:
