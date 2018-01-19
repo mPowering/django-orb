@@ -446,13 +446,10 @@ def resource_file_view(request, id):
         raise Http404()
 
     if os.path.isfile(os.path.join(settings.MEDIA_ROOT, file.file.name)):
-        resource_file_viewed.send(
-            sender=file, resource_file=file, request=request)
+        resource_file_viewed.send(sender=file, resource_file=file, request=request)
         return HttpResponseRedirect(settings.MEDIA_URL + file.file.name)
     else:
         raise Http404()
-
-    return render(request, 'orb/resource/file.html')
 
 
 def resource_edit_view(request, resource_id):
