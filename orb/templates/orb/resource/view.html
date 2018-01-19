@@ -8,328 +8,357 @@
 {% block extra_head_title %}{{ resource.title }}{% endblock extra_head_title %}
 
 {% block extra_head_desc %}{{ resource.title }}{% endblock extra_head_desc %}
-{% block extra_head_keywords %}{% for c in resource.get_categories %}{% for t in c.tags %}{{ t.name }},{% endfor %}{% endfor %}{% endblock extra_head_keywords %}
+{% block extra_head_keywords %}{% for c in resource.get_categories %}{% for t in c.tags %}{{ t.name }},{% endfor %}
+{% endfor %}{% endblock extra_head_keywords %}
 
 {% block extra_scripts %}
 
-<script>
+    <script>
 
-$.ajaxSetup({
-	  data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
-	});
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}'},
+        });
 
-{% if user_rating %}
-	USER_RATING = {{ user_rating }};
-{% else %}
-	USER_RATING = 0;
-{% endif %}
+        {% if user_rating %}
+            USER_RATING = {{ user_rating }};
+        {% else %}
+            USER_RATING = 0;
+        {% endif %}
 
-function ratingOnHover(i){
-	for (j = 1; j<=i ; j++){
-		$("#rating_"+j).attr('src', '{% static 'orb/images/star-full.png' %}');
-	}
-	for (j = i+1; j<=5 ; j++){
-		$("#rating_"+j).attr('src', '{% static 'orb/images/star-empty.png' %}');
-	}
-}
+        function ratingOnHover(i) {
+            for (j = 1; j <= i; j++) {
+                $("#rating_" + j).attr('src', '{% static 'orb/images/star-full.png' %}');
+            }
+            for (j = i + 1; j <= 5; j++) {
+                $("#rating_" + j).attr('src', '{% static 'orb/images/star-empty.png' %}');
+            }
+        }
 
-function ratingOffHover(i){
-	for (j = 1; j<=i ; j++){
-		$("#rating_"+j).attr('src', '{% static 'orb/images/star-empty.png' %}');
-	}
-	for (j = 1; j<=USER_RATING ; j++){
-		$("#rating_"+j).attr('src', '{% static 'orb/images/star-full.png' %}');
-	}
-	for (j = USER_RATING+1; j<=5 ; j++){
-		$("#rating_"+j).attr('src', '{% static 'orb/images/star-empty.png' %}');
-	}
+        function ratingOffHover(i) {
+            for (j = 1; j <= i; j++) {
+                $("#rating_" + j).attr('src', '{% static 'orb/images/star-empty.png' %}');
+            }
+            for (j = 1; j <= USER_RATING; j++) {
+                $("#rating_" + j).attr('src', '{% static 'orb/images/star-full.png' %}');
+            }
+            for (j = USER_RATING + 1; j <= 5; j++) {
+                $("#rating_" + j).attr('src', '{% static 'orb/images/star-empty.png' %}');
+            }
 
-}
+        }
 
-function rateResource(i){
-	$.post("{% url 'orb_rate' %}", { rating: i, resource: {{ resource.id }} },
-	    function(data) {
-			USER_RATING = i;
-			if (data.no_ratings < data.ratings_required) {
-				console.log(data.ratings_required)
-				$("#rating-min-users").text(data.ratings_required);
-				$("#rating-pending").show();
-			} else {
-				$("#rating-added").show();
-			}
-		});
-}
+        function rateResource(i) {
+            $.post("{% url 'orb_rate' %}", {rating: i, resource: {{ resource.id }}},
+                function (data) {
+                    USER_RATING = i;
+                    if (data.no_ratings < data.ratings_required) {
+                        console.log(data.ratings_required)
+                        $("#rating-min-users").text(data.ratings_required);
+                        $("#rating-pending").show();
+                    } else {
+                        $("#rating-added").show();
+                    }
+                });
+        }
 
-function bookmarkResource(){
-	$.post("{% url 'orb_bookmark' %}", { resource_id: {{ resource.id }} },
-		    function(data) {
-				$("#bookmark_text").text("{% trans 'Bookmarked' %}");
-				$("#bookmark_image").attr('src', '{% static 'orb/images/mono-bookmark.png' %}');
-			});
-}
-</script>
+        function bookmarkResource() {
+            $.post("{% url 'orb_bookmark' %}", {resource_id: {{ resource.id }}},
+                function (data) {
+                    $("#bookmark_text").text("{% trans 'Bookmarked' %}");
+                    $("#bookmark_image").attr('src', '{% static 'orb/images/mono-bookmark.png' %}');
+                });
+        }
+    </script>
 
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+    <script>(function (d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s);
+        js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.3";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));</script>
 
-<script>
-window.twttr=(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],t=window.twttr||{};if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);t._e=[];t.ready=function(f){t._e.push(f);};return t;}(document,"script","twitter-wjs"));
-</script>
+    <script>
+        window.twttr = (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {};
+            if (d.getElementById(id)) return;
+            js = d.createElement(s);
+            js.id = id;
+            js.src = "https://platform.twitter.com/widgets.js";
+            fjs.parentNode.insertBefore(js, fjs);
+            t._e = [];
+            t.ready = function (f) {
+                t._e.push(f);
+            };
+            return t;
+        }(document, "script", "twitter-wjs"));
+    </script>
 
 {% endblock extra_scripts %}
 
 
 {% block content %}
-<div id="fb-root"></div>
+    <div id="fb-root"></div>
 
-{% include 'orb/includes/search_bar.html' %}
+    {% include 'orb/includes/search_bar.html' %}
 
-<div xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#">
+    <div xmlns:dct="http://purl.org/dc/terms/" xmlns:cc="http://creativecommons.org/ns#">
 
-<h3 style="text-align:center"><span property="dct:title">{{ resource.title }}</span></h3>
+        <h3 style="text-align:center"><span property="dct:title">{{ resource.title }}</span></h3>
 
-{% include "includes/messages.html" %}
+        {% include "includes/messages.html" %}
 
-<p style="text-align:center">
-{% trans 'From:' %}
-{% for o in resource.get_organisations %}
-	<a href="{% url 'orb_tags' o.slug %}" property="cc:attributionName" rel="cc:attributionURL dct:creator">{{ o.name }}</a>{% if not forloop.last %},{% endif %}
-{% endfor %}
-</p>
+        <p style="text-align:center">
+            {% trans 'From:' %}
+            {% for o in resource.get_organisations %}
+                <a href="{% url 'orb_tags' o.slug %}" property="cc:attributionName"
+                   rel="cc:attributionURL dct:creator">{{ o.name }}</a>{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        </p>
 
-<p style="text-align:center">
-{% if resource.get_rating.rating and resource.get_rating.count >= ORB_RESOURCE_MIN_RATINGS  %}
-	{% for i in "xxxxx"%}
-		{% if forloop.counter <= resource.get_rating.rating %}
-			<img src="{% static 'orb/images/star-full-small.png' %}"/>
-		{% else %}
-			<img src="{% static 'orb/images/star-empty-small.png' %}"/>
-		{% endif %}
-	{% endfor %}
-	({{ resource.get_rating.count }} users)
-{% endif %}
-</p>
+        <p style="text-align:center">
+            {% if resource.get_rating.rating and resource.get_rating.count >= ORB_RESOURCE_MIN_RATINGS %}
+                {% for i in "xxxxx" %}
+                    {% if forloop.counter <= resource.get_rating.rating %}
+                        <img src="{% static 'orb/images/star-full-small.png' %}"/>
+                    {% else %}
+                        <img src="{% static 'orb/images/star-empty-small.png' %}"/>
+                    {% endif %}
+                {% endfor %}
+                ({{ resource.get_rating.count }} users)
+            {% endif %}
+        </p>
 
-{% if resource.image %}
-	{% thumbnail resource.image "250x180" format="PNG" padding=True as im %}
-		<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-image" alt="{{ resource.title }}">
-	{% endthumbnail %}
-{% else %}
-	{% for c in resource.get_health_domains|slice:":1" %}
-		{% thumbnail c.image "250x180" format="PNG" padding=True as im %}
-			<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-image resource-image-default" alt="{{ resource.title }}">
-		{% endthumbnail %}
-	{% endfor %}
-{% endif %}
-<p>
-{{ resource.description|safe }}
-</p>
+        {% if resource.image %}
+            {% thumbnail resource.image "250x180" format="PNG" padding=True as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" class="thumbnail resource-image"
+                     alt="{{ resource.title }}">
+            {% endthumbnail %}
+        {% else %}
+            {% for c in resource.get_health_domains|slice:":1" %}
+                {% thumbnail c.image "250x180" format="PNG" padding=True as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
+                         class="thumbnail resource-image resource-image-default" alt="{{ resource.title }}">
+                {% endthumbnail %}
+            {% endfor %}
+        {% endif %}
+        <p>
+            {{ resource.description|safe }}
+        </p>
 
-<div class="share-button">
-	<div class="fb-share-button"
-		data-href="http://health-orb.org{% url 'orb_resource' resource.slug %}"
-		data-layout="button_count"></div>
-</div>
-<div class="share-button">
-	<a class="twitter-share-button" href="https://twitter.com/share"
-		data-url="http://health-orb.org{% url 'orb_resource' resource.slug %}"
-		data-via="mpoweringhealth"> Tweet </a>
-</div>
-<div class="share-button">
-	<script type="text/javascript" src="http://platform.linkedin.com/in.js"></script>
-	<script type="in/share" data-counter="right"></script>
-</div>
-<div style="clear: both"></div>
+        <div class="share-button">
+            <div class="fb-share-button"
+                 data-href="http://health-orb.org{% url 'orb_resource' resource.slug %}"
+                 data-layout="button_count"></div>
+        </div>
+        <div class="share-button">
+            <a class="twitter-share-button" href="https://twitter.com/share"
+               data-url="http://health-orb.org{% url 'orb_resource' resource.slug %}"
+               data-via="mpoweringhealth"> Tweet </a>
+        </div>
+        <div class="share-button">
+            <script type="text/javascript" src="http://platform.linkedin.com/in.js"></script>
+            <script type="in/share" data-counter="right"></script>
+        </div>
+        <div style="clear: both"></div>
 
-<hr/>
+        <hr/>
 
-{% if user.is_authenticated %}
-	<div class="row">
-		<div style="float:left;">
-			<h4>{% trans 'Your Rating' %}</h4>
-			{% include "orb/includes/user_rating.html" %}
-		</div>
-		<div style="float:right;">
-			<h4>{% trans 'Bookmark' %}</h4>
-			{% if bookmarked %}
-				<span class="bookmark"><img id="bookmark_image" src="{% static 'orb/images/mono-bookmark.png' %}" alt="{% trans 'Bookmarked' %}"/><span id="bookmark_text">{% trans 'Bookmarked' %}</span></span>
-			{% else %}
-				<span onclick="bookmarkResource()" class="bookmark"><img id="bookmark_image" src="{% static 'orb/images/mono-bookmark-add.png' %}" alt="{% trans 'Bookmark this' %}"/><span id="bookmark_text">{% trans 'Bookmark this' %}</span></span>
-			{% endif %}
-		</div>
-	</div>
-{% else %}
-	<h4>{% trans 'Your Rating/Bookmark' %}</h4>
-	{% url 'profile_login' as login %}
-	{% url 'profile_register' as register %}
-	{% blocktrans with request.path as nextpath %}Please <a href="{{ login }}?next={{ nextpath }}">login</a> or <a href="{{ register }}">register</a> to rate or bookmark this resource{% endblocktrans %}
-{% endif %}
+        {% if user.is_authenticated %}
+            <div class="row">
+                <div style="float:left;">
+                    <h4>{% trans 'Your Rating' %}</h4>
+                    {% include "orb/includes/user_rating.html" %}
+                </div>
+                <div style="float:right;">
+                    <h4>{% trans 'Bookmark' %}</h4>
+                    {% if bookmarked %}
+                        <span class="bookmark"><img id="bookmark_image"
+                                                    src="{% static 'orb/images/mono-bookmark.png' %}"
+                                                    alt="{% trans 'Bookmarked' %}"/><span
+                                id="bookmark_text">{% trans 'Bookmarked' %}</span></span>
+                    {% else %}
+                        <span onclick="bookmarkResource()" class="bookmark"><img id="bookmark_image"
+                                                                                 src="{% static 'orb/images/mono-bookmark-add.png' %}"
+                                                                                 alt="{% trans 'Bookmark this' %}"/><span
+                                id="bookmark_text">{% trans 'Bookmark this' %}</span></span>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <h4>{% trans 'Your Rating/Bookmark' %}</h4>
+            {% url 'profile_login' as login %}
+            {% url 'profile_register' as register %}
+            {% blocktrans with request.path as nextpath %}Please <a href="{{ login }}?next={{ nextpath }}">login</a> or
+                <a href="{{ register }}">register</a> to rate or bookmark this resource{% endblocktrans %}
+        {% endif %}
 
-{% if resource.get_files %}
-	<hr/>
-	<h4>{% trans 'Files' %}</h4>
+        {% if resource.get_files %}
+            <hr/>
+            <h4>{% trans 'Files' %}</h4>
 
-	{% for f in resource.get_files %}
-		<div class="row file-row">
+            {% for f in resource.get_files %}
+                <div class="row file-row">
 
-			<div class="col-md-1 col-xs-3 vcenter">
-				<a href="{% url 'orb_resource_view_file' f.id %}" title="{% trans 'Download' %} {{ f.filename }}">
-					<img src="{% static 'orb/images/download_file.png' %}"/>
-				</a>
-			</div><!--
-			 --><div class="col-md-8 col-xs-8 vcenter" >
-				<a href="{% url 'orb_resource_view_file' f.id %}" title="{% trans 'Download' %} {{ f.filename }}">
-					{% if f.description and f.description.strip %}
-						{{ f.description }}:
-					{% endif %}
-					{% if f.title  %}
-						{{ f.title }}
-					{% else %}
-						{{ f.filename }}
-					{% endif %}
-				</a>
-				<br/>
-				({{ f.filesize|filesizeformat }})
-			</div>
-		</div>
-	{% endfor %}
+                    <div class="col-md-1 col-xs-3 vcenter">
+                        <a href="{% url 'orb_resource_view_file' f.id %}"
+                           title="{% trans 'Download' %} {{ f.filename }}">
+                            <img src="{% static 'orb/images/download_file.png' %}"/>
+                        </a>
+                    </div>
+                    <div class="col-md-8 col-xs-8 vcenter">
+                        <a href="{% url 'orb_resource_view_file' f.id %}"
+                           title="{% trans 'Download' %} {{ f.filename }}">
+                            {% if f.description and f.description.strip %}
+                                {{ f.description }}:
+                            {% endif %}
+                            {% if f.title %}
+                                {{ f.title }}
+                            {% else %}
+                                {{ f.filename }}
+                            {% endif %}
+                        </a>
+                        <br/>
+                        ({{ f.filesize|filesizeformat }})
+                    </div>
+                </div>
+            {% endfor %}
 
-{% endif %}
+        {% endif %}
 
-{% if resource.get_urls %}
-	<hr/>
+        {% if resource.get_urls %}
+            <hr/>
 
-	<h4>{% trans 'Links' %}</h4>
-	{% for u in resource.get_urls %}
-		<div class="row file-row">
+            <h4>{% trans 'Links' %}</h4>
+            {% for u in resource.get_urls %}
+                <div class="row file-row">
 
-			<div class="col-md-1 col-xs-3 vcenter">
-				<a href="{% url 'orb_resource_view_link' u.id %}" title="{% trans 'Go to' %} {{ u.url }}">
-					<img src="{% static 'orb/images/external_link.png' %}"/>
-				</a>
-			</div><!--
-			 --><div class="col-md-8 col-xs-8 vcenter">
-				<a href="{% url 'orb_resource_view_link' u.id %}" title="{% trans 'Go to' %} {{ u.url }}">
-					{% if u.title %}
-						{{ u.title }}
-					{% else %}
-						{{ u.url }}
-					{% endif %}
-					</a>
-				{% if u.description and u.description.strip %}
-					<p>{{ u.description }}</p>
-				{% endif %}
-				{% if u.file_size != 0 %}
-					<br/>({{ u.file_size|filesizeformat }})
-				{% endif %}
-			</div>
-		</div>
-	{% endfor %}
-{% endif %}
+                    <div class="col-md-1 col-xs-3 vcenter">
+                        <a href="{% url 'orb_resource_view_link' u.id %}" title="{% trans 'Go to' %} {{ u.url }}">
+                            <img src="{% static 'orb/images/external_link.png' %}"/>
+                        </a>
+                    </div>
+                    <div class="col-md-8 col-xs-8 vcenter">
+                        <a href="{% url 'orb_resource_view_link' u.id %}" title="{% trans 'Go to' %} {{ u.url }}">
+                            {% if u.title %}
+                                {{ u.title }}
+                            {% else %}
+                                {{ u.url }}
+                            {% endif %}
+                        </a>
+                        {% if u.description and u.description.strip %}
+                            <p>{{ u.description }}</p>
+                        {% endif %}
+                        {% if u.file_size != 0 %}
+                            <br/>({{ u.file_size|filesizeformat }})
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
 
-{% if collections %}
-<hr/>
-	<h4>{% trans 'Collections' %}</h4>
-	<p>{% trans 'This resource is included in the following collections:' %}</p>
-	<ul>
-	{% for c in collections %}
-		<li><a href="{% url 'orb_collection' c.slug %}" title="{{ c.description }}">{{ c.title }}</a></li>
-	{% endfor %}
-	</ul>
-{% endif %}
+        {% if collections %}
+            <hr/>
+            <h4>{% trans 'Collections' %}</h4>
+            <p>{% trans 'This resource is included in the following collections:' %}</p>
+            <ul>
+                {% for c in collections %}
+                    <li><a href="{% url 'orb_collection' c.slug %}" title="{{ c.description }}">{{ c.title }}</a></li>
+                {% endfor %}
+            </ul>
+        {% endif %}
 
-{% if resource.study_time_number %}
-	<hr/>
-	<h4>{% trans 'Study Time' %}</h4>
-	<div class="row file-row">
-		<div class="col-md-1 col-xs-3 vcenter">
-			<img src="{% static 'orb/images/study_time.png' %}"/>
-		</div><!--
-		--><div class="col-md-8 col-xs-8 vcenter" >
-		{{ resource.study_time_number }} {{ resource.study_time_unit}}
-		</div>
-	</div>
-{% endif %}
+        {% if resource.study_time_number %}
+            <hr/>
+            <h4>{% trans 'Study Time' %}</h4>
+            <div class="row file-row">
+                <div class="col-md-1 col-xs-3 vcenter">
+                    <img src="{% static 'orb/images/study_time.png' %}"/>
+                </div>
+                <div class="col-md-8 col-xs-8 vcenter">
+                    {{ resource.study_time_number }} {{ resource.study_time_unit }}
+                </div>
+            </div>
+        {% endif %}
 
-{% if resource.get_display_categories %}
-	{% for c in resource.get_display_categories %}
-		<hr/>
+        {% if resource.get_display_categories %}
+            {% for c in resource.get_display_categories %}
+                <hr/>
 
-		<h4>{{ c.name }}</h4>
-			<div class="category">
-			{% for t in c.tags %}
-					<div class="resourcetag">
-						<a href="{% url 'orb_tags' t.slug %}">
-						 {% if t.image %}
-						 	{% thumbnail t.image "70x70" padding=True format="PNG" upscale=False as im %}
-								<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-							{% empty %}
-						  		<p>No image</p>
-						  	{% endthumbnail %}
-						 {% endif %}
-						 <br>
-						{{ t.name }}</a>
-						{% if t.summary %}
-							- {{ t.summary }}
-						{% endif %}
-					</div>
+                <h4>{{ c.name }}</h4>
+                <div class="category">
+                    {% for t in c.tags %}
+                        <div class="resourcetag">
+                            <a href="{% url 'orb_tags' t.slug %}">
+                                {% if t.image %}
+                                    {% thumbnail t.image "70x70" padding=True format="PNG" upscale=False as im %}
+                                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                                    {% empty %}
+                                        <p>No image</p>
+                                    {% endthumbnail %}
+                                {% endif %}
+                                <br>
+                                {{ t.name }}</a>
+                            {% if t.summary %}
+                                - {{ t.summary }}
+                            {% endif %}
+                        </div>
 
-			{% endfor %}
-			</div>
-	{% endfor %}
-{% endif %}
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% endif %}
 
-{% if resource.get_license %}
-		<hr/>
-		<h4>{% trans 'License' %}</h4>
-		{% for l in resource.get_license %}
-			<div class="row file-row">
-				<div class="col-md-2 col-xs-4 vcenter">
-					{% if l|tag_property:"url" %}
-						<a href="{{ l|tag_property:'url' }}" rel="license">
-						{% thumbnail l.image "x30" padding=True format="PNG" upscale=False as im %}
-							<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-						{% endthumbnail %}
-						</a>
-					{% endif %}
-				</div><!--
-			 --><div class="col-md-8 col-xs-8 vcenter">
-			 	<a href="{% url 'orb_tags' l.slug %}">{{ l.name }}</a>
-				{% if resource.attribution %}
-					<br/>{% trans 'Attribution' %}: {{ resource.attribution }}
-				{% endif %}
-				</div>
-			</div>
-		{% endfor %}
-{% endif %}
+        {% if resource.get_license %}
+            <hr/>
+            <h4>{% trans 'License' %}</h4>
+            {% for l in resource.get_license %}
+                <div class="row file-row">
+                    <div class="col-md-2 col-xs-4 vcenter">
+                        {% if l|tag_property:"url" %}
+                            <a href="{{ l|tag_property:'url' }}" rel="license">
+                                {% thumbnail l.image "x30" padding=True format="PNG" upscale=False as im %}
+                                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+                                {% endthumbnail %}
+                            </a>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8 col-xs-8 vcenter">
+                        <a href="{% url 'orb_tags' l.slug %}">{{ l.name }}</a>
+                        {% if resource.attribution %}
+                            <br/>{% trans 'Attribution' %}: {{ resource.attribution }}
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
 
-</div> <!-- end CC div -->
+    </div> <!-- end CC div -->
 
-<hr/>
+    <hr/>
 
-{% url 'profile_view' resource.create_user.id as create_user_url %}
-{% url 'profile_view' resource.update_user.id as update_user_url %}
+    {% url 'profile_view' resource.create_user.id as create_user_url %}
+    {% url 'profile_view' resource.update_user.id as update_user_url %}
 
-<small>
-{% blocktrans with resource.create_user.first_name as create_first_name and resource.create_user.last_name as create_last_name and resource.create_date as create_date and resource.update_user.first_name as update_first_name and resource.update_user.last_name as update_last_name and resource.update_date as update_date%}
-Resource uploaded by <a href="{{ create_user_url }}">{{ create_first_name }} {{ create_last_name }}</a> ({{ create_date }})
-and last updated by <a href="{{ update_user_url }}">{{ update_first_name }} {{ update_last_name }}</a> ({{ update_date }})
-{% endblocktrans %}
-</small>
+    <small>
+        {% blocktrans with resource.create_user.first_name as create_first_name and resource.create_user.last_name as create_last_name and resource.create_date as create_date and resource.update_user.first_name as update_first_name and resource.update_user.last_name as update_last_name and resource.update_date as update_date %}
+            Resource uploaded by <a href="{{ create_user_url }}">{{ create_first_name }} {{ create_last_name }}</a> (
+            {{ create_date }})
+            and last updated by <a href="{{ update_user_url }}">{{ update_first_name }} {{ update_last_name }}</a> (
+            {{ update_date }})
+        {% endblocktrans %}
+    </small>
 
-<hr/>
-<p>{% blocktrans with resource.get_no_hits as no_hits %}Resource viewed {{ no_hits }} times{% endblocktrans %}</p>
+    <hr/>
+    <p>{% blocktrans with resource.get_no_hits as no_hits %}Resource viewed {{ no_hits }} times{% endblocktrans %}</p>
 
 
-{% if options_menu %}
-<hr/>
-	{% for om in options_menu %}
-		<a class="btn {% if forloop.first %}btn-primary{% endif %} btn-default" href="{{ om.url }}">{{ om.title }}</a>
-	{% endfor %}
-{% endif %}
+    {% if options_menu %}
+        <hr/>
+        {% for om in options_menu %}
+            <a class="btn {% if forloop.first %}btn-primary{% endif %} btn-default"
+               href="{{ om.url }}">{{ om.title }}</a>
+        {% endfor %}
+    {% endif %}
 {% endblock %}
