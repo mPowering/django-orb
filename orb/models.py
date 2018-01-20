@@ -295,6 +295,19 @@ class Resource(TimestampBase):
             language for language, fields in field_names.items() if all([getattr(self, field) for field in fields])
         ]
 
+    def user_can_view(self, user):
+        if self.status == Resource.APPROVED:
+            return True
+        elif user.is_anonymous():
+            return False
+        elif ((user.is_staff or
+                       user == self.create_user or
+                       user == self.update_user) or
+                  (user.userprofile and (user.userprofile.is_reviewer))):
+            return True
+        else:
+            return False
+
 
 class ResourceWorkflowTracker(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
