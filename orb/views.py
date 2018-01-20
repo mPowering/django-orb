@@ -752,12 +752,7 @@ def resource_can_edit(resource, user):
     if user.is_staff or user == resource.create_user or user == resource.update_user:
         return True
     else:
-        tag_owner = TagOwner.objects.filter(
-            user__pk=user.id, tag__resourcetag__resource=resource).count()
-        if tag_owner > 0:
-            return True
-        else:
-            return False
+        return TagOwner.objects.filter(user__pk=user.id, tag__resourcetag__resource=resource).exists()
 
 
 def resource_add_free_text_tags(resource, tag_text, user, category_slug):
