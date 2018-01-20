@@ -429,29 +429,6 @@ def resource_pending_mep_view(request, id):
     return render(request, 'orb/resource/status_updated.html', {'resource': resource})
 
 
-def resource_link_view(request, id):
-    url = get_object_or_404(ResourceURL, pk=id)
-
-    if not resource_can_view(url.resource, request.user):
-        raise Http404()
-
-    resource_url_viewed.send(sender=url, resource_url=url, request=request)
-    return HttpResponseRedirect(url.url)
-
-
-def resource_file_view(request, id):
-    file = get_object_or_404(ResourceFile, pk=id)
-
-    if not resource_can_view(file.resource, request.user):
-        raise Http404()
-
-    if os.path.isfile(os.path.join(settings.MEDIA_ROOT, file.file.name)):
-        resource_file_viewed.send(sender=file, resource_file=file, request=request)
-        return HttpResponseRedirect(settings.MEDIA_URL + file.file.name)
-    else:
-        raise Http404()
-
-
 def resource_edit_view(request, resource_id):
     resource = get_object_or_404(Resource, pk=resource_id)
     if not resource_can_edit(resource, request.user):
@@ -769,20 +746,6 @@ def advanced_search_form_set_choices(form):
     form.fields['license'].choices = [
         ('ND', _(u'Derivatives allowed')), ('NC', _(u'Commercial use allowed'))]
     return form
-
-
-def resource_can_view(resource, user):
-    if resource.status == Resource.APPROVED:
-        return True
-    elif user.is_anonymous():
-        return False
-    elif ((user.is_staff or
-           user == resource.create_user or
-           user == resource.update_user) or
-          (user.userprofile and (user.userprofile.is_reviewer))):
-        return True
-    else:
-        return False
 
 
 def resource_can_edit(resource, user):

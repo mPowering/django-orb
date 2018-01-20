@@ -1,0 +1,28 @@
+from django.conf.urls import url
+
+from orb.resources.views import ResourceFileView
+from orb.resources.views import ResourceURLView
+
+urlpatterns = [
+    url(r'^create/1/$', 'orb.views.resource_create_step1_view', name="orb_resource_create"),
+    url(r'^create/2/(?P<id>\d+)/$', 'orb.views.resource_create_step2_view', name="orb_resource_create2"),
+    url(r'^create/(?P<id>\d+)/thanks/$', 'orb.views.resource_create_thanks_view', name="orb_resource_create_thanks"),
+    url(r'^view/(?P<resource_slug>\w[\w/-]*)$', 'orb.views.resource_view', name="orb_resource"),
+    url(r'^(?P<id>\d+)$', 'orb.views.resource_permalink_view', name="orb_resource_permalink"),
+    url(r'^create/(?P<id>\d+)/link/(?P<url_id>\d+)/delete/$', 'orb.views.resource_create_url_delete_view', name="orb_resource_create_delete_url"),
+    url(r'^create/(?P<id>\d+)/file/(?P<file_id>\d+)/delete/$', 'orb.views.resource_create_file_delete_view', name="orb_resource_create_delete_file"),
+    url(r'^link/(?P<id>\d+)/$', ResourceURLView.as_view(), name="orb_resource_view_link"),
+    url(r'^file/(?P<id>\d+)/$', ResourceFileView.as_view(), name="orb_resource_view_file"),
+    url(r'^edit/1/(?P<resource_id>\d+)/$', 'orb.views.resource_edit_view', name="orb_resource_edit"),
+    url(r'^edit/2/(?P<resource_id>\d+)/$', 'orb.views.resource_edit_step2_view', name="orb_resource_edit2"),
+    url(r'^edit/(?P<id>\d+)/link/(?P<url_id>\d+)/delete/$', 'orb.views.resource_edit_url_delete_view', name="orb_resource_edit_delete_url"),
+    url(r'^edit/(?P<id>\d+)/file/(?P<file_id>\d+)/delete/$', 'orb.views.resource_edit_file_delete_view', name="orb_resource_edit_delete_file"),
+    url(r'^edit/(?P<id>\d+)/thanks/$', 'orb.views.resource_edit_thanks_view', name="orb_resource_edit_thanks"),
+
+    url(r'^approve/(?P<id>\d+)/$', 'orb.views.resource_approve_view', name="orb_resource_approve"),
+    url(r'^pending_mep/(?P<id>\d+)/$', 'orb.views.resource_pending_mep_view', name="orb_resource_pending_mep"),
+    url(r'^reject/(?P<id>\d+)/$', 'orb.views.resource_reject_view', name="orb_resource_reject"),
+    url(r'^reject/(?P<id>\d+)/sent/$', 'orb.views.resource_reject_sent_view', name="orb_resource_reject_sent"),
+
+    url(r'^guidelines/$', 'orb.views.resource_guidelines_view', name="orb_guidelines"),
+]
