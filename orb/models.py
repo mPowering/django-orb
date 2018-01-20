@@ -325,7 +325,7 @@ class ResourceURL(TimestampBase):
     update_user = models.ForeignKey(
         User, related_name='resource_url_update_user')
 
-    objects = ResourceURLManager()
+    objects = ResourceURLManager.as_manager()
 
     def __unicode__(self):
         return self.url
@@ -396,6 +396,8 @@ class ResourceFile(TimestampBase):
     update_user = models.ForeignKey(
         User, related_name='resource_file_update_user')
     file_full_text = models.TextField(blank=True, null=True, default=None)
+
+    objects = ResourceURLManager.as_manager()
 
     def __unicode__(self):
         return self.title or self.file.name
