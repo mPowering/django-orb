@@ -163,6 +163,10 @@ ADVANCED_SEARCH_CATEGORIES = [
 #####################################################################
 # Authentication
 LOGIN_URL = reverse_lazy('profile_login')
+AUTHENTICATION_BACKENDS =  [
+    'orb.auth.UserModelEmailBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 #####################################################################
 
 
@@ -231,6 +235,10 @@ TINYMCE_DEFAULT_CONFIG = {
     'height': 300,
     'position': 'top',
 }
+
+# Simple settings flags for download features
+DOWNLOAD_LOGIN_REQUIRED = True
+DOWNLOAD_EXTRA_INFO = True
 
 
 try:

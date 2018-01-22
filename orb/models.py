@@ -5,7 +5,8 @@ import parsedatetime as pdt
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core import urlresolvers
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.urlresolvers import reverse
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import Avg, Count
 from django.utils.translation import ugettext_lazy as _
@@ -15,7 +16,7 @@ from tastypie.models import create_api_key
 from orb import signals
 from orb.analytics.models import UserLocationVisualization
 from orb.profiles.querysets import ProfilesQueryset
-from orb.resources.managers import ResourceURLManager, ResourceQueryset
+from orb.resources.managers import ResourceQueryset, ResourceURLManager
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ResourceTagManager, TagQuerySet
 from .fields import AutoSlugField
@@ -294,6 +295,19 @@ class Resource(TimestampBase):
             language for language, fields in field_names.items() if all([getattr(self, field) for field in fields])
         ]
 
+    def user_can_view(self, user):
+        if self.status == Resource.APPROVED:
+            return True
+        elif user.is_anonymous():
+            return False
+        elif ((user.is_staff or
+                       user == self.create_user or
+                       user == self.update_user) or
+                  (user.userprofile and (user.userprofile.is_reviewer))):
+            return True
+        else:
+            return False
+
 
 class ResourceWorkflowTracker(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
@@ -324,10 +338,13 @@ class ResourceURL(TimestampBase):
     update_user = models.ForeignKey(
         User, related_name='resource_url_update_user')
 
-    objects = ResourceURLManager()
+    objects = ResourceURLManager.as_manager()
 
     def __unicode__(self):
         return self.url
+
+    def get_absolute_url(self):
+        return reverse('orb_resource_view_link', kwargs={'id': self.id})
 
     @classmethod
     def from_url_data(cls, resource, api_data, user=None):
@@ -393,8 +410,13 @@ class ResourceFile(TimestampBase):
         User, related_name='resource_file_update_user')
     file_full_text = models.TextField(blank=True, null=True, default=None)
 
+    objects = ResourceURLManager.as_manager()
+
     def __unicode__(self):
         return self.title or self.file.name
+
+    def get_absolute_url(self):
+        return reverse('orb_resource_view_file', kwargs={'id': self.id})
 
     def filename(self):
         return os.path.basename(self.file.name)
@@ -533,7 +555,7 @@ class Tag(TimestampBase):
         # add generic language icon if not specified
         if self.category.slug == 'language' and not self.image:
             self.image = 'tag/language_default.png'
-            
+
         # add generic organization icon if not specified
         if self.category.slug == 'organisation' and not self.image:
             self.image = 'tag/organisation_default.png'
@@ -541,7 +563,7 @@ class Tag(TimestampBase):
         # add generic other icon if not specified
         if self.category.slug == 'other' and not self.image:
             self.image = 'tag/other_default.png'
-            
+
         super(Tag, self).save(*args, **kwargs)
 
     def image_filename(self):
@@ -681,6 +703,7 @@ class UserProfile(TimestampBase):
     age_range = models.CharField(
         max_length=50, choices=AGE_RANGE, default='none')
     mailing = models.BooleanField(default=False, blank=False)
+    survey = models.BooleanField(default=False, blank=False)
     reviewer_roles = models.ManyToManyField('ReviewerRole', blank=True, related_name="profiles")
 
     profiles = ProfilesQueryset.as_manager()
@@ -718,25 +741,22 @@ class ResourceTracker(models.Model):
         (DOWNLOAD, _(u'Download')),
         (CREATE, _(u'Create')),
     )
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True,
-                             default=None, on_delete=models.SET_NULL)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     type = models.CharField(max_length=50, choices=TRACKER_TYPES, default=VIEW)
-    resource = models.ForeignKey(
-        Resource, blank=True, null=True, default=None, on_delete=models.SET_NULL)
-    resource_file = models.ForeignKey(
-        ResourceFile, blank=True, null=True, default=None, on_delete=models.SET_NULL)
-    resource_url = models.ForeignKey(
-        ResourceURL, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    resource = models.ForeignKey(Resource, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    resource_file = models.ForeignKey(ResourceFile, blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    resource_url = models.ForeignKey(ResourceURL, blank=True, null=True, default=None, on_delete=models.SET_NULL)
     access_date = models.DateTimeField(auto_now_add=True)
     ip = models.GenericIPAddressField(blank=True, null=True, default=None)
     user_agent = models.TextField(blank=True, null=True, default=None)
     extra_data = models.TextField(blank=True, null=True, default=None)
+    survey_intended_use = models.CharField(max_length=50, blank=True, null=True)
+    survey_intended_use_other = models.TextField(blank=True, null=True, default="")
+    survey_health_worker_count = models.IntegerField(blank=True, null=True)
+    survey_health_worker_cadre = models.CharField(max_length=50, blank=True, null=True)
 
     def get_location(self):
-        try:
-            return UserLocationVisualization.objects.filter(ip=self.ip).first()
-        except UserLocationVisualization.DoesNotExist:
-            return None
+        return UserLocationVisualization.objects.filter(ip=self.ip).first()
 
 
 class SearchTracker(models.Model):

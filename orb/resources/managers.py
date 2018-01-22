@@ -111,7 +111,7 @@ class ResourceQueryset(models.QuerySet):
         return qs.distinct()
 
 
-class ResourceURLManager(models.Manager):
+class ResourceURLManager(models.QuerySet):
 
     def approved(self, user=None):
         """
@@ -125,7 +125,6 @@ class ResourceURLManager(models.Manager):
             QuerySet: A queryset filtered by status and/or user
 
         """
-        qs = super(ResourceURLManager, self).get_queryset()
         if user is None:
             user = AnonymousUser()
-        return approved_queryset(qs, user, relation="resource__")
+        return approved_queryset(self, user, relation="resource__")

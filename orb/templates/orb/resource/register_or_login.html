@@ -1,0 +1,15 @@
+{% load i18n %}
+{% if required %}
+<div class="alert alert-block alert-danger">
+    <a name="{{ section_name }}-notice"></a>
+    {% if section_name == 'files' %}
+        {% blocktrans %}
+            Please <a href="{{ login_url }}">login</a> or <a href="{{ register_url }}">register</a> to download these files.
+        {% endblocktrans %}
+    {% else %}
+        {% blocktrans %}
+            Please <a href="{{ login_url }}">login</a> or <a href="{{ register_url }}">register</a> to access these links.
+        {% endblocktrans %}
+    {% endif %}
+</div>
+{% endif %}

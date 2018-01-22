@@ -44,6 +44,14 @@ a:hover, a:focus, span.bookmark:hover, span.bookmark:focus {
     text-decoration: underline;
 }
 
+a.active-link {
+    cursor: pointer;
+}
+a.disabled-link {
+    cursor: help;
+    color: #999;
+}
+
 span.bookmark:hover, span.bookmark:focus {
     cursor: pointer;
 }
