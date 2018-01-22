@@ -1,9 +1,14 @@
+"""
+Cross-app filters and tags
+"""
+
 from __future__ import unicode_literals
 
 from django import template
-from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
+
+from orb import conf
 
 register = template.Library()
 
@@ -17,7 +22,7 @@ def cloud_text_size(count, diff):
 def register_or_login(section_name):
     return {
         'section_name': section_name,
-        'required': settings.DOWNLOAD_LOGIN_REQUIRED,
+        'required': conf.DOWNLOAD_LOGIN_REQUIRED,
         'register_url': reverse('profile_register'),
         'login_url': reverse('profile_login'),
     }
@@ -31,7 +36,7 @@ def resourcefile_link(context, resourcefile, alternate_link):
     OR if the setting is turned off.
     """
     file_link = "href='{url}' title='{title}' class='{css_class}'"
-    if not settings.DOWNLOAD_LOGIN_REQUIRED or context['user'].is_authenticated():
+    if not conf.DOWNLOAD_LOGIN_REQUIRED or context['user'].is_authenticated():
         url = resourcefile.get_absolute_url()
         title = _("Download ") + resourcefile.filename()
         css_class = 'active-link'
@@ -50,7 +55,7 @@ def resourceurl_link(context, resourceurl, alternate_link):
     OR if the setting is turned off.
     """
     link_link = "href='{url}' title='{title}' class='{css_class}'"
-    if not settings.DOWNLOAD_LOGIN_REQUIRED or context['user'].is_authenticated():
+    if not conf.DOWNLOAD_LOGIN_REQUIRED or context['user'].is_authenticated():
         url = resourceurl.get_absolute_url()
         title = _("Go to ") + resourceurl.url
         css_class = 'active-link'
