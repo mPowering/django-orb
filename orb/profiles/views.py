@@ -1,4 +1,3 @@
-# orb/profile/views.py
 import hashlib
 import urllib
 
@@ -7,10 +6,12 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.views.generic import FormView
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from orb.models import UserProfile, Tag, Category, Resource, ResourceRating, Collection
@@ -43,6 +44,54 @@ def login_view(request):
         form = LoginForm(initial={'next': request.GET.get('next'), })
 
     return render(request, 'orb/form.html', {'username': username, 'form': form, 'title': _(u'Login')})
+
+
+class RegistrationView(FormView):
+    template_name = 'orb/form.html'
+    form_class = RegisterForm
+
+    def get_success_url(self, form):
+        return form.cleaned_data['next'] if form.cleaned_data.get('next') else reverse('profile_register_thanks')
+
+    def get_context_data(self, **kwargs):
+        context = super(RegistrationView, self).get_context_data(**kwargs)
+        context['title'] = _(u'Register')
+        return context
+
+    def form_valid(self, form):
+        user_profile = form.save_profile()
+
+        if form.cleaned_data.get("gender") != '0':
+            user_profile.gender = form.cleaned_data.get("gender")
+        if form.cleaned_data.get("age_range") != '0':
+            user_profile.age_range = form.cleaned_data.get("age_range")
+        if form.cleaned_data.get("role") != '0':
+            role = Tag.objects.get(pk=form.cleaned_data.get("role"))
+            user_profile.role = role
+        user_profile.role_other = form.cleaned_data.get("role_other")
+
+        if form.cleaned_data.get("organisation").strip() != '':
+            category = Category.objects.get(slug='organisation')
+            organisation, created = Tag.objects.get_or_create(
+                name=form.cleaned_data.get("organisation"),
+                category=category,
+                defaults={
+                    'name': form.cleaned_data.get("organisation"),
+                    'category': category,
+                    'create_user': user_profile.user,
+                    'update_user': user_profile.user,
+                }
+            )
+            user_profile.organisation = organisation
+
+        user_profile.save()
+        user_registered.send(sender=user_profile.user, user=user_profile.user, request=self.request)
+
+        authd_user= form.authenticate_user()
+        if authd_user and authd_user.is_active:
+            login(self.request, authd_user)
+
+        return redirect(self.get_success_url(form))
 
 
 def register(request):

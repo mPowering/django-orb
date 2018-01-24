@@ -1,9 +1,10 @@
 from django.conf.urls import url
 from django.views.generic import TemplateView
 
+from orb.profiles import views
 
 urlpatterns = [
-    url(r'^register/$', 'orb.profiles.views.register', name="profile_register"),
+    url(r'^register/$', view=views.RegistrationView.as_view(), name="profile_register"),
     url(r'^register/thanks/$', TemplateView.as_view(template_name="orb/thanks.html"), name="profile_register_thanks"),
     url(r'^login/$', 'orb.profiles.views.login_view', name="profile_login"),
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'orb/logout.html'}, name="profile_logout"),
