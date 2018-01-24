@@ -49,6 +49,17 @@ def login_view(request):
 class RegistrationView(FormView):
     template_name = 'orb/form.html'
     form_class = RegisterForm
+    initial = {'mailing': True}
+
+    def get_initial(self):
+        initial = self.initial.copy()
+        initial.update({'next': self.request.GET.get('next', '')})
+        return initial
+
+    def get_form_kwargs(self):
+        kwargs = super(RegistrationView, self).get_form_kwargs()
+        print(kwargs)
+        return kwargs
 
     def get_success_url(self, form):
         return form.cleaned_data['next'] if form.cleaned_data.get('next') else reverse('profile_register_thanks')
@@ -60,31 +71,6 @@ class RegistrationView(FormView):
 
     def form_valid(self, form):
         user_profile = form.save_profile()
-
-        if form.cleaned_data.get("gender") != '0':
-            user_profile.gender = form.cleaned_data.get("gender")
-        if form.cleaned_data.get("age_range") != '0':
-            user_profile.age_range = form.cleaned_data.get("age_range")
-        if form.cleaned_data.get("role") != '0':
-            role = Tag.objects.get(pk=form.cleaned_data.get("role"))
-            user_profile.role = role
-        user_profile.role_other = form.cleaned_data.get("role_other")
-
-        if form.cleaned_data.get("organisation").strip() != '':
-            category = Category.objects.get(slug='organisation')
-            organisation, created = Tag.objects.get_or_create(
-                name=form.cleaned_data.get("organisation"),
-                category=category,
-                defaults={
-                    'name': form.cleaned_data.get("organisation"),
-                    'category': category,
-                    'create_user': user_profile.user,
-                    'update_user': user_profile.user,
-                }
-            )
-            user_profile.organisation = organisation
-
-        user_profile.save()
         user_registered.send(sender=user_profile.user, user=user_profile.user, request=self.request)
 
         authd_user= form.authenticate_user()
@@ -92,55 +78,6 @@ class RegistrationView(FormView):
             login(self.request, authd_user)
 
         return redirect(self.get_success_url(form))
-
-
-def register(request):
-
-    if request.method == 'POST':  # if form submitted...
-        form = RegisterForm(request.POST)
-        build_form_options(form)
-
-        if form.is_valid():
-            user_profile = form.save_profile()
-
-            if form.cleaned_data.get("gender") != '0':
-                user_profile.gender = form.cleaned_data.get("gender")
-            if form.cleaned_data.get("age_range") != '0':
-                user_profile.age_range = form.cleaned_data.get("age_range")
-            if form.cleaned_data.get("role") != '0':
-                role = Tag.objects.get(pk=form.cleaned_data.get("role"))
-                user_profile.role = role
-            user_profile.role_other = form.cleaned_data.get("role_other")
-
-            if form.cleaned_data.get("organisation").strip() != '':
-                category = Category.objects.get(slug='organisation')
-                try:
-                    organisation = Tag.objects.get(
-                        name=form.cleaned_data.get("organisation"), category=category)
-                except Tag.DoesNotExist:
-                    organisation = Tag()
-                    organisation.name = form.cleaned_data.get("organisation")
-                    organisation.category = category
-                    organisation.create_user = user_profile.user
-                    organisation.update_user = user_profile.user
-                    organisation.save()
-                user_profile.organisation = organisation
-
-            user_profile.save()
-
-            # send welcome email
-            user_registered.send(sender=user_profile.user, user=user_profile.user, request=request)
-
-            authd_user= form.authenticate_user()
-            if authd_user and authd_user.is_active:
-                login(request, authd_user)
-
-            return HttpResponseRedirect(reverse('profile_register_thanks'))
-    else:
-        form = RegisterForm(initial={'next': request.GET.get('next'), 'mailing': True})
-        build_form_options(form)
-
-    return render(request, 'orb/form.html', {'form': form, 'title': _(u'Register')})
 
 
 def reset(request):

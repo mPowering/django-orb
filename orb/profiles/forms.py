@@ -12,6 +12,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import validate_email
 from django.utils.translation import ugettext_lazy as _
 
+from orb.models import Category
 from orb.models import Tag
 from orb.models import UserProfile
 
@@ -189,10 +190,36 @@ class RegisterForm(forms.Form):
         user.first_name = first_name
         user.last_name = last_name
         user.save()
+
+        save_kwargs = {}
+
+        if self.cleaned_data.get("gender") != '0':
+            save_kwargs['gender'] = self.cleaned_data.get("gender")
+        if self.cleaned_data.get("age_range") != '0':
+            save_kwargs['age_range'] = self.cleaned_data.get("age_range")
+        if self.cleaned_data.get("role") != '0':
+            save_kwargs['role'] = Tag.objects.get(pk=self.cleaned_data.get("role"))
+        save_kwargs['role_other'] = self.cleaned_data.get("role_other")
+
+        if self.cleaned_data.get("organisation").strip() != '':
+            category = Category.objects.get(slug='organisation')
+            organisation, created = Tag.objects.get_or_create(
+                name=self.cleaned_data.get("organisation"),
+                category=category,
+                defaults={
+                    'name': self.cleaned_data.get("organisation"),
+                    'category': category,
+                    'create_user': user,
+                    'update_user': user,
+                }
+            )
+            save_kwargs['organisation'] = organisation
+
         return UserProfile.objects.create(
             user=user,
             mailing=self.cleaned_data['mailing'],
             survey=self.cleaned_data['survey'],
+            **save_kwargs
         )
 
     def authenticate_user(self):
