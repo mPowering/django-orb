@@ -147,10 +147,7 @@ class RegisterForm(forms.Form):
         super(RegisterForm, self).__init__(*args, **kwargs)
 
         blank_options = [('0', '--')]
-        self.fields['role'].choices = blank_options + [
-            (t.id, t.name)
-            for t in Tag.objects.filter(category__slug='audience').order_by('order_by', 'name')
-        ]
+        self.fields['role'].choices = blank_options + list(Tag.tags.roles().choices())
         self.fields['age_range'].choices = blank_options + UserProfile.AGE_RANGE
         self.fields['gender'].choices = blank_options + UserProfile.GENDER
 
