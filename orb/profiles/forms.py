@@ -12,6 +12,7 @@ from django.core.urlresolvers import reverse
 from django.core.validators import validate_email
 from django.utils.translation import ugettext_lazy as _
 
+from orb.models import Tag
 from orb.models import UserProfile
 
 
@@ -136,9 +137,22 @@ class RegisterForm(forms.Form):
         required=False,
         initial=True,
     )
+    next = forms.CharField(
+        widget=forms.HiddenInput,
+        required=False,
+    )
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
+
+        blank_options = [('0', '--')]
+        self.fields['role'].choices = blank_options + [
+            (t.id, t.name)
+            for t in Tag.objects.filter(category__slug='audience').order_by('order_by', 'name')
+        ]
+        self.fields['age_range'].choices = blank_options + UserProfile.AGE_RANGE
+        self.fields['gender'].choices = blank_options + UserProfile.GENDER
+
         self.helper = FormHelper()
         self.helper.form_action = reverse('profile_register')
         self.helper.form_class = 'form-horizontal'
@@ -158,6 +172,7 @@ class RegisterForm(forms.Form):
             'mailing',
             'survey',
             'terms',
+            'next',
             Div(
                 Submit('submit', _('Register'), css_class='btn btn-default'),
                 css_class='col-lg-offset-2 col-lg-4',
@@ -187,6 +202,12 @@ class RegisterForm(forms.Form):
         """
         return authenticate(username=self.cleaned_data['email'], password=self.cleaned_data['password'])
 
+    def clean_age_range(self):
+        age_range = self.cleaned_data.get("age_range")
+        if age_range and age_range == '0':
+            raise forms.ValidationError(_("Please select an age range"))
+        return age_range
+
     def clean(self):
         cleaned_data = self.cleaned_data
         email = cleaned_data.get("email")
@@ -208,8 +229,6 @@ class RegisterForm(forms.Form):
         if role == '0' and role_other == '':
             raise forms.ValidationError(_("Please select or enter a role"))
 
-        if cleaned_data.get("age_range") == '0':
-            raise forms.ValidationError(_("Please select an age range"))
 
         if cleaned_data.get("gender") == '0':
             raise forms.ValidationError(_("Please select a gender"))
