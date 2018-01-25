@@ -12,6 +12,8 @@ from django.core.urlresolvers import reverse
 from django.core.validators import validate_email
 from django.utils.translation import ugettext_lazy as _
 
+from orb.models import Category
+from orb.models import Tag
 from orb.models import UserProfile
 
 
@@ -136,9 +138,19 @@ class RegisterForm(forms.Form):
         required=False,
         initial=True,
     )
+    next = forms.CharField(
+        widget=forms.HiddenInput,
+        required=False,
+    )
 
     def __init__(self, *args, **kwargs):
         super(RegisterForm, self).__init__(*args, **kwargs)
+
+        blank_options = [('0', '--')]
+        self.fields['role'].choices = blank_options + list(Tag.tags.roles().choices())
+        self.fields['age_range'].choices = blank_options + UserProfile.AGE_RANGE
+        self.fields['gender'].choices = blank_options + UserProfile.GENDER
+
         self.helper = FormHelper()
         self.helper.form_action = reverse('profile_register')
         self.helper.form_class = 'form-horizontal'
@@ -158,6 +170,7 @@ class RegisterForm(forms.Form):
             'mailing',
             'survey',
             'terms',
+            'next',
             Div(
                 Submit('submit', _('Register'), css_class='btn btn-default'),
                 css_class='col-lg-offset-2 col-lg-4',
@@ -174,10 +187,36 @@ class RegisterForm(forms.Form):
         user.first_name = first_name
         user.last_name = last_name
         user.save()
+
+        save_kwargs = {}
+
+        if self.cleaned_data.get("gender") != '0':
+            save_kwargs['gender'] = self.cleaned_data.get("gender")
+        if self.cleaned_data.get("age_range") != '0':
+            save_kwargs['age_range'] = self.cleaned_data.get("age_range")
+        if self.cleaned_data.get("role") != '0':
+            save_kwargs['role'] = Tag.objects.get(pk=self.cleaned_data.get("role"))
+        save_kwargs['role_other'] = self.cleaned_data.get("role_other")
+
+        if self.cleaned_data.get("organisation").strip() != '':
+            category = Category.objects.get(slug='organisation')
+            organisation, created = Tag.objects.get_or_create(
+                name=self.cleaned_data.get("organisation"),
+                category=category,
+                defaults={
+                    'name': self.cleaned_data.get("organisation"),
+                    'category': category,
+                    'create_user': user,
+                    'update_user': user,
+                }
+            )
+            save_kwargs['organisation'] = organisation
+
         return UserProfile.objects.create(
             user=user,
             mailing=self.cleaned_data['mailing'],
             survey=self.cleaned_data['survey'],
+            **save_kwargs
         )
 
     def authenticate_user(self):
@@ -186,6 +225,12 @@ class RegisterForm(forms.Form):
         This must be run after the user has been created
         """
         return authenticate(username=self.cleaned_data['email'], password=self.cleaned_data['password'])
+
+    def clean_age_range(self):
+        age_range = self.cleaned_data.get("age_range")
+        if age_range and age_range == '0':
+            raise forms.ValidationError(_("Please select an age range"))
+        return age_range
 
     def clean(self):
         cleaned_data = self.cleaned_data
@@ -208,8 +253,6 @@ class RegisterForm(forms.Form):
         if role == '0' and role_other == '':
             raise forms.ValidationError(_("Please select or enter a role"))
 
-        if cleaned_data.get("age_range") == '0':
-            raise forms.ValidationError(_("Please select an age range"))
 
         if cleaned_data.get("gender") == '0':
             raise forms.ValidationError(_("Please select a gender"))

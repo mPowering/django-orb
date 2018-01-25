@@ -18,13 +18,14 @@ def cloud_text_size(count, diff):
     return int(14.0 + ((28.0 / diff) * count))
 
 
-@register.inclusion_tag('orb/resource/register_or_login.html')
-def register_or_login(section_name):
+@register.inclusion_tag('orb/resource/register_or_login.html', takes_context=True)
+def register_or_login(context, section_name):
     return {
         'section_name': section_name,
         'required': conf.DOWNLOAD_LOGIN_REQUIRED,
         'register_url': reverse('profile_register'),
         'login_url': reverse('profile_login'),
+        'next': context['request'].path,
     }
 
 

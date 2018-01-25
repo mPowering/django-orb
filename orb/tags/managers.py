@@ -36,6 +36,13 @@ class TagQuerySet(models.QuerySet):
         """"""
         return self.filter(category__slug=category_slug)
 
+    def roles(self):
+        return self.filter(category__slug='audience').order_by('order_by', 'name')
+
+    def choices(self):
+        """Returns a generator of choice tuples from queryset"""
+        return ((t.id, t.name) for t in self)
+
 
 class ResourceTagManager(models.Manager):
     """Manager for the ResourceTag linking model"""

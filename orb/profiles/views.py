@@ -1,4 +1,3 @@
-# orb/profile/views.py
 import hashlib
 import urllib
 
@@ -7,10 +6,12 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.views.generic import FormView
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from orb.models import UserProfile, Tag, Category, Resource, ResourceRating, Collection
@@ -45,53 +46,38 @@ def login_view(request):
     return render(request, 'orb/form.html', {'username': username, 'form': form, 'title': _(u'Login')})
 
 
-def register(request):
+class RegistrationView(FormView):
+    template_name = 'orb/form.html'
+    form_class = RegisterForm
+    initial = {'mailing': True}
 
-    if request.method == 'POST':  # if form submitted...
-        form = RegisterForm(request.POST)
-        build_form_options(form)
+    def get_initial(self):
+        initial = self.initial.copy()
+        initial.update({'next': self.request.GET.get('next', '')})
+        return initial
 
-        if form.is_valid():
-            user_profile = form.save_profile()
+    def get_form_kwargs(self):
+        kwargs = super(RegistrationView, self).get_form_kwargs()
+        print(kwargs)
+        return kwargs
 
-            if form.cleaned_data.get("gender") != '0':
-                user_profile.gender = form.cleaned_data.get("gender")
-            if form.cleaned_data.get("age_range") != '0':
-                user_profile.age_range = form.cleaned_data.get("age_range")
-            if form.cleaned_data.get("role") != '0':
-                role = Tag.objects.get(pk=form.cleaned_data.get("role"))
-                user_profile.role = role
-            user_profile.role_other = form.cleaned_data.get("role_other")
+    def get_success_url(self, form):
+        return form.cleaned_data['next'] if form.cleaned_data.get('next') else reverse('profile_register_thanks')
 
-            if form.cleaned_data.get("organisation").strip() != '':
-                category = Category.objects.get(slug='organisation')
-                try:
-                    organisation = Tag.objects.get(
-                        name=form.cleaned_data.get("organisation"), category=category)
-                except Tag.DoesNotExist:
-                    organisation = Tag()
-                    organisation.name = form.cleaned_data.get("organisation")
-                    organisation.category = category
-                    organisation.create_user = user_profile.user
-                    organisation.update_user = user_profile.user
-                    organisation.save()
-                user_profile.organisation = organisation
+    def get_context_data(self, **kwargs):
+        context = super(RegistrationView, self).get_context_data(**kwargs)
+        context['title'] = _(u'Register')
+        return context
 
-            user_profile.save()
+    def form_valid(self, form):
+        user_profile = form.save_profile()
+        user_registered.send(sender=user_profile.user, user=user_profile.user, request=self.request)
 
-            # send welcome email
-            user_registered.send(sender=user_profile.user, user=user_profile.user, request=request)
+        authd_user= form.authenticate_user()
+        if authd_user and authd_user.is_active:
+            login(self.request, authd_user)
 
-            authd_user= form.authenticate_user()
-            if authd_user and authd_user.is_active:
-                login(request, authd_user)
-
-            return HttpResponseRedirect(reverse('profile_register_thanks'))
-    else:
-        form = RegisterForm(initial={'next': request.GET.get('next'), 'mailing': True})
-        build_form_options(form)
-
-    return render(request, 'orb/form.html', {'form': form, 'title': _(u'Register')})
+        return redirect(self.get_success_url(form))
 
 
 def reset(request):
