@@ -27,18 +27,19 @@ class ResourceComponentView(FormMixin, DetailView):
     pk_url_kwarg = 'id'
     form_class = ResourceAccessForm
 
-    def send_signal(self):
-        kwargs = {
+    def send_signal(self, **kwargs):
+        base_kwargs = {
             'request': self.request,
             self.signal_arg_name: self.object,
         }
-        self.signal.send(sender=self.object, **kwargs)
+        base_kwargs.update(kwargs)
+        self.signal.send(sender=self.object, **base_kwargs)
 
     def get_queryset(self):
         return self.model.objects.approved(self.request.user)
 
     def form_valid(self, form):
-        self.send_signal()
+        self.send_signal(**form.cleaned_data)
         return redirect(self.get_success_url())
 
     def get(self, request, *args, **kwargs):
