@@ -11,6 +11,7 @@ from django.shortcuts import redirect
 from django.views.generic import DetailView
 from django.views.generic.edit import FormMixin
 
+from orb import conf
 from orb.models import ResourceFile
 from orb.models import ResourceURL
 from orb.resources.forms import ResourceAccessForm
@@ -26,6 +27,7 @@ class ResourceComponentView(FormMixin, DetailView):
     signal_arg_name = None
     pk_url_kwarg = 'id'
     form_class = ResourceAccessForm
+    template_name = 'orb/resource/resource_gateway.html'
 
     def send_signal(self, **kwargs):
         base_kwargs = {
@@ -42,10 +44,38 @@ class ResourceComponentView(FormMixin, DetailView):
         self.send_signal(**form.cleaned_data)
         return redirect(self.get_success_url())
 
+    def get_form_kwargs(self):
+        """Presumes GET requests"""
+        kwargs = super(ResourceComponentView, self).get_form_kwargs()
+        kwargs.update({
+            'data': self.request.GET,
+        })
+        return kwargs
+
     def get(self, request, *args, **kwargs):
+        """Responds to all requests
+
+        Must check whether form should be bound first by checking for a value that
+        is expected to be submitted with the form, i.e. 'submit'.
+        """
+
         self.object = self.get_object()
         form = self.get_form()
-        return self.form_valid(form)
+
+        if not conf.DOWNLOAD_EXTRA_INFO:
+            form.is_valid()
+            return self.form_valid(form)
+        elif 'submit' not in self.request.GET:
+            return self.render_to_response(self.get_context_data(
+                form=self.form_class(),
+                object=self.get_object(),
+            ))
+        elif form.is_valid():
+            return self.form_valid(form)
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            object=self.get_object(),
+        ))
 
 
 class ResourceFileView(ResourceComponentView):
