@@ -41,8 +41,13 @@ class ResourceComponentView(FormMixin, DetailView):
         return self.model.objects.approved(self.request.user)
 
     def form_valid(self, form):
-        self.send_signal(**form.cleaned_data)
+        form_data = form.cleaned_data
+        self.request.session['resource_init_data'] = form_data  # set initial data for next resource
+        self.send_signal(**form_data)
         return redirect(self.get_success_url())
+
+    def get_initial(self):
+        return self.request.session.get('resource_init_data', {})
 
     def get_form_kwargs(self):
         """Presumes GET requests"""
@@ -67,7 +72,7 @@ class ResourceComponentView(FormMixin, DetailView):
             return self.form_valid(form)
         elif 'submit' not in self.request.GET:
             return self.render_to_response(self.get_context_data(
-                form=self.form_class(),
+                form=self.form_class(initial=self.get_initial()),
                 object=self.get_object(),
             ))
         elif form.is_valid():

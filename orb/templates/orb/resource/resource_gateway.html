@@ -38,7 +38,7 @@
                     surveyCadre.hide();
                 }
             }
-            update(selection.value);
+            update($('input[type=radio][name=survey_intended_use]:checked')[0].value);
         });
     </script>
 

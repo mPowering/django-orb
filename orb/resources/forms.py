@@ -39,10 +39,10 @@ class ResourceAccessForm(forms.Form):
         required=False,
         min_value=1,
     )
-    survey_health_worker_cadre = forms.ModelChoiceField(
+    survey_health_worker_cadre = forms.ChoiceField(
         label=_("What type/cadre of frontline health workers are you intending to train?"),
         required=False,
-        queryset=Tag.tags.approved().roles(),
+        choices=Tag.tags.approved().roles().slugchoices(),
     )
 
     def __init__(self, *args, **kwargs):
