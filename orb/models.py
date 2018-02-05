@@ -426,6 +426,11 @@ class ResourceFile(TimestampBase):
         """Returns the complete path to the file"""
         return os.path.join(settings.MEDIA_ROOT, self.file.name)
 
+    @property
+    def web_path(self):
+        """Returns the relative URL to the file"""
+        return settings.MEDIA_URL + self.file.name
+
     def filesize(self):
         if os.path.isfile(self.full_path):
             return os.path.getsize(self.full_path)

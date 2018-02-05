@@ -89,14 +89,14 @@ class ResourceFileView(ResourceComponentView):
     signal_arg_name = 'resource_file'
 
     def get_object(self, queryset=None):
-        object = super(ResourceFileView, self).get_object(queryset)
-        if not object.filesize():
+        self.object = super(ResourceFileView, self).get_object(queryset)
+        if not self.object.filesize():
             logger.warning("File for '{}' does not exist or has 0 filesize".format(self.object))
             raise Http404
-        return object
+        return self.object
 
     def get_success_url(self):
-        return self.object.full_path
+        return self.object.web_path
 
 
 class ResourceURLView(ResourceComponentView):
