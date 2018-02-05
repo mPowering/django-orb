@@ -1,9 +1,11 @@
 """
 Manager classes for tag-related models
 """
+from __future__ import unicode_literals
 
-from django.db import models, IntegrityError
 from django.contrib.auth.models import AnonymousUser
+from django.db import models
+
 from orb.resources.managers import approved_queryset
 
 
@@ -40,8 +42,12 @@ class TagQuerySet(models.QuerySet):
         return self.filter(category__slug='audience').order_by('order_by', 'name')
 
     def choices(self):
-        """Returns a generator of choice tuples from queryset"""
+        """Returns a generator of choice tuples from queryset (using ID)"""
         return ((t.id, t.name) for t in self)
+
+    def slugchoices(self):
+        """Returns a generator of choice tuples from queryset (using slug)"""
+        return ((t.slug, t.name) for t in self)
 
 
 class ResourceTagManager(models.Manager):
