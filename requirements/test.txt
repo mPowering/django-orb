@@ -4,6 +4,8 @@ mock==2.0.0
 freezegun==0.3.7
 
 hypothesis==3.6.0
+unittest2==1.1.0
+Faker==0.8.10
 
 pytest==3.0.4
 pytest-django==3.1.1             # Django specific fixtures, settings handling

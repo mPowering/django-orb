@@ -38,7 +38,13 @@
                     surveyCadre.hide();
                 }
             }
-            update($('input[type=radio][name=survey_intended_use]:checked')[0].value);
+            // Check first for a checked instance, as this may be prepopulated based
+            // on previous form submission.
+            var initial = $('input[type=radio][name=survey_intended_use]:checked')[0];
+            if (initial == null) {
+                initial = $('input[type=radio][name=survey_intended_use]')[0];
+            }
+            update(initial.value);
         });
     </script>
 

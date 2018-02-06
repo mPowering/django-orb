@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from crispy_forms.helper import FormHelper
+from django.db.models import Q
 from crispy_forms.layout import Div
 from crispy_forms.layout import HTML
 from crispy_forms.layout import Layout
@@ -228,35 +229,20 @@ class RegisterForm(forms.Form):
 
     def clean_age_range(self):
         age_range = self.cleaned_data.get("age_range")
-        if age_range and age_range == '0':
-            raise forms.ValidationError(_("Please select an age range"))
-        return age_range
+        return '' if age_range == '0' else age_range
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(Q(username__iexact=email) | Q(email__iexact=email)).exists():
+            raise forms.ValidationError(_("Username has already been registered, please select another."))
+        return email
 
     def clean(self):
         cleaned_data = self.cleaned_data
-        email = cleaned_data.get("email")
         password = cleaned_data.get("password")
         password_again = cleaned_data.get("password_again")
-
-        if User.objects.filter(username__iexact=email).exists():
-            raise forms.ValidationError(_("Username has already been registered, please select another."))
-
-        if User.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError(_("Email has already been registered"))
-
         if password and password_again and (password != password_again):
             raise forms.ValidationError(_("Passwords do not match."))
-
-        # Check either a role is selected or other is entered
-        role = cleaned_data.get("role")
-        role_other = cleaned_data.get("role_other")
-        if role == '0' and role_other == '':
-            raise forms.ValidationError(_("Please select or enter a role"))
-
-
-        if cleaned_data.get("gender") == '0':
-            raise forms.ValidationError(_("Please select a gender"))
-
         return cleaned_data
 
 
@@ -306,20 +292,21 @@ class ProfileForm(forms.Form):
     username = forms.CharField(
         label=_('Username'),
         widget=forms.TextInput(attrs={'readonly': 'readonly'}),
-        required=False, help_text=_('You cannot edit your username.'))
+        required=False,
+        help_text=_('You cannot edit your username.'),
+    )
     email = forms.CharField(
         label=_('Email'),
         validators=[validate_email],
-        error_messages={'invalid': _(
-            'Please enter a valid e-mail address.')},
-        required=True)
+        error_messages={'invalid': _('Please enter a valid e-mail address.')},
+        required=True,
+    )
     password = forms.CharField(
         label=_('Password'),
         widget=forms.PasswordInput,
         required=False,
         min_length=6,
-        error_messages={
-            'min_length': _('Your new password should be at least 6 characters long')},
+        error_messages={'min_length': _('Your new password should be at least 6 characters long')},
     )
     password_again = forms.CharField(
         label=_('Password again'),
@@ -354,17 +341,17 @@ class ProfileForm(forms.Form):
     organisation = forms.CharField(
         label=_('Organisation'),
         max_length=100,
-        required=False)
+        required=True)
     age_range = forms.ChoiceField(
         label=_('Age range'),
         widget=forms.Select,
-        required=True,
+        required=False,
         error_messages={'required': _('Please select an age range')},
     )
     gender = forms.ChoiceField(
         label=_('Gender'),
         widget=forms.Select,
-        required=True,
+        required=False,
         error_messages={'required': _('Please select a gender')},
     )
     mailing = forms.BooleanField(
@@ -398,9 +385,9 @@ class ProfileForm(forms.Form):
             'email',
             'first_name',
             'last_name',
+            'organisation',
             'role',
             'role_other',
-            'organisation',
             'age_range',
             'gender',
             'about',
@@ -427,16 +414,14 @@ class ProfileForm(forms.Form):
         # check email not used by anyone else
         email = cleaned_data.get("email")
         username = cleaned_data.get("username")
-        num_rows = User.objects.exclude(
-            username__exact=username).filter(email=email).count()
+        num_rows = User.objects.exclude(username__exact=username).filter(email=email).count()
         if num_rows != 0:
             raise forms.ValidationError(_("Email address already in use"))
 
         # if password entered then check they are the same
-        password = cleaned_data.get("password")
-        password_again = cleaned_data.get("password_again")
-        if password and password_again:
-            if password != password_again:
-                raise forms.ValidationError(_("Passwords do not match."))
+        password = cleaned_data.get("password", "")
+        password_again = cleaned_data.get("password_again", "")
+        if password != password_again:
+            raise forms.ValidationError(_("Passwords do not match."))
 
         return cleaned_data
