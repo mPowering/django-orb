@@ -9,6 +9,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 from orb.models import Tag
+from collections import OrderedDict
 
 
 class ResourceAccessForm(forms.Form):
@@ -16,17 +17,17 @@ class ResourceAccessForm(forms.Form):
     Form class for collecting information prior to allowing a user to
     download a resource file or access a resource link.
     """
-    INTENDED_USE = [
+    INTENDED_USE = OrderedDict([
         ("learning", _("For my own learning")),
         ("browsing", _("I'm just browsing")),
         ("training", _("For training frontline health workers")),
         ("other", _("Other")),
-    ]
+    ])
 
     survey_intended_use = forms.ChoiceField(
         label=_("Please let us know how you are intending to use this resource"),
         required=True,
-        choices=INTENDED_USE,
+        choices=INTENDED_USE.items(),
         widget=forms.RadioSelect(),
     )
     survey_intended_use_other = forms.CharField(
@@ -37,16 +38,17 @@ class ResourceAccessForm(forms.Form):
     survey_health_worker_count = forms.IntegerField(
         label=_("How many frontline health workers are you intending to train?"),
         required=False,
-        min_value=1,
+        widget=forms.NumberInput(attrs={'min': 1}),
     )
     survey_health_worker_cadre = forms.ChoiceField(
         label=_("What type/cadre of frontline health workers are you intending to train?"),
         required=False,
-        choices=Tag.tags.approved().roles().slugchoices(),
+        choices=[],
     )
 
     def __init__(self, *args, **kwargs):
         super(ResourceAccessForm, self).__init__(*args, **kwargs)
+        self.fields['survey_health_worker_cadre'].choices = Tag.tags.roles().slugchoices(empty_label=_("Choose type/cadre"))
         self.helper = FormHelper()
         self.helper.form_method = 'GET'
         self.helper.form_class = 'form-horizontal'
@@ -64,3 +66,21 @@ class ResourceAccessForm(forms.Form):
                 css_class='col-lg-offset-2 col-lg-8',
             ),
         )
+
+    def clean(self):
+        data = self.cleaned_data
+        intended_use = data.get('survey_intended_use')
+        use_other = data.get('survey_intended_use_other')
+        worker_count = data.get('survey_health_worker_count', 0)
+        worker_cadre = data.get('survey_health_worker_cadre')
+
+        if intended_use == 'training':
+            if not worker_cadre:
+                self.add_error('survey_health_worker_cadre', _("Please select an item"))
+            if worker_count < 1:
+                self.add_error('survey_health_worker_count', _("Please enter a number greater than zero"))
+
+        elif intended_use == 'other' and not use_other:
+            self.add_error('survey_intended_use_other', _("Please enter an explanation"))
+
+        return data

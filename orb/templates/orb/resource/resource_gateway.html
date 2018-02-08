@@ -22,22 +22,35 @@
             var surveyCount = $('div#div_id_survey_health_worker_count');
             var surveyCadre = $('div#div_id_survey_health_worker_cadre');
             $(selection).change(function() {update(this.value)});
-            function update(selectedValue) {
-                if (selectedValue === "training") {
-                    surveyOther.hide();
-                    surveyCount.show();
-                    surveyCadre.show();
-                } else if (selectedValue === "other") {
-                    surveyOther.show();
-                    surveyCount.hide();
-                    surveyCadre.hide();
 
+            function toggleField(fieldDiv, isShown) {
+                if(isShown) {
+                    fieldDiv.show();
+                    fieldDiv.find(':input').prop('required', true);
                 } else {
-                    surveyOther.hide();
-                    surveyCount.hide();
-                    surveyCadre.hide();
+                    fieldDiv.hide();
+                    fieldDiv.find(':input').prop('required', false);
+
                 }
             }
+
+            function update(selectedValue) {
+                if (selectedValue === "training") {
+                    toggleField(surveyOther, false);
+                    toggleField(surveyCount, true);
+                    toggleField(surveyCadre, true);
+                } else if (selectedValue === "other") {
+                    toggleField(surveyOther, true);
+                    toggleField(surveyCount, false);
+                    toggleField(surveyCadre, false);
+
+                } else {
+                    toggleField(surveyOther, false);
+                    toggleField(surveyCount, false);
+                    toggleField(surveyCadre, false);
+                }
+            }
+
             // Check first for a checked instance, as this may be prepopulated based
             // on previous form submission.
             var initial = $('input[type=radio][name=survey_intended_use]:checked')[0];

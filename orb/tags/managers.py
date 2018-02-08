@@ -41,13 +41,37 @@ class TagQuerySet(models.QuerySet):
     def roles(self):
         return self.filter(category__slug='audience').order_by('order_by', 'name')
 
-    def choices(self):
-        """Returns a generator of choice tuples from queryset (using ID)"""
-        return ((t.id, t.name) for t in self)
+    def choices(self, empty_label=''):
+        """Returns a generator of choice tuples from queryset (using ID)
 
-    def slugchoices(self):
-        """Returns a generator of choice tuples from queryset (using slug)"""
-        return ((t.slug, t.name) for t in self)
+        Args:
+            empty_label: optional label for empty label. If included an empty label
+                        and separator will be included
+
+        Returns:
+            generator of choice tuples using primary key
+        """
+        if empty_label:
+            yield ('', empty_label)
+            yield ('', '---')
+        for t in self:
+            yield t.id, t.name
+
+    def slugchoices(self, empty_label=''):
+        """Returns a generator of choice tuples from queryset (using slug)
+
+        Args:
+            empty_label: optional label for empty label. If included an empty label
+                        and separator will be included
+
+        Returns:
+            generator of choice tuples using slug
+        """
+        if empty_label:
+            yield ('', empty_label)
+            yield ('', '---')
+        for t in self:
+            yield t.slug, t.name
 
 
 class ResourceTagManager(models.Manager):

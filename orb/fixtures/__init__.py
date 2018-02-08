@@ -43,6 +43,24 @@ def sample_tag(sample_category, testing_user):
 
 
 @pytest.fixture
+def role_category():
+    category, _ = Category.objects.get_or_create(name="audience")
+    yield category
+
+
+@pytest.fixture
+def role_tag(role_category, testing_user):
+    tag, _ = Tag.objects.get_or_create(name="cadre", defaults={
+        "category": role_category,
+        "create_user": testing_user,
+        "update_user": testing_user,
+    })
+    assert Tag.tags.roles()
+    yield tag
+
+
+
+@pytest.fixture
 def test_resource(testing_user):
     yield resource_factory(
         user=testing_user,
