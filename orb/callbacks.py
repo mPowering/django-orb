@@ -100,40 +100,45 @@ def resource_workflow_callback(sender, **kwargs):
 
 @receiver(resource_url_viewed)
 def resource_url_viewed_callback(sender, **kwargs):
-    request = kwargs.get('request')
-    resource_url = kwargs.get('resource_url')
+    """Tracks each occurance that a resource link is accessed"""
+    request = kwargs.pop('request')
+    resource_url = kwargs.pop('resource_url')
+    _ = kwargs.pop('signal')
+
     if is_search_crawler(request.META.get('HTTP_USER_AGENT', 'unknown')):
         return
 
-    tracker = ResourceTracker()
-    if not request.user.is_anonymous():
-        tracker.user = request.user
-    tracker.resource_url = resource_url
-    tracker.resource = resource_url.resource
-    tracker.ip = request.META.get('REMOTE_ADDR', '0.0.0.0')
-    tracker.user_agent = request.META.get('HTTP_USER_AGENT', 'unknown')
-    tracker.type = ResourceTracker.VIEW
-    tracker.save()
+    ResourceTracker.objects.create(
+        user=None if request.user.is_anonymous() else request.user,
+        resource_url=resource_url,
+        resource = resource_url.resource,
+        ip=request.META.get('REMOTE_ADDR', '0.0.0.0'),
+        user_agent=request.META.get('HTTP_USER_AGENT', 'unknown'),
+        type=ResourceTracker.VIEW,
+        **kwargs
+    )
     return
 
 
 @receiver(resource_file_viewed)
 def resource_file_viewed_callback(sender, **kwargs):
-    request = kwargs.get('request')
-    resource_file = kwargs.get('resource_file')
+    """Tracks each occurance that a resource file is downloaded"""
+    request = kwargs.pop('request')
+    resource_file = kwargs.pop('resource_file')
+    _ = kwargs.pop('signal')
 
     if is_search_crawler(request.META.get('HTTP_USER_AGENT', 'unknown')):
         return
 
-    tracker = ResourceTracker()
-    if not request.user.is_anonymous():
-        tracker.user = request.user
-    tracker.resource_file = resource_file
-    tracker.resource = resource_file.resource
-    tracker.ip = request.META.get('REMOTE_ADDR', '0.0.0.0')
-    tracker.user_agent = request.META.get('HTTP_USER_AGENT', 'unknown')
-    tracker.type = ResourceTracker.VIEW
-    tracker.save()
+    ResourceTracker.objects.create(
+        user=None if request.user.is_anonymous() else request.user,
+        resource_file=resource_file,
+        resource = resource_file.resource,
+        ip=request.META.get('REMOTE_ADDR', '0.0.0.0'),
+        user_agent=request.META.get('HTTP_USER_AGENT', 'unknown'),
+        type=ResourceTracker.VIEW,
+        **kwargs
+    )
     return
 
 
