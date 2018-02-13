@@ -27,6 +27,7 @@ def is_search_crawler(user_agent):
                'Yeti',
                'ltx71',
                'qwantify',
+               'BUbiNG',
                }
     for s in spiders:
         if s.lower() in user_agent.lower():
