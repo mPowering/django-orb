@@ -1,13 +1,15 @@
-from django.conf.urls import patterns
 from django.conf.urls import url
 
+from orb.analytics import views
+
 urlpatterns = [
-    url(r'^$', 'orb.analytics.views.home_view', name="orb_analytics_home"),
-    url(r'^mailinglist/$', 'orb.analytics.views.mailing_list_view', name="orb_analytics_mailing_list"),
-    url(r'^visitor/$', 'orb.analytics.views.visitor_view', name="orb_analytics_visitor"),
-    url(r'^visitor/(?P<year>\d+)/(?P<month>\d+)/$', 'orb.analytics.views.visitor_view', name="orb_analytics_visitor_month_view"),
-    url(r'^map/$', 'orb.analytics.views.map_view', name="orb_analytics_map"),
-    url(r'^tag/(?P<id>\d+)/$', 'orb.analytics.views.tag_view', name="orb_analytics_tag"),
-    url(r'^tag/(?P<id>\d+)/download/(?P<year>\d+)/(?P<month>\d+)/$', 'orb.analytics.views.tag_download', name="orb_analytics_download"),
-    url(r'^resource/(?P<id>\d+)/$', 'orb.analytics.views.resource_view', name="orb_analytics_resource"),
+    url(r'^$', view=views.home_view, name="orb_analytics_home"),
+    url(r'^mailinglist/$', view=views.mailing_list_view, name="orb_analytics_mailing_list"),
+    url(r'^visitor/$', view=views.visitor_view, name="orb_analytics_visitor"),
+    url(r'^visitor/(?P<year>\d+)/(?P<month>\d+)/$', view=views.visitor_view, name="orb_analytics_visitor_month_view"),
+    url(r'^map/$', view=views.map_view, name="orb_analytics_map"),
+    url(r'^tag/(?P<id>\d+)/$', view=views.tag_view, name="orb_analytics_tag"),
+    url(r'^tag/(?P<id>\d+)/download/(?P<year>\d+)/(?P<month>\d+)/$', view=views.tag_download, name="orb_analytics_download"),
+    url(r'^resource/(?P<id>\d+)/$', view=views.resource_view, name="orb_analytics_resource"),
+    url(r'^assets/$', view=views.resource_tracker_stats, name="orb_resource_asset_stats"),
 ]

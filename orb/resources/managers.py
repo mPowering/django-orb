@@ -2,10 +2,16 @@
 Manager classes for resource-related models
 """
 
+from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.db import models
-from django.conf import settings
-from django.db.models import Count, Max, Min, Q, Avg, Case, When, Value
+from django.db.models import Avg
+from django.db.models import Case
+from django.db.models import CharField
+from django.db.models import Count
+from django.db.models import Q
+from django.db.models import Value
+from django.db.models import When
 
 
 def approved_queryset(queryset, user=AnonymousUser, status="approved", relation=""):
@@ -90,7 +96,7 @@ class ResourceQueryset(models.QuerySet):
 
     def search(self, search_form_data):
         """
-        
+
         Args:
             search_form_data: a dictionary of cleaned field data
 
@@ -128,3 +134,31 @@ class ResourceURLManager(models.QuerySet):
         if user is None:
             user = AnonymousUser()
         return approved_queryset(self, user, relation="resource__")
+
+
+class TrackerQueryset(models.QuerySet):
+
+    def resource_assets(self):
+        """Returns only tracker data related to ResourceURLs and ResourceFiles"""
+        return self.filter(Q(resource_file__isnull=False) | Q(resource_url__isnull=False))
+
+    def export_data(self):
+        return self.select_related('user__userprofile', 'resource', 'resource_file', 'resource_url').annotate(
+            title=Case(
+                When(resource_file__isnull=False, then='resource_file__title'),
+                When(resource_url__isnull=False, then='resource_url__title'),
+                default='resource__title',
+                output_field=CharField(),
+            )
+        ).order_by('-access_date').values_list(
+            'user__first_name',
+            'user__last_name',
+            'user__email',
+            'access_date',
+            'user__userprofile__organisation',
+            'title',
+            'survey_intended_use',
+            'survey_intended_use_other',
+            'survey_health_worker_cadre',
+            'survey_health_worker_count',
+        )
