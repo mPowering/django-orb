@@ -97,9 +97,6 @@ def test_resource_access_form(role_tag, intended_use, use_intended_use, intended
     }
 
     form = forms.ResourceAccessForm(data=data)
-
-    uses = dict(forms.ResourceAccessForm.INTENDED_USE)
-
     form_validity = True
 
     if any([
@@ -121,3 +118,9 @@ def test_resource_access_form(role_tag, intended_use, use_intended_use, intended
 
     assert form_validity == form.is_valid()
 
+    if form_validity:
+        if survey_intended_use in ['browsing', 'learning', 'other']:
+            assert not form.cleaned_data.get('survey_health_worker_count')
+            assert not form.cleaned_data.get('survey_health_worker_cadre')
+        if survey_intended_use in ['browsing', 'learning', 'training']:
+            assert not form.cleaned_data.get('survey_intended_use_other')
