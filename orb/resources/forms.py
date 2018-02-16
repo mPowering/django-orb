@@ -69,7 +69,19 @@ class ResourceAccessForm(forms.Form):
 
     def clean(self):
         data = self.cleaned_data
+
         intended_use = data.get('survey_intended_use')
+        exclude = {
+            'browsing': ['survey_intended_use_other', 'survey_health_worker_count', 'survey_health_worker_cadre'],
+            'learning': ['survey_intended_use_other', 'survey_health_worker_count', 'survey_health_worker_cadre'],
+            'training': ['survey_intended_use_other'],
+            'other': ['survey_health_worker_count', 'survey_health_worker_cadre'],
+        }
+
+        for field in exclude.get(intended_use, []):
+            if field in data:
+                del data[field]
+
         use_other = data.get('survey_intended_use_other')
         worker_count = data.get('survey_health_worker_count', 0)
         worker_cadre = data.get('survey_health_worker_cadre')
