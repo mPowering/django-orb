@@ -16,7 +16,7 @@ from tastypie.models import create_api_key
 from orb import signals
 from orb.analytics.models import UserLocationVisualization
 from orb.profiles.querysets import ProfilesQueryset
-from orb.resources.managers import ResourceQueryset, ResourceURLManager
+from orb.resources.managers import ResourceQueryset, ResourceURLManager, TrackerQueryset
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ResourceTagManager, TagQuerySet
 from .fields import AutoSlugField
@@ -755,6 +755,8 @@ class ResourceTracker(models.Model):
     survey_intended_use_other = models.TextField(blank=True, null=True, default="")
     survey_health_worker_count = models.IntegerField(blank=True, null=True)
     survey_health_worker_cadre = models.CharField(max_length=50, blank=True, null=True)
+
+    objects = TrackerQueryset.as_manager()
 
     def get_location(self):
         return UserLocationVisualization.objects.filter(ip=self.ip).first()

@@ -6,17 +6,16 @@ import datetime
 
 import dateutil.relativedelta
 import tablib
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator, InvalidPage, EmptyPage
+from django.core.paginator import EmptyPage, InvalidPage, Paginator
 from django.db.models import Count
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
 
 from orb.analytics.models import UserLocationVisualization
 from orb.decorators import staff_required
-from orb.models import Resource, SearchTracker, ResourceTracker, Tag, TagOwner, TagTracker
+from orb.models import Resource, ResourceTracker, SearchTracker, Tag, TagOwner, TagTracker
 from orb.views import resource_can_edit
 
 
@@ -309,10 +308,8 @@ def tag_download(request, id, year, month):
                 )
             )
 
-    response = HttpResponse(
-        data.xls, content_type='application/vnd.ms-excel;charset=utf-8')
-    response['Content-Disposition'] = "attachment; filename=export-" + \
-        str(year) + "-" + str(month) + ".xls"
+    response = HttpResponse(data.xls, content_type='application/vnd.ms-excel;charset=utf-8')
+    response['Content-Disposition'] = "attachment; filename=export-" + str(year) + "-" + str(month) + ".xls"
 
     return response
 
@@ -429,3 +426,16 @@ def is_tag_owner(request, id):
         return False
     else:
         return True
+
+
+@staff_required
+def resource_tracker_stats(request):
+    """
+    Generates a CSV file of resource URL/File downloads
+    """
+    headers = ['First name', 'Last name', 'Email', 'Organisation', 'Access date', 'Title',
+               'Intended use', 'Intended use (other)', 'Health workers cadre', 'Health workers count']
+    data = tablib.Dataset(*ResourceTracker.objects.resource_assets().export_data(), headers=headers)
+    response = HttpResponse(data.csv, content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=orb_resourcetracker.csv'
+    return response
