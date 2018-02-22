@@ -277,7 +277,7 @@ def tag_download(request, id, year, month):
     for t in trackers:
         if t.resource.title:
             if t.resource_file and t.resource_file.filename():
-                print t.resource_file.filename()
+                #print t.resource_file.filename()
                 object = t.resource_file.filename()
             elif t.resource_url and t.resource_url.url:
                 object = t.resource_url.url
