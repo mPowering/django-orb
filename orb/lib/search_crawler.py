@@ -1,7 +1,5 @@
 
-
-def is_search_crawler(user_agent):
-    spiders = { 'bot',
+SPIDERS = { 'bot',
                 'crawl',
                 'slurp',
                 'spider',
@@ -29,7 +27,9 @@ def is_search_crawler(user_agent):
                'qwantify',
                'BUbiNG',
                }
-    for s in spiders:
+
+def is_search_crawler(user_agent):
+    for s in SPIDERS:
         if s.lower() in user_agent.lower():
             return True
     return False

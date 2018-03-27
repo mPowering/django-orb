@@ -19,14 +19,9 @@ class Command(BaseCommand):
         pass
 
     def handle(self, *args, **options):
-        # ResourceTracker
-        rts = ResourceTracker.objects.all()
-        for rt in rts:
-            if search_crawler.is_search_crawler(rt.user_agent):
-                print "found: " + rt.user_agent
-                rt.delete()
-            
-
-        # SearchTracker
-        # @TODO    
+        for spider in search_crawler.SPIDERS:
+            rts = ResourceTracker.objects.filter(user_agent__contains=spider)
+            print spider + ":" + str(rts.count())
+            rts.delete()
+  
             
