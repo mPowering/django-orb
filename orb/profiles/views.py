@@ -36,10 +36,7 @@ def login_view(request):
         user = authenticate(username=username, password=password)
         if user is not None and user.is_active:
             login(request, user)
-            if next is not None:
-                return HttpResponseRedirect(next)
-            else:
-                return HttpResponseRedirect(reverse('orb_home'))
+            return redirect(next) if next else redirect(reverse('orb_home'))
     else:
         form = LoginForm(initial={'next': request.GET.get('next'), })
 
