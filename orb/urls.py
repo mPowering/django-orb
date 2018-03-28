@@ -1,35 +1,36 @@
 from django.conf.urls import include, url
 from django.views.generic import TemplateView
 
+from orb import views
 from orb.feeds import LatestEntries, LatestTagEntries
 
 urlpatterns = [
-    url(r'^$', 'orb.views.home_view', name="orb_home"),
+    url(r'^$', views.home_view, name="orb_home"),
     url(r'^robots.txt$', TemplateView.as_view(template_name="orb/robots.txt")),
     url(r'^about/$', TemplateView.as_view(template_name="orb/about.html"), name="orb_about"),
     url(r'^feed/$', LatestEntries(), name="orb_feed"),
     url(r'^how-to/$', TemplateView.as_view(template_name="orb/how_to.html"), name="orb_how_to"),
     url(r'^cc-faq/$', TemplateView.as_view(template_name="orb/cc-faq.html"), name="orb_cc_faq"),
-    url(r'^partners/$', 'orb.views.partner_view', name="orb_partners"),
-    url(r'^taxonomy/$', 'orb.views.taxonomy_view', name="orb_taxonomy"),
+    url(r'^partners/$', views.partner_view, name="orb_partners"),
+    url(r'^taxonomy/$', views.taxonomy_view, name="orb_taxonomy"),
     url(r'^terms/$', TemplateView.as_view(template_name="orb/terms.html"), name="orb_terms"),
 
     url(r'^profile/', include('orb.profiles.urls')),
 
-    url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', 'orb.views.tag_view', name="orb_tags"),
+    url(r'^tag/view/(?P<tag_slug>\w[\w/-]*)$', views.tag_view, name="orb_tags"),
     url(r'^tag/feed/(?P<tag_slug>\w[\w/-]*)$', LatestTagEntries(), name="orb_tag_feed"),
 
     url(r'^tag/', include('orb.tags.urls')),
 
-    url(r'^collection/view/(?P<collection_slug>\w[\w/-]*)$', 'orb.views.collection_view', name="orb_collection"),
+    url(r'^collection/view/(?P<collection_slug>\w[\w/-]*)$', views.collection_view, name="orb_collection"),
 
     url(r'^analytics/', include('orb.analytics.urls')),
 
     url(r'^tinymce/', include('tinymce.urls')),
-    url(r'^search/$', 'orb.views.search_view', name="orb_search"),
-    url(r'^search/advanced/$', 'orb.views.search_advanced_view', name="orb_search_advanced"),
-    url(r'^search/advanced/(?P<tag_id>\d+)/$', 'orb.views.search_advanced_view', name="orb_search_advanced_prefill"),
-    url(r'^search/advanced/results/$', 'orb.views.search_advanced_results_view', name="orb_search_advanced_results"),
+    url(r'^search/$', views.search_view, name="orb_search"),
+    url(r'^search/advanced/$', views.search_advanced_view, name="orb_search_advanced"),
+    url(r'^search/advanced/(?P<tag_id>\d+)/$', views.search_advanced_view, name="orb_search_advanced_prefill"),
+    url(r'^search/advanced/results/$', views.search_advanced_results_view, name="orb_search_advanced_results"),
     url(r'^opensearch/$', TemplateView.as_view(template_name="search/opensearch.html"), name="orb_opensearch"),
 
     url(r'^api/', include('orb.api.urls')),

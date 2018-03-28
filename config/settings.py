@@ -19,7 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = '*****************************'
 
 DEBUG = True
-TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
@@ -74,18 +73,29 @@ MIDDLEWARE_CLASSES = [
 
 #####################################################################
 # Templates
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.core.context_processors.static",
-    "django.core.context_processors.request",
-    "django.contrib.messages.context_processors.messages",
-    'orb.context_processors.get_menu',
-    'orb.context_processors.get_version',
-    'orb.context_processors.base_context_processor',
-)
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+                'orb.context_processors.get_menu',
+                'orb.context_processors.get_version',
+                'orb.context_processors.base_context_processor',
+            ],
+            'debug': DEBUG,
+        },
+    },
+]
+
 #####################################################################
 
 
@@ -216,7 +226,6 @@ LOGGING = {
 ORB_RESOURCE_DESCRIPTION_MAX_WORDS = 150
 ORB_GOOGLE_ANALYTICS_CODE = ''
 ORB_INFO_EMAIL = 'orb@example.com'
-ORB_RESOURCE_DESCRIPTION_MAX_WORDS = 150
 ORB_PAGINATOR_DEFAULT = 20
 ORB_RESOURCE_MIN_RATINGS = 3
 TASK_UPLOAD_FILE_TYPE_BLACKLIST = [u'application/vnd.android']
