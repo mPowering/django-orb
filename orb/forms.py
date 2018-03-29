@@ -110,6 +110,7 @@ class ResourceStep1Form(forms.Form):
 
         super(ResourceStep1Form, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        self.helper.attrs = {'novalidate': True}
         self.helper.form_class = 'form-horizontal'
         self.helper.label_class = 'col-lg-2'
         self.helper.field_class = 'col-lg-8'
@@ -434,7 +435,7 @@ class AdvancedSearchForm(forms.Form):
     def search(self):
         """
         Implements the filtered search
-        
+
         Returns:
             a tuple of a queryset and list of Tags
 
