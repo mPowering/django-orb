@@ -18,12 +18,9 @@ def modify(settings):
                                    'orb.toolkits',
                                    'orb.courses',)
     settings['MIDDLEWARE_CLASSES'] += ('orb.middleware.SearchFormMiddleware',)
-    settings[
-        'TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_menu',)
-    settings[
-        'TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.get_version',)
-    settings[
-        'TEMPLATE_CONTEXT_PROCESSORS'] += ('orb.context_processors.base_context_processor',)
+    settings['TEMPLATES'][0]['OPTIONS']['context_processors'] += ('orb.context_processors.get_menu',)
+    settings['TEMPLATES'][0]['OPTIONS']['context_processors'] += ('orb.context_processors.get_version',)
+    settings['TEMPLATES'][0]['OPTIONS']['context_processors'] += ('orb.context_processors.base_context_processor',)
     settings['CRISPY_TEMPLATE_PACK'] = 'bootstrap3'
     settings['LOGIN_URL'] = reverse_lazy('profile_login')
 
