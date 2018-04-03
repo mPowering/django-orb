@@ -31,5 +31,11 @@ django-fsm==2.4.0
 
 django-extensions==1.7.5
 defusedxml==0.5.0
+dj_database_url==0.4.2
+
+dicttoxml==1.7.4
 
 git+https://github.com/mPowering/orb-api-python.git@v0.1.1#orb_api
+
+Markdown==2.6.9
+enum34==1.1.6

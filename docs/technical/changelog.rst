@@ -1,6 +1,18 @@
 Change log
 =====================================
 
+
+.. _orb-v2-7-0:
+
+v2.7.0 - not yet released
+----------------------------------
+
+.. note:
+	This release moves to Django 1.11.11 LTS.
+	
+	
+
+
 .. _orb-v2-6-0:
 
 v2.6.0 - Released 22 Feb 2018
@@ -29,6 +41,7 @@ v2.6.0 - Released 22 Feb 2018
 * 507: Update registration page - https://github.com/mPowering/django-orb/issues/507
 * 506: Settings for turning registration on & off - https://github.com/mPowering/django-orb/issues/506
 * 505: Allow users to log in with either username or email - https://github.com/mPowering/django-orb/issues/505
+
 
 .. _orb-v2-5-2:
 

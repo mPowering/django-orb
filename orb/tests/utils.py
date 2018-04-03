@@ -91,19 +91,23 @@ class LoginClient(object):
                     )
 
     """
-
-
     def __init__(self, test_case=None, username=None, password=None):
         self.test_case = test_case
         self.username = username
         self.password = password
 
     def __enter__(self):
-        self.test_case.client.login(username=self.username, password=self.password)
+        try:
+            self.test_case.client.login(username=self.username, password=self.password)
+        except AttributeError:
+            self.test_case.login(username=self.username, password=self.password)
         return self
 
     def __exit__(self, *args):
-        self.test_case.client.logout()
+        try:
+            self.test_case.client.logout()
+        except AttributeError:
+            self.test_case.logout()
 
     def __call__(self, method):
         @wraps(method)

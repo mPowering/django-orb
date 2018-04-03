@@ -1,0 +1,50 @@
+version: '2'
+
+volumes:
+  mysql_data_dev: {}
+  solr_data_dev: {}
+
+services:
+
+  mysql:
+    image: mysql:5.6
+    ports:
+     - "3306:3308"
+    environment:
+        MYSQL_ROOT_PASSWORD: verysecret
+        MYSQL_DATABASE: orb
+        MYSQL_USER: orb
+        MYSQL_PASSWORD: orb
+    volumes:
+      - ./local_data/mysql-data:/var/lib/mysql
+      - ./local_data/mysql-init:/docker-entrypoint-initdb.d
+
+  solr:
+    #image: mxr576/apachesolr-4.x-drupal-docker
+    build:
+      context: .
+      dockerfile: ./compose/solr/Dockerfile
+    ports:
+     - "8983:8983"
+    volumes:
+      - solr_data_dev:/opt/solr/server/solr/mycores
+
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/django/Dockerfile-dev
+    command: /start-dev.sh
+    depends_on:
+      - mysql
+      - solr
+    environment:
+      - MYSQL_USER=orb
+      - USE_DOCKER=yes
+      - DATABASE_URL="mysql://orb:orb@mysql:3308/orb"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    links:
+      - mysql
+      - solr

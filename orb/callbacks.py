@@ -9,10 +9,15 @@ from django.dispatch import receiver
 from orb.emailer import (first_resource, resource_approved, resource_rejected,
                          user_welcome, new_resource_submitted)
 from orb.lib.search_crawler import is_search_crawler
-from orb.models import (Resource, ResourceTracker, SearchTracker,
+from orb.models import (UserProfile, Resource, ResourceTracker, SearchTracker,
                         ResourceWorkflowTracker, ResourceCriteria, TagTracker)
 from orb.signals import resource_viewed, resource_workflow, resource_url_viewed, \
     resource_file_viewed, search, tag_viewed, user_registered, resource_submitted
+
+
+# TODO add signal silencer option
+def create_profile(sender, instance, **kwargs):
+    profile, _ = UserProfile.objects.get_or_create(user=instance)
 
 
 @receiver(user_registered)

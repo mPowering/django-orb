@@ -7,7 +7,7 @@ pytest fixtures
 import pytest
 from django.contrib.auth.models import User
 
-from orb.models import Category, Tag
+from orb.models import Category, Tag, UserProfile
 from orb.peers.models import Peer
 from orb.resources.tests.factory import resource_factory
 
@@ -17,13 +17,27 @@ pytestmark = pytest.mark.django_db
 @pytest.fixture
 def testing_user():
     user, _ = User.objects.get_or_create(username="tester")
+    user.set_password("password")
+    user.save()
     yield user
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
+def testing_profile(testing_user):
+    yield UserProfile.objects.create(user=testing_user)
+
+
+@pytest.fixture()
 def import_user():
     user, _ = User.objects.get_or_create(username="importer")
+    user.set_password("password")
+    user.save()
     yield user
+
+
+@pytest.fixture
+def importer_profile(import_user):
+    yield UserProfile.objects.create(user=import_user)
 
 
 @pytest.fixture

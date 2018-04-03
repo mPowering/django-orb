@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<moodle_backup>
+    <information>
+        <name>{{ information.name }}</name>
+        <moodle_version>{{ information.moodle_version }}</moodle_version>
+        <moodle_release>{{ information.moodle_release }}</moodle_release>
+        <backup_version>{{ information.backup_version }}</backup_version>
+        <backup_release>{{ information.backup_release }}</backup_release>
+        <backup_date>{{ information.backup_date }}</backup_date>
+        <mnet_remoteusers>0</mnet_remoteusers>
+        <include_files>1</include_files>
+        <include_file_references_to_external_content>0</include_file_references_to_external_content>
+        <original_wwwroot>{{ information.original_wwwroot }}</original_wwwroot>
+        <original_site_identifier_hash>{{ information.original_site_identifier_hash }}</original_site_identifier_hash>
+        <original_course_id>{{ information.original_course_id }}</original_course_id>
+        <original_course_format>{{ information.original_course_format }}</original_course_format>
+        <original_course_fullname>{{ information.original_course_fullname }}</original_course_fullname>
+        <original_course_shortname>{{ information.original_course_shortname }}</original_course_shortname>
+        <original_course_startdate>{{ information.original_course_startdate }}</original_course_startdate>
+        <original_course_enddate>{{ information.original_course_enddate }}</original_course_enddate>
+        <original_course_contextid>{{ information.original_course_contextid }}</original_course_contextid>
+        <original_system_contextid>{{ information.original_system_contextid }}</original_system_contextid>
+        <details>
+            <detail backup_id="{{ details.detail.backup_id }}">
+                <type>{{ details.detail.type }}</type>
+                <format>{{ details.detail.format }}</format>
+                <interactive>{{ details.detail.interactive }}</interactive>
+                <mode>{{ details.detail.mode }}</mode>
+                <execution>{{ details.detail.execution}}</execution>
+                <executiontime>{{ details.detail.executiontime }}</executiontime>
+            </detail>
+        </details>
+        <contents>
+            <activities>
+            {% for item in contents.activities.activity %}
+                <activity>
+                    <directory>{{ item.directory }}</directory>
+                    <title>{{ item.title }}</title>
+                    <sectionid>{{ item.sectionid }}</sectionid>
+                    <modulename>{{ item.modulename }}</modulename>
+                    <moduleid>{{ item.moduleid }}</moduleid>
+                </activity>
+            {% endfor %}
+            </activities>
+            <sections>
+            {% for item in contents.sections.section %}
+                <section>
+                    <directory>{{ item.directory }}</directory>
+                    <title>{{ item.title }}</title>
+                    <sectionid>{{ item.sectionid }}</sectionid>
+                </section>
+            {% endfor %}
+            </sections>
+            <course>
+                <courseid>{{ contents.course.courseid }}</courseid>
+                <directory>{{ contents.course.directory }}</directory>
+                <title>{{ contents.course.title }}</title>
+            </course>
+        </contents>
+        <settings>
+            {% for setting in settings.setting %}
+                <setting>
+                    {% for key, value in setting.items %}
+                        <{{ key }}>{{ value }}</{{ key }}>
+                    {% endfor %}
+                </setting>
+            {% endfor %}
+        </settings>
+    </information>
+</moodle_backup>

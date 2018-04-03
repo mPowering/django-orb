@@ -1,0 +1,92 @@
+<div 
+    class="course-activity panel panel-info"
+    :class="$style['hl--xy']"
+>
+    <template v-if="edittable">
+        <div class="panel-body">
+            <div class="form-group">
+                <label :for="'act_title_' + id">Activity Slide Title</label>
+                <input 
+                    :id="'act_title_' + id"
+                    type="text"
+                    class="form-control"
+                    v-model="instance.title"
+                >
+            </div>
+
+            <div class="form-group">
+                <label :for="'act_desc_' + id">Activity Slide Description</label>
+                <textarea 
+                    :id="'act_desc_' + id"
+                    class="form-control" 
+                    v-model="instance.description"
+                    rows="10"
+                ></textarea>
+            </div>
+        </div>
+    </template>
+    
+    <template v-else>
+        <header
+            class="course-activity-hdr panel-heading"
+            :class="[$style['row--pStart--sMiddle'], $style['rhy--xStart25']]"
+        >   
+            <slot name="prehed"></slot>
+            <h5 v-text="instance.title"></h5>
+            <slot name="posthed"></slot>
+        </header>
+    
+        <div 
+            class="panel-body"
+            v-if="instance.description"
+            v-text="instance.description">
+        </div>
+    </template>
+
+    <footer 
+        class="panel-footer"
+        :class="[$style['row--pEnd--sMiddle'], $style['rhy--xStart50']]"
+    >
+        <button 
+            class="btn btn-primary" 
+            type="button" 
+            @click="edit"
+            :class="[$style['rhy--xStart25']]"
+            v-if="!edittable"
+        >
+            <span
+                class="glyphicon glyphicon-edit"
+                aria-hidden="true"
+            ></span>
+            <span>Edit</span>
+        </button>
+        
+        <template v-else>
+            <button 
+                class="btn btn-danger" 
+                type="button" 
+                @click="edit"
+                :class="[$style['rhy--xStart25']]"
+            >
+                <span
+                    class="glyphicon glyphicon-ban-circle"
+                    aria-hidden="true"
+                ></span>
+                <span>Cancel</span>
+            </button>
+        
+            <button 
+                class="btn btn-success" 
+                type="button" 
+                @click="update"
+                :class="[$style['rhy--xStart25']]"
+            >
+                <span
+                    class="glyphicon glyphicon-ok-circle"
+                    aria-hidden="true"
+                ></span>
+                <span>Save</span>
+            </button>
+        </template>
+    </footer>
+</div>

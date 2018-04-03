@@ -94,6 +94,10 @@ class ResourceQueryset(models.QuerySet):
             ),
         ).order_by('exceeds_minimum')
 
+    def text_search(self, query):
+        """Text based querying interface"""
+        return self.filter(Q(title__icontains=query) | Q(title__icontains=query)).distinct()
+
     def search(self, search_form_data):
         """
 

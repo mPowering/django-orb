@@ -1,33 +1,39 @@
 # orb/context_processors.py
 from datetime import date
+
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext_lazy as _
+
 import orb
-from orb.models import Category, Tag, TagOwner
+from orb.models import Tag, TagOwner
 
 
 def get_menu(request):
     topics = Tag.tags.public().top_level()
-    
+
     if request.user.is_authenticated():
         tags = TagOwner.objects.filter(user=request.user)
     else:
         tags = None
 
     if request.user.is_authenticated():
-        if request.user.userprofile and request.user.userprofile.is_reviewer:
-            reviewer = True
-        else:
+        try:
+            if request.user.userprofile and request.user.userprofile.is_reviewer:
+                reviewer = True
+            else:
+                reviewer = False
+        except ObjectDoesNotExist:
             reviewer = False
     else:
         reviewer = False
-    
+
     return {
         'header_menu_categories': topics,
         'header_owns_tags': tags,
         'settings': settings,
         'reviewer': reviewer,
-        
+
     }
 
 
@@ -43,7 +49,7 @@ def get_version(request):
     notices = []
     if date.today() >= date(2017, 04, 05) and date.today() <= date(2017, 05, 21):
         notices.append(_(u'<strong>ORB Survey.</strong> We would like to hear from you on your experience using ORB as a training tool. Please fill out our short survey and enter in to win a $25 Amazon gift card! <strong><a href="https://goo.gl/forms/mPML9uiRZpjSeQkJ3" target="_blank">Take the survey</a></strong>'))
-        
+
     return {'version': version,
             'ORB_GOOGLE_ANALYTICS_CODE': settings.ORB_GOOGLE_ANALYTICS_CODE,
             'ORB_RESOURCE_MIN_RATINGS': settings.ORB_RESOURCE_MIN_RATINGS,
