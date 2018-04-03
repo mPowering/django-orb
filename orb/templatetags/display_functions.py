@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 from django import template
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
+from django.utils.safestring import mark_safe
 
 from orb import conf
 
@@ -45,7 +46,7 @@ def resourcefile_link(context, resourcefile, alternate_link):
         url = alternate_link
         title = _("Please login on register to download these files or access these links")
         css_class = 'disabled-link'
-    return file_link.format(url=url, title=title, css_class=css_class)
+    return mark_safe(file_link.format(url=url, title=title, css_class=css_class))
 
 
 @register.simple_tag(takes_context=True)
@@ -64,4 +65,4 @@ def resourceurl_link(context, resourceurl, alternate_link):
         url = alternate_link
         title = _("Please login on register to download these files or access these links")
         css_class = 'disabled-link'
-    return link_link.format(url=url, title=title, css_class=css_class)
+    return mark_safe(link_link.format(url=url, title=title, css_class=css_class))

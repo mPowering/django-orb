@@ -102,7 +102,8 @@ class Resource(TimestampBase):
     tags = models.ManyToManyField('Tag', through='ResourceTag', blank=True)
 
     resources = ResourceQueryset.as_manager()
-    objects = resources  # alias
+    objects = ResourceQueryset.as_manager()
+    # objects = resources  # alias
 
     # Fields to strip from API data
     API_EXCLUDED_FIELDS = ['id', 'guid']
@@ -320,7 +321,8 @@ class ResourceWorkflowTracker(models.Model):
     owner_email_sent = models.BooleanField(default=False, blank=False)
 
     workflows = WorkflowQueryset.as_manager()
-    objects = workflows  # Backwards compatible alias
+    objects = WorkflowQueryset.as_manager()
+    # objects = workflows  # Backwards compatible alias
 
 
 class ResourceURL(TimestampBase):
@@ -486,7 +488,8 @@ class ResourceCriteria(models.Model):
     )
 
     criteria = CriteriaQueryset.as_manager()
-    objects = criteria
+    objects = CriteriaQueryset.as_manager()
+    # objects = criteria
 
     def get_role_display(self):
         """Returns an appropriate label for the admin"""
@@ -538,7 +541,8 @@ class Tag(TimestampBase):
     published = models.BooleanField(default=True, help_text=_(u"Used to toggle status of health domains."))
 
     tags = TagQuerySet.as_manager()
-    objects = tags  # backwards compatibility
+    objects = TagQuerySet.as_manager()
+    # objects = tags  # backwards compatibility
 
     class Meta:
         verbose_name = _('Tag')
@@ -708,7 +712,8 @@ class UserProfile(TimestampBase):
     reviewer_roles = models.ManyToManyField('ReviewerRole', blank=True, related_name="profiles")
 
     profiles = ProfilesQueryset.as_manager()
-    objects = profiles
+    objects = ProfilesQueryset.as_manager()
+    # objects = profiles
 
     class Meta:
         db_table = "orb_userprofile"
@@ -884,7 +889,8 @@ class ReviewerRole(models.Model):
     name = models.CharField(max_length=100, choices=ROLE_CHOICES, unique=True, default='medical')
 
     roles = models.Manager()
-    objects = roles
+    objects = models.Manager()
+    # objects = roles
 
     def __unicode__(self):
         return self.get_name_display()

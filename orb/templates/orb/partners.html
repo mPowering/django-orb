@@ -1,9 +1,9 @@
-{% extends "base.html" %} 
-{% load i18n %} 
+{% extends "base.html" %}
+{% load i18n %}
 {% load thumbnail %}
 {% block extra_head_title %}
 	{% trans 'Content Partners' %}
-{% endblock extra_head_title %} 
+{% endblock extra_head_title %}
 
 {% block content %}
 
@@ -33,7 +33,7 @@
 	Content Partners should have an internal quality assurance and review
 	process in place, as this will help us fast-track your ORB resources
 	through our content review process.</p>
-	
+
 <p>The criteria for becoming a content partner are:</p>
 
 <ul>
@@ -62,9 +62,9 @@
 
 
 {% for p in partners %}
-<div class="row" style="padding-bottom:20px"> 
+<div class="row" style="padding-bottom:20px">
 	<div class="col-md-1">
-		<a href="{% url 'orb.views.tag_view' p.slug %}" title="{% blocktrans with p.name as org %}View all {{ org }} resources on ORB{% endblocktrans %}">
+		<a href="{% url 'orb_tags' p.slug %}" title="{% blocktrans with p.name as org %}View all {{ org }} resources on ORB{% endblocktrans %}">
 		{% thumbnail p.image "70x70" format="PNG" padding=True as im %}
 				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}"
 					alt="{% blocktrans with p.name as org %}View all {{ org }} resources on ORB{% endblocktrans %}">
@@ -74,14 +74,14 @@
 	<div class="col-md-8">
 		<h4>{{ p.name }}</h4>
 		<p>{{ p.description|safe }}<br/>
-		{% if p.slug = 'jhu-ccp' %}
-			<a href="{% url 'orb.views.tag_view' 'nurhi' %}">{% blocktrans %}View all NURHI project resources on ORB{% endblocktrans %}</a><br/>
-			<a href="{% url 'orb.views.tag_view' 'ghana-behavior-change-support' %}">{% blocktrans %}View all Ghana BCS project resources on ORB{% endblocktrans %}</a></p>
+		{% if p.slug == 'jhu-ccp' %}
+			<a href="{% url 'orb_tags' 'nurhi' %}">{% blocktrans %}View all NURHI project resources on ORB{% endblocktrans %}</a><br/>
+			<a href="{% url 'orb_tags' 'ghana-behavior-change-support' %}">{% blocktrans %}View all Ghana BCS project resources on ORB{% endblocktrans %}</a></p>
 		{% else %}
-			<a href="{% url 'orb.views.tag_view' p.slug %}">{% blocktrans with p.name as org %}View all {{ org }} resources on ORB{% endblocktrans %}</a></p>
+			<a href="{% url 'orb_tags' p.slug %}">{% blocktrans with p.name as org %}View all {{ org }} resources on ORB{% endblocktrans %}</a></p>
 		{%endif %}
 	</div>
-	
+
 </div>
 {% endfor %}
 {% endblock content %}

@@ -5,11 +5,11 @@ Utility functions for enhancing the reusability and readability of test code
 from functools import wraps
 
 import mock
+from importlib import import_module
 from django.conf import settings
 from django.contrib.auth import SESSION_KEY
 from django.contrib.auth.models import AnonymousUser
 from django.test import RequestFactory
-from django.utils.importlib import import_module
 
 
 def request_factory(factory=None, user=None, userprofile=None, method='GET', **kwargs):

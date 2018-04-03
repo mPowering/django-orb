@@ -189,8 +189,7 @@ class SiteTest(TestCase):
                 self.assertEqual(tracker_count_start + 1, tracker_count_end)
 
     def test_resources_pending(self):
-        pending_resources = Resource.objects.filter(
-            status=Resource.PENDING)
+        pending_resources = Resource.objects.filter(status=Resource.PENDING)
 
         if FAST_TESTS:
             pending_resources = pending_resources[:1]
