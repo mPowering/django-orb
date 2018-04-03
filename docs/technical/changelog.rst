@@ -4,13 +4,13 @@ Change log
 
 .. _orb-v2-7-0:
 
-v2.7.0 - not yet released
+v2.7.0 - Released 3 Apr 2018
 ----------------------------------
 
 .. note:
 	This release moves to Django 1.11.11 LTS.
 	
-	
+* 512: Moving to Django 1.11.x LTS - https://github.com/mPowering/django-orb/issues/issues/512	
 
 
 .. _orb-v2-6-0:
