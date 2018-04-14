@@ -1,6 +1,14 @@
 OpenDeliver AMI Versions
 =========================
 
+.. _opendeliver-amiv4:
+
+OpenDeliver AMI - v3 - released 13 Apr 2017
+--------------------------------------------
+
+* ORB v2.7.0
+* Moodle v3.4
+* OppiaMobile server v0.10.0
 
 
 .. _opendeliver-amiv3:
