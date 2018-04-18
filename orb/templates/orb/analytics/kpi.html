@@ -121,64 +121,60 @@
 		<tr>
 			<td><strong>{% trans 'Registered Users' %}</strong></td>
             <td><strong>{{ indicators.reg_users|intcomma }}</strong></td>
-            <td>{% blocktrans %}
+            <td>
             	<ul>
-            		<li>Until 22nd Feb 2018, users only need to register if they wanted to upload content, after this date users have been required to register to download a resource.</li>
+            		<li>{% blocktrans %}Until 22nd Feb 2018, users only need to register if they wanted to upload content, after this date users have been required to register to download a resource.{% endblocktrans %}</li>
 				</ul>
-            {% endblocktrans %}</td>
+			</td>
         </tr>
         <tr>
 			<td><strong>{% trans 'Anonymous Unique Users' %}</strong></td>
             <td><strong>{{ indicators.anon_uniq_users|intcomma }}</strong></td>
-            <td>{% blocktrans %}
+            <td>
             	<ul>
-            		<li>The anonymous visitors is based on the IP address, so each IP address in the figures counts only once</li>
-					<li>This figure does not show how many times a person revisits the site from the same IP address.</li>
-					<li>This figure does not show if multiple people use the same IP address (e.g. more than one health worker accessing the same tablet to see content on ORB).</li>
+            		<li>{% blocktrans %}The anonymous visitors is based on the IP address, so each IP address in the figures counts only once{% endblocktrans %}</li>
+					<li>{% blocktrans %}This figure does not show how many times a person revisits the site from the same IP address.{% endblocktrans %}</li>
+					<li>{% blocktrans %}This figure does not show if multiple people use the same IP address (e.g. more than one health worker accessing the same tablet to see content on ORB).{% endblocktrans %}</li>
 				</ul>
-            {% endblocktrans %}</td>
+			</td>
         </tr>
         <tr>
 			<td><strong>{% trans 'Resources on ORB' %}</strong></td>
             <td><strong>{{ indicators.no_resources_uniq|intcomma }} ({{ indicators.no_resources_total|intcomma }})</strong></td>
             <td>
-            	{% blocktrans with indicators.no_resources_pending as no_pending and indicators.no_resources_total as no_total and indicators.no_resources_uniq as no_uniq %}
             	<ul>
-            		<li>{{ no_pending }} resources pending content review</li>
-            		<li>There are {{ no_uniq }} separate approved resources on the site – excluding double counting resource that are in more than one health domain. There are {{ no_total }} if we just add up the no resources from each domain on the homepage (this double counts some resources where they are in multiple domains).</li>
+            		<li>{% blocktrans with indicators.no_resources_pending as no_pending %}{{ no_pending }} resources pending content review{% endblocktrans %}</li>
+            		<li>{% blocktrans with  indicators.no_resources_total as no_total and indicators.no_resources_uniq as no_uniq %}There are {{ no_uniq }} separate approved resources on the site – excluding double counting resource that are in more than one health domain. There are {{ no_total }} if we just add up the number of resources from each domain on the homepage (this double counts some resources where they are in multiple domains).{% endblocktrans %}</li>
 				</ul>
-            {% endblocktrans %}</td>
+            </td>
         </tr>
         <tr>
 			<td><strong>{% trans 'Resource views' %}</strong></td>
             <td><strong>{{ indicators.resource_views|intcomma }}</strong></td>
-            <td>
-            	{% blocktrans %} 
+            <td> 
             	<ul>
-            		<li>This excludes any views from the mPowering team/ORB administrators/staff</li>
-					<li>This figure includes some views from search bots, although we filter these out as much as is possible</li>
+            		<li>{% blocktrans %}This excludes any views from the mPowering team/ORB administrators/staff{% endblocktrans %}</li>
+					<li>{% blocktrans %}This figure includes some views from search bots, although we filter these out as much as is possible{% endblocktrans %}</li>
 				</ul>
-            	{% endblocktrans %}</td>
+            </td>
         </tr>
         <tr>
 			<td><strong>{% trans 'Countries' %}</strong></td>
             <td><strong>{{ indicators.countries|intcomma }}</strong></td>
             <td>
-            	{% blocktrans %} 
             	<ul>
-            		<li>Number of distinct countries users have visited ORB from</li>
+            		<li>{% blocktrans %}Number of distinct countries users have visited ORB from{% endblocktrans %}</li>
 				</ul>
-            	{% endblocktrans %}</td>
+			</td>
         </tr>
          <tr>
 			<td><strong>{% trans 'Languages' %}</strong></td>
             <td><strong>{{ indicators.languages|intcomma }}</strong></td>
             <td>
-            	{% blocktrans %} 
             	<ul>
-            		<li>Number of languages that resources have been tagged with</li>
+            		<li>{% blocktrans %}Number of languages that resources have been tagged with{% endblocktrans %}</li>
 				</ul>
-            	{% endblocktrans %}</td>
+            </td>
         </tr>
 	</tbody>
 </table>
@@ -194,9 +190,8 @@
     
 <h3>{% trans 'Resource Download Questionnaire Data' %}</h3>
 
-{% blocktrans %}
-<p>On 22nd Feb 2018 ORB was updated to require users to register and provide information on their intended use, before being able to download resources.</p>
-{% endblocktrans %}
+<p>{% blocktrans %}On 22nd Feb 2018 ORB was updated to require users to register and provide information on their intended use, before being able to download resources.{% endblocktrans %}</p>
+
 
 <table class="table table-condensed">
     <thead>
