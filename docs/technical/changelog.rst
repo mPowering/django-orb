@@ -2,6 +2,14 @@ Change log
 =====================================
 
 
+.. _orb-v2-7-1:
+
+v2.7.1 - not yet released
+----------------------------------
+
+* 529: Add KPI report - https://github.com/mPowering/django-orb/issues/529
+
+
 .. _orb-v2-7-0:
 
 v2.7.0 - Released 3 Apr 2018
@@ -10,7 +18,7 @@ v2.7.0 - Released 3 Apr 2018
 .. note:
 	This release moves to Django 1.11.11 LTS.
 	
-* 512: Moving to Django 1.11.x LTS - https://github.com/mPowering/django-orb/issues/issues/512	
+* 512: Moving to Django 1.11.x LTS - https://github.com/mPowering/django-orb/issues/512	
 
 
 .. _orb-v2-6-0:

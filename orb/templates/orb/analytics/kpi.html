@@ -205,8 +205,8 @@
         <tr>
             <th>{% trans 'Browsing' %}</th>
             <th>{% trans 'Own learning' %}</th>
-            <th>{% trans 'Training (<a href="#training">*1</a>)' %}</th>
-            <th>{% trans 'Other (<a href="#other">*2</a>)' %}</th>
+            <th>{% trans 'Training' %} <sup><a href="#training">1</a></sup></th>
+            <th>{% trans 'Other' %} <sup><a href="#other">2</a></sup></th>
         </tr>
     </thead>
     <tbody>
@@ -228,7 +228,7 @@
     </tbody>
 </table>
 
-<h4><a name="training" class="named-anchor"></a>{% trans '(*1) Training data breakdown' %}</h4>
+<h4><a name="training" class="named-anchor"></a>{% trans '1. Training data breakdown' %}</h4>
 <table class="table table-condensed">
     <thead>
         <tr>
@@ -252,7 +252,7 @@
 	</tbody>
 </table>
 
-<h4><a name="other" class="named-anchor"></a>{% trans '(*2) Other data breakdown' %}</h4>
+<h4><a name="other" class="named-anchor"></a>{% trans '2. Other data breakdown' %}</h4>
 <table class="table table-condensed">
     <thead>
         <tr>
