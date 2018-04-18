@@ -3,12 +3,12 @@ Views for rendering site usage analytics
 """
 
 import datetime
-
-import dateutil.relativedelta
 import tablib
+import dateutil.relativedelta
+
 from django.contrib.auth.models import User
 from django.core.paginator import EmptyPage, InvalidPage, Paginator
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils import timezone
@@ -18,6 +18,7 @@ from orb.decorators import staff_required
 from orb.models import Resource, ResourceTracker, SearchTracker, Tag, TagOwner, TagTracker
 from orb.views import resource_can_edit
 
+from orb.lib import search_crawler
 
 @staff_required
 def home_view(request):
@@ -439,3 +440,108 @@ def resource_tracker_stats(request):
     response = HttpResponse(data.csv, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=orb_resourcetracker.csv'
     return response
+
+@staff_required
+def kpi_view(request):
+    
+    # registered users
+    reg_users = User.objects.all().count()
+    
+    # anonymous unique users
+    anon_1 = ResourceTracker.objects.filter(user=None).values_list('ip')
+    anon_2 = TagTracker.objects.filter(user=None).values_list('ip')
+    anon_3 = SearchTracker.objects.filter(user=None).values_list('ip')
+    anon_uniq_users = anon_1.union(anon_2,anon_3).count()
+    
+    # no resources
+    no_resources_total = Tag.objects.filter(category__slug='health-domain', resourcetag__resource__status='approved').count()
+    no_resources_uniq = Resource.objects.filter(status='approved').count()
+    no_resources_pending = Resource.objects.filter(status='pending').count()
+    
+    # resource views
+    resource_views = ResourceTracker.objects.exclude(Q(user__is_superuser=True) | Q(user__is_staff=True)).count()
+    
+    # countries
+    countries = UserLocationVisualization.objects.all().values_list('country_name').distinct().count()    
+    
+    # languages
+    languages = Tag.objects.filter(category__slug='language',resource__status='approved').values_list('name').distinct().count()
+    
+    indicators = {
+                    'reg_users': reg_users,
+                    'anon_uniq_users': anon_uniq_users,
+                    'no_resources_total': no_resources_total,
+                    'no_resources_uniq': no_resources_uniq,
+                    'no_resources_pending': no_resources_pending,
+                    'resource_views': resource_views,
+                    'countries': countries,
+                    'languages': languages
+    }
+    
+    table_data = []
+    
+    start_date = timezone.now() - datetime.timedelta(days=365)
+    delta = dateutil.relativedelta.relativedelta(months=+1)
+            
+    no_months = 0
+    tmp_date = start_date
+    while tmp_date <= timezone.now():
+        tmp_date += delta
+        no_months += 1
+                
+    for i in range(0,no_months,+1):
+        temp = start_date + dateutil.relativedelta.relativedelta(months=+i)
+        month = temp.strftime("%m")
+        year = temp.strftime("%Y")
+        
+        # no downloads
+        monthly_trackers = ResourceTracker.objects.filter(access_date__month=month, access_date__year=year).exclude(resource_url=None,resource_file=None)
+        
+        # strip bots
+        for spider in search_crawler.SPIDERS:
+            monthly_trackers = monthly_trackers.exclude(user_agent__contains=spider)
+        
+        downloads = monthly_trackers.count()
+        
+        # no users
+        users_logged_in = monthly_trackers.filter(user__isnull=False).values_list('user').distinct().count()
+        users_anon = monthly_trackers.filter(user__isnull=True).values_list('ip').distinct().count()
+        users = users_logged_in + users_anon
+        
+        # no resources 
+        resources = monthly_trackers.values_list('resource').distinct().count()
+        
+        # intended uses
+        # browsing
+        browsing = monthly_trackers.filter(survey_intended_use='browsing').count()
+        
+        # own learning
+        own_learning = monthly_trackers.filter(survey_intended_use='learning').count()
+        
+        # training
+        training = monthly_trackers.filter(survey_intended_use='training').count()
+        training_data = monthly_trackers.filter(survey_intended_use='training')
+        
+        # other
+        other = monthly_trackers.filter(survey_intended_use='other').count()
+        other_data = monthly_trackers.filter(survey_intended_use='other')
+        
+        period = {
+                    'date': ('%s-%s' % (temp.strftime("%b"), year)),
+                    'downloads' : downloads,
+                    'users': users,
+                    'resources': resources,
+                    'browsing': browsing,
+                    'own_learning' : own_learning,
+                    'training': training,
+                    'training_data': training_data,
+                    'other' : other,
+                    'other_data': other_data
+                    
+                    }
+        table_data.append(period)
+                
+                
+    
+    return render(request, 'orb/analytics/kpi.html', {'indicators': indicators,
+                                                      'table_data': table_data})

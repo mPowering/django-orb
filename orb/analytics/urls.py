@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^tag/(?P<id>\d+)/download/(?P<year>\d+)/(?P<month>\d+)/$', view=views.tag_download, name="orb_analytics_download"),
     url(r'^resource/(?P<id>\d+)/$', view=views.resource_view, name="orb_analytics_resource"),
     url(r'^assets/$', view=views.resource_tracker_stats, name="orb_resource_asset_stats"),
+    url(r'^kpi/$', view=views.kpi_view, name="orb_analytics_kpi"),
 ]
