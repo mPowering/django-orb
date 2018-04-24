@@ -35,7 +35,7 @@ dj_database_url==0.4.2
 
 dicttoxml==1.7.4
 
-git+https://github.com/mPowering/orb-api-python.git@v0.1.1#orb_api
+git+https://github.com/mPowering/orb-api-python.git@v1.1.0#orb_api
 
 Markdown==2.6.9
 enum34==1.1.6
