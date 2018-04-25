@@ -1,3 +1,4 @@
+import itertools
 import os
 import uuid
 
@@ -11,6 +12,9 @@ from django.db import models
 from django.db.models import Avg, Count
 from django.utils.translation import ugettext_lazy as _
 from modeltranslation.utils import build_localized_fieldname
+from typing import Any
+from typing import Dict
+from typing import Iterable
 
 from orb import signals
 from orb.analytics.models import UserLocationVisualization
@@ -151,7 +155,9 @@ class Resource(TimestampBase):
 
         import_user = get_import_user()
 
-        for attr, value in api_data.iteritems():
+        cleaned_api_data = clean_api_data(api_data, 'attribution', 'description', 'title')
+
+        for attr, value in cleaned_api_data.iteritems():
             setattr(self, attr, value)
 
         self.update_user = import_user
@@ -172,6 +178,7 @@ class Resource(TimestampBase):
             the Resource object created
 
         """
+
         resource_files = api_data.pop('files', [])
         languages = api_data.pop('languages', [])
         tags = api_data.pop('tags', [])
@@ -181,18 +188,37 @@ class Resource(TimestampBase):
 
         import_user = get_import_user()
 
-        resource = cls.resources.create(source_peer=peer, create_user=import_user, update_user=import_user, **api_data)
+        cleaned_api_data = clean_api_data(api_data, 'attribution', 'description', 'title')
+
+        resource = cls.resources.create(
+            source_peer=peer,
+            create_user=import_user,
+            update_user=import_user,
+            **cleaned_api_data
+        )
 
         ResourceURL.objects.bulk_create([
-            ResourceURL.from_url_data(resource, resource_url_data, import_user)
+            ResourceURL.from_url_data(
+                resource,
+                clean_api_data(resource_url_data, "description", "title"),
+                import_user,
+            )
             for resource_url_data in resource_urls
         ] + [
-            ResourceURL.from_file_data(resource, resource_file_data, import_user)
+            ResourceURL.from_file_data(
+                resource,
+                clean_api_data(resource_file_data, "description", "title"),
+                import_user,
+            )
             for resource_file_data in resource_files
         ])
 
         for tag_data in tags:
-            ResourceTag.create_from_api_data(resource, tag_data['tag'], user=import_user)
+            ResourceTag.create_from_api_data(
+                resource,
+                clean_api_data(tag_data['tag'], "category", "description", "name", "summary"),
+                user=import_user,
+            )
 
         return resource
 
@@ -668,6 +694,10 @@ class ResourceTag(models.Model):
             for field in category_fields
         }
 
+        for field in api_data.keys():
+            if field.startswith("category"):
+                del api_data[field]
+
         category, created = Category.objects.get_or_create(name=category_name, defaults=category_name_translations)
 
         api_data['category'] = category
@@ -903,3 +933,33 @@ def get_import_user():
         user.save()
         return user
 
+
+def clean_api_data(data, *fields):
+    # type: (Dict[unicode, Any], Iterable[unicode]) -> Dict[unicode, Any]
+    """
+    Returns API resource data with unusable translations filtered
+
+    Args:
+        data: original API data
+        *fields: translated field names
+
+    Returns:
+        same API data with unsupported translations dropped
+
+    """
+    language_codes = [l[0].replace('-', '_') for l in settings.LANGUAGES]
+    supported_field_translations = [
+        "{}_{}".format(field, language)
+        for (field, language) in itertools.product(fields, language_codes)
+    ]
+    def allowed_field(test_field):
+        # type: (unicode) -> bool
+        if test_field != 'id' or test_field in fields or test_field in supported_field_translations:
+            return True
+        return not any([test_field.startswith(f) for f in fields])
+
+    return {
+        key: value
+        for key, value in data.items()
+        if allowed_field(key)
+    }

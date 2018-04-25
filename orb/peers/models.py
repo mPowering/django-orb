@@ -90,7 +90,8 @@ class Peer(models.Model):
 
         total_count, resource_list = self.client.list_resources(**filters)
 
-        for api_resource in resource_list:
+        for initial_api_resource in resource_list:
+            api_resource = self.client.get_resource_by_id(initial_api_resource['id'])
             try:
                 local_resource = Resource.resources.get(guid=api_resource['guid'])
             except Resource.DoesNotExist:
