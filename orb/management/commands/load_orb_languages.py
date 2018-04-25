@@ -1,6 +1,8 @@
 """
 Management command to load language fixtures as tags
 """
+from __future__ import unicode_literals
+
 import csv
 import os
 import re
@@ -47,7 +49,7 @@ class Command(BaseCommand):
         parser.add_argument(
             "--user",
             dest="user",
-            type="int",
+            type=int,
             default=1,
             help="Default user to mark as creating",
         )
@@ -66,7 +68,9 @@ class Command(BaseCommand):
         except User.DoesNotExist:
             raise CommandError("No match user found for '{0}'".format(options["user"]))
 
-        category = Category.objects.filter(name="Language").first()
+        category, _ = Category.objects.get_or_create(name="Language", defaults={
+            'top_level': True,
+        })
 
         if not os.path.exists(options["fixture"]):
             raise CommandError("Cannot find file '{0}'".format(options["fixture"]))
@@ -74,6 +78,8 @@ class Command(BaseCommand):
         with open(options["fixture"]) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
+
+                row = {k: v.decode('utf-8') for k, v in row.items()}
 
                 if not options["iso6392"] and not has_data(row["iso639-1"]):
                     continue

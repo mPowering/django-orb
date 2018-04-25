@@ -39,7 +39,7 @@ class Command(BaseCommand):
         try:
             user = get_user_model().objects.get(username=username)
         except get_user_model().DoesNotExist:
-            get_user_model().objects.create_superuser(
+            user = get_user_model().objects.create_superuser(
                 username,
                 password=options.get('password'),
                 email=options.get('email'),
