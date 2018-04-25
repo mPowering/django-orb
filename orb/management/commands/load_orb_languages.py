@@ -1,13 +1,13 @@
 """
 Management command to load language fixtures as tags
 """
-import os
 import csv
+import os
 import re
-from optparse import make_option
 
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
+
 from orb.models import Category, Tag
 
 
@@ -31,26 +31,33 @@ def has_data(input):
 class Command(BaseCommand):
     help = "Loads languages from CSV fixtures into tag database"
 
-    option_list = BaseCommand.option_list + (
-        make_option("--file",
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--file",
             dest="fixture",
             default="orb/fixtures/iso639.csv",
-            help="CSV file path"),
-        make_option("--image",
+            help="CSV file path",
+        )
+        parser.add_argument(
+            "--image",
             dest="image",
             default="tag/language_default.png",
-            help="Default image (static image path)"),
-        make_option("--user",
+            help="Default image (static image path)",
+        )
+        parser.add_argument(
+            "--user",
             dest="user",
             type="int",
             default=1,
-            help="Default user to mark as creating"),
-        make_option("--iso6392",
+            help="Default user to mark as creating",
+        )
+        parser.add_argument(
+            "--iso6392",
             action="store_true",
             dest="iso6392",
             default=False,
-            help="Flag for including all ISO 639.2 (only ISO 639.1 included by default)"),
-    )
+            help="Flag for including all ISO 639.2 (only ISO 639.1 included by default)",
+        )
 
     def handle(self, *args, **options):
 
