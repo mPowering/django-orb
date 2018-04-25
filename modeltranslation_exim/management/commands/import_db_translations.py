@@ -38,11 +38,12 @@ class Command(BaseCommand):
     help = "Update database translations from specially formatted PO file"
     args = "<PO file path>"
 
-    option_list = BaseCommand.option_list + (
-        make_option('--language',
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--language',
             dest='language',
-            help='Language code for target language, e.g. `pt-br` (required)',),
-    )
+            help='Language code for target language, e.g. `pt-br` (required)',
+        )
 
     def handle(self, *args, **options):
         try:

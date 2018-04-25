@@ -4,7 +4,7 @@
 Model field definitions for Django ORB
 """
 
-from autoslug import AutoSlugField as BaseSlugField
+from autoslugged import AutoSlugField as BaseSlugField
 
 
 class AutoSlugField(BaseSlugField):

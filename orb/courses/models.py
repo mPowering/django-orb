@@ -8,7 +8,7 @@ from __future__ import unicode_literals
 
 import json
 
-from autoslug.settings import slugify
+from autoslugged.settings import slugify
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.core.urlresolvers import reverse

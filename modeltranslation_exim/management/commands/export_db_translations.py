@@ -51,14 +51,14 @@ class Command(BaseCommand):
 
     args = "<module.Class.field> <module.Class.field> ... "
 
-    option_list = BaseCommand.option_list + (
-        make_option('--language',
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--language',
             dest='language',
             help=('Language code for target language, e.g. `pt-br` (optional). '
                   'This will return existing translations, without specification it will return '
                   'an blank msgstr values.'),
-        ),
-    )
+        )
 
     def handle(self, *args, **options):
         language = options.get('language', None)
