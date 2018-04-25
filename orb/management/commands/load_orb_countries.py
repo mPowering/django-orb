@@ -96,12 +96,11 @@ class Command(BaseCommand):
                     )
                 except Tag.MultipleObjectsReturned:
                     self.stderr.write(
-                        u"Error: multiple matches for {0}".format(row[name_label]))
+                        "Error: multiple matches for {0}".format(row[name_label]))
                     continue
 
                 if created:
-                    self.stdout.write(
-                        u"Added new tag: {0}".format(row[name_label]))
+                    self.stdout.write("Added new tag: {0}".format(row[name_label]))
 
                 tag_meta, _ = TagProperty.objects.get_or_create(
                     tag=tag, name="code", defaults={"value": row[code_label].upper()})
