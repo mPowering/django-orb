@@ -4,13 +4,15 @@
 Management command to load country fixtures as tags and tag properties
 """
 
-import os
+from __future__ import unicode_literals
+
 import csv
+import os
 import re
-from optparse import make_option
 
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
+
 from orb.models import Category, Tag, TagProperty
 
 
@@ -34,25 +36,32 @@ def has_data(input):
 class Command(BaseCommand):
     help = "Loads countries from CSV fixtures into tag database"
 
-    option_list = BaseCommand.option_list + (
-        make_option("--file",
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--file",
             dest="fixture",
             default="orb/fixtures/country-codes.csv",
-            help="CSV file path"),
-        make_option("--name",
+            help="CSV file path",
+        )
+        parser.add_argument(
+            "--name",
             dest="name",
             default="name",
-            help="Default column header for country name"),
-        make_option("--code",
+            help="Default column header for country name",
+        )
+        parser.add_argument(
+            "--code",
             dest="code",
             default="ISO3166-1-Alpha-2",
-            help="Default column header for country code"),
-        make_option("--user",
+            help="Default column header for country code",
+        )
+        parser.add_argument(
+            "--user",
             dest="user",
-            type="int",
+            type=int,
             default=1,
-            help="Default user to mark as creating"),
-    )
+            help="Default user to mark as creating",
+        )
 
     def handle(self, *args, **options):
 
