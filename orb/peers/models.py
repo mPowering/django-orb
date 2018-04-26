@@ -1,14 +1,16 @@
 """
 Models for the ORB content sharing network
 """
+from __future__ import unicode_literals
+
 import logging
-from collections import defaultdict
 
 from django.db import models
 from django.db.models import Q
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from orb_api.api import OrbClient
+
 from orb.peers.tasks import send_peer_sync_notification_email
 
 logger = logging.getLogger('orb')
@@ -91,13 +93,22 @@ class Peer(models.Model):
         total_count, resource_list = self.client.list_resources(**filters)
 
         for initial_api_resource in resource_list:
+
+            if initial_api_resource.get('status', '') != Resource.APPROVED:
+                writer("Skipping '{}' because it is '{}'".format(
+                    initial_api_resource.get('title', ''),
+                    initial_api_resource.get('status', ''),
+                ))
+                continue
+
             api_resource = self.client.get_resource_by_id(initial_api_resource['id'])
+
             try:
                 local_resource = Resource.resources.get(guid=api_resource['guid'])
             except Resource.DoesNotExist:
                 Resource.create_from_api(api_resource, peer=self)
                 resource_counts['new_resources'] += 1
-                writer(u"Created a new resource: {}".format(api_resource['title']))
+                writer("Created a new resource: {}".format(api_resource['title']))
             else:
                 if local_resource.is_local():
                     resource_counts['skipped_local_resources'] += 1
@@ -137,7 +148,7 @@ class PeerQueryLog(models.Model):
         get_latest_by = 'finished'
 
     def __unicode__(self):
-        return u"{} - {}".format(self.peer, self.created)
+        return "{} - {}".format(self.peer, self.created)
 
     def finish(self, filtered_date=None, new_resources=0, skipped_local_resources=0,
                updated_resources=0, unchanged_resources=0):

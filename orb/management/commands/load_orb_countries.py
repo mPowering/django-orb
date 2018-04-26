@@ -66,24 +66,28 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         try:
-            user = User.objects.get(pk=options["user"])
+            user = User.objects.get(pk=options[b"user"])
         except User.DoesNotExist:
-            raise CommandError("No match user found for '{0}'".format(options["user"]))
+            raise CommandError("No match user found for '{0}'".format(options[b"user"]))
 
-        category = Category.objects.filter(name="Geography").first()
+        category, _ = Category.objects.get_or_create(name="Geography", defaults={
+            'top_level': True,
+        })
 
-        if not os.path.exists(options["fixture"]):
-            raise CommandError("Cannot find file '{0}'".format(options["fixture"]))
+        if not os.path.exists(options[b"fixture"]):
+            raise CommandError("Cannot find file '{0}'".format(options[b"fixture"]))
 
-        name_label = options["name"]
-        code_label = options["code"]
+        name_label = options[b"name"]
+        code_label = options[b"code"]
 
-        with open(options["fixture"]) as csvfile:
+        with open(options[b"fixture"]) as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
 
                 if not has_data(row[code_label]):
                     continue
+
+                row = {k: v.decode('utf-8') for k, v in row.items()}
 
                 try:
                     tag, created = Tag.objects.get_or_create(
@@ -95,12 +99,11 @@ class Command(BaseCommand):
                         }
                     )
                 except Tag.MultipleObjectsReturned:
-                    self.stderr.write(
-                        "Error: multiple matches for {0}".format(row[name_label]))
+                    self.stderr.write("Error: multiple matches for '{0}'".format(row[name_label]))
                     continue
 
                 if created:
-                    self.stdout.write("Added new tag: {0}".format(row[name_label]))
+                    self.stdout.write("Added new tag: '{0}'".format(row[name_label]))
 
                 tag_meta, _ = TagProperty.objects.get_or_create(
                     tag=tag, name="code", defaults={"value": row[code_label].upper()})

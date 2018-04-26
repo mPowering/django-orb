@@ -4,6 +4,8 @@
 Model field definitions for Django ORB
 """
 
+from __future__ import unicode_literals
+
 from autoslugged import AutoSlugField as BaseSlugField
 
 

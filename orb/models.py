@@ -81,16 +81,13 @@ class Resource(TimestampBase):
     guid = models.UUIDField(null=True, default=uuid.uuid4, unique=True, editable=False)
     title = models.TextField(blank=False, null=False)
     description = models.TextField(blank=False, null=False)
-    image = models.ImageField(
-        upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
-    status = models.CharField(
-        max_length=50, choices=STATUS_TYPES, default=PENDING)
+    image = models.ImageField(upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
+    status = models.CharField(max_length=50, choices=STATUS_TYPES, default=PENDING)
     create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_create_user')
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_update_user')
     slug = AutoSlugField(populate_from='title', max_length=100, blank=True, null=True)
     study_time_number = models.IntegerField(default=0, null=True, blank=True)
-    study_time_unit = models.CharField(
-        max_length=10, choices=STUDY_TIME_UNITS, blank=True, null=True)
+    study_time_unit = models.CharField(max_length=10, choices=STUDY_TIME_UNITS, blank=True, null=True)
     born_on = models.DateTimeField(blank=True, null=True, default=None)
     attribution = models.TextField(blank=True, null=True, default=None)
 
@@ -954,9 +951,13 @@ def clean_api_data(data, *fields):
         "{}_{}".format(field, language)
         for (field, language) in itertools.product(fields, language_codes)
     ]
+
     def allowed_field(test_field):
         # type: (unicode) -> bool
-        if test_field != 'id' or test_field in fields or test_field in supported_field_translations:
+        """Returns True if the given field name should be included"""
+        if test_field in ['id', 'status']:
+            return False
+        if test_field in fields or test_field in supported_field_translations:
             return True
         return not any([test_field.startswith(f) for f in fields])
 
