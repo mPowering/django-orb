@@ -1,16 +1,17 @@
 from __future__ import unicode_literals
 
 from crispy_forms.helper import FormHelper
-from django.db.models import Q
 from crispy_forms.layout import Div
 from crispy_forms.layout import HTML
 from crispy_forms.layout import Layout
 from crispy_forms.layout import Submit
 from django import forms
 from django.contrib.auth import authenticate
+from django.contrib.auth.forms import UserCreationForm as BaseUserCreationForm
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.core.validators import validate_email
+from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
 from orb.models import Category
@@ -425,3 +426,12 @@ class ProfileForm(forms.Form):
             raise forms.ValidationError(_("Passwords do not match."))
 
         return cleaned_data
+
+
+class UserCreationForm(BaseUserCreationForm):
+    def save(self, commit=True):
+        """Ensures a UserProfile is saved"""
+        user = super(UserCreationForm, self).save(commit=True)
+        UserProfile.objects.create(user=user)
+        return user
+

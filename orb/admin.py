@@ -2,20 +2,22 @@ from django import forms
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib import messages
-from django.db.models import Value as V, F
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+from django.db.models import F, Value as V
 from django.db.models.functions import Concat
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
+from orb import models
 from orb.actions import merge_selected_tags
-from orb.models import Category, Tag, Resource, ResourceURL, TagProperty
-from orb.models import Collection, CollectionUser, CollectionResource, ReviewerRole
-from orb.models import ResourceFile, ResourceTag, UserProfile, ResourceCriteria
-from orb.models import ResourceTracker, SearchTracker, TagOwner, ResourceWorkflowTracker, ResourceRating
+from orb.profiles.forms import UserCreationForm
 
 
 class TagMergeForm(forms.Form):
-    tag = forms.ModelChoiceField(queryset=Tag.tags.all(), label=_('Winner'))
+    tag = forms.ModelChoiceField(queryset=models.Tag.tags.all(), label=_('Winner'))
 
     def __init__(self, other=None, *args, **kwargs):
         super(TagMergeForm, self).__init__(*args, **kwargs)
@@ -45,21 +47,21 @@ class ReviewerFilter(admin.SimpleListFilter):
 
 class ResourceCriteriaInline(admin.TabularInline):
     """Inline class for showing related ResourceCriteria"""
-    model = ResourceCriteria
+    model = models.ResourceCriteria
     extra = 0
 
 
-@admin.register(ReviewerRole)
+@admin.register(models.ReviewerRole)
 class ReviewerRoleAdmin(admin.ModelAdmin):
     inlines = [ResourceCriteriaInline]
 
 
-@admin.register(Category)
+@admin.register(models.Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'top_level', 'slug', 'order_by')
 
 
-@admin.register(Resource)
+@admin.register(models.Resource)
 class ResourceAdmin(admin.ModelAdmin):
     list_display = ('title', 'status', 'create_user', 'create_date', 'slug')
     search_fields = ['title', 'description']
@@ -67,45 +69,45 @@ class ResourceAdmin(admin.ModelAdmin):
     list_filter = ('status',)
 
 
-@admin.register(ResourceCriteria)
+@admin.register(models.ResourceCriteria)
 class ResourceCriteriaAdmin(admin.ModelAdmin):
     list_display = ('description', 'get_role_display', 'order_by', )
     search_fields = ['description']
 
 
-@admin.register(ResourceURL)
+@admin.register(models.ResourceURL)
 class ResourceURLAdmin(admin.ModelAdmin):
     list_display = ('resource', 'url', 'title', 'description')
     search_fields = ['title', 'description', 'url']
     raw_id_fields = ('create_user', 'update_user')
 
 
-@admin.register(ResourceFile)
+@admin.register(models.ResourceFile)
 class ResourceFileAdmin(admin.ModelAdmin):
     list_display = ('resource', 'file', 'title', 'description')
     search_fields = ['title', 'description']
     raw_id_fields = ('create_user', 'update_user')
 
 
-@admin.register(ResourceTag)
+@admin.register(models.ResourceTag)
 class ResourceTagAdmin(admin.ModelAdmin):
     list_display = ('resource', 'tag')
     raw_id_fields = ('resource', 'tag', 'create_user')
 
 
-@admin.register(ResourceRating)
+@admin.register(models.ResourceRating)
 class ResourceRatingAdmin(admin.ModelAdmin):
     list_display = ('resource', 'rating', 'user', 'comments')
     raw_id_fields = ('resource', 'user')
 
 
-@admin.register(ResourceTracker)
+@admin.register(models.ResourceTracker)
 class ResourceTrackerAdmin(admin.ModelAdmin):
     list_display = ('resource', 'user', 'access_date', 'ip', 'type')
     raw_id_fields = ('resource', 'user', 'resource_file', 'resource_url')
 
 
-@admin.register(ResourceWorkflowTracker)
+@admin.register(models.ResourceWorkflowTracker)
 class ResourceWorkflowTrackerAdmin(admin.ModelAdmin):
     list_display = ('resource', 'create_user', 'create_date',
                     'status', 'notes', 'owner_email_sent')
@@ -113,13 +115,13 @@ class ResourceWorkflowTrackerAdmin(admin.ModelAdmin):
     raw_id_fields = ('resource', 'create_user')
 
 
-@admin.register(SearchTracker)
+@admin.register(models.SearchTracker)
 class SearchTrackerAdmin(admin.ModelAdmin):
     list_display = ('query', 'user', 'access_date', 'no_results', 'ip', 'type')
     raw_id_fields = ('user',)
 
 
-@admin.register(Tag)
+@admin.register(models.Tag)
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'external_url',
                     'slug', 'published', 'parent_tag', 'order_by', 'image')
@@ -136,7 +138,7 @@ class TagAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def merge_tags(self, request, object_id):
-        tag = get_object_or_404(Tag, pk=object_id)
+        tag = get_object_or_404(models.Tag, pk=object_id)
 
         form = TagMergeForm(tag)
 
@@ -157,14 +159,14 @@ class TagAdmin(admin.ModelAdmin):
         return render(request, "admin/orb/tag/merge_tag_form.html", context)
 
 
-@admin.register(TagProperty)
+@admin.register(models.TagProperty)
 class TagPropertyAdmin(admin.ModelAdmin):
     list_display = ('tag', 'name', 'value')
     search_fields = ['name', 'value']
     raw_id_fields = ('tag',)
 
 
-@admin.register(UserProfile)
+@admin.register(models.UserProfile)
 class UserProfileAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'user__email', 'user__first_name', 'user__last_name')
     list_display = ('user_name', 'api_access', 'about', 'job_title', 'organisation')
@@ -183,27 +185,36 @@ class UserProfileAdmin(admin.ModelAdmin):
         )
 
     def user_name(self, obj):
-        return obj.user.get_full_name()
+        return obj.user.get_full_name() or obj.user
     user_name.admin_order_field = 'full_user_name'
 
 
-@admin.register(TagOwner)
+@admin.register(models.TagOwner)
 class TagOwnerAdmin(admin.ModelAdmin):
     list_display = ('user', 'tag')
     raw_id_fields = ('user', 'tag')
 
 
-@admin.register(Collection)
+@admin.register(models.Collection)
 class CollectionAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'visibility')
 
 
-@admin.register(CollectionResource)
+@admin.register(models.CollectionResource)
 class CollectionResourceAdmin(admin.ModelAdmin):
     list_display = ('collection', 'resource', 'order_by')
     raw_id_fields = ('resource',)
 
 
-@admin.register(CollectionUser)
+@admin.register(models.CollectionUser)
 class CollectionUserAdmin(admin.ModelAdmin):
     list_display = ('collection', 'user')
+
+
+class CustomUserAdmin(UserAdmin):
+    """Create a UserProfile when creating user from admin"""
+    add_form = UserCreationForm
+
+
+admin.site.unregister(User)
+admin.site.register(User, CustomUserAdmin)

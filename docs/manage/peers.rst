@@ -44,6 +44,14 @@ How syncing works
 The core action of the peer data sync is to copy or update resources from the remote
 ORB to the local ORB.
 
+Global IDs
+----------
+
+Every resource has a globally unique identifier which is copied with synced resources.
+This ensures that a resource can be downloaded from one ORB and from yet another and
+still retain a non-overridable ID that tracks it across instances. This GUID is used to
+identify resources for update.
+
 Pending by default
 ------------------
 
