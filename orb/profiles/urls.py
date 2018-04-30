@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^view/$', views.view_my_profile, name="my_profile_view"),
     url(r'^view/bookmarks/$', views.view_my_bookmarks, name="my_bookmarks_view"),
     url(r'^view/ratings/$', views.view_my_ratings, name="my_ratings_view"),
+    url(r'^export/$', views.export_data, name="profile_export_data"),
 ]

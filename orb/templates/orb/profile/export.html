@@ -1,0 +1,283 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load thumbnail %}
+{% block extra_head_title %}{% trans 'Export Data' %}{% endblock extra_head_title %}
+
+
+{% block content %}
+<h2><a name="top" class="named-anchor"></a>{% trans 'Export Data' %}</h2>
+
+
+<p>
+<a href="#profile">{% trans 'Profile' %}</a> |
+<a href="#resources">{% trans 'Resources Submitted or Edited' %}</a> |
+<a href="#collections">{% trans 'Resource Collections/Bookmarks' %}</a> |
+<a href="#ratings">{% trans 'Resource Ratings' %}</a> |
+<a href="#resourcetrackers">{% trans 'Resources Visited' %}</a> |
+<a href="#tagtrackers">{% trans 'Tags Visited' %}</a> |
+<a href="#searchtrackers">{% trans 'Searches' %}</a>
+</p>
+
+
+<h3><a name="profile" class="named-anchor"></a>{% trans 'Profile' %} <small>[<a href="#top">{% trans 'Back to top' %}</a>]</small></h3>
+
+{% for k,v in userrecord.items %}
+	{% if k != 'password' and k != 'id' %}
+		<div class="row profile">
+			<div class="col-lg-2">
+				<strong>{{k}}</strong>
+			</div>
+			<div class="col-md-8 col-xs-8" >
+				{{ v }}
+			</div>
+		</div>
+	{% endif %}
+{% endfor %}
+{% for k,v in userprofile.items %}
+	{% if k != 'id' and k != 'user' %}
+		<div class="row profile">
+			<div class="col-lg-2">
+				<strong>{{k}}</strong>
+			</div>
+			<div class="col-md-8 col-xs-8" >
+				{% if k == 'organisation' %}
+					{{ organisation }}
+				{% else %}
+					{{ v }}
+				{% endif %}
+			</div>
+		</div>
+	{% endif %}
+{% endfor %}
+
+
+<h3><a name="resources" class="named-anchor"></a>{% trans 'Resources Submitted or Edited' %} <small>[<a href="#top">{% trans 'Back to top' %}</a>]</small></h3>
+{% if resources %}
+	<div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{% trans 'Title' %}</th>
+                <th>{% trans 'Create Date' %}</th>
+                <th>{% trans 'Update Date' %}</th>
+                <th>{% trans 'Status' %}</th>
+                <th>{% trans 'Files' %}</th>
+                <th>{% trans 'URLs' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+				{% for resource in resources %}
+					<tr>
+                        <td><a href="{% url 'orb_resource' resource.slug %}" target="_blank">{{ resource.title }}</a></td>
+                        <td>{{ resource.create_date }}</td>
+                        <td>{{ resource.update_date }}</td>
+                        <td>{{ resource.status }}</td>
+                        <td> 
+                        	{% for f in resource.get_files %}
+	                        	{% if f.title %}
+	                                {{ f.title }}
+	                            {% else %}
+	                                {{ f.filename }}
+	                            {% endif %}
+	                            <br/>
+                        	{% endfor %}
+                        </td>
+                        <td>
+							{% for u in resource.get_urls %}
+	                        	{% if u.title %}
+	                                {{ u.title }}
+	                            {% else %}
+	                                {{ u.url }}
+	                            {% endif %}
+	                            <br/>
+                        	{% endfor %}
+						</td>
+                    </tr>
+				{% endfor %}
+			</tbody>
+        </table>
+    </div>
+{% else %}
+	<p>{% trans 'No data stored' %}</p>    
+{% endif %}
+
+<h3><a name="collections" class="named-anchor"></a>{% trans 'Resource Collections/Bookmarks' %} <small>[<a href="#top">{% trans 'Back to top' %}</a>]</small></h3>
+{% if collections %}
+	<div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{% trans 'Title' %}</th>
+                <th>{% trans 'Visibility' %}</th>
+                <th>{% trans 'Resources' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            	{% for collection in collections %}
+            		<tr>
+                        <td><a href="{% url 'orb_collection' collection.slug %}" target="_blank">{{ collection.title }}</a></td>
+                        <td>{{ collection.visibility }}</td>
+                        <td> 
+                        	{% for cr in collection.collectionresource_set.all %}
+	                                <a href="{% url 'orb_resource' cr.resource.slug %}" target="_blank">{{ cr.resource.title }}</a> <br/>
+                        	{% endfor %}
+                        </td>
+                    </tr>
+            	{% endfor %}
+            	
+            </tbody>
+        </table>
+    </div>
+{% else %}
+	<p>{% trans 'No data stored' %}</p>    
+{% endif %}
+
+
+<h3><a name="ratings" class="named-anchor"></a>{% trans 'Resource Ratings' %} <small>[<a href="#top">{% trans 'Back to top' %}</a>]</small></h3>
+{% if ratings %}
+	<div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{% trans 'Resource' %}</th>
+                <th>{% trans 'Rating' %}</th>
+                <th>{% trans 'Date' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            	{% for rating in ratings %}
+            		<tr>
+                        <td><a href="{% url 'orb_resource' rating.resource.slug %}" target="_blank">{{ rating.resource.title }}</a></td>
+                        <td>{{ rating.rating }}/5</td>
+                        <td>{{ rating.create_date }}</td>
+                    </tr>
+            	{% endfor %}
+            	
+            </tbody>
+        </table>
+    </div>
+{% else %}
+	<p>{% trans 'No data stored' %}</p>    
+{% endif %}
+
+
+<h3><a name="resourcetrackers" class="named-anchor"></a>{% trans 'Resources Visited' %} <small>[<a href="#top">{% trans 'Back to top' %}</a>]</small></h3>
+{% if resource_trackers %}
+	<div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{% trans 'Resource' %}</th>
+                <th>{% trans 'Date' %}</th>
+                <th>{% trans 'Type' %}</th>
+                <th>{% trans 'IP' %}</th>
+                <th>{% trans 'User Agent' %}</th>
+                <th>{% trans 'Extra Data' %}</th>
+                <th>{% trans 'Intended Use' %}</th>
+                <th>{% trans 'Use (other)' %}</th>
+                <th>{% trans 'HW count' %}</th>
+                <th>{% trans 'HW cadre' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            	{% for tracker in resource_trackers %}
+            		<tr>
+                        <td>
+	                        {% if tracker.resource %}
+	                        	<a href="{% url 'orb_resource' tracker.resource.slug %}" target="_blank">{{ tracker.resource.title }}</a>
+	                        {% endif %}	
+                        </td>
+                        <td>{{ tracker.access_date }}</td>
+                        <td>{{ tracker.type }}</td>
+                        <td>{{ tracker.ip }}</td>
+                        <td>{{ tracker.user_agent }}</td>
+                        <td>{{ tracker.extra_data }}</td>
+                        <td>{{ tracker.survey_intended_use }}</td>
+                        <td>{{ tracker.survey_intended_use_other }}</td>
+                        <td>{{ tracker.survey_health_worker_count }}</td>
+                        <td>{{ tracker.survey_health_worker_cadre }}</td>
+                    </tr>
+            	{% endfor %}
+            	
+            </tbody>
+        </table>
+    </div>
+{% else %}
+	<p>{% trans 'No data stored' %}</p>    
+{% endif %}
+
+
+<h3><a name="tagtrackers" class="named-anchor"></a>{% trans 'Tags Visited' %} <small>[<a href="#top">{% trans 'Back to top' %}</a>]</small></h3>
+{% if tag_trackers %}
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{% trans 'Tag' %}</th>
+                <th>{% trans 'Date' %}</th>
+                <th>{% trans 'Type' %}</th>
+                <th>{% trans 'IP' %}</th>
+                <th>{% trans 'User Agent' %}</th>
+                <th>{% trans 'Extra Data' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            	{% for tt in tag_trackers %}
+            		<tr>
+                        <td>
+	                        {% if tt.tag %}
+	                        	<a href="{% url 'orb_tags' tt.tag.slug %}" target="_blank">{{ tt.tag.name }}</a>
+	                        {% endif %}	
+                        </td>
+                        <td>{{ tt.access_date }}</td>
+                        <td>{{ tt.type }}</td>
+                        <td>{{ tt.ip }}</td>
+                        <td>{{ tt.user_agent }}</td>
+                        <td>{{ tt.extra_data }}</td>
+                    </tr>
+            	{% endfor %}
+            	
+            </tbody>
+        </table>
+    </div>
+{% else %}
+	<p>{% trans 'No data stored' %}</p>    
+{% endif %}
+
+
+<h3><a name="searchtrackers" class="named-anchor"></a>{% trans 'Searches' %} <small>[<a href="#top">{% trans 'Back to top' %}</a>]</small></h3>
+{% if search_trackers %}
+	<div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{% trans 'Query' %}</th>
+                <th>{% trans 'No. Results' %}</th>
+                <th>{% trans 'Date' %}</th>
+                <th>{% trans 'Type' %}</th>
+                <th>{% trans 'IP' %}</th>
+                <th>{% trans 'User Agent' %}</th>
+                <th>{% trans 'Extra Data' %}</th>
+            </tr>
+            </thead>
+            <tbody>
+            	{% for st in search_trackers %}
+            		<tr>
+                        <td>{{ st.query }}</td>
+                        <td>{{ st.no_results }}</td>
+                        <td>{{ st.access_date }}</td>
+                        <td>{{ st.type }}</td>
+                        <td>{{ st.ip }}</td>
+                        <td>{{ st.user_agent }}</td>
+                        <td>{{ st.extra_data }}</td>
+                    </tr>
+            	{% endfor %}
+            	
+            </tbody>
+        </table>
+    </div>
+{% else %}
+	<p>{% trans 'No data stored' %}</p>    
+{% endif %}
+
+{% endblock %}

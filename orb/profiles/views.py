@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.db.models import Q
+from django.forms.models import model_to_dict
 from django.views.generic import FormView
 
 from django.core.urlresolvers import reverse
@@ -14,7 +16,7 @@ from django.shortcuts import render
 from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
-from orb.models import UserProfile, Tag, Category, Resource, ResourceRating, Collection
+from orb.models import UserProfile, Tag, Category, Resource, ResourceRating, Collection, ResourceTracker, TagTracker, SearchTracker
 from orb.profiles.forms import LoginForm, RegisterForm, ResetForm, ProfileForm
 from orb.emailer import password_reset
 from orb.signals import user_registered
@@ -235,8 +237,36 @@ def view_my_bookmarks(request):
                                         collectionresource__collection__collectionuser__user=user).order_by('title')
     return render(request, 'orb/profile/bookmarks.html', {'bookmarks': bookmarks})
 
-# Helper Methods
 
+def export_data(request):
+    '''
+    '''
+    resources = Resource.objects.filter(Q(create_user=request.user) | Q(update_user=request.user)).order_by('-create_date')
+    collections = Collection.objects.filter(collectionuser__user=request.user).order_by('-create_date')
+    resource_trackers = ResourceTracker.objects.filter(user=request.user).order_by('-access_date')
+    tag_trackers = TagTracker.objects.filter(user=request.user).order_by('-access_date')
+    search_trackers = SearchTracker.objects.filter(user=request.user).order_by('-access_date')
+    ratings = ResourceRating.objects.filter(user=request.user).order_by('-create_date')
+    
+    return render(request, 'orb/profile/export.html',
+                  {'userrecord': model_to_dict(request.user, fields=[field.name for field in request.user._meta.fields]),
+                   'userprofile': model_to_dict(request.user.userprofile, fields=[field.name for field in request.user.userprofile._meta.fields]),
+                   'organisation': request.user.userprofile.organisation.name,
+                   'resources': resources,
+                   'collections': collections,
+                   'resource_trackers': resource_trackers,
+                   'tag_trackers': tag_trackers,
+                   'search_trackers': search_trackers,
+                   'ratings': ratings})
+    
+    
+
+'''
+def delete_account(request):
+
+
+'''
+# Helper Methods
 
 def build_form_options(form, blank_options=True):
     # roles
