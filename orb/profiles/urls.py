@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^view/ratings/$', views.view_my_ratings, name="my_ratings_view"),
     url(r'^export/$', views.export_data, name="profile_export_data"),
     url(r'^delete/$', views.delete_account, name="profile_delete_account"),
+    url(r'^delete/complete/$', views.delete_account_complete, name="profile_delete_account_complete"),
 ]

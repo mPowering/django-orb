@@ -20,9 +20,12 @@
 {% crispy form %}
 
 <div style="clear:both"></div>
-<h3>{% trans 'Export data/Delete Account' %}</h3>
+<h3>{% trans 'Export Data' %}</h3>
 
 <a href="{% url 'profile_export_data' %}" class="btn btn-default">{% trans 'Export Data' %}</a>
 
+<h3>{% trans 'Delete Account' %}</h3>
+
+<a href="{% url 'profile_delete_account' %}" class="btn btn-default">{% trans 'Delete Account' %}</a>
 
 {% endblock %}

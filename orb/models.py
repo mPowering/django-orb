@@ -472,10 +472,8 @@ class ResourceRelationship(TimestampBase):
     relationship_type = models.CharField(
         max_length=50, choices=RELATIONSHIP_TYPES)
     description = models.TextField(blank=False, null=False)
-    create_user = models.ForeignKey(
-        User, related_name='resource_relationship_create_user')
-    update_user = models.ForeignKey(
-        User, related_name='resource_relationship_update_user')
+    create_user = models.ForeignKey(User, related_name='resource_relationship_create_user', null=True, default=None, on_delete=models.SET_NULL)
+    update_user = models.ForeignKey(User, related_name='resource_relationship_update_user', null=True, default=None, on_delete=models.SET_NULL)
 
 
 class ResourceCriteria(models.Model):
@@ -545,8 +543,8 @@ class Tag(TimestampBase):
     category = models.ForeignKey(Category)
     parent_tag = models.ForeignKey('self', blank=True, null=True, default=None, related_name="children")
     name = models.CharField(max_length=100)
-    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_create_user')
-    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_update_user')
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_create_user', null=True, default=None, on_delete=models.SET_NULL)
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_update_user', null=True, default=None, on_delete=models.SET_NULL)
     image = models.ImageField(upload_to='tag/%Y/%m/%d', null=True, blank=True)
     slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
     order_by = models.IntegerField(default=0)
