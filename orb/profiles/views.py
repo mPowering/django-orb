@@ -192,7 +192,7 @@ def edit(request):
 
     return render(request, 'orb/profile/edit.html', {'form': form, })
 
-
+@login_required
 def view_profile(request, id):
     try:
         user = User.objects.get(pk=id)
@@ -207,7 +207,7 @@ def view_profile(request, id):
 
     return render(request, 'orb/profile/view.html', {'viewuser': user, 'gravatar_url': gravatar_url})
 
-
+@login_required
 def view_my_profile(request):
     try:
         user = User.objects.get(pk=request.user.id)
@@ -215,7 +215,7 @@ def view_my_profile(request):
     except User.DoesNotExist:
         raise Http404()
 
-
+@login_required
 def view_my_ratings(request):
     try:
         user = User.objects.get(pk=request.user.id)
@@ -226,7 +226,7 @@ def view_my_ratings(request):
         resource__status=Resource.APPROVED, user=user).order_by('resource__title')
     return render(request, 'orb/profile/rated.html', {'ratings': ratings})
 
-
+@login_required
 def view_my_bookmarks(request):
     try:
         user = User.objects.get(pk=request.user.id)
@@ -237,7 +237,7 @@ def view_my_bookmarks(request):
                                         collectionresource__collection__collectionuser__user=user).order_by('title')
     return render(request, 'orb/profile/bookmarks.html', {'bookmarks': bookmarks})
 
-
+@login_required
 def export_data(request):
     '''
     '''
@@ -261,7 +261,7 @@ def export_data(request):
     
     
 
-
+@login_required
 def delete_account(request):
     resources_count = Resource.objects.filter(create_user=request.user).count()
     
@@ -292,11 +292,9 @@ def delete_account(request):
                 # resource_files
                 ResourceFile.objects.filter(create_user=request.user).delete()
             
-            # userprofile
-            UserProfile.objects.filter(user=request.user).delete()
-            
             # user
-            User.objects.filter(pk=request.user.id).delete()
+            u = User.objects.get(pk=request.user.id)
+            u.delete()
             
             return HttpResponseRedirect(reverse('profile_delete_account_complete')) 
     else:

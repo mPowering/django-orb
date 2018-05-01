@@ -83,8 +83,8 @@ class Resource(TimestampBase):
     description = models.TextField(blank=False, null=False)
     image = models.ImageField(upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
     status = models.CharField(max_length=50, choices=STATUS_TYPES, default=PENDING)
-    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_create_user', null=True, default=None, on_delete=models.SET_NULL)
-    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_update_user', null=True, default=None, on_delete=models.SET_NULL)
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_create_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_update_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
     slug = AutoSlugField(populate_from='title', max_length=100, blank=True, null=True)
     study_time_number = models.IntegerField(default=0, null=True, blank=True)
     study_time_unit = models.CharField(max_length=10, choices=STUDY_TIME_UNITS, blank=True, null=True)
@@ -357,8 +357,8 @@ class ResourceURL(TimestampBase):
     file_size = models.IntegerField(default=0)
     image = models.ImageField(
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
-    create_user = models.ForeignKey(User, related_name='resource_url_create_user', null=True, default=None, on_delete=models.SET_NULL)
-    update_user = models.ForeignKey(User, related_name='resource_url_update_user', null=True, default=None, on_delete=models.SET_NULL)
+    create_user = models.ForeignKey(User, related_name='resource_url_create_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    update_user = models.ForeignKey(User, related_name='resource_url_update_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
 
     objects = ResourceURLManager.as_manager()
 
@@ -426,8 +426,8 @@ class ResourceFile(TimestampBase):
     order_by = models.IntegerField(default=0)
     image = models.ImageField(
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
-    create_user = models.ForeignKey(User, related_name='resource_file_create_user', null=True, default=None, on_delete=models.SET_NULL)
-    update_user = models.ForeignKey(User, related_name='resource_file_update_user', null=True, default=None, on_delete=models.SET_NULL)
+    create_user = models.ForeignKey(User, related_name='resource_file_create_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    update_user = models.ForeignKey(User, related_name='resource_file_update_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
     file_full_text = models.TextField(blank=True, null=True, default=None)
     objects = ResourceURLManager.as_manager()
 
@@ -472,8 +472,8 @@ class ResourceRelationship(TimestampBase):
     relationship_type = models.CharField(
         max_length=50, choices=RELATIONSHIP_TYPES)
     description = models.TextField(blank=False, null=False)
-    create_user = models.ForeignKey(User, related_name='resource_relationship_create_user', null=True, default=None, on_delete=models.SET_NULL)
-    update_user = models.ForeignKey(User, related_name='resource_relationship_update_user', null=True, default=None, on_delete=models.SET_NULL)
+    create_user = models.ForeignKey(User, related_name='resource_relationship_create_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    update_user = models.ForeignKey(User, related_name='resource_relationship_update_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
 
 
 class ResourceCriteria(models.Model):
@@ -543,8 +543,8 @@ class Tag(TimestampBase):
     category = models.ForeignKey(Category)
     parent_tag = models.ForeignKey('self', blank=True, null=True, default=None, related_name="children")
     name = models.CharField(max_length=100)
-    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_create_user', null=True, default=None, on_delete=models.SET_NULL)
-    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_update_user', null=True, default=None, on_delete=models.SET_NULL)
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_create_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='tag_update_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
     image = models.ImageField(upload_to='tag/%Y/%m/%d', null=True, blank=True)
     slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
     order_by = models.IntegerField(default=0)
@@ -648,7 +648,7 @@ class ResourceTag(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     resource = models.ForeignKey(Resource)
     tag = models.ForeignKey(Tag, related_name="resourcetag")
-    create_user = models.ForeignKey(User, related_name='resourcetag_create_user')
+    create_user = models.ForeignKey(User, related_name='resourcetag_create_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
 
     objects = ResourceTagManager()
 
