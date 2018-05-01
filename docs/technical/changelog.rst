@@ -2,13 +2,13 @@ Change log
 =====================================
 
 
-.. _orb-v2-7-1:
+.. _orb-v2-8-0:
 
-v2.7.1 - not yet released
+v2.8.0 - not yet released
 ----------------------------------
 
 * 529: Add KPI report - https://github.com/mPowering/django-orb/issues/529
-
+* 536: EU GDPR - add options to download data and delete account - https://github.com/mPowering/django-orb/issues/536
 
 .. _orb-v2-7-0:
 

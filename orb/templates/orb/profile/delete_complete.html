@@ -12,9 +12,9 @@
 
 {% blocktrans %}
 <p>Your account and all your data has now been deleted.</p>
-
 <p>To access ORB again you will need to re-register to create a new profile</p>
-
 {% endblocktrans %}
+
+<p><a href="{% url 'orb_home' %}">{% trans 'Return to the ORB homepage' %}</a></p>
 
 {% endblock %}
