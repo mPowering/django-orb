@@ -426,12 +426,9 @@ class ResourceFile(TimestampBase):
     order_by = models.IntegerField(default=0)
     image = models.ImageField(
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
-    create_user = models.ForeignKey(
-        User, related_name='resource_file_create_user')
-    update_user = models.ForeignKey(
-        User, related_name='resource_file_update_user')
+    create_user = models.ForeignKey(User, related_name='resource_file_create_user', null=True, default=None, on_delete=models.SET_NULL)
+    update_user = models.ForeignKey(User, related_name='resource_file_update_user', null=True, default=None, on_delete=models.SET_NULL)
     file_full_text = models.TextField(blank=True, null=True, default=None)
-
     objects = ResourceURLManager.as_manager()
 
     def __unicode__(self):
