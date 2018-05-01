@@ -17,7 +17,7 @@ from django.shortcuts import redirect
 from django.utils.translation import ugettext_lazy as _
 
 from orb.models import UserProfile, Tag, Category, Resource, ResourceRating, Collection, ResourceTracker, TagTracker, SearchTracker
-from orb.profiles.forms import LoginForm, RegisterForm, ResetForm, ProfileForm
+from orb.profiles.forms import LoginForm, RegisterForm, ResetForm, ProfileForm, DeleteProfileForm
 from orb.emailer import password_reset
 from orb.signals import user_registered
 from tastypie.models import ApiKey
@@ -261,11 +261,24 @@ def export_data(request):
     
     
 
-'''
+
 def delete_account(request):
+    resources_count = Resource.objects.filter(create_user=request.user).count()
+    
+    if request.method == 'POST':
+        form = DeleteProfileForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            
+            
+            
+            return HttpResponseRedirect(reverse('profile_delete_account_complete')) 
+    else:
+        form = DeleteProfileForm(resources_count, initial={'username':request.user.username},)
+         
+    return render(request, 'orb/profile/delete.html',
+                  {'form': form })
 
-
-'''
 # Helper Methods
 
 def build_form_options(form, blank_options=True):

@@ -83,8 +83,8 @@ class Resource(TimestampBase):
     description = models.TextField(blank=False, null=False)
     image = models.ImageField(upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
     status = models.CharField(max_length=50, choices=STATUS_TYPES, default=PENDING)
-    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_create_user')
-    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_update_user')
+    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_create_user', null=True, default=None, on_delete=models.SET_NULL)
+    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='resource_update_user', null=True, default=None, on_delete=models.SET_NULL)
     slug = AutoSlugField(populate_from='title', max_length=100, blank=True, null=True)
     study_time_number = models.IntegerField(default=0, null=True, blank=True)
     study_time_unit = models.CharField(max_length=10, choices=STUDY_TIME_UNITS, blank=True, null=True)
@@ -357,10 +357,8 @@ class ResourceURL(TimestampBase):
     file_size = models.IntegerField(default=0)
     image = models.ImageField(
         upload_to='resourceimage/%Y/%m/%d', max_length=200, blank=True, null=True)
-    create_user = models.ForeignKey(
-        User, related_name='resource_url_create_user')
-    update_user = models.ForeignKey(
-        User, related_name='resource_url_update_user')
+    create_user = models.ForeignKey(User, related_name='resource_url_create_user', null=True, default=None, on_delete=models.SET_NULL)
+    update_user = models.ForeignKey(User, related_name='resource_url_update_user', null=True, default=None, on_delete=models.SET_NULL)
 
     objects = ResourceURLManager.as_manager()
 
