@@ -14,14 +14,9 @@ from orb.lib import search_crawler
 class Command(BaseCommand):
     help = "Removes bots/crawlers from trackers"
 
-
-    def add_arguments(self, parser):
-        pass
-
     def handle(self, *args, **options):
         for spider in search_crawler.SPIDERS:
             rts = ResourceTracker.objects.filter(user_agent__contains=spider)
             print spider + ":" + str(rts.count())
             rts.delete()
-  
-            
+
