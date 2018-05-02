@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
 
 import itertools
-import os
 import uuid
 
+import os
 import parsedatetime as pdt
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -20,11 +20,12 @@ from typing import Iterable
 
 from orb import signals
 from orb.analytics.models import UserLocationVisualization
+from orb.fields import AutoSlugField
+from orb.fields import image_cleaner
 from orb.profiles.querysets import ProfilesQueryset
 from orb.resources.managers import ResourceQueryset, ResourceURLManager, TrackerQueryset
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ResourceTagManager, TagQuerySet
-from .fields import AutoSlugField
 
 cal = pdt.Calendar()
 
@@ -115,6 +116,20 @@ class Resource(TimestampBase):
 
     def __unicode__(self):
         return self.title
+
+    def save(self, **kwargs):
+        """Cleans API submitted images"""
+        if self.image and (self.image.name.startswith("http://") or self.image.name.startswith("https://")):
+            remote_image_file = self.image.name
+        else:
+            remote_image_file = None
+
+        super(Resource, self).save(**kwargs)
+
+        if remote_image_file:
+            image_cleaner(self, url=remote_image_file)
+
+        return self
 
     def get_absolute_url(self):
         return urlresolvers.reverse('orb_resource', args=[self.slug])
