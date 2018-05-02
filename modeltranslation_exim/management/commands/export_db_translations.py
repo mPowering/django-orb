@@ -53,6 +53,11 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
+            'fields',
+            nargs='*',
+            help=('Optional dotted paths to model field names'),
+        )
+        parser.add_argument(
             '--language',
             dest='language',
             help=('Language code for target language, e.g. `pt-br` (optional). '
@@ -62,9 +67,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         language = options.get('language', None)
+        fields = options.get('fields', [])
         if language and language not in [i[0] for i in settings.LANGUAGES]:
             raise CommandError(
                 u"'{}' is not one of the available language choices for this installation.".format(language))
 
-        exported = DatabaseTranslations.from_paths(language, *args)
+        exported = DatabaseTranslations.from_paths(language, *fields)
         exported.save()

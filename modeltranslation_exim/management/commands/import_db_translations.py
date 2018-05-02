@@ -40,21 +40,18 @@ class Command(BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument(
+            'filepath',
+        )
+        parser.add_argument(
             '--language',
             dest='language',
+            required=True,
             help='Language code for target language, e.g. `pt-br` (required)',
         )
 
     def handle(self, *args, **options):
-        try:
-            filepath, = args
-        except ValueError:
-            raise CommandError("Command takes one required file path argument")
-
+        filepath= options.get('filepath')
         language = options.get('language')
-        if language is None:
-            raise CommandError("Missing required --language option")
-
         translator = POTranslations(filepath, language, output=self.stdout)
         translator.save()
 
