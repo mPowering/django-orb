@@ -10,6 +10,7 @@ from autoslugged import AutoSlugField as BaseSlugField
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
 
+from orb.compat import HTTPError
 from orb.compat import urlopen
 
 
@@ -41,7 +42,11 @@ def image_cleaner(instance, field_name="image", url=None):
 
     url = url if url else image_field.name
 
-    img_temp.write(urlopen(url).read())
+    try:
+        img_temp.write(urlopen(url).read())
+    except HTTPError:
+        return instance
+
     img_temp.flush()
 
     img_filename = image_field.name.split("/")[-1]
