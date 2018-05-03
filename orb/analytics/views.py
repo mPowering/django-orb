@@ -444,6 +444,11 @@ def resource_tracker_stats(request):
 @staff_required
 def kpi_view(request):
     
+    try:
+        days = int(request.GET.get('days', '365'))
+    except ValueError:
+        days = 365
+    
     # registered users
     reg_users = User.objects.all().count()
     
@@ -480,7 +485,7 @@ def kpi_view(request):
     
     table_data = []
     
-    start_date = timezone.now() - datetime.timedelta(days=365)
+    start_date = timezone.now() - datetime.timedelta(days=days)
     delta = dateutil.relativedelta.relativedelta(months=+1)
             
     no_months = 0
