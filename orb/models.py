@@ -694,10 +694,10 @@ class ResourceTag(models.Model):
         api_data.pop('resource_uri', None)
         api_data.pop('url', None)
 
-        category_name = api_data.pop('category')
+        category_name = api_data.pop('category').strip()
         category_fields = [f for f in Category.api_translation_fields()]
         category_name_translations = {
-            field: api_data.pop(field.replace('category', 'name'), "")
+            field: api_data.pop(field.replace('name', 'category'), "")
             for field in category_fields
         }
 
@@ -710,6 +710,7 @@ class ResourceTag(models.Model):
         api_data['category'] = category
 
         tag, created = Tag.objects.get_or_create(name=api_data['name'], defaults=api_data)
+
         return cls.objects.create(resource=resource, tag=tag, create_user=user)
 
 
