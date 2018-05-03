@@ -587,6 +587,12 @@ class Tag(TimestampBase):
         return urlresolvers.reverse('orb_tags', args=[self.slug])
 
     def save(self, *args, **kwargs):
+
+        if self.image and (self.image.name.startswith("http://") or self.image.name.startswith("https://")):
+            remote_image_file = self.image.name
+        else:
+            remote_image_file = None
+
         # add generic geography icon if not specified
         if self.category.slug == 'geography' and not self.image:
             self.image = 'tag/geography_default.png'
@@ -604,6 +610,11 @@ class Tag(TimestampBase):
             self.image = 'tag/other_default.png'
 
         super(Tag, self).save(*args, **kwargs)
+
+        if remote_image_file:
+            image_cleaner(self, url=remote_image_file)
+
+        return self
 
     def image_filename(self):
         return os.path.basename(self.image.name)
