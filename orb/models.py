@@ -1,9 +1,9 @@
 from __future__ import unicode_literals
 
 import itertools
-import os
 import uuid
 
+import os
 import parsedatetime as pdt
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -20,11 +20,12 @@ from typing import Iterable
 
 from orb import signals
 from orb.analytics.models import UserLocationVisualization
+from orb.fields import AutoSlugField
+from orb.fields import image_cleaner
 from orb.profiles.querysets import ProfilesQueryset
 from orb.resources.managers import ResourceQueryset, ResourceURLManager, TrackerQueryset
 from orb.review.queryset import CriteriaQueryset
 from orb.tags.managers import ResourceTagManager, TagQuerySet
-from .fields import AutoSlugField
 
 cal = pdt.Calendar()
 
@@ -115,6 +116,20 @@ class Resource(TimestampBase):
 
     def __unicode__(self):
         return self.title
+
+    def save(self, **kwargs):
+        """Cleans API submitted images"""
+        if self.image and (self.image.name.startswith("http://") or self.image.name.startswith("https://")):
+            remote_image_file = self.image.name
+        else:
+            remote_image_file = None
+
+        super(Resource, self).save(**kwargs)
+
+        if remote_image_file:
+            image_cleaner(self, url=remote_image_file)
+
+        return self
 
     def get_absolute_url(self):
         return urlresolvers.reverse('orb_resource', args=[self.slug])
@@ -572,6 +587,12 @@ class Tag(TimestampBase):
         return urlresolvers.reverse('orb_tags', args=[self.slug])
 
     def save(self, *args, **kwargs):
+
+        if self.image and (self.image.name.startswith("http://") or self.image.name.startswith("https://")):
+            remote_image_file = self.image.name
+        else:
+            remote_image_file = None
+
         # add generic geography icon if not specified
         if self.category.slug == 'geography' and not self.image:
             self.image = 'tag/geography_default.png'
@@ -589,6 +610,11 @@ class Tag(TimestampBase):
             self.image = 'tag/other_default.png'
 
         super(Tag, self).save(*args, **kwargs)
+
+        if remote_image_file:
+            image_cleaner(self, url=remote_image_file)
+
+        return self
 
     def image_filename(self):
         return os.path.basename(self.image.name)
@@ -679,10 +705,10 @@ class ResourceTag(models.Model):
         api_data.pop('resource_uri', None)
         api_data.pop('url', None)
 
-        category_name = api_data.pop('category')
+        category_name = api_data.pop('category').strip()
         category_fields = [f for f in Category.api_translation_fields()]
         category_name_translations = {
-            field: api_data.pop(field.replace('category', 'name'), "")
+            field: api_data.pop(field.replace('name', 'category'), "")
             for field in category_fields
         }
 
@@ -695,6 +721,7 @@ class ResourceTag(models.Model):
         api_data['category'] = category
 
         tag, created = Tag.objects.get_or_create(name=api_data['name'], defaults=api_data)
+
         return cls.objects.create(resource=resource, tag=tag, create_user=user)
 
 

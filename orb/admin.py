@@ -22,7 +22,7 @@ class TagMergeForm(forms.Form):
     def __init__(self, other=None, *args, **kwargs):
         super(TagMergeForm, self).__init__(*args, **kwargs)
         if other:
-            self.fields['tag'].queryset = Tag.tags.exclude(pk=other.pk)
+            self.fields['tag'].queryset = models.Tag.tags.exclude(pk=other.pk)
 
 
 class ReviewerFilter(admin.SimpleListFilter):
