@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-orb',
-    version='2.6.0',
+    version='2.8.1',
     packages=[
         'orb',
         'orb.analytics',
