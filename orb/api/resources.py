@@ -109,17 +109,17 @@ class ResourceResource(ModelResource):
         """Returns the *original* URL of the resource"""
         if bundle.obj.is_local():
             return self.dehydrate_url(bundle)
-        return self.bundle.obj.source_url
+        return bundle.obj.source_url
 
     def dehydrate_source_name(self, bundle):
         if bundle.obj.is_local():
             return None
-        return self.bundle.obj.source_name
+        return bundle.obj.source_name
 
     def dehydrate_source_host(self, bundle):
         if bundle.obj.is_local():
             return None
-        return self.bundle.obj.source_host
+        return bundle.obj.source_host
 
     def authorized_read_detail(self, object_list, bundle):
         # add to ResourceTracker
