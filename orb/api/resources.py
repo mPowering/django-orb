@@ -216,6 +216,9 @@ class ResourceResource(ModelResource):
 
 class ResourceFileResource(ModelResource):
 
+    file_extension = fields.CharField(readonly=True)
+    is_embeddable = fields.BooleanField(readonly=True)
+
     class Meta:
         queryset = ResourceFile.objects.all()
         resource_name = 'resourcefile'
@@ -226,6 +229,14 @@ class ResourceFileResource(ModelResource):
         serializer = PrettyJSONSerializer()
         always_return_data = True
         include_resource_uri = True
+
+    def dehydrate_is_embeddable(self, bundle):
+        """Returns whether this file is considered embeddable or not"""
+        return bundle.obj.is_embeddable
+
+    def dehydrate_file_extension(self, bundle):
+        """Returns the parsed file extension"""
+        return bundle.obj.file_extension
 
     def dehydrate_file(self, bundle):
         if bundle.obj.file:

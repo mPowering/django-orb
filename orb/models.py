@@ -18,6 +18,7 @@ from typing import Any
 from typing import Dict
 from typing import Iterable
 
+from orb import conf
 from orb import signals
 from orb.analytics.models import UserLocationVisualization
 from orb.fields import AutoSlugField
@@ -470,6 +471,15 @@ class ResourceFile(TimestampBase):
             return os.path.getsize(self.full_path)
         else:
             return 0
+
+    @property
+    def file_extension(self):
+        """Returns the file extension"""
+        return self.file.name.split('.')[-1]
+
+    @property
+    def is_embeddable(self):
+        return self.file_extension in conf.EMBEDDABLE_FILE_TYPES
 
 # ResourceRelationship
 
