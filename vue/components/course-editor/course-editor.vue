@@ -168,7 +168,14 @@ export default {
             )
                 .then(
                     (response) => {
-                        this.available_resources = response.data.objects
+                        const availableResources = response.data.objects
+                        let testing = availableResources.map(
+                            ({ title, files }) => {
+                                files.forEach(file => { file.title = `${file.title} - ${title}` })
+                                return files
+                            }
+                        )
+                        this.available_resources = testing.reduce((acc, val) => acc.concat(val), [])
                     }
                 )
                 .catch(
