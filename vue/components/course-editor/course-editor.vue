@@ -16,6 +16,9 @@ import CourseResource from '@cmp/course-resource/course-resource'
 import CourseNotification from '@cmp/notifications/dismissable'
 import PublishControl from '@cmp/course-publish-control/course-publish-control'
 
+// TODO move this to a constants module (or similar)
+const embeddableExtensions = ['pdf', 'mp4', 'pptx', 'jpg', 'png', 'ppt', 'docx', 'mov', 'm4v']
+
 const defaults = {
     sections: [[{resources: []}]],
     endpoints: {
@@ -169,13 +172,20 @@ export default {
                 .then(
                     (response) => {
                         const availableResources = response.data.objects
+
                         let testing = availableResources.map(
                             ({ title, files }) => {
-                                files.forEach(file => { file.title = `${file.title} - ${title}` })
+                                files.forEach(file => {
+                                    let fileComponents = file.file.split('.')
+                                    file.extension = fileComponents[fileComponents.length - 1]
+                                    file.isEmbeddable = embeddableExtensions.includes(file.extension)
+                                    file.title = `${file.title} - ${title} (${file.extension})`
+                                })
                                 return files
                             }
                         )
-                        this.available_resources = testing.reduce((acc, val) => acc.concat(val), [])
+                        const resourcesFiles = testing.reduce((acc, val) => acc.concat(val), [])
+                        this.available_resources = resourcesFiles.filter(resourceFile => resourceFile.isEmbeddable)
                     }
                 )
                 .catch(
