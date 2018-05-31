@@ -27,17 +27,19 @@ The MoodleCourse class is used to export
 
 """
 import hashlib
-from django.utils.html import escape
 import sys
-import markdown
 import time
 from StringIO import StringIO
 from zipfile import ZipFile
 
+import markdown
 from dicttoxml import dicttoxml
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
+from django.utils.html import escape
 from django.utils.safestring import SafeText  # noqa
+from typing import Dict  # noqa
+from typing import List  # noqa
 
 
 def format_page(activity):
