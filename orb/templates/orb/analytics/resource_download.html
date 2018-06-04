@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load humanize %}
+
+{% block extra_head_title %}{% trans 'Resources (Page Hits vs Downloads)' %}{% endblock extra_head_title %}
+
+
+{% block content %}
+
+<h2>{% trans 'Resources (Page Hits vs Downloads)' %}</h2>
+
+<p>Showing data from {{ start_date }} until now.</p>
+
+<table class="table table-condensed">
+    <thead>
+        <tr>
+			<th>{% trans 'Resource' %}</th>
+            <th>{% trans 'Page hits' %} <sup><a href="#page">1</a></sup></th>
+            <th>{% trans 'Downloads' %} <sup><a href="#download">2</a></sup></th>
+            <th>{% trans 'Conversion Rate' %} <sup><a href="#conversion">3</a></sup></th>
+        </tr>
+	</thead>
+	<tbody>
+		{% for rd in resource_data %}
+			<tr>
+				<td><a href="{% url 'orb_resource' rd.resource.slug %}" target="_blank">{{ rd.resource.title }}</a></td>
+				<td>{% if rd.page_view > 0 %}{{ rd.page_view }}{% else %}--{% endif %}</td>
+				<td>{% if rd.download > 0 %}{{ rd.download }}{% else %}--{% endif %}</td>
+				<td>{% if rd.conversion > 0 %}{{ rd.conversion|floatformat:"1" }}%{% else %}--{% endif %}</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<ol>
+<li><a name="page" class="named-anchor"></a>The number of unique users who have visited the resource meta data page, excluding staff and admin users.</li>
+<li><a name="download" class="named-anchor"></a>The number of unique users who have downloaded any of the resource files associated with the resource, excluding staff and admin users.</li>
+<li><a name="conversion" class="named-anchor"></a>The percentage of users (excluding staff and admin users) who have downloaded any of the resource files, compared to the overall resource meta data page hits.</li>
+</ol>
+
+Notes:
+<ul>
+<li>Users might have visited the resource meta data page several times before downloading the resource - this data excludes multiple hits on the same resource meta data page by the same user for the given time period.</li>
+<li>The resources downloads reflects only that a user has downloaded one or more of the files/urls associated with the resource. For example, if a user has downloaded only 1 of 5 files for the resource, this data will still show that they have downloaded the resource.</li>
+</ul>
+{% endblock %}

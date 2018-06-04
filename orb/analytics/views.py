@@ -550,3 +550,40 @@ def kpi_view(request):
     
     return render(request, 'orb/analytics/kpi.html', {'indicators': indicators,
                                                       'table_data': table_data})
+    
+@staff_required
+def resource_download_view(request):
+    try:
+        days = int(request.GET.get('days', '90'))
+    except ValueError:
+        days = 90
+    
+    resource_data = []
+    
+    start_date = timezone.now() - datetime.timedelta(days=days)
+    
+    resources = Resource.objects.filter(status='approved')
+    for r in resources:
+        resource_obj = {}
+        resource_obj['resource'] = r
+        
+        # get unique pages hits for users
+        page_view_logged_in = ResourceTracker.objects.filter(user__isnull=False, resource=r, access_date__gte=start_date, resource_url=None, resource_file=None).exclude(Q(user__is_superuser=True) | Q(user__is_staff=True)).values('user').distinct().count()
+        page_view_anon = ResourceTracker.objects.filter(user__isnull=True, resource=r, access_date__gte=start_date, resource_url=None, resource_file=None).values('ip').distinct().count()
+        
+        resource_obj['page_view'] = page_view_logged_in + page_view_anon
+        
+        download_logged_in = ResourceTracker.objects.filter(user__isnull=False, resource=r, access_date__gte=start_date).filter(Q(resource_file__isnull=False) | Q(resource_url__isnull=False)).exclude(Q(user__is_superuser=True) | Q(user__is_staff=True)).values('user').distinct().count()
+        download_anon = ResourceTracker.objects.filter(user__isnull=True, resource=r, access_date__gte=start_date).filter(Q(resource_file__isnull=False) | Q(resource_url__isnull=False)).values('ip').distinct().count()
+        
+        resource_obj['download'] = download_logged_in + download_anon
+        
+        if resource_obj['page_view'] > 0:
+            resource_obj['conversion'] = float(resource_obj['download'])*100/float(resource_obj['page_view'])
+        else:
+            resource_obj['conversion'] = 0
+                
+        resource_data.append(resource_obj)
+    
+    return render(request, 'orb/analytics/resource_download.html', {'start_date': start_date,
+                                                                    'resource_data': resource_data})
