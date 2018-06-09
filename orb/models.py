@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
 
+import hashlib
 import itertools
+import os
 import uuid
 
-import os
 import parsedatetime as pdt
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -17,6 +18,7 @@ from modeltranslation.utils import build_localized_fieldname
 from typing import Any
 from typing import Dict
 from typing import Iterable
+from typing import Text
 
 from orb import conf
 from orb import signals
@@ -445,6 +447,7 @@ class ResourceFile(TimestampBase):
     create_user = models.ForeignKey(User, related_name='resource_file_create_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
     update_user = models.ForeignKey(User, related_name='resource_file_update_user', blank=True, null=True, default=None, on_delete=models.SET_NULL)
     file_full_text = models.TextField(blank=True, null=True, default=None)
+    sha1 = models.CharField(max_length=40, blank=True, null=True, editable=False)
     objects = ResourceURLManager.as_manager()
 
     def __unicode__(self):
@@ -458,6 +461,7 @@ class ResourceFile(TimestampBase):
 
     @property
     def full_path(self):
+        # type: () -> Text
         """Returns the complete path to the file"""
         return os.path.join(settings.MEDIA_ROOT, self.file.name)
 
@@ -471,6 +475,34 @@ class ResourceFile(TimestampBase):
             return os.path.getsize(self.full_path)
         else:
             return 0
+
+    def sha1sum(self, update=False):
+        """Returns the sha checksum of the file
+
+        Args:
+            update: if this is true then missing SHA values will be saved to the instance
+
+        Returns:
+            SHA1 hash of the file
+
+        Raises:
+            Exception if there was a system error
+        """
+        if self.sha1:
+            return self.sha1
+
+        h = hashlib.sha1()
+        with open(self.full_path, b'rb', buffering=0) as rf:
+            for batch in iter(lambda: rf.read(128 * 1024), b''):
+                h.update(batch)
+
+        sha = h.hexdigest()
+
+        if update:
+            self.sha1 = sha
+            self.save()
+
+        return sha
 
     @property
     def file_extension(self):
