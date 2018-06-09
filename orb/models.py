@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 import hashlib
 import itertools
+import time
 import os
 import uuid
 
@@ -475,6 +476,11 @@ class ResourceFile(TimestampBase):
             return os.path.getsize(self.full_path)
         else:
             return 0
+
+    def update_timestamp(self):
+        # type: () -> int
+        """Returns a timestamp of seconds since Unix epoch"""
+        return int(time.mktime(self.update_date.timetuple()))
 
     def sha1sum(self, update=False):
         """Returns the sha checksum of the file
