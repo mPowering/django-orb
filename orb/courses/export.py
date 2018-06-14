@@ -95,6 +95,12 @@ class MoodleCourse(object):
 
         self.hashed_site_identifier = kwargs.pop('hashed_site_identifier', '')  # md5
 
+    def resources(self):
+        """Returns only resource activities"""
+        for course_resource in self.activities:
+            if course_resource['type'] == 'resource':
+                yield course_resource
+
     def convert_xml(self, keys, pretty=False):
         if isinstance(keys, str) or isinstance(keys, unicode):
             keys = {keys: None}
@@ -707,6 +713,13 @@ class MoodleCourse(object):
                                    self.convert_xml({'roles': {'role_overrides': None, 'role_assignments': None}}))
             moodle_backup.writestr('course/inforef.xml',
                                    self.convert_xml({'inforef': {'roleref': {'role': 5}}}))
+
+            for course_resource in self.resources():
+                with open(course_resource['file_path'], 'rb') as rf:
+                    moodle_backup.writestr(
+                        course_resource["export_path"],
+                        rf.read()
+                    )
 
             for section in self.sections:
                 moodle_backup.writestr('sections/section_{id}/inforef.xml'.format(id=section['id']),
