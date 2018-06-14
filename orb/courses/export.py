@@ -426,6 +426,35 @@ class MoodleCourse(object):
   </tags>
 </course>"""
 
+    def resource_xml(self, activity):
+        """Returns
+
+        Uses string formatting b/c dicttoxml doesn't support attributes
+        """
+        return """<?xml version="1.0" encoding="UTF-8"?>
+<activity id="{id}" moduleid="{moduleid}" modulename="page" contextid="{contextid}">
+  <resource id="{id}">
+    <name>{name}</name>
+    <intro></intro>
+    <introformat>1</introformat>
+    <content>{content_html}</content>
+    <contentformat>1</contentformat>
+    <legacyfiles>0</legacyfiles>
+    <legacyfileslast>$@NULL@$</legacyfileslast>
+    <display>5</display>
+    <displayoptions>a:2:{{s:12:"printheading";s:1:"1";s:10:"printintro";s:1:"0";}}</displayoptions>
+    <revision>1</revision>
+    <timemodified>{timestamp}</timemodified>
+  </resource>
+</activity>""".format(
+            id=activity['id'],
+            moduleid=activity['id'],
+            contextid=activity['id'],
+            name=activity['intro'],
+            content_html=escape(format_page(activity)),
+            timestamp="{}".format(int(time.time())),
+        )
+
     def page_xml(self, activity):
         """Returns
 

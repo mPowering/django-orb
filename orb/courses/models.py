@@ -160,16 +160,27 @@ class Course(TimestampBase):
         activities = []
         resource_id = 1
 
+        def render_page_activity(activity, resource_id, section_count):
+            if activity.get("type") == "CourseResource":
+                return {
+                    'id': resource_id,
+                    'type': 'resource',
+                    # 'intro': activity['title'],
+                    # 'content': activity['description'],
+                    'section': section_count,
+                }
+            return {
+                'id': resource_id,
+                'type': 'page',
+                'intro': activity['title'],
+                'content': activity['description'],
+                'section': section_count,
+            }
+
         for section_count, section in enumerate(self.section_data(), start=1):
             section_activities = []
             for activity in section['resources']:
-                activities.append({
-                    'id': resource_id,
-                    'type': 'page',
-                    'intro': activity['title'],
-                    'content': activity['description'],
-                    'section': section_count,
-                })
+                activities.append(render_page_activity(activity, resource_id, section_count))
                 section_activities.append(resource_id)
                 resource_id += 1
             sections.append({'id': section_count, 'sequence': section_activities})

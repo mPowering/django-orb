@@ -483,6 +483,7 @@ class ResourceFile(TimestampBase):
         return int(time.mktime(self.update_date.timetuple()))
 
     def sha1sum(self, update=False):
+        # type: (bool) -> Text
         """Returns the sha checksum of the file
 
         Args:
@@ -491,8 +492,6 @@ class ResourceFile(TimestampBase):
         Returns:
             SHA1 hash of the file
 
-        Raises:
-            Exception if there was a system error
         """
         if self.sha1:
             return self.sha1
