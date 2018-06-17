@@ -101,6 +101,61 @@ class MoodleCourse(object):
             if course_resource['type'] == 'resource':
                 yield course_resource
 
+    def files_xml(self):
+        """
+          <file id="279691">
+    <contenthash>c7ee6c50edffc243138420eed2f8e94ce84478a8</contenthash>
+    <contextid>39751</contextid>
+    <component>course</component>
+    <filearea>summary</filearea>
+    <itemid>0</itemid>
+    <filepath>/</filepath>
+    <filename>anc.small.png</filename>
+    <userid>2</userid>
+    <filesize>9043</filesize>
+    <mimetype>image/png</mimetype>
+    <status>0</status>
+    <timecreated>1405527815</timecreated>
+    <timemodified>1405527822</timemodified>
+    <source>anc.small.png</source>
+    <author>Alex Little</author>
+    <license>allrightsreserved</license>
+    <sortorder>0</sortorder>
+    <repositorytype>$@NULL@$</repositorytype>
+    <repositoryid>$@NULL@$</repositoryid>
+    <reference>$@NULL@$</reference>
+  </file>
+        """
+        wrapper = """"<?xml version="1.0" encoding="UTF-8"?><files>{}</files>"""
+        inner = "".join([
+            """
+          <file id="{id}">
+    <contenthash>{sha}</contenthash>
+    <contextid>39751</contextid>
+    <component>course</component>
+    <filearea>summary</filearea>
+    <itemid>0</itemid>
+    <filepath>/</filepath>
+    <filename>anc.small.png</filename>
+    <userid>2</userid>
+    <filesize>{size}</filesize>
+    <mimetype>image/png</mimetype>
+    <status>0</status>
+    <timecreated>1405527815</timecreated>
+    <timemodified>1405527822</timemodified>
+    <source>anc.small.png</source>
+    <author>Alex Little</author>
+    <license>allrightsreserved</license>
+    <sortorder>0</sortorder>
+    <repositorytype>$@NULL@$</repositorytype>
+    <repositoryid>$@NULL@$</repositoryid>
+    <reference>$@NULL@$</reference>
+  </file>""".format(id=f['id'], sha=f['file_sha'], size=f['file_size'])
+            for f in self.resources()
+        ])
+        return wrapper.format(inner)
+
+
     def convert_xml(self, keys, pretty=False):
         if isinstance(keys, str) or isinstance(keys, unicode):
             keys = {keys: None}
@@ -694,7 +749,7 @@ class MoodleCourse(object):
         with ZipFile(backup_file, 'w') as moodle_backup:
 
             moodle_backup.writestr('completion.xml', self.convert_xml('course_completion'))
-            moodle_backup.writestr('files.xml', self.convert_xml('files'))
+            moodle_backup.writestr('files.xml', self.files_xml())
             # moodle_backup.writestr('completion.xml', self.convert_xml('course_completion'))
 
             moodle_backup.writestr('grade_history.xml', self.convert_xml({'grade_history': {'grade_grades': None}}))

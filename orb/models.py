@@ -472,6 +472,7 @@ class ResourceFile(TimestampBase):
         return settings.MEDIA_URL + self.file.name
 
     def filesize(self):
+        # type: () -> int
         if os.path.isfile(self.full_path):
             return os.path.getsize(self.full_path)
         else:
