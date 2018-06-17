@@ -53,6 +53,7 @@ node_modules
 collectedstatic/
 .coverage
 *.egg-info
+.pytest_cache
 
 # Project specific files #
 ##########################

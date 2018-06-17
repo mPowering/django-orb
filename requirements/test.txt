@@ -8,10 +8,10 @@ hypothesis==3.6.0
 unittest2==1.1.0
 Faker==0.8.10
 
-pytest==3.0.4
-pytest-django==3.1.1             # Django specific fixtures, settings handling
-pytest-sugar==0.7.1              # Adds a progressbar and shows tests failures as they happen
-pytest-pythonpath==0.7.1         # Fix the project path no matter where tests are run
-pytest-mock==1.5.0               # Wrapper around mock library
+pytest==3.6.1
+pytest-django==3.3.0             # Django specific fixtures, settings handling
+pytest-sugar==0.9.1              # Adds a progressbar and shows tests failures as they happen
+pytest-pythonpath==0.7.2         # Fix the project path no matter where tests are run
+pytest-mock==1.10.0              # Wrapper around mock library
 
 IPython==5.1.0
