@@ -546,6 +546,9 @@ class MoodleCourse(object):
             timestamp="{}".format(int(time.time())),
         )
 
+    def activity_xml(self, activity):
+        return self.resource_xml(activity) if activity['type'] == 'resource' else self.page_xml(activity)
+
     def activity_module_xml(self, activity):
         return """<?xml version="1.0" encoding="UTF-8"?>
 <module id="{moduleid}" version="{versionid}">
@@ -736,6 +739,20 @@ class MoodleCourse(object):
   </grade_settings>
 </gradebook>"""
 
+    def activity_inforef_xml(self, activity):
+        """Returns the inforef.xml content for an activity"""
+        if activity['type'] == 'resource':
+            return self.convert_xml({
+                'inforef': {
+                    'fileref': {
+                        'file': {
+                            'id': activity['id'],
+                        }
+                    }
+                }
+            })
+        return self.convert_xml('inforef')
+
     def export(self):
         """
         Generates a Moodle export
@@ -791,12 +808,12 @@ class MoodleCourse(object):
                 # [x] roles
                 moodle_backup.writestr(
                     'activities/{type}_{id}/inforef.xml'.format(type=activity['type'], id=activity['id']),
-                    self.convert_xml('inforef'),
+                    self.activity_inforef_xml(activity),
                 )
 
                 moodle_backup.writestr(
-                    'activities/{type}_{id}/page.xml'.format(type=activity['type'], id=activity['id']),
-                    self.page_xml(activity)
+                    'activities/{type}_{id}/{type}.xml'.format(type=activity['type'], id=activity['id']),
+                    self.activity_xml(activity)
                 )
 
                 moodle_backup.writestr(
