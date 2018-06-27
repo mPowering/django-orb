@@ -126,7 +126,7 @@ class MoodleCourse(object):
     <reference>$@NULL@$</reference>
   </file>
         """
-        wrapper = """"<?xml version="1.0" encoding="UTF-8"?><files>{}</files>"""
+        wrapper = """<?xml version="1.0" encoding="UTF-8"?><files>{}</files>"""
         inner = "".join([
             """
           <file id="{id}">
