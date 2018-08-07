@@ -4,11 +4,13 @@
     <a name="{{ section_name }}-notice"></a>
     {% if section_name == 'files' %}
         {% blocktrans %}
-            Please <a href="{{ login_url }}?next={{ next }}">login</a> or <a href="{{ register_url }}?next={{ next }}">register</a> to download these files.
+            Please <a href="{{ login_url }}?next={{ next }}" onclick="ga('send', 'event', 'Resource File', 'click', 'Login');">login</a>
+            or <a href="{{ register_url }}?next={{ next }}"  onclick="ga('send', 'event', 'Resource File', 'click', 'Register');">register</a> to download these files.
         {% endblocktrans %}
     {% else %}
         {% blocktrans %}
-            Please <a href="{{ login_url }}?next={{ next }}">login</a> or <a href="{{ register_url }}?next={{ next }}">register</a> to access these links.
+            Please <a href="{{ login_url }}?next={{ next }}" onclick="ga('send', 'event', 'Resource Link', 'click', 'Login');">login</a>
+            or <a href="{{ register_url }}?next={{ next }}" onclick="ga('send', 'event', 'Resource Link', 'click', 'Register');">register</a> to access these links.
         {% endblocktrans %}
     {% endif %}
 </div>

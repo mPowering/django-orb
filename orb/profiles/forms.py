@@ -174,7 +174,12 @@ class RegisterForm(forms.Form):
             'terms',
             'next',
             Div(
-                Submit('submit', _('Register'), css_class='btn btn-default'),
+                Submit(
+                    'submit',
+                    _('Register'),
+                    css_class='btn btn-default',
+                    onClick="ga('send', 'event', 'Registration', 'submit', '');",
+                ),
                 css_class='col-lg-offset-2 col-lg-4',
             ),
         )
@@ -434,7 +439,7 @@ class UserCreationForm(BaseUserCreationForm):
         user = super(UserCreationForm, self).save(commit=True)
         UserProfile.objects.create(user=user)
         return user
-    
+
 class DeleteProfileForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'readonly': 'readonly'}),
                                required=True)
@@ -464,7 +469,7 @@ class DeleteProfileForm(forms.Form):
                 HTML("""<a role="button" class="btn btn-default"
                         href="{% url "my_profile_edit" %}">Cancel</a>"""),
                 css_class='col-lg-offset-2 col-lg-4',
-                
+
             ),
         )
 
