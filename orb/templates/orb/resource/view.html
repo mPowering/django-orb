@@ -368,9 +368,9 @@
             	and last updated by [deleted user] ({{ update_date }})
             {% endblocktrans %}
     	{% endif %}
-        
-            
-        
+
+
+
     </small>
 
     <hr/>
@@ -384,4 +384,10 @@
                href="{{ om.url }}">{{ om.title }}</a>
         {% endfor %}
     {% endif %}
+{% endblock %}
+
+{% block footer_js %}
+    <script>
+        ga('send', 'event', 'Resource', 'access', 'View', '{{ resource.pk }}');
+    </script>
 {% endblock %}
