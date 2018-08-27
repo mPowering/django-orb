@@ -132,9 +132,9 @@ class MoodleCourse(object):
             """
           <file id="{id}">
     <contenthash>{sha}</contenthash>
-    <contextid>39751</contextid>
-    <component>course</component>
-    <filearea>summary</filearea>
+    <contextid>{contextid}</contextid>
+    <component>mod_resource</component>
+    <filearea>content</filearea>
     <itemid>0</itemid>
     <filepath>/</filepath>
     <filename>anc.small.png</filename>
@@ -151,7 +151,12 @@ class MoodleCourse(object):
     <repositorytype>$@NULL@$</repositorytype>
     <repositoryid>$@NULL@$</repositoryid>
     <reference>$@NULL@$</reference>
-  </file>""".format(id=f['id'], sha=f['file_sha'], size=f['file_size'])
+  </file>""".format(
+                id=f['id'],
+                contextid=f['id'],
+                sha=f['file_sha'],
+                size=f['file_size'],
+            )
             for f in self.resources()
         ])
         return wrapper.format(inner)
@@ -378,13 +383,13 @@ class MoodleCourse(object):
             settings_data += [
                 {
                     "level": "activity",
-                    "activity": "page_{}".format(activity['id']),
-                    "name": "page_{}_included".format(activity['id']),
+                    "activity": "{}_{}".format(activity['type'], activity['id']),
+                    "name": "{}_{}_included".format(activity['type'], activity['id']),
                     "value": "1"
                 }, {
                     "level": "activity",
-                    "activity": "page_{}".format(activity['id']),
-                    "name": "page_{}_userinfo".format(activity['id']),
+                    "activity": "{}_{}".format(activity['type'], activity['id']),
+                    "name": "{}_{}_userinfo".format(activity['type'], activity['id']),
                     "value": "0"
                 }
             ]
