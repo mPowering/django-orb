@@ -44,7 +44,8 @@ from typing import List  # noqa
 
 def format_page(activity):
     # type: (dict) -> unicode
-    """Create an HTML formatted page from a simple course activity"""
+    """Create an HTML fo
+    rmatted page from a simple course activity"""
     header = "# {}\n\n".format(activity['intro'])
     content = header + activity['content']
     return markdown.markdown(content)
@@ -493,17 +494,17 @@ class MoodleCourse(object):
         Uses string formatting b/c dicttoxml doesn't support attributes
         """
         return """<?xml version="1.0" encoding="UTF-8"?>
-<activity id="{id}" moduleid="{moduleid}" modulename="page" contextid="{contextid}">
+<activity id="{id}" moduleid="{moduleid}" modulename="resource" contextid="{contextid}">
   <resource id="{id}">
     <name>{name}</name>
     <intro></intro>
     <introformat>1</introformat>
-    <content>{content_html}</content>
-    <contentformat>1</contentformat>
+    <tobemigrated>0</tobemigrated>
     <legacyfiles>0</legacyfiles>
     <legacyfileslast>$@NULL@$</legacyfileslast>
-    <display>5</display>
-    <displayoptions>a:2:{{s:12:"printheading";s:1:"1";s:10:"printintro";s:1:"0";}}</displayoptions>
+    <display>0</display>
+    <displayoptions>a:1:{{s:10:"printintro";i:1;}}</displayoptions>
+    <filterfiles>0</filterfiles>
     <revision>1</revision>
     <timemodified>{timestamp}</timemodified>
   </resource>
@@ -512,7 +513,6 @@ class MoodleCourse(object):
             moduleid=activity['id'],
             contextid=activity['id'],
             name=activity['intro'],
-            content_html=escape(format_page(activity)),
             timestamp="{}".format(int(time.time())),
         )
 
@@ -552,7 +552,7 @@ class MoodleCourse(object):
     def activity_module_xml(self, activity):
         return """<?xml version="1.0" encoding="UTF-8"?>
 <module id="{moduleid}" version="{versionid}">
-  <modulename>page</modulename>
+  <modulename>{activity_type}</modulename>
   <sectionid>{sectionid}</sectionid>
   <sectionnumber>{sectionnum}</sectionnumber>
   <idnumber></idnumber>
@@ -573,6 +573,7 @@ class MoodleCourse(object):
   <tags>
   </tags>
 </module>""".format(
+            activity_type=activity['type'],
             moduleid=activity['id'],
             sectionid=activity['section'],
             sectionnum=activity['section'],
