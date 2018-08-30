@@ -143,7 +143,6 @@ class Course(TimestampBase):
 
                     yield file_data
 
-
     def moodle_activities(self):
         # type: () -> (dict, dict)
         """
@@ -200,8 +199,11 @@ class Course(TimestampBase):
                     'content': activity['description'],
                     'section': section_count,
                     "file_path": rf.full_path,
+                    "file_name": rf.filename(),
                     "file_sha": sha1,
                     "file_size": rf.filesize(),
+                    # "ts_created": rf.create_date,
+                    # "ts_updated": rf.update_date,
                     "export_path": "files/{}/{}".format(sha1[:2], sha1),
                 }
             return {

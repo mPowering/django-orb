@@ -137,14 +137,14 @@ class MoodleCourse(object):
     <filearea>content</filearea>
     <itemid>0</itemid>
     <filepath>/</filepath>
-    <filename>anc.small.png</filename>
+    <filename>{filename}</filename>
     <userid>2</userid>
     <filesize>{size}</filesize>
     <mimetype>image/png</mimetype>
     <status>0</status>
     <timecreated>1405527815</timecreated>
     <timemodified>1405527822</timemodified>
-    <source>anc.small.png</source>
+    <source>{filename}</source>
     <author>Alex Little</author>
     <license>allrightsreserved</license>
     <sortorder>0</sortorder>
@@ -156,6 +156,7 @@ class MoodleCourse(object):
                 contextid=f['id'],
                 sha=f['file_sha'],
                 size=f['file_size'],
+                filename=f['file_name'],
             )
             for f in self.resources()
         ])
