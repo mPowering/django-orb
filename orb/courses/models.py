@@ -202,8 +202,8 @@ class Course(TimestampBase):
                     "file_name": rf.filename(),
                     "file_sha": sha1,
                     "file_size": rf.filesize(),
-                    # "ts_created": rf.create_date,
-                    # "ts_updated": rf.update_date,
+                    "created": rf.create_timestamp(),
+                    "modified": rf.update_timestamp(),
                     "export_path": "files/{}/{}".format(sha1[:2], sha1),
                 }
             return {

@@ -142,8 +142,8 @@ class MoodleCourse(object):
     <filesize>{size}</filesize>
     <mimetype>image/png</mimetype>
     <status>0</status>
-    <timecreated>1405527815</timecreated>
-    <timemodified>1405527822</timemodified>
+    <timecreated>{created}</timecreated>
+    <timemodified>{modified}</timemodified>
     <source>{filename}</source>
     <author>Alex Little</author>
     <license>allrightsreserved</license>
@@ -157,6 +157,8 @@ class MoodleCourse(object):
                 sha=f['file_sha'],
                 size=f['file_size'],
                 filename=f['file_name'],
+                created=f['created'],
+                modified=f['modified'],
             )
             for f in self.resources()
         ])

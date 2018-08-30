@@ -478,6 +478,11 @@ class ResourceFile(TimestampBase):
         else:
             return 0
 
+    def create_timestamp(self):
+        # type: () -> int
+        """Returns a timestamp of seconds since Unix epoch"""
+        return int(time.mktime(self.create_date.timetuple()))
+
     def update_timestamp(self):
         # type: () -> int
         """Returns a timestamp of seconds since Unix epoch"""
