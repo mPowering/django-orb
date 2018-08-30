@@ -145,7 +145,7 @@ class MoodleCourse(object):
     <timecreated>{created}</timecreated>
     <timemodified>{modified}</timemodified>
     <source>{filename}</source>
-    <author>Alex Little</author>
+    <author>{author}</author>
     <license>allrightsreserved</license>
     <sortorder>0</sortorder>
     <repositorytype>$@NULL@$</repositorytype>
@@ -154,6 +154,7 @@ class MoodleCourse(object):
   </file>""".format(
                 id=f['id'],
                 contextid=f['id'],
+                author=f['author'],
                 sha=f['file_sha'],
                 size=f['file_size'],
                 filename=f['file_name'],

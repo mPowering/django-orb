@@ -488,6 +488,12 @@ class ResourceFile(TimestampBase):
         """Returns a timestamp of seconds since Unix epoch"""
         return int(time.mktime(self.update_date.timetuple()))
 
+    def author(self):
+        try:
+            return self.create_user.get_full_name()
+        except AttributeError:
+            return "N/A"
+
     def sha1sum(self, update=False):
         # type: (bool) -> Text
         """Returns the sha checksum of the file
