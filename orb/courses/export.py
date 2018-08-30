@@ -140,7 +140,7 @@ class MoodleCourse(object):
     <filename>{filename}</filename>
     <userid>2</userid>
     <filesize>{size}</filesize>
-    <mimetype>image/png</mimetype>
+    <mimetype>{mimetype}</mimetype>
     <status>0</status>
     <timecreated>{created}</timecreated>
     <timemodified>{modified}</timemodified>
@@ -158,6 +158,7 @@ class MoodleCourse(object):
                 sha=f['file_sha'],
                 size=f['file_size'],
                 filename=f['file_name'],
+                mimetype=f['file_mimetype'],
                 created=f['created'],
                 modified=f['modified'],
             )

@@ -2,8 +2,9 @@ from __future__ import unicode_literals
 
 import hashlib
 import itertools
-import time
+import mimetypes
 import os
+import time
 import uuid
 
 import parsedatetime as pdt
@@ -525,6 +526,21 @@ class ResourceFile(TimestampBase):
     def file_extension(self):
         """Returns the file extension"""
         return self.file.name.split('.')[-1]
+
+    @property
+    def mimetype(self):
+        """Returns the mimetype of the file
+
+        This is based on the standard library's mimetype module, which
+        relies on the file extension. As a result it may not be 100%
+        accurate.
+        """
+        print(self.file_extension, "." + self.file_extension)
+        try:
+            return mimetypes.types_map["." + self.file_extension]
+        except KeyError:
+            return "application/octet-stream"
+
 
     @property
     def is_embeddable(self):
