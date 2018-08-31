@@ -19,6 +19,7 @@ from django.utils.translation import ugettext_lazy as _
 from modeltranslation.utils import build_localized_fieldname
 from typing import Any
 from typing import Dict
+from typing import Optional
 from typing import Iterable
 from typing import Text
 
@@ -311,7 +312,14 @@ class Resource(TimestampBase):
         return Tag.tags.by_category('language').by_resource(self)
 
     def get_license(self):
-        return Tag.tags.by_category('license').by_resource(self)
+        # type: () -> Optional[Tag]
+        """Returns the license tag or None
+
+        There is expected to be one license for a resource but
+        because there is no hard data restriction on this we
+        check for the first match.
+        """
+        return Tag.tags.by_category('license').by_resource(self).first()
 
     def get_health_domains(self):
         return Tag.tags.by_category('health-domain').by_resource(self)
@@ -495,6 +503,13 @@ class ResourceFile(TimestampBase):
         except AttributeError:
             return "N/A"
 
+    def license(self):
+        """Returns a license slug suitable for data export"""
+        try:
+            return self.resource.get_license().slug
+        except AttributeError:
+            return "allrightsreserved"  # Moodle's default
+
     def sha1sum(self, update=False):
         # type: (bool) -> Text
         """Returns the sha checksum of the file
@@ -540,7 +555,6 @@ class ResourceFile(TimestampBase):
             return mimetypes.types_map["." + self.file_extension]
         except KeyError:
             return "application/octet-stream"
-
 
     @property
     def is_embeddable(self):

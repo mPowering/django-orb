@@ -203,6 +203,7 @@ class Course(TimestampBase):
                     "file_sha": sha1,
                     "file_size": rf.filesize(),
                     "file_mimetype": rf.mimetype,
+                    "license": rf.license(),
                     "author": rf.author(),
                     "created": rf.create_timestamp(),
                     "modified": rf.update_timestamp(),

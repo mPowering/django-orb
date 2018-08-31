@@ -146,7 +146,7 @@ class MoodleCourse(object):
     <timemodified>{modified}</timemodified>
     <source>{filename}</source>
     <author>{author}</author>
-    <license>allrightsreserved</license>
+    <license>{license}</license>
     <sortorder>0</sortorder>
     <repositorytype>$@NULL@$</repositorytype>
     <repositoryid>$@NULL@$</repositoryid>
@@ -161,6 +161,7 @@ class MoodleCourse(object):
                 mimetype=f['file_mimetype'],
                 created=f['created'],
                 modified=f['modified'],
+                license=f['license'],
             )
             for f in self.resources()
         ])
