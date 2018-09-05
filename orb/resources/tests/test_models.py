@@ -12,10 +12,14 @@ import uuid
 from copy import deepcopy
 from datetime import datetime
 
+import mock
 import pytest
 from dateutil.relativedelta import relativedelta
 
-from orb.models import Resource, ResourceURL, get_import_user
+from orb.models import Resource
+from orb.models import ResourceFile
+from orb.models import ResourceURL
+from orb.models import get_import_user
 from orb.resources.tests.factory import resource_factory
 
 pytestmark = pytest.mark.django_db
@@ -104,6 +108,32 @@ class TestResourceURL(object):
     def test_unicode_display(self):
         """Unicode value of URL is returned"""
         assert ResourceURL(url=u"http://www.example.com/niños").__unicode__() == u"http://www.example.com/niños"
+
+
+class TestResourceFile(object):
+
+    @pytest.mark.parametrize("extension,mimetype", [
+
+        ("pdf", "application/pdf"),
+        ("mp4", "video/mp4"),
+        ("mbz", "application/octet-stream"),
+        ("zip", "application/x-zip-compressed"),
+        ("docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"),
+        ("png", "image/png"),
+        ("ppt", "application/vnd.ms-powerpoint"),
+        ("jpg", "image/jpeg"),
+        ("pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation"),
+        ("m4v", "video/x-m4v"),
+        ("mov", "video/quicktime"),
+        ("wmv", "video/x-ms-wmv"),
+        ("zzz", "application/octet-stream"),
+    ])
+    def test_mimetype(self, extension, mimetype):
+        """"""
+        with mock.patch('orb.models.ResourceFile.file_extension', new_callable=mock.PropertyMock) as mocked_extension:
+            mocked_extension.return_value = extension
+            r = ResourceFile()
+            assert r.mimetype == mimetype
 
 
 class TestResourceLocality(object):

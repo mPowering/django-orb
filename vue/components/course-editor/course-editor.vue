@@ -168,7 +168,16 @@ export default {
             )
                 .then(
                     (response) => {
-                        this.available_resources = response.data.objects
+                        const availableResources = response.data.objects
+
+                        let testing = availableResources.map(
+                            ({ title, files }) => {
+                                files.forEach(file => { file.title = `${file.title} - ${title} (${file.file_extension})` })
+                                return files
+                            }
+                        )
+                        const resourcesFiles = testing.reduce((acc, val) => acc.concat(val), [])
+                        this.available_resources = resourcesFiles.filter(resourceFile => resourceFile.is_embeddable)
                     }
                 )
                 .catch(

@@ -27,22 +27,25 @@ The MoodleCourse class is used to export
 
 """
 import hashlib
-from django.utils.html import escape
 import sys
-import markdown
 import time
 from StringIO import StringIO
 from zipfile import ZipFile
 
+import markdown
 from dicttoxml import dicttoxml
 from django.template.loader import render_to_string
 from django.utils.functional import cached_property
+from django.utils.html import escape
 from django.utils.safestring import SafeText  # noqa
+from typing import Dict  # noqa
+from typing import List  # noqa
 
 
 def format_page(activity):
     # type: (dict) -> unicode
-    """Create an HTML formatted page from a simple course activity"""
+    """Create an HTML fo
+    rmatted page from a simple course activity"""
     header = "# {}\n\n".format(activity['intro'])
     content = header + activity['content']
     return markdown.markdown(content)
@@ -92,6 +95,78 @@ class MoodleCourse(object):
             raise ValueError("Moodle backup file names must end with the .mbz extension")
 
         self.hashed_site_identifier = kwargs.pop('hashed_site_identifier', '')  # md5
+
+    def resources(self):
+        """Returns only resource activities"""
+        for course_resource in self.activities:
+            if course_resource['type'] == 'resource':
+                yield course_resource
+
+    def files_xml(self):
+        """
+          <file id="279691">
+    <contenthash>c7ee6c50edffc243138420eed2f8e94ce84478a8</contenthash>
+    <contextid>39751</contextid>
+    <component>course</component>
+    <filearea>summary</filearea>
+    <itemid>0</itemid>
+    <filepath>/</filepath>
+    <filename>anc.small.png</filename>
+    <userid>2</userid>
+    <filesize>9043</filesize>
+    <mimetype>image/png</mimetype>
+    <status>0</status>
+    <timecreated>1405527815</timecreated>
+    <timemodified>1405527822</timemodified>
+    <source>anc.small.png</source>
+    <author>Alex Little</author>
+    <license>allrightsreserved</license>
+    <sortorder>0</sortorder>
+    <repositorytype>$@NULL@$</repositorytype>
+    <repositoryid>$@NULL@$</repositoryid>
+    <reference>$@NULL@$</reference>
+  </file>
+        """
+        wrapper = """<?xml version="1.0" encoding="UTF-8"?><files>{}</files>"""
+        inner = "".join([
+            """
+          <file id="{id}">
+    <contenthash>{sha}</contenthash>
+    <contextid>{contextid}</contextid>
+    <component>mod_resource</component>
+    <filearea>content</filearea>
+    <itemid>0</itemid>
+    <filepath>/</filepath>
+    <filename>{filename}</filename>
+    <userid>2</userid>
+    <filesize>{size}</filesize>
+    <mimetype>{mimetype}</mimetype>
+    <status>0</status>
+    <timecreated>{created}</timecreated>
+    <timemodified>{modified}</timemodified>
+    <source>{filename}</source>
+    <author>{author}</author>
+    <license>{license}</license>
+    <sortorder>0</sortorder>
+    <repositorytype>$@NULL@$</repositorytype>
+    <repositoryid>$@NULL@$</repositoryid>
+    <reference>$@NULL@$</reference>
+  </file>""".format(
+                id=f['id'],
+                contextid=f['id'],
+                author=f['author'],
+                sha=f['file_sha'],
+                size=f['file_size'],
+                filename=f['file_name'],
+                mimetype=f['file_mimetype'],
+                created=f['created'],
+                modified=f['modified'],
+                license=f['license'],
+            )
+            for f in self.resources()
+        ])
+        return wrapper.format(inner)
+
 
     def convert_xml(self, keys, pretty=False):
         if isinstance(keys, str) or isinstance(keys, unicode):
@@ -314,13 +389,13 @@ class MoodleCourse(object):
             settings_data += [
                 {
                     "level": "activity",
-                    "activity": "page_{}".format(activity['id']),
-                    "name": "page_{}_included".format(activity['id']),
+                    "activity": "{}_{}".format(activity['type'], activity['id']),
+                    "name": "{}_{}_included".format(activity['type'], activity['id']),
                     "value": "1"
                 }, {
                     "level": "activity",
-                    "activity": "page_{}".format(activity['id']),
-                    "name": "page_{}_userinfo".format(activity['id']),
+                    "activity": "{}_{}".format(activity['type'], activity['id']),
+                    "name": "{}_{}_userinfo".format(activity['type'], activity['id']),
                     "value": "0"
                 }
             ]
@@ -424,6 +499,34 @@ class MoodleCourse(object):
   </tags>
 </course>"""
 
+    def resource_xml(self, activity):
+        """Returns
+
+        Uses string formatting b/c dicttoxml doesn't support attributes
+        """
+        return """<?xml version="1.0" encoding="UTF-8"?>
+<activity id="{id}" moduleid="{moduleid}" modulename="resource" contextid="{contextid}">
+  <resource id="{id}">
+    <name>{name}</name>
+    <intro></intro>
+    <introformat>1</introformat>
+    <tobemigrated>0</tobemigrated>
+    <legacyfiles>0</legacyfiles>
+    <legacyfileslast>$@NULL@$</legacyfileslast>
+    <display>0</display>
+    <displayoptions>a:1:{{s:10:"printintro";i:1;}}</displayoptions>
+    <filterfiles>0</filterfiles>
+    <revision>1</revision>
+    <timemodified>{timestamp}</timemodified>
+  </resource>
+</activity>""".format(
+            id=activity['id'],
+            moduleid=activity['id'],
+            contextid=activity['id'],
+            name=activity['intro'],
+            timestamp="{}".format(int(time.time())),
+        )
+
     def page_xml(self, activity):
         """Returns
 
@@ -454,10 +557,13 @@ class MoodleCourse(object):
             timestamp="{}".format(int(time.time())),
         )
 
+    def activity_xml(self, activity):
+        return self.resource_xml(activity) if activity['type'] == 'resource' else self.page_xml(activity)
+
     def activity_module_xml(self, activity):
         return """<?xml version="1.0" encoding="UTF-8"?>
 <module id="{moduleid}" version="{versionid}">
-  <modulename>page</modulename>
+  <modulename>{activity_type}</modulename>
   <sectionid>{sectionid}</sectionid>
   <sectionnumber>{sectionnum}</sectionnumber>
   <idnumber></idnumber>
@@ -478,6 +584,7 @@ class MoodleCourse(object):
   <tags>
   </tags>
 </module>""".format(
+            activity_type=activity['type'],
             moduleid=activity['id'],
             sectionid=activity['section'],
             sectionnum=activity['section'],
@@ -644,6 +751,20 @@ class MoodleCourse(object):
   </grade_settings>
 </gradebook>"""
 
+    def activity_inforef_xml(self, activity):
+        """Returns the inforef.xml content for an activity"""
+        if activity['type'] == 'resource':
+            return self.convert_xml({
+                'inforef': {
+                    'fileref': {
+                        'file': {
+                            'id': activity['id'],
+                        }
+                    }
+                }
+            })
+        return self.convert_xml('inforef')
+
     def export(self):
         """
         Generates a Moodle export
@@ -657,7 +778,7 @@ class MoodleCourse(object):
         with ZipFile(backup_file, 'w') as moodle_backup:
 
             moodle_backup.writestr('completion.xml', self.convert_xml('course_completion'))
-            moodle_backup.writestr('files.xml', self.convert_xml('files'))
+            moodle_backup.writestr('files.xml', self.files_xml())
             # moodle_backup.writestr('completion.xml', self.convert_xml('course_completion'))
 
             moodle_backup.writestr('grade_history.xml', self.convert_xml({'grade_history': {'grade_grades': None}}))
@@ -677,6 +798,13 @@ class MoodleCourse(object):
             moodle_backup.writestr('course/inforef.xml',
                                    self.convert_xml({'inforef': {'roleref': {'role': 5}}}))
 
+            for course_resource in self.resources():
+                with open(course_resource['file_path'], 'rb') as rf:
+                    moodle_backup.writestr(
+                        course_resource["export_path"],
+                        rf.read()
+                    )
+
             for section in self.sections:
                 moodle_backup.writestr('sections/section_{id}/inforef.xml'.format(id=section['id']),
                                        self.convert_xml('inforef'))
@@ -692,12 +820,12 @@ class MoodleCourse(object):
                 # [x] roles
                 moodle_backup.writestr(
                     'activities/{type}_{id}/inforef.xml'.format(type=activity['type'], id=activity['id']),
-                    self.convert_xml('inforef'),
+                    self.activity_inforef_xml(activity),
                 )
 
                 moodle_backup.writestr(
-                    'activities/{type}_{id}/page.xml'.format(type=activity['type'], id=activity['id']),
-                    self.page_xml(activity)
+                    'activities/{type}_{id}/{type}.xml'.format(type=activity['type'], id=activity['id']),
+                    self.activity_xml(activity)
                 )
 
                 moodle_backup.writestr(

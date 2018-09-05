@@ -7,6 +7,7 @@ Models for ORB courses
 from __future__ import unicode_literals
 
 import json
+import logging
 
 from autoslugged.settings import slugify
 from django.conf import settings
@@ -18,6 +19,10 @@ from enum import Enum
 
 from orb.courses.export import MoodleCourse
 from orb.models import TimestampBase
+from orb.models import ResourceFile
+
+
+logger = logging.getLogger('orb.courses')
 
 
 class BaseChoices(Enum):
@@ -64,7 +69,7 @@ class CourseQueryset(models.QuerySet):
         )
 
     def editable(self, user):
-        """Returns only those itesm the given user should be able to edit"""
+        """Returns only those items the given user should be able to edit"""
         if user == AnonymousUser():
             return self.none()
         if user.is_staff:
@@ -115,6 +120,29 @@ class Course(TimestampBase):
 
         return sections
 
+    def resource_files(self):
+        """
+        Filters activities by resources (files)
+        """
+        for section in self.section_data():
+            for resource in section["resources"]:
+                if resource["type"] == "CourseResource":
+                    file_data = {}
+                    file_data.update(**resource)
+                    try:
+                        rf = ResourceFile.objects.get(pk=file_data["id"])
+                    except ResourceFile.DoesNotExist:
+                        logger.error("ResourceFile missing for export, pk: '{}'".format(file_data["id"]))
+                        continue
+
+                    file_data.update({
+                        "file_path": rf.full_path,
+                        "file_sha1": rf.sha1sum(),
+                        "file_size": rf.filesize(),
+                    })
+
+                    yield file_data
+
     def moodle_activities(self):
         # type: () -> (dict, dict)
         """
@@ -160,16 +188,39 @@ class Course(TimestampBase):
         activities = []
         resource_id = 1
 
-        for section_count, section in enumerate(self.section_data(), start=1):
-            section_activities = []
-            for activity in section['resources']:
-                activities.append({
+        def render_page_activity(activity, resource_id, section_count):
+            if activity.get("type") == "CourseResource":
+                rf = ResourceFile.objects.get(pk=activity["id"])
+                sha1 = rf.sha1sum()
+                return {
                     'id': resource_id,
-                    'type': 'page',
+                    'type': 'resource',
                     'intro': activity['title'],
                     'content': activity['description'],
                     'section': section_count,
-                })
+                    "file_path": rf.full_path,
+                    "file_name": rf.filename(),
+                    "file_sha": sha1,
+                    "file_size": rf.filesize(),
+                    "file_mimetype": rf.mimetype,
+                    "license": rf.license(),
+                    "author": rf.author(),
+                    "created": rf.create_timestamp(),
+                    "modified": rf.update_timestamp(),
+                    "export_path": "files/{}/{}".format(sha1[:2], sha1),
+                }
+            return {
+                'id': resource_id,
+                'type': 'page',
+                'intro': activity['title'],
+                'content': activity['description'],
+                'section': section_count,
+            }
+
+        for section_count, section in enumerate(self.section_data(), start=1):
+            section_activities = []
+            for activity in section['resources']:
+                activities.append(render_page_activity(activity, resource_id, section_count))
                 section_activities.append(resource_id)
                 resource_id += 1
             sections.append({'id': section_count, 'sequence': section_activities})

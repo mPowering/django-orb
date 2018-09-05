@@ -79,14 +79,14 @@ class ResourceCriteriaAdmin(admin.ModelAdmin):
 class ResourceURLAdmin(admin.ModelAdmin):
     list_display = ('resource', 'url', 'title', 'description')
     search_fields = ['title', 'description', 'url']
-    raw_id_fields = ('create_user', 'update_user')
+    raw_id_fields = ('resource', 'create_user', 'update_user')
 
 
 @admin.register(models.ResourceFile)
 class ResourceFileAdmin(admin.ModelAdmin):
     list_display = ('resource', 'file', 'title', 'description')
     search_fields = ['title', 'description']
-    raw_id_fields = ('create_user', 'update_user')
+    raw_id_fields = ('resource', 'create_user', 'update_user')
 
 
 @admin.register(models.ResourceTag)

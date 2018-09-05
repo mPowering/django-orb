@@ -26,7 +26,6 @@ from orb.courses import models
 logger = logging.getLogger(__name__)
 
 
-
 def response_messages(key):
     messages = {
         'error_saving': _('There was an error trying to save your course'),
@@ -52,13 +51,11 @@ def course_save_message(original_status, updated_status):
 
 
 class CoursesListView(generic.ListView):
-    model = models.Course
+    template_name = "orb/courses/course_list.html"
+    context_object_name = "courses"
 
-
-def course_list(request):
-    return render(request, "orb/courses/course_list.html", {
-        'courses': models.Course.courses.active(),  # TODO paginate!
-    })
+    def get_queryset(self):
+        return models.Course.courses.viewable(self.request.user).order_by('-id')
 
 
 class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
