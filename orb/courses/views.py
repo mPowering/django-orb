@@ -26,7 +26,6 @@ from orb.courses import models
 logger = logging.getLogger(__name__)
 
 
-
 def response_messages(key):
     messages = {
         'error_saving': _('There was an error trying to save your course'),

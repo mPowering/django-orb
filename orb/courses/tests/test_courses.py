@@ -108,7 +108,7 @@ def test_admin_can_edit_course(course, admin_client, rf):
 
     response = admin_client.post(
         reverse('courses_edit', kwargs={'pk': course.pk}),
-        data=json.dumps({'sections': '[]', 'title': 'Hello'}),
+        data=json.dumps({'sections': '[]', 'title': 'Hello', 'status': models.CourseStatus.draft.label}),
         content_type="application/json",
     )
     assert response.status_code == 200

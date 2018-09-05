@@ -69,7 +69,7 @@ class CourseQueryset(models.QuerySet):
         )
 
     def editable(self, user):
-        """Returns only those itesm the given user should be able to edit"""
+        """Returns only those items the given user should be able to edit"""
         if user == AnonymousUser():
             return self.none()
         if user.is_staff:
