@@ -321,7 +321,7 @@
         {% if resource.get_license %}
             <hr/>
             <h4>{% trans 'License' %}</h4>
-            {% for l in resource.get_license %}
+            {% with l=resource.get_license %}
                 <div class="row file-row">
                     <div class="col-md-2 col-xs-4 vcenter">
                         {% if l|tag_property:"url" %}
@@ -339,7 +339,7 @@
                         {% endif %}
                     </div>
                 </div>
-            {% endfor %}
+            {% endwith %}
         {% endif %}
 
     </div> <!-- end CC div -->
