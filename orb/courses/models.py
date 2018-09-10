@@ -188,7 +188,7 @@ class Course(TimestampBase):
         activities = []
         resource_id = 1
 
-        def render_page_activity(activity, resource_id, section_count):
+        def render_activity(activity, resource_id, section_count):
             if activity.get("type") == "CourseResource":
                 rf = ResourceFile.objects.get(pk=activity["id"])
                 sha1 = rf.sha1sum()
@@ -220,7 +220,7 @@ class Course(TimestampBase):
         for section_count, section in enumerate(self.section_data(), start=1):
             section_activities = []
             for activity in section['resources']:
-                activities.append(render_page_activity(activity, resource_id, section_count))
+                activities.append(render_activity(activity, resource_id, section_count))
                 section_activities.append(resource_id)
                 resource_id += 1
             sections.append({'id': section_count, 'sequence': section_activities})
