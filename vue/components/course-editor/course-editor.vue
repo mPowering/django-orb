@@ -172,7 +172,7 @@ export default {
 
                         let testing = availableResources.map(
                             ({ title, files }) => {
-                                files.forEach(file => { file.title = `${file.title} - ${title} (${file.file_extension})` })
+                                files.forEach(file => { file.title = `${file.title} (${file.file_extension}) - ${title}` })
                                 return files
                             }
                         )

@@ -12,17 +12,18 @@ import logging
 from autoslugged.settings import slugify
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.translation import ugettext
 from enum import Enum
 
 from orb.courses.export import MoodleCourse
-from orb.models import TimestampBase
 from orb.models import ResourceFile
-
+from orb.models import TimestampBase
 
 logger = logging.getLogger('orb.courses')
+
 
 
 class BaseChoices(Enum):
@@ -44,6 +45,48 @@ class CourseStatus(BaseChoices):
     draft = ugettext("Draft")
     published = ugettext("Published")
     archived = ugettext("Archived")
+
+
+def page_activity(activity_id, intro, content, section):
+    """Returns a page activity dictionary
+
+    Separate function to ensure consistent re-use
+    """
+    return {
+        'id': activity_id,
+        'type': 'page',
+        'intro': intro,
+        'content': content,
+        'section': section,
+    }
+
+
+def resource_error(resource_id, activity, section_count, err):
+    """Handle an error getting a resource file into a Moodle backup"""
+    if isinstance(err, IOError):
+        logger.error("IOError for resourcefile_id={}".format(activity["id"]))
+        return page_activity(
+            activity_id=resource_id,
+            intro="[ERROR] File missing",
+            content="The file for '{}' could not be found for export".format(activity["title"]),
+            section=section_count,
+        )
+    if isinstance(err, ObjectDoesNotExist):
+        logger.error("ResourceFile missing for resourcefile_id={}".format(activity["id"]))
+        return page_activity(
+            activity_id=resource_id,
+            intro="[ERROR] Resource missing",
+            content="The specified resource for '{}' might have been deleted prior to export".format(activity["title"]),
+            section=section_count,
+        )
+    else:
+        logger.exception("Error rendering resource file for backup")
+        return page_activity(
+            activity_id=resource_id,
+            intro="[ERROR] Unknown error",
+            content="There was an unknown error export the resource for '{}'".format(activity["title"]),
+            section=section_count,
+        )
 
 
 class CourseQueryset(models.QuerySet):
@@ -188,10 +231,18 @@ class Course(TimestampBase):
         activities = []
         resource_id = 1
 
-        def render_page_activity(activity, resource_id, section_count):
+        def render_activity(activity, resource_id, section_count):
             if activity.get("type") == "CourseResource":
-                rf = ResourceFile.objects.get(pk=activity["id"])
-                sha1 = rf.sha1sum()
+                try:
+                    rf = ResourceFile.objects.get(pk=activity["id"])
+                except ResourceFile.DoesNotExist as err:
+                    return resource_error(resource_id, activity, section_count, err)
+
+                try:
+                    sha1 = rf.sha1sum()
+                except IOError as err:
+                    return resource_error(resource_id, activity, section_count, err)
+
                 return {
                     'id': resource_id,
                     'type': 'resource',
@@ -209,18 +260,18 @@ class Course(TimestampBase):
                     "modified": rf.update_timestamp(),
                     "export_path": "files/{}/{}".format(sha1[:2], sha1),
                 }
-            return {
-                'id': resource_id,
-                'type': 'page',
-                'intro': activity['title'],
-                'content': activity['description'],
-                'section': section_count,
-            }
+
+            return page_activity(
+                activity_id=resource_id,
+                intro=activity['title'],
+                content=activity['description'],
+                section=section_count,
+            )
 
         for section_count, section in enumerate(self.section_data(), start=1):
             section_activities = []
             for activity in section['resources']:
-                activities.append(render_page_activity(activity, resource_id, section_count))
+                activities.append(render_activity(activity, resource_id, section_count))
                 section_activities.append(resource_id)
                 resource_id += 1
             sections.append({'id': section_count, 'sequence': section_activities})
