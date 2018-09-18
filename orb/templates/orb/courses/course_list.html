@@ -23,17 +23,23 @@
     {% endif %}
 
     <div>
+
     {% for course in courses %}
 
-        <div>
-            <h3>
-                <a href="{{ course.get_absolute_url }}">{{ course.title }}</a>
+        <div class="row" style="margin-top: 20px;">
+            <span style="font-size: 28px; font-weight: bold;">
                 {% if course.status == 'draft' %}
-                <span class="btn btn-warning">
+                  <span class="btn btn-warning">
                     {{ course.status }}
                 </span>
                 {% endif %}
-            </h3>
+                <a href="{{ course.get_absolute_url }}">{{ course.title }}</a>
+            </span>
+        {% if user.is_authenticated %}
+        <span class="label label-info" style="margin-left: 10px;">
+          <a href="{% url 'courses_moodle_export' course.pk %}">Export to Moodle</a>
+        </span>
+        {% endif %}
 
         </div>
     {% empty %}
