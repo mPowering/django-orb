@@ -3,6 +3,7 @@ sphinx_rtd_theme==0.3.0
 flake8
 mock==2.0.0
 freezegun==0.3.7
+xmldiff==1.1.1
 
 hypothesis==3.6.0
 unittest2==1.1.0

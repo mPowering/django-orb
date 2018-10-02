@@ -188,7 +188,7 @@ def test_moodle_activities():
         }]
     }]
     course = models.Course(sections=json.dumps(data))
-    sections, activities = course.moodle_activities()
+    sections, activities = course.activities_for_export()
 
     assert sections == [
         {'id': 1, 'sequence': [1, 2]},

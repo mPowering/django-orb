@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <meta>
+    <versionid>{{ versionid }}</versionid>
+    <priority>0</priority>
+    <server>{{ oppia_server }}</server>
+    <sequencing>none</sequencing>
+    <tags/>
+    <exportversion>{{ versionid }}</exportversion>
+    <title lang="en"><![CDATA[{{ title }}]]></title>
+    <shortname>demoben</shortname>
+    <description lang="en"><![CDATA[{{ title }}]]></description>
+    <langs>
+      <lang>en</lang>
+    </langs>
+    <gamification/>
+  </meta>
+  <structure>
+      {% for section in sections %}
+          <section order="{{ forloop.counter }}">
+              <title lang="en"><![CDATA[Planning Antenatal Care]]></title>
+              <activities>
+                  {% for activity in section.activities %}
+                      <activity type="{{ activity.type }}" order="{{ forloop.counter }}" digest="{{ activity.digest }}">
+                          <title lang="en"><![CDATA[{{ activity.title }}]]></title>
+                          {% if activity.type == "page" %}
+                          <location lang="en">{{ activity.html }}</location>
+                          {% else %}
+                          <location lang="en" type="{{ activity.mime_type }}">{{ activity.file_path }}</location>
+                          {% endif %}
+                      </activity>
+                  {% endfor %}
+              </activities>
+          </section>
+      {% endfor %}
+  </structure>
+  <media/>
+</module>

@@ -37,6 +37,9 @@
             </span>
         {% if user.is_authenticated %}
         <span class="label label-info" style="margin-left: 10px;">
+          <a href="{% url 'courses_oppia_export' course.pk %}">Export to Oppia</a>
+        </span>
+        <span class="label label-info" style="margin-left: 10px;">
           <a href="{% url 'courses_moodle_export' course.pk %}">Export to Moodle</a>
         </span>
         {% endif %}

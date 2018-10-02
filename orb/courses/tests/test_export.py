@@ -8,8 +8,8 @@ from __future__ import unicode_literals
 
 import pytest
 
-from orb.courses.export import MoodleCourse
-from orb.courses.export import format_page
+from orb.courses.moodle_export import MoodleCourse
+from orb.courses.export import format_page_as_markdown
 
 
 @pytest.fixture
@@ -177,5 +177,5 @@ def test_page_activity_formatting():
     """Should render as HTML"""
     activity = {'id': 1, 'type': 'page', 'intro': 'First slide', 'content': 'Hello world!\n\nFoo bar.', 'section': 1}
     expected = """<h1>First slide</h1>\n<p>Hello world!</p>\n<p>Foo bar.</p>"""
-    result = format_page(activity).strip()
+    result = format_page_as_markdown(activity).strip()
     assert expected == result

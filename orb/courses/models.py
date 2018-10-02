@@ -18,7 +18,8 @@ from django.db import models
 from django.utils.translation import ugettext
 from enum import Enum
 
-from orb.courses.export import MoodleCourse
+from orb.courses.moodle_export import MoodleCourse
+from orb.courses.oppia_export import OppiaExport
 from orb.models import ResourceFile
 from orb.models import TimestampBase
 
@@ -59,6 +60,44 @@ def page_activity(activity_id, intro, content, section):
         'content': content,
         'section': section,
     }
+
+
+def render_activity(activity, resource_id, section_count):
+    if activity.get("type") == "CourseResource":
+        try:
+            rf = ResourceFile.objects.get(pk=activity["id"])
+        except ResourceFile.DoesNotExist as err:
+            return resource_error(resource_id, activity, section_count, err)
+
+        try:
+            sha1 = rf.sha1sum()
+        except IOError as err:
+            return resource_error(resource_id, activity, section_count, err)
+
+        return {
+            'id': resource_id,
+            'type': 'resource',
+            'intro': activity['title'],
+            'content': activity['description'],
+            'section': section_count,
+            "file_path": rf.full_path,
+            "file_name": rf.filename(),
+            "file_sha": sha1,
+            "file_size": rf.filesize(),
+            "file_mimetype": rf.mimetype,
+            "license": rf.license(),
+            "author": rf.author(),
+            "created": rf.create_timestamp(),
+            "modified": rf.update_timestamp(),
+            "export_path": "files/{}/{}".format(sha1[:2], sha1),
+        }
+
+    return page_activity(
+        activity_id=resource_id,
+        intro=activity['title'],
+        content=activity['description'],
+        section=section_count,
+    )
 
 
 def resource_error(resource_id, activity, section_count, err):
@@ -186,10 +225,10 @@ class Course(TimestampBase):
 
                     yield file_data
 
-    def moodle_activities(self):
-        # type: () -> (dict, dict)
+    def activities_for_export(self):
+        # type: () -> (Dict, Dict)
         """
-        Returns dictionaries of Moodle section and activities content
+        Returns dictionaries of section and activities content
 
         Build dictionaries of sections and activities with unique identifiers
 
@@ -219,7 +258,7 @@ class Course(TimestampBase):
         This should result in data looking like so::
 
             >>> course = Course(sections=data)
-            >>> sections, activities = course.moodle_activities()
+            >>> sections, activities = course.activities_for_export()
             >>> sections
             [{'id': 1, 'sequence': [1, 2]}, {'id': 2, 'sequence': [3]}]
 
@@ -231,43 +270,6 @@ class Course(TimestampBase):
         activities = []
         resource_id = 1
 
-        def render_activity(activity, resource_id, section_count):
-            if activity.get("type") == "CourseResource":
-                try:
-                    rf = ResourceFile.objects.get(pk=activity["id"])
-                except ResourceFile.DoesNotExist as err:
-                    return resource_error(resource_id, activity, section_count, err)
-
-                try:
-                    sha1 = rf.sha1sum()
-                except IOError as err:
-                    return resource_error(resource_id, activity, section_count, err)
-
-                return {
-                    'id': resource_id,
-                    'type': 'resource',
-                    'intro': activity['title'],
-                    'content': activity['description'],
-                    'section': section_count,
-                    "file_path": rf.full_path,
-                    "file_name": rf.filename(),
-                    "file_sha": sha1,
-                    "file_size": rf.filesize(),
-                    "file_mimetype": rf.mimetype,
-                    "license": rf.license(),
-                    "author": rf.author(),
-                    "created": rf.create_timestamp(),
-                    "modified": rf.update_timestamp(),
-                    "export_path": "files/{}/{}".format(sha1[:2], sha1),
-                }
-
-            return page_activity(
-                activity_id=resource_id,
-                intro=activity['title'],
-                content=activity['description'],
-                section=section_count,
-            )
-
         for section_count, section in enumerate(self.section_data(), start=1):
             section_activities = []
             for activity in section['resources']:
@@ -277,6 +279,28 @@ class Course(TimestampBase):
             sections.append({'id': section_count, 'sequence': section_activities})
 
         return sections, activities
+
+    @property
+    def oppia_file_name(self):
+        """
+        Returns the slugified title with a zip extension
+        """
+        return "{}.zip".format(slugify(self.title))
+
+    def oppia_exporter(self):
+        return OppiaExport(
+            name=self.title,
+            id=self.pk,
+            backup_filename=self.oppia_file_name,
+        )
+
+    def oppia_backup(self):
+        """
+        Returns an archive of the course in zipped Oppia backup format
+        """
+        sections, activities = self.activities_for_export()
+        backup = OppiaExport(self.title, self.pk, sections, activities)
+        return backup.export()
 
     @property
     def moodle_file_name(self):
@@ -290,7 +314,7 @@ class Course(TimestampBase):
         Returns an archive of the course in zipped Moodle backup format
 
         """
-        sections, activities = self.moodle_activities()
+        sections, activities = self.activities_for_export()
         backup = MoodleCourse(
             name=self.title,
             id=self.pk,
