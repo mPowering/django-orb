@@ -8,8 +8,17 @@ from __future__ import unicode_literals
 
 from django.conf import settings
 
-DOWNLOAD_LOGIN_REQUIRED = getattr(settings, 'DOWNLOAD_LOGIN_REQUIRED ', True)
-DOWNLOAD_EXTRA_INFO = getattr(settings, 'DOWNLOAD_EXTRA_INFO ', True)
+
+try:
+    DOWNLOAD_LOGIN_REQUIRED = settings.DOWNLOAD_LOGIN_REQUIRED
+except AttributeError:
+    DOWNLOAD_LOGIN_REQUIRED = False
+
+try:
+    DOWNLOAD_EXTRA_INFO = settings.DOWNLOAD_EXTRA_INFO
+except AttributeError:
+    DOWNLOAD_EXTRA_INFO = False
+
 
 EMBEDDABLE_FILE_TYPES = getattr(
     settings,
