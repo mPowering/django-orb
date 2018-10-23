@@ -31,6 +31,7 @@
 
                 <li><a href="{% url 'orb_resource_create' %}">{% trans 'Add Resource' %}</a></li>
 
+
                 {% if header_owns_tags or user.is_staff %}
                     <li class="dropdown"><a href="#" data-toggle="dropdown"
                                             class="dropdown-toggle">{% trans 'Analytics' %} <b
@@ -88,6 +89,23 @@
                     <li><a href="{% url 'profile_login' %}">{% trans 'Login' %}</a></li>
                     <li><a href="{% url 'profile_register' %}">{% trans 'Register' %}</a></li>
                 {% endif %}
+
+              {# Help section #}
+              <li class="dropdown">
+                <a href="#" data-toggle="dropdown" class="dropdown-toggle">{% trans 'Help' %}
+                  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="{% url 'orb_how_to' %}">{% trans 'How to use ORB' %}</a></li>
+                  <li><a href="{% url 'orb_guidelines' %}">{% trans 'Resource Guidelines' %}</a></li>
+                  <li><a href="{% url 'orb_about' %}#crp">{% trans 'Content Review Process' %}</a></li>
+                  <li><a href="{% url 'orb_cc_faq' %}">{% trans 'Creative Commons FAQs' %}</a></li>
+                  {#                  <li><a href="https://mpowering.readthedocs.io/">{% trans 'Technical Documentation' %}</a></li>#}
+                  {#                  <li><a href="{% url 'orb_partners' %}">{% trans 'Content Partners' %}</a></li>#}
+                  {#                  <li><a href="{% url 'orb_about' %}">{% trans 'About ORB' %}</a></li>#}
+                </ul>
+              </li>
+
 
                 {% csrf_token %}
                 {% get_available_languages as languages %}
