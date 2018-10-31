@@ -30,6 +30,15 @@ class OppiaExport(CourseExport):
 
     """
     default_filename = "orb-course.zip"
+    course_folder = "ORB_Course"  # Must match what's in the base archive
+
+    def __init__(self, *args, **kwargs):
+        super(OppiaExport, self).__init__(*args, **kwargs)
+
+        for section in self.sections:
+            for activity in section["activities"]:
+                if activity["type"] == "page":
+                    activity["html"] = self.page_filename(activity)
 
     def validate_backup_filename(self):
         if not self.backup_filename.endswith(".zip"):
@@ -47,11 +56,17 @@ class OppiaExport(CourseExport):
             "en",
         )
 
+    def page_filename_fullpath(self, activity):
+        return "{}/{}".format(
+            self.course_folder,
+            self.page_filename(activity),
+        )
+
     def write_pages(self, backup_file):
         for course_resource in self.pages():
             page_html = self.format_page(course_resource)
             backup_file.writestr(
-                self.page_filename(course_resource),
+                self.page_filename_fullpath(course_resource),
                 page_html,
             )
 
@@ -59,7 +74,10 @@ class OppiaExport(CourseExport):
         for course_resource in self.resources():
             with open(course_resource['file_path'], 'rb') as rf:
                 backup_file.writestr(
-                    "resources/{}".format(course_resource["file_name"]),
+                    "{}/resources/{}".format(
+                        self.course_folder,
+                        course_resource["file_name"],
+                    ),
                     rf.read()
                 )
 
@@ -80,7 +98,7 @@ class OppiaExport(CourseExport):
         """Performs the full backup"""
         backup_file = StringIO()
 
-        with open("orb/courses/oppia-export-base.zip", "rb") as base_export_file:
+        with open("orb/courses/ORB_Course.zip", "rb") as base_export_file:
             backup_file.write(base_export_file.read())
             backup_file.seek(0)
 
@@ -88,7 +106,8 @@ class OppiaExport(CourseExport):
                 backup_file, "a", compression=zipfile.ZIP_DEFLATED
             ) as updated_backup_file:
                 updated_backup_file.writestr(
-                    "module.xml", self.module_xml(self.module_context())
+                    "{}/module.xml".format(self.course_folder),
+                    self.module_xml(self.module_context()),
                 )
                 self.write_pages(updated_backup_file)
                 self.write_resources(updated_backup_file)
