@@ -26,7 +26,7 @@
                           {% if activity.type == "page" %}
                           <location lang="en">{{ activity.html }}</location>
                           {% else %}
-                          <location lang="en" type="{{ activity.mime_type }}">resources/{{ activity.file_name }}</location>
+                          <location lang="en" type="{{ activity.mime_type }}">/resources/{{ activity.file_name }}</location>
                           {% endif %}
                       </activity>
                   {% endfor %}
