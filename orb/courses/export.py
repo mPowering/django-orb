@@ -102,6 +102,6 @@ class CourseExport(object):
 
     @cached_property
     def backup_date(self):
-        # type: () -> str
+        # type: () -> text_type
         """Returns the backup date/time in epoch seconds"""
         return "{}".format(int(time.time()))
