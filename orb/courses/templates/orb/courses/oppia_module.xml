@@ -6,14 +6,14 @@
     <server>{{ oppia_server }}</server>
     <sequencing>none</sequencing>
     <tags/>
-    <exportversion>{{ versionid }}</exportversion>
+{#    <exportversion>{{ versionid }}</exportversion>#}
     <title lang="en"><![CDATA[{{ title }}]]></title>
     <shortname>{{ shortname }}</shortname>
     <description lang="en"><![CDATA[{{ title }}]]></description>
     <langs>
       <lang>en</lang>
     </langs>
-    <gamification/>
+{#    <gamification/>#}
   </meta>
   <structure>
       {% for section in sections %}
@@ -34,5 +34,5 @@
           </section>
       {% endfor %}
   </structure>
-  <media/>
+{#  <media/>#}
 </module>

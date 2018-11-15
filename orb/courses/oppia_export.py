@@ -8,6 +8,7 @@ import zipfile
 from StringIO import StringIO
 
 from django.template.loader import render_to_string
+from lxml import etree
 
 from orb.courses.export import CourseExport
 from orb.courses.export import format_page_as_markdown
@@ -82,8 +83,13 @@ class OppiaExport(CourseExport):
                 )
 
     def module_xml(self, context):
-        """Returns the module.xml file contents"""
-        return render_to_string("orb/courses/oppia_module.xml", context).encode("utf8")
+        """Validates and returns the module.xml file contents"""
+        oppia_xml = render_to_string("orb/courses/oppia_module.xml", context).encode("utf8")
+        schema_source = etree.parse("orb/courses/oppia-schema.xsd")
+        oppia_schema = etree.XMLSchema(schema_source)
+        oppia_xml_tree = etree.fromstring(oppia_xml)
+        oppia_schema.assertValid(oppia_xml_tree)
+        return oppia_xml
 
     def module_context(self):
         return dict(
