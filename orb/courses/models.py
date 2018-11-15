@@ -176,11 +176,23 @@ class Course(TimestampBase):
     # Previous work with a third party JSON field was unsuccessufl
     sections = models.TextField(default="[]")  # TODO use a proper JSON field
 
+    version = models.IntegerField(
+        editable=False,
+        default=1,
+    )
+
     courses = CourseQueryset.as_manager()
     objects = courses
 
     def __unicode__(self):
         return self.title
+
+    def save(self, **kwargs):
+        if not self.version:
+            self.version = 1
+        else:
+            self.version += 1
+        super(Course, self).save(**kwargs)
 
     def get_absolute_url(self):
         return reverse("courses_edit", kwargs={"pk": self.pk})
@@ -299,7 +311,7 @@ class Course(TimestampBase):
         Returns an archive of the course in zipped Oppia backup format
         """
         sections, activities = self.activities_for_export()
-        backup = OppiaExport(self.title, self.pk, sections, activities)
+        backup = OppiaExport(self.title, self.pk, sections, activities, self.version)
         return backup.export()
 
     @property
@@ -320,6 +332,7 @@ class Course(TimestampBase):
             id=self.pk,
             sections=sections,
             activities=activities,
+            version=self.version,
             backup_filename=self.moodle_file_name,
         )
         return backup.export()

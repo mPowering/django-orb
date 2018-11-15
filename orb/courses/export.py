@@ -53,7 +53,7 @@ class CourseExport(object):
     """
     default_filename = ""
 
-    def __init__(self, name, id, sections=None, activities=None, **kwargs):
+    def __init__(self, name, id, sections=None, activities=None, version=1, **kwargs):
         """
 
         Args:
@@ -81,6 +81,7 @@ class CourseExport(object):
 
         self.name = name
         self.courseid = str(id)
+        self.version = version
         self.backup_filename = kwargs.pop("backup_filename", self.default_filename)
         self.validate_backup_filename()
 

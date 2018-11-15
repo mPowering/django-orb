@@ -51,6 +51,16 @@ def archived_course(testing_user):
 
 
 @pytest.mark.django_db
+def test_course_versioning(draft_course):
+    """Ensure course versions increment"""
+    version = draft_course.version
+    draft_course.save()
+    assert draft_course.version == version + 1
+    draft_course.save()
+    assert draft_course.version == version + 2
+
+
+@pytest.mark.django_db
 def test_editable_queryset(course, draft_course, archived_course, testing_user, import_user, admin_user):
     assert [course, draft_course] == list(models.Course.courses.editable(testing_user))
     assert [course, draft_course] == list(models.Course.courses.editable(admin_user))
