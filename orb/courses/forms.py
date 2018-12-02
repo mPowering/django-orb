@@ -54,3 +54,10 @@ class CourseForm(forms.ModelForm):
             logger.debug(e)
             raise forms.ValidationError("Invalid JSON")
         return data
+
+
+class OppiaPublishForm(forms.Form):
+    """"""
+    host = forms.URLField()
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
