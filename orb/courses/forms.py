@@ -1,4 +1,5 @@
 
+from __future__ import unicode_literals
 import json
 import logging
 
@@ -61,3 +62,12 @@ class OppiaPublishForm(forms.Form):
     host = forms.URLField()
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
+    tags = forms.CharField()
+    is_draft = forms.BooleanField(required=False)
+
+    def clean_tags(self):
+        tags = self.cleaned_data.get("tags", "").strip().split(",")
+        cleaned_tags = [tag.strip() for tag in tags if tag.strip()]
+        if not cleaned_tags:
+            raise forms.ValidationError("At least one tag is required, use commas to separate multiple tags")
+        return ",".join(cleaned_tags)

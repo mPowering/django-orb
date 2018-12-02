@@ -51,27 +51,52 @@ def archived_course(testing_user):
 
 
 form_test_data = [
-    (None, "", None, False),
-    ("", "", None, False),
-    ("", "", "", False),
-    ("http://orb.com", "", "", False),
-    ("http://orb.com", "hey", "", False),
-    ("http://orb.com", "", "kjaksd", False),
-    ("http://orb.com", "", "kjaksd", False),
-    ("http://", "kjsakdj", "kjaksd", False),
-    ("", "kjsakdj", "kjaksd", False),
-    ("http://orb.com", "kjsakdj", "kjaksd", True),
+    (None, "", None, "", None, False),
+    ("", "", None, "", True, False),
+    ("", "", "", "health", True, False),
+    ("http://orb.com", "", "", "dogs,cats", False, False),
+    ("http://orb.com", "hey", "", "dogs, cats", True, False),
+    ("http://orb.com", "", "kjaksd", "hey,okay", True, False),
+    ("http://orb.com", "", "kjaksd", "hey, okay", True, False),
+    ("http://", "kjsakdj", "kjaksd", "hey,okay", False, False),
+    ("", "kjsakdj", "kjaksd", "kjd", True, False),
+    ("http://orb.com", "kjsakdj", "kjaksd", "health, videos", False, True),
+    ("http://orb.com", "kjsakdj", "kjaksd", "health, videos", True, True),
+    ("http://orb.com", "kjsakdj", "kjaksd", "health, videos", None, True),
+    ("http://orb.com", "kjsakdj", "kjaksd", "    ", True, False),
 ]
 
 
-@pytest.mark.parametrize("host,username,password,expected", form_test_data)
-def test_form_validation(host, username, password, expected):
+@pytest.mark.parametrize("host,username,password,tags,is_draft,expected", form_test_data)
+def test_form_validation(host, username, password, tags, is_draft, expected):
     form = forms.OppiaPublishForm(data={
         "host": host,
         "username": username,
         "password": password,
+        "tags": tags,
+        "is_draft": is_draft,
     })
     assert form.is_valid() == expected
+    assert form.cleaned_data["is_draft"] == bool(is_draft)
+
+tag_test_data = [
+    ("", False),
+    (", ,,, ,,", False),
+    (", ,,kjakdj, ,,", True),
+    ("Hey", True),
+]
+
+@pytest.mark.parametrize("tags,expected", tag_test_data)
+def test_tags_cleaning(tags, expected):
+    form = forms.OppiaPublishForm(data={
+        "host": "https://www.orb.org",
+        "username": "bob",
+        "password": "kjaskdjdk1k11jska",
+        "tags": tags,
+        "is_draft": False,
+    })
+    assert form.is_valid() == expected
+
 
 
 @pytest.mark.django_db
