@@ -100,9 +100,10 @@ class OppiaExport(CourseExport):
             sections=self.sections,
         )
 
-    def export(self):
+    def export(self, backup_file=None):
         """Performs the full backup"""
-        backup_file = StringIO()
+        if not backup_file:
+            backup_file = StringIO()
 
         with open("orb/courses/ORB_Course.zip.template", "rb") as base_export_file:
             backup_file.write(base_export_file.read())

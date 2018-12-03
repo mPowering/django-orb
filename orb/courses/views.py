@@ -12,8 +12,10 @@ import json
 import logging
 
 from django import http
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views import generic
@@ -214,3 +216,26 @@ class OppiaExportView(generic.DetailView):
         response['Content-Disposition'] = 'attachment; filename=%s' % self.object.oppia_file_name
         response.content = self.object.oppia_backup()
         return response
+
+
+class OppiaPublishView(generic.DetailView, generic.FormView):
+    form_class = forms.OppiaPublishForm
+    template_name = "orb/courses/publish_to_oppia.html"
+    queryset = models.Course.courses.active()
+
+    def form_valid(self, form):
+        """"""
+        self.object = self.get_object()
+        content = self.object.oppia_backup()
+        success, status, message = models.OppiaLog.objects.publish(
+            self.object,
+            self.request.user,
+            content,
+            **form.cleaned_data
+        )
+        if success:
+            messages.success(self.request, message)
+            return redirect(self.object.get_absolute_url())
+        else:
+            messages.error(self.request, message)
+            return self.form_invalid(form)

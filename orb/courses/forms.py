@@ -6,6 +6,11 @@ import logging
 from django import forms
 
 from orb.courses import models
+from orb.courses.oppia_client import OppiaClient
+from django.utils.translation import ugettext_lazy as _
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Div, Layout, Submit
+from functools import partial
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +69,27 @@ class OppiaPublishForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
     tags = forms.CharField()
     is_draft = forms.BooleanField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(OppiaPublishForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_method = 'POST'
+        self.helper.form_class = 'form-horizontal'
+        # self.helper.disable_csrf = True
+        self.helper.label_class = 'col-lg-2'
+        self.helper.field_class = 'col-lg-8'
+        self.helper.layout = Layout(
+            'host',
+            'username',
+            'password',
+            'tags',
+            'is_draft',
+            Div(
+                Submit('submit', _("Publish"),
+                       css_class='btn btn-default'),
+                css_class='col-lg-offset-2 col-lg-8',
+            ),
+        )
 
     def clean_tags(self):
         tags = self.cleaned_data.get("tags", "").strip().split(",")
