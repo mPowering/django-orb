@@ -15,10 +15,13 @@ from django.contrib.auth.models import AnonymousUser
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext
 from enum import Enum
+from six import text_type
 
 from orb.courses.moodle_export import MoodleCourse
+from orb.courses.oppia_client import OppiaClient
 from orb.courses.oppia_export import OppiaExport
 from orb.models import ResourceFile
 from orb.models import TimestampBase
@@ -159,6 +162,7 @@ class CourseQueryset(models.QuerySet):
         return self.active().filter(create_user=user)
 
 
+@python_2_unicode_compatible
 class Course(TimestampBase):
     """
     Data container for a user-created course
@@ -184,8 +188,8 @@ class Course(TimestampBase):
     courses = CourseQueryset.as_manager()
     objects = courses
 
-    def __unicode__(self):
-        return self.title
+    def __str__(self):
+        return text_type(self.title)
 
     def save(self, **kwargs):
         if not self.version:
@@ -306,13 +310,13 @@ class Course(TimestampBase):
             backup_filename=self.oppia_file_name,
         )
 
-    def oppia_backup(self):
+    def oppia_backup(self, backup_file=None):
         """
         Returns an archive of the course in zipped Oppia backup format
         """
         sections, activities = self.activities_for_export()
         backup = OppiaExport(self.title, self.pk, sections, activities, self.version)
-        return backup.export()
+        return backup.export(backup_file=backup_file)
 
     @property
     def moodle_file_name(self):
@@ -336,3 +340,54 @@ class Course(TimestampBase):
             backup_filename=self.moodle_file_name,
         )
         return backup.export()
+
+
+class OppiaPublisherQuerySet(models.QuerySet):
+    """QuerySet for OppiaLog"""
+
+    def publish(self, course, user, export_file, **kwargs):
+        host = kwargs["host"]
+        client = OppiaClient(
+            host=host,
+            username=kwargs["username"],
+            password=kwargs["password"],
+        )
+        tags = kwargs["tags"]
+        is_draft = kwargs["is_draft"]
+        success, status, message, response = client.publish_course(
+            tags,
+            is_draft,
+            export_file,
+        )
+        self.create(
+            course=course,
+            user=user,
+            oppia_host=host,
+            status=status,
+            success=success,
+            response=response,
+        )
+        return success, status, message
+
+
+@python_2_unicode_compatible
+class OppiaLog(TimestampBase):
+    """Logs attempts to publish a course to Oppia"""
+
+    course = models.ForeignKey(
+        'Course',
+        related_name="oppia_logs",
+    )
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="oppia_logs",
+    )
+    oppia_host = models.URLField()
+    status = models.SmallIntegerField(help_text="HTTP status code of the response")
+    success = models.BooleanField(default=False)
+    response = models.TextField(blank=True)
+
+    objects = OppiaPublisherQuerySet.as_manager()
+
+    def __str__(self):
+        return text_type(self.oppia_host)

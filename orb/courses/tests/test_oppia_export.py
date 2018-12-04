@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import unicode_literals
+
 import os
-from lxml import etree as ET
-from django.core.files.uploadedfile import SimpleUploadedFile
-from xmldiff import main as differ
+
 import pytest
-from orb.models import ResourceFile
-from orb.models import Resource
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.urls import reverse
+from xmldiff import main as differ
+
 from orb.courses.models import Course
 from orb.courses.oppia_export import OppiaExport
+from orb.models import ResourceFile
 
 pytestmark = pytest.mark.django_db
 
@@ -87,6 +89,7 @@ def test_module_xml(orb_course):
         # assert expected_xml == result_xml
 
 
-
-def test_page_rendering(orb_course):
-    """Ensure a page is renderd with the expected template"""
+def test_publish_to_oppia(client, orb_course):
+    """Test that the page loads"""
+    response = client.get(reverse("courses_oppia_publish", kwargs={"pk": orb_course.pk}))
+    assert response.status_code == 200

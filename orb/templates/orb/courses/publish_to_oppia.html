@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n static %}
+{% load crispy_forms_tags %}
+
+{% block extra_head_title %}{% if course %}{{ course.title }}{% else %}{% trans 'New Course' %}{% endif %}{% endblock extra_head_title %}
+
+{% block extra_scripts %}
+{% endblock extra_scripts %}
+
+{% block content %}
+    {% include "includes/messages.html" %}
+    <div id="app">
+      <h1>Publish to Oppia</h1>
+      <p>Enter the host name (e.g. "https://my-oppia.org") of your Oppia
+      server and your username and password. For security reasons these
+      credentials will not be saved on ORB.</p>
+      {% crispy form %}
+    </div>
+{% endblock %}
+
+
+{% block footer_js %}
+{{ super }}
+<script src="{% static 'orb/js/course_builder.js'  %}"></script>
+{% endblock %}
