@@ -11,6 +11,7 @@ import hashlib
 import time
 
 import markdown
+from autoslugged.settings import slugify
 from django.utils.functional import cached_property
 from six import text_type
 from typing import Dict  # noqa
@@ -80,6 +81,7 @@ class CourseExport(object):
             ]
 
         self.name = name
+        self.slug = slugify(name)
         self.courseid = str(id)
         self.version = version
         self.backup_filename = kwargs.pop("backup_filename", self.default_filename)

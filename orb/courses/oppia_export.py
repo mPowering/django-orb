@@ -34,10 +34,10 @@ class OppiaExport(CourseExport):
 
     """
     default_filename = "orb-course.zip"
-    course_folder = "ORB_Course"  # Must match what's in the base archive
 
     def __init__(self, *args, **kwargs):
         super(OppiaExport, self).__init__(*args, **kwargs)
+
 
         for section in self.sections:
             for activity in section["activities"]:
@@ -62,7 +62,7 @@ class OppiaExport(CourseExport):
 
     def page_filename_fullpath(self, activity):
         return "{}/{}".format(
-            self.course_folder,
+            self.slug,
             self.page_filename(activity),
         )
 
@@ -79,7 +79,7 @@ class OppiaExport(CourseExport):
             with open(course_resource['file_path'], 'rb') as rf:
                 backup_file.writestr(
                     "{}/resources/{}".format(
-                        self.course_folder,
+                        self.slug,
                         course_resource["file_name"],
                     ),
                     rf.read()
@@ -113,20 +113,27 @@ class OppiaExport(CourseExport):
         if not backup_file:
             backup_file = StringIO()
 
-        base_export_path = module_base.joinpath("ORB_Course.zip.template")
-        with base_export_path.open("rb") as base_export_file:
-            backup_file.write(base_export_file.read())
-            backup_file.seek(0)
+        base_export_path = module_base.joinpath("ORB_Course")
 
-            with zipfile.ZipFile(
-                backup_file, "a", compression=zipfile.ZIP_DEFLATED
-            ) as updated_backup_file:
-                updated_backup_file.writestr(
-                    "{}/module.xml".format(self.course_folder),
-                    self.module_xml(self.module_context()),
+        with zipfile.ZipFile(
+            backup_file, "a", compression=zipfile.ZIP_DEFLATED
+        ) as updated_backup_file:
+
+            for file_path in base_export_path.glob('**/*.*'):
+                updated_backup_file.write(
+                    str(file_path.absolute()),
+                    arcname="{}/{}".format(
+                        self.slug,
+                        str(file_path.relative_to(base_export_path)),
+                    )
                 )
-                self.write_pages(updated_backup_file)
-                self.write_resources(updated_backup_file)
+
+            updated_backup_file.writestr(
+                "{}/module.xml".format(self.slug),
+                self.module_xml(self.module_context()),
+            )
+            self.write_pages(updated_backup_file)
+            self.write_resources(updated_backup_file)
 
         backup_file.seek(0)
         return backup_file
