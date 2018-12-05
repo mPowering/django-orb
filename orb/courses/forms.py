@@ -1,16 +1,15 @@
 
 from __future__ import unicode_literals
+
 import json
 import logging
 
-from django import forms
-
-from orb.courses import models
-from orb.courses.oppia_client import OppiaClient
-from django.utils.translation import ugettext_lazy as _
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Layout, Submit
-from functools import partial
+from django import forms
+from django.utils.translation import ugettext_lazy as _
+
+from orb.courses import models
 
 logger = logging.getLogger(__name__)
 
