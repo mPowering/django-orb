@@ -179,6 +179,7 @@ class Course(TimestampBase):
     update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='course_update_user')
 
     title = models.CharField(max_length=200)
+    slug = models.CharField(max_length=200, null=True, blank=True)
 
     # Previous work with a third party JSON field was unsuccessufl
     sections = models.TextField(default="[]")  # TODO use a proper JSON field
@@ -199,6 +200,8 @@ class Course(TimestampBase):
             self.version = 1
         else:
             self.version += 1
+        if not self.slug:
+            self.slug = self.get_slug()
         super(Course, self).save(**kwargs)
 
     def get_absolute_url(self):
@@ -299,12 +302,15 @@ class Course(TimestampBase):
 
         return sections, activities
 
+    def get_slug(self):
+        return slugify(self.title)
+
     @property
     def oppia_file_name(self):
         """
         Returns the slugified title with a zip extension
         """
-        return "{}.zip".format(slugify(self.title))
+        return "{}.zip".format(self.get_slug())
 
     def oppia_exporter(self):
         return OppiaExport(
