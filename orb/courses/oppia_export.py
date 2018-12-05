@@ -13,6 +13,8 @@ from lxml import etree
 from orb.courses.export import CourseExport
 from orb.courses.export import format_page_as_markdown
 
+import os
+from django.conf import settings
 
 class OppiaExport(CourseExport):
     """
@@ -84,8 +86,8 @@ class OppiaExport(CourseExport):
 
     def module_xml(self, context):
         """Validates and returns the module.xml file contents"""
-        oppia_xml = render_to_string("orb/courses/oppia_module.xml", context).encode("utf8")
-        schema_source = etree.parse("orb/courses/oppia-schema.xsd")
+        oppia_xml = render_to_string(os.path.join(settings.COURSE_TEMPLATE_PATH, "orb/courses/templates", "orb/courses/oppia_module.xml"), context).encode("utf8")
+        schema_source = etree.parse(os.path.join(settings.COURSE_TEMPLATE_PATH, "orb/courses/oppia-schema.xsd"))
         oppia_schema = etree.XMLSchema(schema_source)
         oppia_xml_tree = etree.fromstring(oppia_xml)
         oppia_schema.assertValid(oppia_xml_tree)
@@ -105,7 +107,7 @@ class OppiaExport(CourseExport):
         if not backup_file:
             backup_file = StringIO()
 
-        with open("orb/courses/ORB_Course.zip.template", "rb") as base_export_file:
+        with open(os.path.join(settings.COURSE_TEMPLATE_PATH, "orb/courses/ORB_Course.zip.template"), "rb") as base_export_file:
             backup_file.write(base_export_file.read())
             backup_file.seek(0)
 

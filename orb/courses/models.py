@@ -145,12 +145,15 @@ class CourseQueryset(models.QuerySet):
     def viewable(self, user):
         """Returns only those itesm the given user should be able to see"""
         if user == AnonymousUser():
-            return self.published()
+            return self.filter(models.Q(create_user=0))
+        '''
         if user.is_staff:
             return self.active()
+        '''
         return self.filter(
-            models.Q(status=CourseStatus.published.name) |
-            models.Q(status=CourseStatus.draft.name, create_user=user)
+            #models.Q(status=CourseStatus.published.name) |
+            #models.Q(status=CourseStatus.draft.name, create_user=user)
+            models.Q(create_user=user)
         )
 
     def editable(self, user):

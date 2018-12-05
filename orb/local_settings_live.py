@@ -60,3 +60,5 @@ def modify(settings):
                                               ('geography', 'geography'),
                                               ('language', 'language'),
                                               ('device', 'device')]
+    
+    settings['COURSE_TEMPLATE_PATH'] = '/home/www/platform/django-mpowering/'

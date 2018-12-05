@@ -20,6 +20,11 @@
         ></span>
         <span>{% trans 'Add a new course' %}</span>
     </a>
+    {% else %}
+    	<p>{% url 'profile_login' as login %}
+            {% url 'profile_register' as register %}
+            {% blocktrans with request.path as nextpath %}Please <a href="{{ login }}?next={{ nextpath }}">login</a> or
+                <a href="{{ register }}">register</a> to create or edit courses.{% endblocktrans %}</p>
     {% endif %}
 
     <div>
@@ -36,17 +41,22 @@
                 <a href="{{ course.get_absolute_url }}">{{ course.title }}</a>
             </span>
         {% if user.is_authenticated %}
-        <span class="label label-info" style="margin-left: 10px;">
+        <!--<span class="label label-info" style="margin-left: 10px;">
           <a href="{% url 'courses_oppia_export' course.pk %}">Export to Oppia</a>
         </span>
         <span class="label label-info" style="margin-left: 10px;">
           <a href="{% url 'courses_moodle_export' course.pk %}">Export to Moodle</a>
+        </span> -->
+        <span class="label label-info" style="margin-left: 10px;">
+          <a href="{% url 'courses_oppia_publish' course.pk %}">Publish to OpenDeliver Oppia</a>
         </span>
         {% endif %}
 
         </div>
     {% empty %}
-        <h3>{% trans 'No courses currently available.' %}</h3>
+    	{% if user.is_authenticated %}
+        <h3>{% trans 'You haven\'t created any courses yet.' %}</h3>
+        {% endif %}
     {% endfor %}
 
     </div>
