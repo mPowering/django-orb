@@ -299,12 +299,15 @@ class Course(TimestampBase):
 
         return sections, activities
 
+    def get_slug(self):
+        return slugify(self.title)
+
     @property
     def oppia_file_name(self):
         """
         Returns the slugified title with a zip extension
         """
-        return "{}.zip".format(slugify(self.title))
+        return "{}.zip".format(self.get_slug())
 
     def oppia_exporter(self):
         return OppiaExport(

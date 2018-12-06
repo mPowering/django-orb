@@ -9,12 +9,13 @@ from StringIO import StringIO
 
 from django.template.loader import render_to_string
 from lxml import etree
+from pathlib2 import Path
 
 from orb.courses.export import CourseExport
 from orb.courses.export import format_page_as_markdown
 
-import os
-from django.conf import settings
+module_base = Path(__file__).parent  # Directory in which this file lives
+
 
 class OppiaExport(CourseExport):
     """
@@ -33,10 +34,10 @@ class OppiaExport(CourseExport):
 
     """
     default_filename = "orb-course.zip"
-    course_folder = "ORB_Course"  # Must match what's in the base archive
 
     def __init__(self, *args, **kwargs):
         super(OppiaExport, self).__init__(*args, **kwargs)
+
 
         for section in self.sections:
             for activity in section["activities"]:
@@ -61,7 +62,7 @@ class OppiaExport(CourseExport):
 
     def page_filename_fullpath(self, activity):
         return "{}/{}".format(
-            self.course_folder,
+            self.slug,
             self.page_filename(activity),
         )
 
@@ -78,7 +79,7 @@ class OppiaExport(CourseExport):
             with open(course_resource['file_path'], 'rb') as rf:
                 backup_file.writestr(
                     "{}/resources/{}".format(
-                        self.course_folder,
+                        self.slug,
                         course_resource["file_name"],
                     ),
                     rf.read()
@@ -86,8 +87,13 @@ class OppiaExport(CourseExport):
 
     def module_xml(self, context):
         """Validates and returns the module.xml file contents"""
-        oppia_xml = render_to_string(os.path.join(settings.COURSE_TEMPLATE_PATH, "orb/courses/templates", "orb/courses/oppia_module.xml"), context).encode("utf8")
-        schema_source = etree.parse(os.path.join(settings.COURSE_TEMPLATE_PATH, "orb/courses/oppia-schema.xsd"))
+
+        oppia_xml = render_to_string(str(
+            module_base.joinpath("templates/orb/courses/oppia_module.xml").absolute()
+        ), context).encode("utf8")
+        schema_source = etree.parse(str(
+            module_base.joinpath("oppia-schema.xsd").absolute()
+        ))
         oppia_schema = etree.XMLSchema(schema_source)
         oppia_xml_tree = etree.fromstring(oppia_xml)
         oppia_schema.assertValid(oppia_xml_tree)
@@ -107,19 +113,27 @@ class OppiaExport(CourseExport):
         if not backup_file:
             backup_file = StringIO()
 
-        with open(os.path.join(settings.COURSE_TEMPLATE_PATH, "orb/courses/ORB_Course.zip.template"), "rb") as base_export_file:
-            backup_file.write(base_export_file.read())
-            backup_file.seek(0)
+        base_export_path = module_base.joinpath("ORB_Course")
 
-            with zipfile.ZipFile(
-                backup_file, "a", compression=zipfile.ZIP_DEFLATED
-            ) as updated_backup_file:
-                updated_backup_file.writestr(
-                    "{}/module.xml".format(self.course_folder),
-                    self.module_xml(self.module_context()),
+        with zipfile.ZipFile(
+            backup_file, "a", compression=zipfile.ZIP_DEFLATED
+        ) as updated_backup_file:
+
+            for file_path in base_export_path.glob('**/*.*'):
+                updated_backup_file.write(
+                    str(file_path.absolute()),
+                    arcname="{}/{}".format(
+                        self.slug,
+                        str(file_path.relative_to(base_export_path)),
+                    )
                 )
-                self.write_pages(updated_backup_file)
-                self.write_resources(updated_backup_file)
+
+            updated_backup_file.writestr(
+                "{}/module.xml".format(self.slug),
+                self.module_xml(self.module_context()),
+            )
+            self.write_pages(updated_backup_file)
+            self.write_resources(updated_backup_file)
 
         backup_file.seek(0)
         return backup_file
