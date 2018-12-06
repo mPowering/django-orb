@@ -40,3 +40,5 @@ git+https://github.com/mPowering/orb-api-python.git@v1.1.0#orb_api
 Markdown==2.6.9
 enum34==1.1.6
 typing==3.6.1
+
+pathlib2==2.3.3
