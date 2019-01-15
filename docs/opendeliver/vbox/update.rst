@@ -1,2 +1,0 @@
-Updating OpenDeliver VirtualBox Instance
-=========================================

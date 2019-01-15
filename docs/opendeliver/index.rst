@@ -10,10 +10,4 @@ OpenDeliver
    aws/update
    aws/versions
    
-   
-.. toctree::
-   :maxdepth: 1
-   
-   vbox/install
-   vbox/update
-   vbox/versions
+  

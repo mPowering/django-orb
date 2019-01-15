@@ -24,7 +24,7 @@ Installation
 
 #. Log into your AWS account and go to EC2 services
 #. From 'Instances' select 'Launch Instance'
-#. Select 'Community AMIs' and search for 'OpenDeliver' - you may need to select the zone to be 'US East' for the AMI to appear in the search results.
+#. Select 'Community AMIs' and search for 'OpenDeliver' (or search for the AMI ID as listed in :doc:`versions`) - you may need to select the zone to be 'US East' for the AMI to appear in the search results.
 #. Follow the instructions to create and launch the instance. Remember to keep the server keys safe and secure, you will need these to log into your machine and, if lost, cannot be recovered.
 
 Once the machine is up and running you can log in using SSH.

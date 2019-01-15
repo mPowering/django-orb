@@ -11,7 +11,7 @@ Collections may be resources that are part of a particular curriculum (eg OpenWA
 * Go to the ORB admin pages
 * Under the ORB section select 'Collections'
 * Either click to edit an existing collection, or click to 'Add Collection'
-* Enter a title and description and then save
+* Enter a title/description/logo and then save
 
 Now to add/edit the resources in the collection:
 
