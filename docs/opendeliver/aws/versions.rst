@@ -25,7 +25,7 @@ AMI ID: ami-fe5fd681
 
 .. _opendeliver-amiv4:
 
-OpenDeliver AMI - v4 - released 13 Apr 2017
+OpenDeliver AMI - v4 - released 13 Apr 2018
 --------------------------------------------
 
 * ORB v2.7.0
