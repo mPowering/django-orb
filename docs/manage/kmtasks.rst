@@ -15,3 +15,4 @@ listed below.
    tasks/toolkit
    tasks/collections
    tasks/tags
+   tasks/guidelines
