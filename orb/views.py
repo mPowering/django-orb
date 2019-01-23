@@ -808,8 +808,8 @@ def resource_add_tags(request, form, resource):
         tag_category = form.cleaned_data.get(tc)
         for ht in tag_category:
             tag = Tag.objects.get(pk=ht)
-            ResourceTag(tag=tag, resource=resource,
-                        create_user=request.user).save()
+            ResourceTag.objects.get_or_create(
+                tag=tag, resource=resource, defaults={'create_user': request.user})
     # add license
     license = form.cleaned_data.get("license")
     tag = Tag.objects.get(pk=license)
