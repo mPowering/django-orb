@@ -477,7 +477,7 @@ def resource_edit_view(request, resource_id):
             # Redirect after POST
             return HttpResponseRedirect(reverse('orb_resource_edit2', args=[resource.id]))
         else:
-            initial = request.POST
+            initial = request.POST.copy()
             initial['image'] = resource.image
             files = ResourceFile.objects.filter(resource=resource)[:1]
             if files:
