@@ -477,7 +477,7 @@ def resource_edit_view(request, resource_id):
             # Redirect after POST
             return HttpResponseRedirect(reverse('orb_resource_edit2', args=[resource.id]))
         else:
-            initial = request.POST
+            initial = request.POST.copy()
             initial['image'] = resource.image
             files = ResourceFile.objects.filter(resource=resource)[:1]
             if files:
@@ -808,8 +808,8 @@ def resource_add_tags(request, form, resource):
         tag_category = form.cleaned_data.get(tc)
         for ht in tag_category:
             tag = Tag.objects.get(pk=ht)
-            ResourceTag(tag=tag, resource=resource,
-                        create_user=request.user).save()
+            ResourceTag.objects.get_or_create(
+                tag=tag, resource=resource, defaults={'create_user': request.user})
     # add license
     license = form.cleaned_data.get("license")
     tag = Tag.objects.get(pk=license)
