@@ -1,0 +1,15 @@
+200:
+    status: success
+    message: The course was saved successfully.
+
+200-publish:
+    status: success
+    message: The course is now published.
+
+200-draft:
+    status: success
+    message: The course is now in draft status.
+
+500:
+    status: danger
+    message: Your course was not saved at this time due to an error.

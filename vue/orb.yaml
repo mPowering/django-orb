@@ -1,6 +1,20 @@
-project: Django-ORB
 src: ./
-build: ../orb/static/orb/
-publicPath: js/
+build: ../orb/static/orb
+output: ./
+
 entries:
-    course_builder: ./components/course_builder.js
+    course_builder: apps/course_builder.js
+
+aliases:
+    "@CourseBuilder": ~/apps/CourseBuilder
+
+    "@controls": ~/components/controls
+    "@fields": ~/components/forms/fields
+    "@forms": ~/components/forms
+    "@notifications": ~/components/notifications
+
+    "vue": vue/dist/vue.js
+    "@apps": ~/apps
+    "@components": ~/components
+    "@services": ~/services
+    "@utils": ~/utils

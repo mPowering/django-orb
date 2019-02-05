@@ -3,6 +3,14 @@
 
 {% block extra_head_title %}{% if course %}{{ course.title }}{% else %}{% trans 'New Course' %}{% endif %}{% endblock extra_head_title %}
 
+{% block extra_styles %}
+{{ super }}
+<link
+    href="{% static 'orb/apps/course_builder.css' %}"
+    rel="stylesheet"
+/>
+{% endblock %}
+
 {% block extra_scripts %}
 {% comment %}vue is included in course_build script for now{% endcomment %}
 {% endblock extra_scripts %}
@@ -11,7 +19,7 @@
     {% include "includes/messages.html" %}
     <div id="app">
         <course-editor
-            id="{{ course.id|default:'' }}"
+            id="{{ course.id }}"
             title="{{ course.title|default:'New Course' }}"
             status="{{ course.status|default:'draft' }}"
             :sections="{{ course.sections|default:'[{resources: []}]' }}"
@@ -24,5 +32,5 @@
 
 {% block footer_js %}
 {{ super }}
-<script src="{% static 'orb/js/course_builder.js'  %}"></script>
+<script src="{% static 'orb/apps/course_builder.js' %}"></script>
 {% endblock %}

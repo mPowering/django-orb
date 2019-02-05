@@ -1,4 +1,16 @@
 {
-  "presets": [ "env", "stage-2" ],
-  "comments": false,
-}
+    "plugins": [
+      "transform-object-rest-spread",
+    ],
+    "presets": [
+      [
+        "env",
+        "vue",
+        {
+          "modules": false,
+          "useBuiltIns": "usage",
+          "debug": false
+        }
+      ]
+    ]
+  }

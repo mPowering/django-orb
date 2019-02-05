@@ -81,3 +81,5 @@ vue-dev: ## run vue compiler in dev version
 
 vue-build: ## run vue compiler for production
 	cd ./vue && yarn run build
+	cd ./vue && npm run minify-js
+	cd ./vue && npm run minify-css

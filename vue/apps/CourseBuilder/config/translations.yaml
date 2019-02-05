@@ -1,0 +1,34 @@
+# @prop    i18n
+# @desc    data object mapping default internationalizations for app
+ACTIVITY_ADD: Add Course Activity
+ACTIVITY_CANCEL: Cancel
+ACTIVITY_EDIT: Edit
+ACTIVITY_SAVE: Save
+
+ACTIVITY_DESC_LABEL: Activity Slide Description
+ACTIVITY_TITLE_LABEL: Activity Slide Title
+ACTIVITY_TITLE_NEW: Unnamed Course Activity
+
+COURSE_CREATE: Create Course
+COURSE_SAVE: Save Course
+COURSE_SET_DRAFT: Set to Draft
+COURSE_SET_PUBLISH: Publish
+
+COURSE_TITLE_EDIT: Edit Course Title
+COURSE_TITLE_NEW: New Course
+COURSE_TITLE_SAVE: Save Course Title
+
+RESOURCE_REMOVE: Remove
+
+RESOURCE_TITLE_NEW: Unnamed Resource
+
+SECTION_ADD: Add Course Section
+SECTION_EMPTY: Drop in a Resource or create an Activity
+SECTION_LABEL: Section
+SECTION_REMOVE: Remove Course Section
+
+RESOURCE_LABEL_SEARCH: Find Resource Files
+
+EDIT_RESOURCE: Edit Section Resource
+
+SEARCH_LABEL: Search
