@@ -1,3 +1,4 @@
+# course instance status (used for actions within the course builder)
 ACTIVE: published
 CREATE: create
 INACTIVE: draft

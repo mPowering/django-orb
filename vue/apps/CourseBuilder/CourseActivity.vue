@@ -2,6 +2,8 @@
 export default {
     name: "CourseActivity",
     props: {
+        // @prop    instance
+        // @desc    individual activity instance assigned to a course section
         instance: {
             type: Object,
             default: () => ({})
@@ -9,9 +11,14 @@ export default {
     },
     data () {
         return {
-            activity: {
+            // @prop    currentActivity
+            // @desc    initiate local activity from passed prop
+            currentActivity: {
                 ...this.instance
             },
+
+            // @prop    isEdittable
+            // @desc    state for
             isEdittable: false,
         }
     },
@@ -19,16 +26,25 @@ export default {
         // @func    relayUpdate
         // @desc    inform parent of data change within section
         relayUpdate () {
-            this.$emit("update", { resource: this.activity })
+            this.$emit("update", { resource: this.currentActivity })
         },
 
+        // @func    revertEditState
+        // @desc    if user cancels edit,
+        // @        revert the local data to the passed instance
+        // @        and turn editing off
         revertEditState ({ state = !this.isEdittable }) {
-            this.activity = this.instance
+            this.currentActivity = this.instance
+
             this.setEditState({ state })
         },
 
+        // @func    setEditState
+        // @desc    toggle the edit state
+        // @        if we toggle to "off", inform the parent of our updates
         setEditState ({ state = !this.isEdittable }) {
             this.isEdittable = state
+
             if (!state) this.relayUpdate()
         },
 
@@ -45,7 +61,7 @@ export default {
     >
         <slot name="entry:preheading"></slot>
 
-        <h5>{{ activity.title }}</h5>
+        <h5>{{ currentActivity.title }}</h5>
 
         <slot name="entry:postheading"></slot>
     </header>
@@ -55,27 +71,27 @@ export default {
         v-if="isEdittable"
     >
         <div class="form-group">
-            <label :for="`act_title_${ activity.uuid }`">
+            <label :for="`act_title_${ currentActivity.uuid }`">
                 {{ $i18n.ACTIVITY_TITLE_LABEL }}
             </label>
 
             <input
                 class="form-control"
                 type="text"
-                v-model="activity.title"
-                :id="`act_title_${ instance.uuid }`"
+                v-model="currentActivity.title"
+                :id="`act_title_${ currentActivity.uuid }`"
             >
         </div>
 
         <div class="form-group">
-            <label :for="`act_desc_${ instance.uuid }`">
+            <label :for="`act_desc_${ currentActivity.uuid }`">
                 {{ $i18n.ACTIVITY_DESC_LABEL }}
             </label>
             <textarea
                 class="form-control"
                 rows="10"
-                v-model="activity.description"
-                :id="`act_desc_${ instance.uuid }`"
+                v-model="currentActivity.description"
+                :id="`act_desc_${ currentActivity.uuid }`"
             ></textarea>
         </div>
     </div>
@@ -83,9 +99,9 @@ export default {
     <template v-else>
         <div
             class="panel-body"
-            v-if="activity.description"
+            v-if="currentActivity.description"
         >
-            {{ activity.description }}
+            {{ currentActivity.description }}
         </div>
     </template>
 

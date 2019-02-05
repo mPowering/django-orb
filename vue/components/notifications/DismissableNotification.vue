@@ -4,24 +4,36 @@
 export default {
     name: "DismissableNotification",
     props: {
+        // @prop    active
+        // @desc    is the notification active
         active: {
             type: Boolean,
             default: false
         },
+
+        // @prop    message
+        // @desc    the passed message to show
         message: {
             type: String,
             default: "General warning"
         },
+
+        // @prop    status
+        // @desc    the theme (bootstrap) to be applied
         status: {
             type: String,
             default: "info"
         }
     },
-    methods: {
-        dismiss () { this.$emit('dismissed') }
-    },
+    // @lifecycle   mounted
+    // @desc        when mounting the notification, run the dismiss method in 3000ms
     mounted () {
         window.setTimeout(this.dismiss, 3000)
+    },
+    methods: {
+        // @func    dismiss
+        // @desc    when manually dismissing the element, inform parent
+        dismiss () { this.$emit('dismissed') }
     }
 }
 </script>

@@ -16,6 +16,8 @@ export default {
         Draggable
     },
     props: {
+        // @prop    instance
+        // @desc    individual section instance assigned to a course
         instance: {
             type: Object,
             default: () => ({})
@@ -23,22 +25,33 @@ export default {
     },
     data () {
         return {
+            // @prop    currentResources
+            // @desc    initiate local resources from passed prop
+            currentResources: [
+                ...this.instance.resources
+            ],
+
+            // @prop    dragOptions
+            // @desc    options for vuedraggable instance of resources
+            // @        shares group name with the resource list so that resources
+            // @        can be passed into section's resources
             dragOptions: {
                 handle: ".handle",
                 group: "resources"
             },
-            currentResources: [
-                ...this.instance.resources
-            ]
         }
     },
     methods: {
+        // @func    addSection
+        // @desc    add a new course activity to the local resources
+        // @        and inform parent of data change
         addActivity () {
             this.currentResources.push({
                 title: this.$i18n.ACTIVITY_TITLE_NEW,
                 type: "CourseActivity",
                 uuid: generateUUID()
             })
+
             this.relayUpdate()
         },
 
@@ -48,16 +61,25 @@ export default {
             this.$emit("update", { resources: this.currentResources })
         },
 
+        // @func    removeResource
+        // @desc    remove selected course resource from local resources
+        // @        and inform parent of data change
         removeResource (id) {
-            this.currentResources = this.currentResources.filter(
-                (resource, index) => (index !== id)
-            )
+            this.currentResources = this.currentResources
+                .filter( (resource, index) => (index !== id) )
+
             this.relayUpdate()
         },
 
+        // @func    updateResource,
+        // @desc    on reordering change or any content update of internal resources,
+        // @        we need to assign that resource in their new order back to the section
+        // @        and inform parent of change
         updateResource ({ instance, $event }) {
             const currentResourceIndex = this.currentResources.findIndex( resource => resource === instance )
+
             this.currentResources[currentResourceIndex] = $event.resource
+
             this.relayUpdate()
         }
     }

@@ -56,9 +56,12 @@ export default {
         // @        and inform parent of data change
         addSection () {
             this.currentSections.push({
+                // @info    add a uuid so that we can better reorder
                 uuid: generateUUID(),
+                // @info    this comes after to overwrite uuid if included
                 ...defaultSectionSchema
             })
+
             this.relayUpdate()
         },
 
@@ -72,15 +75,22 @@ export default {
         // @desc    remove selected course section from local sections
         // @        and inform parent of data change
         removeSection (id) {
-            this.currentSections = this.currentSections.filter(
-                (section, index) => (index !== id)
-            )
+            this.currentSections = this.currentSections
+                .filter( (section, index) => (index !== id) )
+
             this.relayUpdate()
         },
 
+        // @func    updateSection,
+        // @desc    on reordering change of sections,
+        // @        we need to assign those resources in their new order back to the section
+        // @        and inform parent of change
         updateSection ({ instance, $event }) {
+            // @info    get the current section by its current index
             const currentSectionIndex = this.currentSections.findIndex( section => section === instance )
+
             this.currentSections[currentSectionIndex].resources = $event.resources
+
             this.relayUpdate()
         }
     }

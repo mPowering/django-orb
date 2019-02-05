@@ -2,10 +2,16 @@
 export default {
     name: "ActionControl",
     props: {
+        // @prop    glyph
+        // @desc    passed glyph class for a glyph icon
+        // @        if none, no icon will be shown
         glyph: {
             type: [Boolean, String],
             default: false
         },
+
+        // @prop    theme
+        // @desc    simplified prop passing of a bootstrap theme name
         theme: {
             type: String,
             default: "default"

@@ -1,3 +1,4 @@
+# shared alert messages
 200:
     status: success
     message: The course was saved successfully.

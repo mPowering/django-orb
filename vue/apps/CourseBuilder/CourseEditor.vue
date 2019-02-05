@@ -24,6 +24,8 @@ export default {
         SectionRiver,
     },
     props: {
+        // @prop    action
+        // @desc    determines whether we are in creation or edit mode
         action: {
             type: String,
             default: COURSE_STATUS.UPDATE
@@ -36,6 +38,8 @@ export default {
             default: false
         },
 
+        // @prop    sections
+        // @desc    passed array of course's saved sections and resources
         sections: {
             type: Array,
             default: () => ([[defaultSectionSchema]])
@@ -57,24 +61,44 @@ export default {
     },
     data () {
         return {
+            // @prop    availableResources
+            // @desc    list of queried resource results from a search
             availableResources: [],
+
+            // @prop    course
+            // @desc    locally initialized current course based on passed rops
             course: {
                 id: this.id.length > 0 ? this.id : null,
                 title: this.title,
                 status: this.status,
                 sections: this.sections
             },
+
+            // @prop    isTitleEditable
+            // @desc    state for showing inputs for update a course title
             isTitleEditable: false,
+
+            // @prop    notification
+            // @desc    data object for showing UI alerts and notifications
             notification: {
                 active: false,
                 status: "info",
                 message: ""
             },
+
+            // @prop    q
+            // @desc    query string for searching server db for applicable resources
             q: "",
+
+            // @prop    saveAction
+            // @desc    initalize base action mode based off passed prop
             saveAction: this.action,
         }
     },
     computed: {
+        // @prop    initialCourseView
+        // @desc    boolean that determines whether we are in the initial create mode;
+        // @        used for showing different UI pieces based on status
         initialCourseView () {
             return (this.saveAction === COURSE_STATUS.CREATE)
         },
@@ -109,13 +133,25 @@ export default {
         },
     },
     methods: {
+        // @func    resetNotification
+        // @desc    clears out a current notifiction
         resetNotification () { this.notification.active = false },
 
+        // @func    redirectOnCreate
+        // @desc    once a course has been created, we need to switch to a new view
+        // @        so we don't recreate new courses on subsequent saves
         redirectOnCreate ({ url = this.savepoint }) {
             const logicCheck = (this.initialCourseView && this.course.id)
+
             if (logicCheck) window.location.replace(url)
         },
 
+        // @func    saveCourse
+        // @desc    based on current course status, save or create a course
+        // @        assigned return server data to current course
+        // @        show a ui notification for success (defaults to 200 template)
+        // @        if newly created, redirect to edit form and state
+        // @        update the action mode to the update state
         async saveCourse ({ status = "200" }) {
             try {
                 let route = (this.saveAction === COURSE_STATUS.CREATE)
@@ -127,10 +163,11 @@ export default {
                     course_status,
                     message,
                     url
-                } = await api.update({
-                        route,
-                        data: this.course
-                    })
+                } = await api
+                        .update({
+                            route,
+                            data: this.course
+                        })
 
                 this.course.id = course_id
                 this.course.status = course_status
@@ -139,12 +176,16 @@ export default {
                 this.saveAction = COURSE_STATUS.UPDATE
             }
             catch (error) {
-                this.setNotification({status: "500", message })
+                this.setNotification({status: "500", message: error.message })
             }
 
             return
         },
 
+        // @func    setNotification
+        // @desc    activates the UI notification,
+        // @        checks if there is a defined alert template to use based on a status key
+        // @        use assigned template or custom messaging
         setNotification ({ status, message = null }) {
             const systemAlert = COURSE_ALERTS[status] || {}
 
@@ -155,6 +196,8 @@ export default {
             }
         },
 
+        // @func    setTitleEditState
+        // @desc    switch title state from edit to viewable
         setTitleEditState ({ state = !this.isTitleEditable }) {
             this.isTitleEditable = state
         },
@@ -164,15 +207,14 @@ export default {
         // @        and assign to available resources
         async searchResources () {
             try {
-                let { objects: availableResources } = await api.fetch(
-                    {
+                let { objects: availableResources } = await api
+                    .fetch({
                         route: API_ROUTES.RESOURCE_SEARCH,
                         params: {
                             format: "json",
                             q: this.q
                         }
-                    }
-                )
+                    })
 
                 this.availableResources = availableResources
             }
@@ -180,9 +222,16 @@ export default {
 
             return
         },
+
+        // @func    updateSections
+        // @desc    assign current course sections with the passed event's updated sections
         updateSections ({ sections }) {
             this.course.sections = sections
         },
+
+        // @func    updateStatus
+        // @desc    publish or draft a current course based on its current-to-desired status
+        // @        set status, show a notificaton template, and save the course
         updateStatus () {
             const { status } = this.course
             const updateStatus = {

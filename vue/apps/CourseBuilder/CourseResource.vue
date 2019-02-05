@@ -2,6 +2,8 @@
 export default {
     name: "CourseResource",
     props: {
+        // @prop    instance
+        // @desc    individual resource instance assigned to a course section
         instance: {
             type: Object,
             default: () => ({
@@ -17,6 +19,8 @@ export default {
         }
     },
     filters: {
+        // @filter  niceTitle
+        // @desc    define the instance's visible title programmatically
         niceTitle (instance) {
             let title = `(${ instance.fileExtension })` || ""
 

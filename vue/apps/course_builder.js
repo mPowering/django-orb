@@ -15,14 +15,18 @@ Vue.use(i18n, {
     defaultTranslations: i18nDefaults
 })
 
+
 import "@apps/course_builder.css"
 import CourseEditor from "@CourseBuilder/CourseEditor"
 
+// @component   universal action control/button
 import ActionControl from "@controls/ActionControl"
 Vue.component("ActionControl", ActionControl)
 
+// @component   universal icon-only control
 import IconControl from "@controls/IconControl"
 Vue.component("IconControl", IconControl)
+
 
 /* eslint-disable no-new */
 new Vue({

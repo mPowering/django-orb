@@ -16072,30 +16072,40 @@ exports.default = void 0;
 var _default = {
   name: "DismissableNotification",
   props: {
+    // @prop    active
+    // @desc    is the notification active
     active: {
       type: Boolean,
       default: false
     },
+    // @prop    message
+    // @desc    the passed message to show
     message: {
       type: String,
       default: "General warning"
     },
+    // @prop    status
+    // @desc    the theme (bootstrap) to be applied
     status: {
       type: String,
       default: "info"
     }
   },
+
+  // @lifecycle   mounted
+  // @desc        when mounting the notification, run the dismiss method in 3000ms
+  mounted() {
+    window.setTimeout(this.dismiss, 3000);
+  },
+
   methods: {
+    // @func    dismiss
+    // @desc    when manually dismissing the element, inform parent
     dismiss() {
       this.$emit('dismissed');
     }
 
-  },
-
-  mounted() {
-    window.setTimeout(this.dismiss, 3000);
   }
-
 };
 exports.default = _default;
         var $a038a2 = exports.default || module.exports;
@@ -16224,6 +16234,9 @@ var _default = {
   },
 
   computed: {
+    // @prop    processedResources
+    // @desc    map returned resources with extra data information for processing
+    // @        filter out those items that are not considered embeddable by the server
     processedResources() {
       return this.resources.reduce((resourceList, _ref2) => {
         let title = _ref2.title,
@@ -16244,6 +16257,8 @@ var _default = {
 
   },
   filters: {
+    // @filter  niceTitle
+    // @desc    define the instance's visible title programmatically
     niceTitle(instance) {
       let title = `(${instance.fileExtension})` || "";
       title = instance.title ? `${instance.title} ${title}` : title;
@@ -16352,6 +16367,8 @@ var _default = {
     }
   },
   methods: {
+    // @func    handleInput
+    // @desc    inform parent of search term
     handleInput(_ref) {
       let value = _ref.target.value;
       this.$emit("input", value);
@@ -16511,6 +16528,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 var _default = {
   name: "CourseActivity",
   props: {
+    // @prop    instance
+    // @desc    individual activity instance assigned to a course section
     instance: {
       type: Object,
       default: () => ({})
@@ -16519,7 +16538,11 @@ var _default = {
 
   data() {
     return {
-      activity: _extends({}, this.instance),
+      // @prop    currentActivity
+      // @desc    initiate local activity from passed prop
+      currentActivity: _extends({}, this.instance),
+      // @prop    isEdittable
+      // @desc    state for
       isEdittable: false
     };
   },
@@ -16529,19 +16552,26 @@ var _default = {
     // @desc    inform parent of data change within section
     relayUpdate() {
       this.$emit("update", {
-        resource: this.activity
+        resource: this.currentActivity
       });
     },
 
+    // @func    revertEditState
+    // @desc    if user cancels edit,
+    // @        revert the local data to the passed instance
+    // @        and turn editing off
     revertEditState(_ref) {
       let _ref$state = _ref.state,
           state = _ref$state === void 0 ? !this.isEdittable : _ref$state;
-      this.activity = this.instance;
+      this.currentActivity = this.instance;
       this.setEditState({
         state
       });
     },
 
+    // @func    setEditState
+    // @desc    toggle the edit state
+    // @        if we toggle to "off", inform the parent of our updates
     setEditState(_ref2) {
       let _ref2$state = _ref2.state,
           state = _ref2$state === void 0 ? !this.isEdittable : _ref2$state;
@@ -16578,7 +16608,7 @@ exports.default = _default;
             [
               _vm._t("entry:preheading"),
               _vm._v(" "),
-              _c("h5", [_vm._v(_vm._s(_vm.activity.title))]),
+              _c("h5", [_vm._v(_vm._s(_vm.currentActivity.title))]),
               _vm._v(" "),
               _vm._t("entry:postheading")
             ],
@@ -16591,7 +16621,7 @@ exports.default = _default;
             _c("div", { staticClass: "form-group" }, [
               _c(
                 "label",
-                { attrs: { for: "act_title_" + _vm.activity.uuid } },
+                { attrs: { for: "act_title_" + _vm.currentActivity.uuid } },
                 [
                   _vm._v(
                     "\n                " +
@@ -16606,62 +16636,76 @@ exports.default = _default;
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.activity.title,
-                    expression: "activity.title"
+                    value: _vm.currentActivity.title,
+                    expression: "currentActivity.title"
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { type: "text", id: "act_title_" + _vm.instance.uuid },
-                domProps: { value: _vm.activity.title },
+                attrs: {
+                  type: "text",
+                  id: "act_title_" + _vm.currentActivity.uuid
+                },
+                domProps: { value: _vm.currentActivity.title },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.activity, "title", $event.target.value)
+                    _vm.$set(_vm.currentActivity, "title", $event.target.value)
                   }
                 }
               })
             ]),
             _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "act_desc_" + _vm.instance.uuid } }, [
-                _vm._v(
-                  "\n                " +
-                    _vm._s(_vm.$i18n.ACTIVITY_DESC_LABEL) +
-                    "\n            "
-                )
-              ]),
+              _c(
+                "label",
+                { attrs: { for: "act_desc_" + _vm.currentActivity.uuid } },
+                [
+                  _vm._v(
+                    "\n                " +
+                      _vm._s(_vm.$i18n.ACTIVITY_DESC_LABEL) +
+                      "\n            "
+                  )
+                ]
+              ),
               _vm._v(" "),
               _c("textarea", {
                 directives: [
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.activity.description,
-                    expression: "activity.description"
+                    value: _vm.currentActivity.description,
+                    expression: "currentActivity.description"
                   }
                 ],
                 staticClass: "form-control",
-                attrs: { rows: "10", id: "act_desc_" + _vm.instance.uuid },
-                domProps: { value: _vm.activity.description },
+                attrs: {
+                  rows: "10",
+                  id: "act_desc_" + _vm.currentActivity.uuid
+                },
+                domProps: { value: _vm.currentActivity.description },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.activity, "description", $event.target.value)
+                    _vm.$set(
+                      _vm.currentActivity,
+                      "description",
+                      $event.target.value
+                    )
                   }
                 }
               })
             ])
           ])
         : [
-            _vm.activity.description
+            _vm.currentActivity.description
               ? _c("div", { staticClass: "panel-body" }, [
                   _vm._v(
                     "\n            " +
-                      _vm._s(_vm.activity.description) +
+                      _vm._s(_vm.currentActivity.description) +
                       "\n        "
                   )
                 ])
@@ -16753,6 +16797,8 @@ var _this = void 0;
 var _default = {
   name: "CourseResource",
   props: {
+    // @prop    instance
+    // @desc    individual resource instance assigned to a course section
     instance: {
       type: Object,
       default: () => ({
@@ -16768,6 +16814,8 @@ var _default = {
   },
 
   filters: {
+    // @filter  niceTitle
+    // @desc    define the instance's visible title programmatically
     niceTitle(instance) {
       let title = `(${instance.fileExtension})` || "";
       title = instance.title ? `${instance.title} ${title}` : title;
@@ -16890,6 +16938,8 @@ var _default = {
     Draggable: _vuedraggable.default
   },
   props: {
+    // @prop    instance
+    // @desc    individual section instance assigned to a course
     instance: {
       type: Object,
       default: () => ({})
@@ -16898,15 +16948,24 @@ var _default = {
 
   data() {
     return {
+      // @prop    currentResources
+      // @desc    initiate local resources from passed prop
+      currentResources: [...this.instance.resources],
+      // @prop    dragOptions
+      // @desc    options for vuedraggable instance of resources
+      // @        shares group name with the resource list so that resources
+      // @        can be passed into section's resources
       dragOptions: {
         handle: ".handle",
         group: "resources"
-      },
-      currentResources: [...this.instance.resources]
+      }
     };
   },
 
   methods: {
+    // @func    addSection
+    // @desc    add a new course activity to the local resources
+    // @        and inform parent of data change
     addActivity() {
       this.currentResources.push({
         title: this.$i18n.ACTIVITY_TITLE_NEW,
@@ -16924,11 +16983,18 @@ var _default = {
       });
     },
 
+    // @func    removeResource
+    // @desc    remove selected course resource from local resources
+    // @        and inform parent of data change
     removeResource(id) {
       this.currentResources = this.currentResources.filter((resource, index) => index !== id);
       this.relayUpdate();
     },
 
+    // @func    updateResource,
+    // @desc    on reordering change or any content update of internal resources,
+    // @        we need to assign that resource in their new order back to the section
+    // @        and inform parent of change
     updateResource(_ref) {
       let instance = _ref.instance,
           $event = _ref.$event;
@@ -17191,6 +17257,7 @@ var _default = {
     // @        and inform parent of data change
     addSection() {
       this.currentSections.push(_extends({
+        // @info    add a uuid so that we can better reorder
         uuid: (0, _uuid.generateUUID)()
       }, _CourseSection.defaultSectionSchema));
       this.relayUpdate();
@@ -17212,9 +17279,14 @@ var _default = {
       this.relayUpdate();
     },
 
+    // @func    updateSection,
+    // @desc    on reordering change of sections,
+    // @        we need to assign those resources in their new order back to the section
+    // @        and inform parent of change
     updateSection(_ref) {
       let instance = _ref.instance,
           $event = _ref.$event;
+      // @info    get the current section by its current index
       const currentSectionIndex = this.currentSections.findIndex(section => section === instance);
       this.currentSections[currentSectionIndex].resources = $event.resources;
       this.relayUpdate();
@@ -17404,6 +17476,8 @@ var _default = {
     SectionRiver: _SectionRiver.default
   },
   props: {
+    // @prop    action
+    // @desc    determines whether we are in creation or edit mode
     action: {
       type: String,
       default: _status.default.UPDATE
@@ -17414,6 +17488,8 @@ var _default = {
       type: [Boolean, String],
       default: false
     },
+    // @prop    sections
+    // @desc    passed array of course's saved sections and resources
     sections: {
       type: Array,
       default: () => [[defaultSectionSchema]]
@@ -17434,25 +17510,40 @@ var _default = {
 
   data() {
     return {
+      // @prop    availableResources
+      // @desc    list of queried resource results from a search
       availableResources: [],
+      // @prop    course
+      // @desc    locally initialized current course based on passed rops
       course: {
         id: this.id.length > 0 ? this.id : null,
         title: this.title,
         status: this.status,
         sections: this.sections
       },
+      // @prop    isTitleEditable
+      // @desc    state for showing inputs for update a course title
       isTitleEditable: false,
+      // @prop    notification
+      // @desc    data object for showing UI alerts and notifications
       notification: {
         active: false,
         status: "info",
         message: ""
       },
+      // @prop    q
+      // @desc    query string for searching server db for applicable resources
       q: "",
+      // @prop    saveAction
+      // @desc    initalize base action mode based off passed prop
       saveAction: this.action
     };
   },
 
   computed: {
+    // @prop    initialCourseView
+    // @desc    boolean that determines whether we are in the initial create mode;
+    // @        used for showing different UI pieces based on status
     initialCourseView() {
       return this.saveAction === _status.default.CREATE;
     },
@@ -17484,10 +17575,15 @@ var _default = {
 
   },
   methods: {
+    // @func    resetNotification
+    // @desc    clears out a current notifiction
     resetNotification() {
       this.notification.active = false;
     },
 
+    // @func    redirectOnCreate
+    // @desc    once a course has been created, we need to switch to a new view
+    // @        so we don't recreate new courses on subsequent saves
     redirectOnCreate(_ref) {
       let _ref$url = _ref.url,
           url = _ref$url === void 0 ? this.savepoint : _ref$url;
@@ -17495,6 +17591,12 @@ var _default = {
       if (logicCheck) window.location.replace(url);
     },
 
+    // @func    saveCourse
+    // @desc    based on current course status, save or create a course
+    // @        assigned return server data to current course
+    // @        show a ui notification for success (defaults to 200 template)
+    // @        if newly created, redirect to edit form and state
+    // @        update the action mode to the update state
     async saveCourse(_ref2) {
       let _ref2$status = _ref2.status,
           status = _ref2$status === void 0 ? "200" : _ref2$status;
@@ -17524,13 +17626,17 @@ var _default = {
       } catch (error) {
         this.setNotification({
           status: "500",
-          message
+          message: error.message
         });
       }
 
       return;
     },
 
+    // @func    setNotification
+    // @desc    activates the UI notification,
+    // @        checks if there is a defined alert template to use based on a status key
+    // @        use assigned template or custom messaging
     setNotification(_ref4) {
       let status = _ref4.status,
           _ref4$message = _ref4.message,
@@ -17543,6 +17649,8 @@ var _default = {
       };
     },
 
+    // @func    setTitleEditState
+    // @desc    switch title state from edit to viewable
     setTitleEditState(_ref5) {
       let _ref5$state = _ref5.state,
           state = _ref5$state === void 0 ? !this.isTitleEditable : _ref5$state;
@@ -17571,11 +17679,16 @@ var _default = {
       return;
     },
 
+    // @func    updateSections
+    // @desc    assign current course sections with the passed event's updated sections
     updateSections(_ref7) {
       let sections = _ref7.sections;
       this.course.sections = sections;
     },
 
+    // @func    updateStatus
+    // @desc    publish or draft a current course based on its current-to-desired status
+    // @        set status, show a notificaton template, and save the course
     updateStatus() {
       const status = this.course.status;
       const updateStatus = {
@@ -17817,10 +17930,15 @@ exports.default = void 0;
 var _default = {
   name: "ActionControl",
   props: {
+    // @prop    glyph
+    // @desc    passed glyph class for a glyph icon
+    // @        if none, no icon will be shown
     glyph: {
       type: [Boolean, String],
       default: false
     },
+    // @prop    theme
+    // @desc    simplified prop passing of a bootstrap theme name
     theme: {
       type: String,
       default: "default"
@@ -17906,6 +18024,9 @@ exports.default = void 0;
 var _default = {
   name: "IconControl",
   props: {
+    // @prop    glyph
+    // @desc    passed glyph class for a glyph icon
+    // @        if none, no icon will be shown
     glyph: {
       type: [Boolean, String],
       default: false
@@ -18012,7 +18133,8 @@ _vue.default.use(_i18n.default, {
   defaultTranslations: _translations.default
 });
 
-_vue.default.component("ActionControl", _ActionControl.default);
+_vue.default.component("ActionControl", _ActionControl.default); // @component   universal icon-only control
+
 
 _vue.default.component("IconControl", _IconControl.default);
 /* eslint-disable no-new */
@@ -18052,7 +18174,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57811" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50887" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

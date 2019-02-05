@@ -2,6 +2,9 @@
 export default {
     name: "IconControl",
     props: {
+        // @prop    glyph
+        // @desc    passed glyph class for a glyph icon
+        // @        if none, no icon will be shown
         glyph: {
             type: [Boolean, String],
             default: false

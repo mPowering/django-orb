@@ -10,6 +10,8 @@ export default {
         }
     },
     methods: {
+        // @func    handleInput
+        // @desc    inform parent of search term
         handleInput ({ target: { value } }) {
             this.$emit(
                 "input",

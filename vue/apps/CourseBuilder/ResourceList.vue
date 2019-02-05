@@ -30,18 +30,23 @@ export default {
         }
     },
     computed: {
+        // @prop    processedResources
+        // @desc    map returned resources with extra data information for processing
+        // @        filter out those items that are not considered embeddable by the server
         processedResources () {
             return this.resources
                 .reduce(
                     (resourceList, { title, files }) => {
-                        files = files.flatMap(
-                            ({ file_extension, ...attrs }) => ({
-                                ...attrs,
-                                fileExtension: file_extension,
-                                parentTitle: title,
-                                type: "CourseResource"
-                            })
-                        ).filter( file => file.is_embeddable )
+                        files = files
+                            .flatMap(
+                                ({ file_extension, ...attrs }) => ({
+                                    ...attrs,
+                                    fileExtension: file_extension,
+                                    parentTitle: title,
+                                    type: "CourseResource"
+                                })
+                            )
+                            .filter( file => file.is_embeddable )
 
                         return resourceList.concat(files)
                     },
@@ -50,6 +55,8 @@ export default {
         }
     },
     filters: {
+        // @filter  niceTitle
+        // @desc    define the instance's visible title programmatically
         niceTitle (instance) {
             let title = `(${ instance.fileExtension })` || ""
 

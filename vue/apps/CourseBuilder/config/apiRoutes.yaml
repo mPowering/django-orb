@@ -1,3 +1,4 @@
+# routes to server
 API: /api/v1/
 RESOURCE_SEARCH: /api/v1/resource/search/
 CREATE: .
