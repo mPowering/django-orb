@@ -5,36 +5,38 @@ import COURSE_ALERTS from "@CourseBuilder/config/alerts"
 import { api } from "@services/api"
 import API_ROUTES from "@CourseBuilder/config/apiRoutes"
 
+import { Course, User } from "@CourseBuilder/config/models"
+
 import Draggable from "vuedraggable"
 
+import { defaultSectionSchema } from "@CourseBuilder/CourseSection"
 import DismissableNotification from "@notifications/DismissableNotification"
+import PrimaryBreadcrumbs from "@navigation/PrimaryBreadcrumbs"
 import ResourceList from "@CourseBuilder/ResourceList"
-import SearchField from "@fields/SearchField"
 import SectionRiver from "@CourseBuilder/SectionRiver"
 
-const defaultSectionSchema = { resources: [] }
 
 export default {
     name: "CourseEditor",
     components: {
         DismissableNotification,
         Draggable,
+        PrimaryBreadcrumbs,
         ResourceList,
-        SearchField,
         SectionRiver,
     },
     props: {
-        // @prop    action
-        // @desc    determines whether we are in creation or edit mode
-        action: {
-            type: String,
-            default: COURSE_STATUS.UPDATE
+        // @prop    exportRoutes
+        // @desc    object for Moodle and Oppia export routes
+        exportRoutes: {
+            type: Object,
+            default: () => ({})
         },
 
         // @prop    id
         // @desc    server-based/synced course id
         id: {
-            type: [Boolean, String],
+            type: [Boolean, String, Number],
             default: false
         },
 
@@ -42,7 +44,7 @@ export default {
         // @desc    passed array of course's saved sections and resources
         sections: {
             type: Array,
-            default: () => ([[defaultSectionSchema]])
+            default: () => ([defaultSectionSchema])
         },
 
         // @prop    status
@@ -55,24 +57,21 @@ export default {
         // @prop    title
         // @desc    the title for the current course
         title: {
-            type: String,
-            default: () => this.$i18n.COURSE_TITLE_NEW
+            type: [Boolean, String],
+            default: false
         },
     },
     data () {
         return {
-            // @prop    availableResources
-            // @desc    list of queried resource results from a search
-            availableResources: [],
-
             // @prop    course
             // @desc    locally initialized current course based on passed rops
-            course: {
-                id: this.id.length > 0 ? this.id : null,
-                title: this.title,
-                status: this.status,
-                sections: this.sections
-            },
+            course: new Course({
+                id: this.id.length ? this.id : "",
+                title: this.title || this.$i18n.COURSE_TITLE_NEW,
+                status: this.status || COURSE_STATUS.INACTIVE,
+                sections: this.sections || [defaultSectionSchema],
+                exportRoutes: this.exportRoutes || {}
+            }),
 
             // @prop    isTitleEditable
             // @desc    state for showing inputs for update a course title
@@ -86,13 +85,9 @@ export default {
                 message: ""
             },
 
-            // @prop    q
-            // @desc    query string for searching server db for applicable resources
-            q: "",
-
             // @prop    saveAction
             // @desc    initalize base action mode based off passed prop
-            saveAction: this.action,
+            saveAction: this.$route.meta.action,
         }
     },
     computed: {
@@ -131,20 +126,83 @@ export default {
                     theme: "primary",
                 }
         },
+
+        // @prop    user
+        // @desc    get the current user from the Vuex Store
+        user () {
+            return User.query().first()
+        }
+    },
+    watch: {
+        // @prop    $route
+        // @desc    run on change/instantiation for boilerplate work
+        $route: {
+            immediate: true,
+            handler () {
+                // @info    this is a driver for when we have a hard-reload on the page,
+                // @        as VueRouter passes everything else to the component props
+                // @        if we're on a new course form, we don't need to go to the store
+                // @        if on a reloaded course detail form, get the first store entry (comes from template)
+                // @        this.id is automatically provided by VueRouter
+                if (this.$route.meta.action == COURSE_STATUS.CREATE) return
+                this.course = Course.query().whereId(this.id).first()
+            }
+        }
     },
     methods: {
-        // @func    resetNotification
-        // @desc    clears out a current notifiction
-        resetNotification () { this.notification.active = false },
+        // @func    getExportRoutes
+        // @desc    after saving a new course, we don't have the
+        // @        course's export routes as those are provided by the template, instead:
+        // @        - fetch the course's detail page via Ajax
+        // @        - parse the html
+        // @        - get the <script #courseData> json and load it into a local variable
+        // @        - update the exportRoutes for the current course and save to the Vuex Store
+        async getExportRoutes ({ id } = { id: this.course.id }) {
+            try {
+                const parser = new DOMParser()
+                let html = await api.fetch({ route: `${ API_ROUTES.UPDATE }${ this.course.id }` })
+                const { exportRoutes } = JSON.parse(
+                    parser
+                        .parseFromString(html, "text/html")
+                        .querySelector("#courseData")
+                        .innerHTML
+                )
+                this.course.exportRoutes = exportRoutes
+                await this.course.$save()
+            }
+            catch (err) {}
+            return
+        },
 
         // @func    redirectOnCreate
         // @desc    once a course has been created, we need to switch to a new view
         // @        so we don't recreate new courses on subsequent saves
-        redirectOnCreate ({ url = this.savepoint }) {
-            const logicCheck = (this.initialCourseView && this.course.id)
+        async redirectOnCreate ({ id } = { id: this.course.id }) {
+            const logicCheck = (this.initialCourseView && id)
 
-            if (logicCheck) window.location.replace(url)
+            try {
+                if (logicCheck) {
+                    await this.getExportRoutes({ id })
+
+                    let params = {
+                        ...this.course
+                    }
+
+                    delete params.$id
+
+                    this.$router.replace({
+                        name: "editCourse",
+                        params
+                    })
+                }
+            }
+            catch (err) {}
+            return
         },
+
+        // @func    resetNotification
+        // @desc    clears out a current notifiction
+        resetNotification () { this.notification.active = false },
 
         // @func    saveCourse
         // @desc    based on current course status, save or create a course
@@ -153,10 +211,12 @@ export default {
         // @        if newly created, redirect to edit form and state
         // @        update the action mode to the update state
         async saveCourse ({ status = "200" }) {
+            let data = this.course
             try {
                 let route = (this.saveAction === COURSE_STATUS.CREATE)
                     ? API_ROUTES.CREATE
-                    : API_ROUTES.UPDATE.replace(":id", this.course.id)
+                    : `${ API_ROUTES.UPDATE }${ this.course.id }/`
+
 
                 const {
                     course_id,
@@ -164,16 +224,15 @@ export default {
                     message,
                     url
                 } = await api
-                        .update({
-                            route,
-                            data: this.course
-                        })
+                        .update({ route, data })
 
                 this.course.id = course_id
                 this.course.status = course_status
+
+                await this.course.$save()
                 this.setNotification({ status, message })
-                this.redirectOnCreate({ url })
-                this.saveAction = COURSE_STATUS.UPDATE
+                await this.redirectOnCreate()
+                // this.saveAction = COURSE_STATUS.UPDATE
             }
             catch (error) {
                 this.setNotification({status: "500", message: error.message })
@@ -202,27 +261,6 @@ export default {
             this.isTitleEditable = state
         },
 
-        // @func    searchResources
-        // @desc    request a queried set of resources from server
-        // @        and assign to available resources
-        async searchResources () {
-            try {
-                let { objects: availableResources } = await api
-                    .fetch({
-                        route: API_ROUTES.RESOURCE_SEARCH,
-                        params: {
-                            format: "json",
-                            q: this.q
-                        }
-                    })
-
-                this.availableResources = availableResources
-            }
-            catch (error) { console.log(error) }
-
-            return
-        },
-
         // @func    updateSections
         // @desc    assign current course sections with the passed event's updated sections
         updateSections ({ sections }) {
@@ -232,7 +270,7 @@ export default {
         // @func    updateStatus
         // @desc    publish or draft a current course based on its current-to-desired status
         // @        set status, show a notificaton template, and save the course
-        updateStatus () {
+        async updateStatus () {
             const { status } = this.course
             const updateStatus = {
                 [COURSE_STATUS.ACTIVE]: {
@@ -245,8 +283,11 @@ export default {
                 }
             }
 
-            this.course.status = updateStatus[status].courseStatus
-            this.saveCourse({ status: updateStatus[status].msgStatus })
+            try {
+                this.course.status = updateStatus[status].courseStatus
+                await this.saveCourse({ status: updateStatus[status].msgStatus })
+            }
+            catch (error) {}
 
         }
     }
@@ -254,48 +295,53 @@ export default {
 </script>
 
 <template>
-<article class="course-editor">
-    <header class="course-editor-hdr iso:yEnd50">
-        <h3 class="course-editor-hed col-sm-6 flex:h--p:start--s:middle rhy:xStart50"
-            v-if="!isTitleEditable"
-            @click="setTitleEditState"
-        >
-            <span>{{ course.title }}</span>
-
-            <action-control
-                class="course-editor-hed-edit btn-xs pad:xyEq25"
-                glyph="edit"
-                theme="primary"
+<article class="course-editor flex:h--p:start grid:h--cols:iAuto--gaps:xyEq100">
+    <div>
+        <header class="course-editor-hdr flex:h--p:start--s:middle pad:yEq100">
+            <h2 class="course-editor-hed flex:hAuto--p:start--s:middle rhy:xStart50 iso:yEq0"
+                v-if="!isTitleEditable"
+                @click="setTitleEditState"
             >
-                <span class="sr-only">{{ $i18n.COURSE_TITLE_EDIT }}</span>
-            </action-control>
-        </h3>
+                <span>{{ course.title }}</span>
+
+                <action-control
+                    class="course-editor-hed-edit btn-xs pad:xyEq25"
+                    glyph="edit"
+                    theme="primary"
+                >
+                    <span class="sr-only">{{ $i18n.COURSE_TITLE_EDIT }}</span>
+                </action-control>
+            </h2>
+
+            <div
+                class="flex:hAuto--p:start--s:start"
+                v-else
+            >
+                <input
+                    class="form-control module:static"
+                    v-model="course.title"
+                >
+
+                <div class="input-group-btn module:static">
+                    <action-control
+                        class="course-editor-hed-save"
+                        @click="setTitleEditState"
+                    >
+                        {{ $i18n.COURSE_TITLE_SAVE }}
+                    </action-control>
+                </div>
+            </div>
+        </header>
 
         <div
-            class="input-group col-sm-6 pad:xEq50"
-            v-else
-        >
-            <input
-                class="form-control"
-                v-model="course.title"
-            >
+            class="lead panel"
+            v-html="$i18n.EDITOR_CONTENT"
+            v-if="initialCourseView"
+        ></div>
 
-            <div class="input-group-btn">
-                <action-control
-                    class="course-editor-hed-save"
-                    @click="setTitleEditState"
-                >
-                    {{ $i18n.COURSE_TITLE_SAVE }}
-                </action-control>
-            </div>
-        </div>
-
-
-    </header>
-
-    <div class="row">
-        <section class="course-sections col-sm-9">
+        <section class="editor-river">
             <dismissable-notification
+                class="iso:yEnd100"
                 v-bind="notification"
                 @dismissed="resetNotification"
             ></dismissable-notification>
@@ -304,10 +350,16 @@ export default {
                 :sections="course.sections"
                 @update="updateSections"
             ></section-river>
+        </section>
+    </div>
 
-            <div class="btn-group">
+    <aside class="editor-sidebar pad:yEq100">
+        <div class="module:sticky">
+            <primary-breadcrumbs class="iso:yEnd100"></primary-breadcrumbs>
+
+            <div class="btn-group flex:h--p:start--s:middle pad:yEq100 iso:yEnd100 edge:yEq--def:tint">
                 <action-control
-                    class="course-save-ctrl"
+                    class="btn-sm module:balance"
                     v-bind="saveControlMeta"
                     @click="saveCourse"
                 >
@@ -315,7 +367,7 @@ export default {
                 </action-control>
 
                 <action-control
-                    class="course-publish-ctrl"
+                    class="btn-sm module:balance"
                     v-bind="statusControlMeta"
                     v-if="course.id"
                     @click="updateStatus"
@@ -323,21 +375,61 @@ export default {
                     <span>{{ statusControlMeta.label }}</span>
                 </action-control>
             </div>
-        </section>
 
-        <aside class="resource-search col-sm-3">
-            <search-field
-                v-model="q"
-                @submit="searchResources"
+            <div
+                class="pad:yEnd100 iso:yEnd100 rhy:yStart50 edge:yEnd--def:tint"
+                v-if="course.id"
             >
-                {{ $i18n.RESOURCE_LABEL_SEARCH }}
-            </search-field>
+                <div class="btn-group flex:h--p:start--s:middle">
+                    <action-link
+                        class="btn-sm module:balance"
+                        v-if="course.exportRoutes.moodleExport"
+                        :href="course.exportRoutes.moodleExport"
+                    >
+                        {{ $i18n.EXPORT_MOODLE }}
+                    </action-link>
 
-            <resource-list
-                class="list-group"
-                :resources="availableResources"
-            ></resource-list>
-        </aside>
-    </div>
+                    <action-link
+                        class="btn-sm module:balance"
+                        v-if="course.exportRoutes.oppiaExport"
+                        :href="course.exportRoutes.oppiaExport"
+                    >
+                        {{ $i18n.EXPORT_OPPIA }}
+                    </action-link>
+                </div>
+
+                <action-link
+                    class="btn-sm module:balance"
+                    theme="primary"
+                    v-if="course.exportRoutes.oppiaPublish"
+                    :href="course.exportRoutes.oppiaPublish"
+                >
+                    {{ $i18n.EXPORT_OPPIA_PUBLISH }}
+                </action-link>
+            </div>
+
+            <resource-list class="list-group"></resource-list>
+        </div>
+    </aside>
 </article>
 </template>
+
+<style>
+.course-editor {
+    --gridCols: minmax(min-content, 70%) minmax(auto, 1fr)
+}
+
+.editor-river {
+    position: sticky;
+    top: 86px;
+}
+
+.editor-river .alert {
+    padding: 4px 35px 4px 12px;
+}
+
+.editor-sidebar > [class*="module:sticky"] {
+    position: sticky;
+    top: 86px;
+}
+</style>

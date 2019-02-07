@@ -1,38 +1,40 @@
-import Vue from "vue"
-// import Vuex from "vuex"
-// Vue.use(Vuex)
-// import { Model } from "@vuex-orm/core"
-// import VueRouter from 'vue-router'
-// Vue.use(VueRouter)
+import "@apps/course_builder.css"
+
+// import Vue from "vue"
+
 // @note    lets increase performance for production
 Vue.config.performance = process.env.NODE_ENV !== "production"
 
 // @plugin      i18n
 // @desc        exposes $i18n, data object mapping internationalizations for app
-import i18nDefaults from "@CourseBuilder/config/translations"
 import i18n from "@services/i18n"
 Vue.use(i18n, {
-    defaultTranslations: i18nDefaults
+    translations: window.i18n || {}
 })
 
+import store from "@CourseBuilder/config/store"
+import router from "@CourseBuilder/config/routes"
 
-import "@apps/course_builder.css"
-import CourseEditor from "@CourseBuilder/CourseEditor"
-
-// @component   universal action control/button
-import ActionControl from "@controls/ActionControl"
-Vue.component("ActionControl", ActionControl)
-
-// @component   universal icon-only control
-import IconControl from "@controls/IconControl"
-Vue.component("IconControl", IconControl)
+import { Course, User } from "@CourseBuilder/config/models"
 
 
 /* eslint-disable no-new */
 new Vue({
     name: "Orb",
-    el: '#app',
-    components: {
-        CourseEditor
-    }
-})
+    router,
+    template: "<router-view></router-view>",
+
+    // @lifecycle   created
+    // @desc        on initial loading of the page,
+    // @            load in template data into the store
+    async created () {
+        try {
+            await Course.stageFromTemplate()
+            await User.stageFromTemplate()
+        }
+        catch (error) {
+            console.log(error)
+        }
+        return
+    },
+}).$mount("#app")

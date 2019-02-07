@@ -1,5 +1,6 @@
 # routes to server
 API: /api/v1/
 RESOURCE_SEARCH: /api/v1/resource/search/
-CREATE: .
-UPDATE: /courses/:id/
+CREATE: /courses/new/
+# requires appending course id
+UPDATE: /courses/

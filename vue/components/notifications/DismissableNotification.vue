@@ -42,7 +42,7 @@ export default {
 <template>
 <transition name="fade">
     <div
-        class="alert alert-dismissable"
+        class="alert alert-dismissable module:balance iso:yEnd0"
         role="alert"
         v-if="active"
         :class="`alert-${ status }`"

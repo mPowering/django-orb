@@ -1,16 +1,24 @@
 {
-    "plugins": [
-      "transform-object-rest-spread",
-    ],
-    "presets": [
-      [
-        "env",
-        "vue",
-        {
-          "modules": false,
-          "useBuiltIns": "usage",
-          "debug": false
+  "plugins": [
+    "transform-object-rest-spread",
+    ["transform-class-properties", { "spec": true }]
+  ],
+  "presets": [
+    [
+      "env",
+      "vue",
+      {
+        "modules": false,
+        "useBuiltIns": "usage",
+        "debug": false,
+        "targets": {
+          "chrome": 64,
+          "safari": "10.1",
+          "firefox": 56,
+          "edge": 16,
+          "ios": "10.3"
         }
-      ]
+      }
     ]
-  }
+  ]
+}

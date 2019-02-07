@@ -3,7 +3,7 @@
 export default {
     install (Vue, options) {
         let {
-            defaultTranslations,
+            defaultTranslations = {},
             translations,
         } = options
 

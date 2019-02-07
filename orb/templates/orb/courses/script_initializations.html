@@ -1,0 +1,82 @@
+{% load i18n review_tags static %}
+
+{% if user.is_authenticated %}
+<script id="userData" type="application/json">
+{
+    "isAuthenticated": true
+}
+</script>
+{% endif %}
+
+{% url 'profile_login' as login %}
+{% url 'profile_register' as register %}
+{% comment %}
+    As this might have manually entered content, and is not being saved in CourseBuilderManager,
+    save it as a universal data prop
+{% endcomment %}
+<script>
+window.i18n = {
+    ACTIVITY_ADD: "Add Course Activity",
+    ACTIVITY_CANCEL: "Cancel",
+    ACTIVITY_EDIT: "Edit",
+    ACTIVITY_SAVE: "Save",
+    ACTIVITY_DESC_LABEL: "Activity Slide Description",
+    ACTIVITY_TITLE_LABEL: "Activity Slide Title",
+    ACTIVITY_TITLE_NEW: "Unnamed Course Activity",
+
+    COURSE_ADD: "{% trans 'Add a new course' %}",
+    COURSE_CREATE: "Create Course",
+    COURSE_SAVE: "Save Course",
+    COURSE_SET_DRAFT: "Set to Draft",
+    COURSE_SET_PUBLISH: "Publish",
+    COURSE_TITLE_EDIT: "Edit Course Title",
+    COURSE_TITLE_NEW: "New Course",
+    COURSE_TITLE_SAVE: "Save Course Title",
+
+    COURSES_CONTENT: `
+        <p>
+            Course List text. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+            officia deserunt mollit anim id est laborum.
+        </p>
+        <p>
+            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+            officia deserunt mollit anim id est laborum.
+        </p>
+    `,
+    COURSES_EMPTY: "{% trans 'You haven\'t created any courses yet.' %}",
+    COURSES_LABEL: "{% trans 'Courses' %}",
+    COURSES_VIEW: "View Course List",
+
+    EDITOR_CONTENT: `
+        <p>
+            Course Editor text. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint
+            occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
+            id est laborum.
+        </p>
+    `,
+
+    EXPORT_MOODLE: "Export to Moodle",
+    EXPORT_OPPIA: "Export to Oppia",
+    EXPORT_OPPIA_PUBLISH: "Publish to OpenDeliver Oppia",
+
+    LOGIN_WARNING: `{% blocktrans with request.path as nextpath %}Please <a href="{{ login }}?next={{ nextpath }}">login</a> or <a href="{{ register }}">register</a> to create or edit courses.{% endblocktrans %}`,
+
+    RESOURCE_EDIT: "Edit Section Resource",
+    RESOURCE_LABEL_SEARCH: "Find Resource Files",
+    RESOURCE_REMOVE: "Remove",
+    RESOURCE_TITLE_NEW: "Unnamed Resource",
+
+    SEARCH_LABEL: "Search",
+
+    SECTION_ADD: "Add Course Section",
+    SECTION_EMPTY: "Drop in a Resource or create an Activity",
+    SECTION_LABEL: "Section",
+    SECTION_REMOVE: "Remove Course Section",
+}
+</script>

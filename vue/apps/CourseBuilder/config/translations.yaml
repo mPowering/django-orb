@@ -1,3 +1,4 @@
+# test data, app data used from /orb/templates/orb/courses/script_initializations.html
 # @prop    i18n
 # @desc    data object mapping default internationalizations for app
 ACTIVITY_ADD: Add Course Activity
@@ -9,10 +10,15 @@ ACTIVITY_DESC_LABEL: Activity Slide Description
 ACTIVITY_TITLE_LABEL: Activity Slide Title
 ACTIVITY_TITLE_NEW: Unnamed Course Activity
 
+COURSE_ADD: Add a new course
 COURSE_CREATE: Create Course
 COURSE_SAVE: Save Course
 COURSE_SET_DRAFT: Set to Draft
 COURSE_SET_PUBLISH: Publish
+
+COURSES_LABEL: Courses
+COURSES_VIEW: View Course List
+COURSES_EMPTY: You haven't created any courses yet.
 
 COURSE_TITLE_EDIT: Edit Course Title
 COURSE_TITLE_NEW: New Course
@@ -32,3 +38,7 @@ RESOURCE_LABEL_SEARCH: Find Resource Files
 EDIT_RESOURCE: Edit Section Resource
 
 SEARCH_LABEL: Search
+
+EXPORT_MOODLE: Export to Moodle
+EXPORT_OPPIA: Export to Oppia
+EXPORT_OPPIA_PUBLISH: Publish to OpenDeliver Oppia

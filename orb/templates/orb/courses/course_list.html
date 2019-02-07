@@ -1,66 +1,100 @@
 {% extends "base.html" %}
-{% load i18n review_tags %}
+{% load i18n review_tags static %}
 
 {% block extra_head_title %}{% trans 'Courses' %}{% endblock extra_head_title %}
 
+{% block extra_styles %}
+{{ super }}
+<link
+    href="{% static 'orb/apps/course_builder.css' %}"
+    rel="stylesheet"
+/>
+{% endblock %}
+
 {% block content %}
+    <div id="app">
+        <header class="flex:h--p:start--s:middle pad:yEq100">
+            <h2 class="flex:hAuto--p:start--s:middle rhy:xStart50 iso:yEq0">
+                {% trans 'Courses' %}
+            </h2>
 
-    <h2>{% trans 'Courses' %}</h2>
+            {% if user.is_authenticated %}
+            <a
+                class="btn btn-default module:static flex:hAuto--p:middle--s:base rhy:xStart25 iso:xStartAuto"
+                href="{% url 'courses_create' %}"
+            >
+                <span
+                    class="glyphicon glyphicon-edit"
+                    aria-hidden="true"
+                ></span>
+                <span>{% trans 'Add a new course' %}</span>
+            </a>
+            {% endif %}
+        </header>
 
-    {% include "includes/messages.html" %}
-
-    {% if user.is_authenticated %}
-    <a
-        class="btn btn-primary btn-xs"
-        href="{% url 'courses_create' %}"
-    >
-        <span
-            class="glyphicon glyphicon-edit"
-            aria-hidden="true"
-        ></span>
-        <span>{% trans 'Add a new course' %}</span>
-    </a>
-    {% else %}
-    	<p>{% url 'profile_login' as login %}
-            {% url 'profile_register' as register %}
-            {% blocktrans with request.path as nextpath %}Please <a href="{{ login }}?next={{ nextpath }}">login</a> or
-                <a href="{{ register }}">register</a> to create or edit courses.{% endblocktrans %}</p>
-    {% endif %}
-
-    <div>
-
-    {% for course in courses %}
-
-        <div class="row" style="margin-top: 20px;">
-            <span style="font-size: 28px; font-weight: bold;">
-                {% if course.status == 'draft' %}
-                  <span class="btn btn-warning">
-                    {{ course.status }}
-                </span>
-                {% endif %}
-                <a href="{{ course.get_absolute_url }}">{{ course.title }}</a>
-            </span>
+        {% comment %} Doesn't seem to be used as of yet {% endcomment %}
+        {% comment %} {% include "includes/messages.html" %} {% endcomment %}
         {% if user.is_authenticated %}
-        <!--<span class="label label-info" style="margin-left: 10px;">
-          <a href="{% url 'courses_oppia_export' course.pk %}">Export to Oppia</a>
-        </span>
-        <span class="label label-info" style="margin-left: 10px;">
-          <a href="{% url 'courses_moodle_export' course.pk %}">Export to Moodle</a>
-        </span> -->
-        <span class="label label-info" style="margin-left: 10px;">
-          <a href="{% url 'courses_oppia_publish' course.pk %}">Publish to OpenDeliver Oppia</a>
-        </span>
+            <div class="lead panel">
+                <p>
+                    Course List text. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+                    officia deserunt mollit anim id est laborum.
+                </p>
+                <p>
+                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
+                    officia deserunt mollit anim id est laborum.
+                </p>
+            </div>
+        {% else %}
+            {% url 'profile_login' as login %}
+            {% url 'profile_register' as register %}
+            <div
+                class="alert alert-warning flex:h--p:start--s:middle rhy:xStart50"
+            >
+                <p>
+                    {% blocktrans with request.path as nextpath %}
+                        Please <a href="{{ login }}?next={{ nextpath }}">login</a> or
+                        <a href="{{ register }}">register</a> to create or edit courses.
+                    {% endblocktrans %}
+                </p>
+            </div>
         {% endif %}
-
-        </div>
-    {% empty %}
-    	{% if user.is_authenticated %}
-        <h3>{% trans 'You haven\'t created any courses yet.' %}</h3>
-        {% endif %}
-    {% endfor %}
-
     </div>
 
+    <script id="courseListData" type="application/json">
+        [
+            {% for course in courses %}
+            {
+                "id": "{{ course.pk }}",
+                "title": "{{ course }}",
+                "status": "{{ course.status }}",
+                "sections": {{ course.sections|safe }},
+                "url": "{{ course.get_absolute_url }}",
+                {% if user.is_authenticated %}
+                "exportRoutes": {
+                    "moodleExport": "{% url 'courses_moodle_export' course.pk %}",
+                    "oppiaExport": "{% url 'courses_oppia_export' course.pk %}",
+                    "oppiaPublish": "{% url 'courses_oppia_publish' course.pk %}"
+                }
+                {% endif %}
+            }{% if not forloop.last %},{% endif %}
+            {% endfor %}
+        ]
+    </script>
 
+    {% include "orb/courses/script_initializations.html" %}
 
+    <div id="course-manager"></div>
+
+{% endblock %}
+
+{% block footer_js %}
+{{ super }}
+<script src="{% static 'orb/apps/bundle.js' %}" defer></script>
+<script src="{% static 'orb/apps/course_builder.js' %}" defer></script>
 {% endblock %}

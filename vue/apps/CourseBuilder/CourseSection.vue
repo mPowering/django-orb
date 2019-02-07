@@ -6,6 +6,7 @@ import Draggable from "vuedraggable"
 import CourseActivity from "@CourseBuilder/CourseActivity"
 import CourseResource from "@CourseBuilder/CourseResource"
 
+
 export const defaultSectionSchema = { resources: [] }
 
 export default {
@@ -88,18 +89,18 @@ export default {
 
 <template>
 <article class="course-section panel panel-primary">
-    <header class="course-section-hdr panel-heading flex:h-p:start--s:middle rhy:xStart25">
-        <slot name="section:preheading"></slot>
+    <header class="course-section-hdr panel-heading flex:h-p:start--s:middle rhy:xStart50">
+        <slot name="preheading"></slot>
 
         <h4 class="panel-title">
             {{ $i18n.SECTION_LABEL }}
         </h4>
 
-        <slot name="section:postheading"></slot>
+        <slot name="postheading"></slot>
     </header>
 
     <draggable
-        class="panel-body pad:yEnd0"
+        class="panel-body pad:xyEq75 rhy:yStart100"
         v-model="currentResources"
         :options ="dragOptions"
         @add="relayUpdate"
@@ -112,18 +113,18 @@ export default {
             :key="instance.uuid || instance.id"
             @update="updateResource({ instance, $event })"
         >
-            <template slot="entry:preheading">
+            <template v-slot:preheading>
                 <span
-                    class="handle glyph pad:xEq25"
+                    class="handle glyph"
                     role="button"
                 >
                     <img src="/static/orb/images/glyphicons-move.png" />
                 </span>
             </template>
 
-            <template slot="entry:postheading">
+            <template v-slot:postheading>
                 <icon-control
-                    class="iso:xStartAuto"
+                    class="pad:xyEq0 iso:xStartAuto"
                     glyph="remove"
                     @click="removeResource(index)"
                 >
@@ -133,7 +134,7 @@ export default {
         </component>
 
         <div
-            class="alert alert-warning"
+            class="alert alert-warning iso:yEnd0"
             slot="footer"
             v-if="!currentResources.length"
         >
@@ -153,14 +154,3 @@ export default {
     </footer>
 </article>
 </template>
-
-<style>
-.course-section-hdr .handle {
-    cursor: grab
-}
-.course-section-hdr .handle > img {
-    height: 16px;
-    margin-top: -5px;
-    width: 16px;
-}
-</style>

@@ -77,9 +77,7 @@ help:
 	@perl -nle'print $& if m{^[a-zA-Z_-]+:.*?## .*$$}' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
 vue-dev: ## run vue compiler in dev version
-	cd ./vue && yarn run dev
+	cd ./vue && env=dev ./build.sh
 
 vue-build: ## run vue compiler for production
-	cd ./vue && yarn run build
-	cd ./vue && npm run minify-js
-	cd ./vue && npm run minify-css
+	cd ./vue && env=production ./build.sh

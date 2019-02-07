@@ -13,6 +13,8 @@ export default {
     },
     data () {
         return {
+            // @prop    resource
+            // @data    local representation of instance that can be overloaded
             resource: {
                 ...this.instance
             },
@@ -39,15 +41,15 @@ export default {
 </script>
 
 <template>
-<div class="course-resource panel panel-success edge:xyEq">
+<div class="course-resource panel panel-success iso:yEnd0 edge:xyEq">
     <header
-        class="course-resource-hdr panel-heading flex:h--p:start--s:middle rhy:xStart25"
+        class="course-resource-hdr panel-heading flex:h--p:start--s:middle pad:xyEq25 rhy:xStart25"
     >
-        <slot name="entry:preheading"></slot>
+        <slot name="preheading"></slot>
 
-        <h5>{{ resource | niceTitle }}</h5>
+        <h5 class="iso:yEnd0">{{ resource | niceTitle }}</h5>
 
-        <slot name="entry:postheading"></slot>
+        <slot name="postheading"></slot>
     </header>
 
     <div

@@ -5,15 +5,22 @@ output: ./
 entries:
     course_builder: apps/course_builder.js
 
+production:
+    bundle: vue/bundle.min.js
+
+development:
+    bundle: vue/bundle.js
+
 aliases:
     "@CourseBuilder": ~/apps/CourseBuilder
 
     "@controls": ~/components/controls
     "@fields": ~/components/forms/fields
     "@forms": ~/components/forms
+    "@navigation": ~/components/navigation
     "@notifications": ~/components/notifications
 
-    "vue": vue/dist/vue.js
+    "vue": ~/node_modules/vue/dist/vue.esm.js
     "@apps": ~/apps
     "@components": ~/components
     "@services": ~/services

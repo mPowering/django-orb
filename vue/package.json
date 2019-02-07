@@ -6,12 +6,8 @@
     "private": true,
     "repository": {},
     "scripts": {
-        "dev": "node build.js --no-cache --config orb.yaml",
-        "build": "NODE_ENV=production node build.js --no-cache --config orb.yaml",
         "unit": "karma start karma.config.js --progress --colors -p --init ./orb.yaml --single-run",
-        "unit-dev": "karma start karma.config.js --progress --colors -p --init ./orb.yaml",
-        "minify-js": "minify ../orb/static/orb/apps --out-dir ../orb/static/orb/apps",
-        "minify-css": "cleancss -o ../orb/static/orb/apps/course_builder.css ../orb/static/orb/apps/course_builder.css"
+        "unit-dev": "karma start karma.config.js --progress --colors -p --init ./orb.yaml"
     },
     "browserslist": [
         "chrome 64",
@@ -27,6 +23,7 @@
         "babel-polyfill": "^6.26.0",
         "common-tags": "^1.8.0",
         "date-fns": "^1.29.0",
+        "vue": "^2.5.16",
         "vue-router": "^3.0.2",
         "vuedraggable": "^2.17.0",
         "vuex": "^3.1.0"
@@ -34,8 +31,9 @@
     "devDependencies": {
         "@vue/component-compiler-utils": "^2.0.0",
         "babel-core": "^6.26.3",
-        "babel-minify": "^0.4.3",
+        "babel-minify": "^0.5.0",
         "babel-plugin-es6-promise": "^1.1.1",
+        "babel-plugin-transform-class-properties": "^6.24.1",
         "babel-plugin-transform-object-rest-spread": "^6.26.0",
         "babel-plugin-transform-runtime": "^6.23.0",
         "babel-preset-env": "^1.7.0",
@@ -48,7 +46,6 @@
         "parcel-plugin-alias": "https://github.com/courcelan/parcel-plugin-alias.git",
         "parcel-plugin-clean-dist": "^0.0.6",
         "postcss-modules": "^1.1.0",
-        "vue": "^2.5.16",
         "vue-hot-reload-api": "^2.3.0",
         "vue-template-compiler": "^2.5.16",
         "yargs": "^12.0.5"

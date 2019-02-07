@@ -1,18 +1,16 @@
 <script>
+import { api } from "@services/api"
+import API_ROUTES from "@CourseBuilder/config/apiRoutes"
+
 import Draggable from "vuedraggable"
+import SearchField from "@fields/SearchField"
+
 
 export default {
     name: "ResourceList",
     components: {
         Draggable,
-    },
-    props: {
-        // @prop    resources
-        // @desc    list of currently search resource files
-        resources: {
-            type: Array,
-            default: () => ([])
-        }
+        SearchField
     },
     data () {
         return {
@@ -26,7 +24,15 @@ export default {
                     pull: "clone",
                     put: false
                 }
-            }
+            },
+
+            // @prop    q
+            // @desc    query string for searching server db for applicable resources
+            q: "",
+
+            // @prop    availableResources
+            // @desc    list of queried resource results from a search
+            resources: [],
         }
     },
     computed: {
@@ -38,7 +44,7 @@ export default {
                 .reduce(
                     (resourceList, { title, files }) => {
                         files = files
-                            .flatMap(
+                            .map(
                                 ({ file_extension, ...attrs }) => ({
                                     ...attrs,
                                     fileExtension: file_extension,
@@ -46,6 +52,7 @@ export default {
                                     type: "CourseResource"
                                 })
                             )
+                        files = [].concat(...files)
                             .filter( file => file.is_embeddable )
 
                         return resourceList.concat(files)
@@ -71,38 +78,59 @@ export default {
             return title
         }
     },
+    methods: {
+        // @func    searchResources
+        // @desc    request a queried set of resources from server
+        // @        and assign to available resources
+        async searchResources () {
+            try {
+                let { objects: resources } = await api
+                    .fetch({
+                        route: API_ROUTES.RESOURCE_SEARCH,
+                        params: {
+                            format: "json",
+                            q: this.q
+                        }
+                    })
+
+                this.resources = resources
+            }
+            catch (error) { console.log(error) }
+
+            return
+        },
+    }
 }
 </script>
 
 
 <template>
-<draggable
-    class="resource-list"
-    :list="processedResources"
-    :options="dragOptions"
->
-    <div class="list-group-item flex:h--p:start--s:base rhy:xStart25 pad:xyEq25 rxn:info"
-        v-for="instance in processedResources"
-        :key="instance.id"
+<div>
+    <search-field
+        v-model="q"
+        @submit="searchResources"
     >
-        <span
-            class="handle glyph pad:x25 pad:y0 "
-            role="button"
+        {{ $i18n.RESOURCE_LABEL_SEARCH }}
+    </search-field>
+
+    <draggable
+        class="resource-list"
+        :list="processedResources"
+        :options="dragOptions"
+    >
+        <div class="list-group-item flex:h--p:start--s:base rhy:xStart25 pad:xyEq25 rxn:info"
+            v-for="instance in processedResources"
+            :key="instance.id"
         >
-            <img src="/static/orb/images/glyphicons-move.png" />
-        </span>
+            <span
+                class="handle glyph pad:x25 pad:y0 "
+                role="button"
+            >
+                <img src="/static/orb/images/glyphicons-move.png" />
+            </span>
 
-        <div>{{ instance | niceTitle }}</div>
-    </div>
-</draggable>
+            <div>{{ instance | niceTitle }}</div>
+        </div>
+    </draggable>
+</div>
 </template>
-
-
-<style>
-.resource-list .handle { cursor: grab }
-.resource-list .handle img {
-    height: 16px;
-    margin-top: -5px;
-    width: 16px
-}
-</style>

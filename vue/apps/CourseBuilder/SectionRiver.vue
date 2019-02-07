@@ -109,18 +109,18 @@ export default {
         :key="instance.uuid"
         @update="updateSection({ instance, $event })"
     >
-        <template slot="section:preheading">
+        <template v-slot:preheading>
             <span
-                class="handle glyph pad:xEq25"
+                class="handle glyph"
                 role="button"
             >
                 <img src="/static/orb/images/glyphicons-move.png" />
             </span>
         </template>
 
-        <template slot="section:postheading">
+        <template v-slot:postheading>
             <icon-control
-                class="iso:xStartAuto"
+                class="pad:xyEq0 iso:xStartAuto"
                 glyph="remove"
                 @click="removeSection(index)"
             >

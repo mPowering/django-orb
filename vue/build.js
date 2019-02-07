@@ -5,22 +5,21 @@ const Bundler = require("parcel-bundler")
 const yaml = require("js-yaml")
 const cliOpts = require("yargs").parse()
 
-
-const configFile = cliOpts.config ? `${ process.cwd() }/${ cliOpts.config }` : null
 const environment = process.env.NODE_ENV || "dev"
 
-// read in local config file
-const config = yaml.load(fs.readFileSync(configFile))
-
 class Bundle {
-    constructor() {
+    constructor({ config, env }) {
+        this.env = env || environment
+
         this.importContext = `${ process.cwd() }/${ config.src }`
         this.exportContext = this.setExportContext(config.build)
 
         this.sources = config.entries
         this.buildDir = config.output
         this.entries = this.setEntries(config.entries)
+
         this.aliases = config.aliases || false
+
         this.options = this.setOptions()
         this.bundler = {}
     }
@@ -66,7 +65,7 @@ class Bundle {
             logLevel: 3,
 
             // @desc    we only want to watch files when developing
-            watch: environment !== "production" ? true : false,
+            watch: (this.env === "dev"),
 
             // @desc    we will minify outside of Parcel in order to get more control
             minify: false,
@@ -74,7 +73,7 @@ class Bundle {
             // @desc    not using sourceMaps for now
             sourceMaps: false,
 
-            hmr: true,
+            hmr: (this.env === "dev"),
             hmrPort: 0,
 
             // @desc    Prints a detailed report of the bundles, assets, filesizes and times
@@ -100,6 +99,7 @@ class Bundle {
         // for pathing, should we need it
         this.bundler.options.buildConfig = this.config
 
+        // console.log(this.bundler)
         // HACK: parcel aggressively bundles hrefs/sources/etc that we want to handle outside the bundler, so we hack it here.
         this.bundler.addAssetType("html", require.resolve("./parcel/HTMLAsset.js"))
 
@@ -113,5 +113,9 @@ class Bundle {
     }
 }
 
-const butter = new Bundle()
-butter.run()
+const configFile = cliOpts.config ? `${ process.cwd() }/${ cliOpts.config }` : null
+const config = yaml.load(fs.readFileSync(configFile))
+
+// read in local config file
+const apps = new Bundle({ config })
+apps.run()
