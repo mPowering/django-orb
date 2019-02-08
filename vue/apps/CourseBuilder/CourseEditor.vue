@@ -314,6 +314,7 @@ export default {
                     class="course-editor-hed-edit btn-xs pad:xyEq25"
                     glyph="edit"
                     theme="primary"
+                    v-if="course.editable"
                 >
                     <span class="sr-only">{{ $i18n.COURSE_TITLE_EDIT }}</span>
                 </action-control>
@@ -353,6 +354,7 @@ export default {
             ></dismissable-notification>
 
             <section-river
+                :can-edit="course.editable"
                 :sections="course.sections"
                 @update="updateSections"
             ></section-river>
@@ -363,24 +365,26 @@ export default {
         <div class="module:sticky">
             <primary-breadcrumbs class="iso:yEnd100"></primary-breadcrumbs>
 
-            <div class="btn-group flex:h--p:start--s:middle pad:yEq100 iso:yEnd100 edge:yEq--def:tint">
-                <action-control
-                    class="btn-sm module:balance"
-                    v-bind="saveControlMeta"
-                    @click="saveCourse"
-                >
-                    <span>{{ saveControlMeta.label }}</span>
-                </action-control>
+            <template v-if="course.editable">
+                <div class="btn-group flex:h--p:start--s:middle pad:yEq100 iso:yEnd100 edge:yEq--def:tint">
+                    <action-control
+                        class="btn-sm module:balance"
+                        v-bind="saveControlMeta"
+                        @click="saveCourse"
+                    >
+                        <span>{{ saveControlMeta.label }}</span>
+                    </action-control>
 
-                <action-control
-                    class="btn-sm module:balance"
-                    v-bind="statusControlMeta"
-                    v-if="course.id"
-                    @click="updateStatus"
-                >
-                    <span>{{ statusControlMeta.label }}</span>
-                </action-control>
-            </div>
+                    <action-control
+                        class="btn-sm module:balance"
+                        v-bind="statusControlMeta"
+                        v-if="course.id"
+                        @click="updateStatus"
+                    >
+                        <span>{{ statusControlMeta.label }}</span>
+                    </action-control>
+                </div>
+            </template>
 
             <div
                 class="pad:yEnd100 iso:yEnd100 rhy:yStart50 edge:yEnd--def:tint"
@@ -414,7 +418,10 @@ export default {
                 </action-link>
             </div>
 
-            <resource-list class="list-group"></resource-list>
+            <resource-list
+                class="list-group"
+                v-if="course.editable"
+            ></resource-list>
         </div>
     </aside>
 </article>

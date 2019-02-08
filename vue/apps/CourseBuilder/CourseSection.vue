@@ -17,6 +17,10 @@ export default {
         Draggable
     },
     props: {
+        canEdit: {
+            type: Boolean,
+            default: false
+        },
         // @prop    instance
         // @desc    individual section instance assigned to a course
         instance: {
@@ -108,12 +112,13 @@ export default {
     >
         <component
             v-for="(instance, index) in currentResources"
+            :can-edit="canEdit"
             :instance="instance"
             :is="instance.type"
             :key="instance.uuid || instance.id"
             @update="updateResource({ instance, $event })"
         >
-            <template v-slot:preheading>
+            <template #preheading v-if="canEdit">
                 <span
                     class="handle glyph"
                     role="button"
@@ -122,7 +127,7 @@ export default {
                 </span>
             </template>
 
-            <template v-slot:postheading>
+            <template #postheading v-if="canEdit">
                 <icon-control
                     class="pad:xyEq0 iso:xStartAuto"
                     glyph="remove"
@@ -142,7 +147,7 @@ export default {
         </div>
     </draggable>
 
-    <footer class="panel-footer flex:h--p:end--s:middle">
+    <footer class="panel-footer flex:h--p:end--s:middle" v-if="canEdit">
         <action-control
             glyph="plus"
             theme="primary"
@@ -150,6 +155,7 @@ export default {
         >
             <span>{{ $i18n.ACTIVITY_ADD }}</span>
         </action-control>
+
         <slot name="section:footer:controls"></slot>
     </footer>
 </article>

@@ -47,7 +47,7 @@ export default {
     >
         <slot name="preheading"></slot>
 
-        <h5 class="iso:yEnd0">{{ resource | niceTitle }}</h5>
+        <h5 class="iso:yEq0">{{ resource | niceTitle }}</h5>
 
         <slot name="postheading"></slot>
     </header>

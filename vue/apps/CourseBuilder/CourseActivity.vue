@@ -2,6 +2,10 @@
 export default {
     name: "CourseActivity",
     props: {
+        canEdit: {
+            type: Boolean,
+            default: false
+        },
         // @prop    instance
         // @desc    individual activity instance assigned to a course section
         instance: {
@@ -61,7 +65,7 @@ export default {
     >
         <slot name="preheading"></slot>
 
-        <h5 class="iso:yEnd0">{{ activity.title }}</h5>
+        <h5 class="iso:yEq0">{{ activity.title }}</h5>
 
         <slot name="postheading"></slot>
     </header>
@@ -105,7 +109,7 @@ export default {
         </div>
     </template>
 
-    <footer class="panel-footer flex:h--p:end--s:middle rhy:xStart50">
+    <footer class="panel-footer flex:h--p:end--s:middle rhy:xStart50" v-if="canEdit">
         <template v-if="isEdittable">
             <action-control
                 glyph="ban-circle"

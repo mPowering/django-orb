@@ -17,11 +17,6 @@ import router from "@CourseBuilder/config/routes"
 
 import { Course, User } from "@CourseBuilder/config/models"
 
-// const dataLoadIn = (async () => {
-//     await Course.stageFromTemplate()
-//     await User.stageFromTemplate()
-// })()
-
 /* eslint-disable no-new */
 new Vue({
     name: "Orb",

@@ -13,6 +13,10 @@ export default {
         CourseSection
     },
     props: {
+        canEdit: {
+            type: Boolean,
+            default: false
+        },
         // @prop    sections
         // @desc    current Course's assigned sections
         sections: {
@@ -105,11 +109,12 @@ export default {
 >
     <course-section
         v-for="(instance, index) in currentSections"
+        :can-edit="canEdit"
         :instance="instance"
         :key="instance.uuid"
         @update="updateSection({ instance, $event })"
     >
-        <template v-slot:preheading>
+        <template #preheading v-if="canEdit">
             <span
                 class="handle glyph"
                 role="button"
@@ -118,7 +123,7 @@ export default {
             </span>
         </template>
 
-        <template v-slot:postheading>
+        <template #postheading v-if="canEdit">
             <icon-control
                 class="pad:xyEq0 iso:xStartAuto"
                 glyph="remove"
@@ -129,7 +134,7 @@ export default {
         </template>
     </course-section>
 
-    <template slot="footer">
+    <template slot="footer" v-if="canEdit">
         <div
             class="course-sections-add panel panel-default"
         >
