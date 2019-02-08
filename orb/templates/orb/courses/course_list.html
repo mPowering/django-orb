@@ -71,7 +71,7 @@
             {% for course in courses %}
             {
                 "id": "{{ course.pk }}",
-                "title": "{{ course }}",
+                "title": "{{ course|safe }}",
                 "status": "{{ course.status }}",
                 "sections": {{ course.sections|safe }},
                 "url": "{{ course.get_absolute_url }}",
