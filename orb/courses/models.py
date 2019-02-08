@@ -157,10 +157,9 @@ class CourseQueryset(models.QuerySet):
             return self.active()
         """
         return self.filter(
-            # models.Q(status=CourseStatus.published.name) |
-            # models.Q(status=CourseStatus.draft.name, create_user=user)
+            models.Q(status=CourseStatus.published.name) |
             models.Q(create_user=user)
-        )
+        ).distinct()
 
     def editable(self, user):
         """Returns only those items the given user should be able to edit"""
