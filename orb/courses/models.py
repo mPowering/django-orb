@@ -8,10 +8,12 @@ from __future__ import unicode_literals
 
 import json
 import logging
+from collections import OrderedDict
 
 from autoslugged.settings import slugify
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.auth.models import User  # noqa
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -19,6 +21,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext
 from enum import Enum
 from six import text_type
+from typing import Optional  # noqa
 
 from orb.courses.moodle_export import MoodleCourse
 from orb.courses.oppia_client import OppiaClient
@@ -27,7 +30,6 @@ from orb.models import ResourceFile
 from orb.models import TimestampBase
 
 logger = logging.getLogger('orb.courses')
-
 
 
 class BaseChoices(Enum):
@@ -163,6 +165,10 @@ class CourseQueryset(models.QuerySet):
         if user.is_staff:
             return self.active()
         return self.active().filter(create_user=user)
+
+    def json_repr(self, user=None):
+        for instance in self:
+            yield instance.json_repr(user=user)
 
 
 @python_2_unicode_compatible
@@ -346,6 +352,33 @@ class Course(TimestampBase):
             backup_filename=self.moodle_file_name,
         )
         return backup.export()
+
+    def json_repr(self, user=None):
+        # type: (Optional[User]) -> OrderedDict
+        """JSON-ready representation, useful for templates"""
+        course = OrderedDict([
+            ("id", self.pk),
+            ("title", self.title),
+            ("status", self.status),
+            ("sections", json.loads(self.sections)),
+            ("url", self.get_absolute_url()),
+            ("exportRoutes", OrderedDict([
+                ("moodleExport", reverse("courses_moodle_export", kwargs={"pk": self.pk})),
+                ("oppiaExport", reverse("courses_oppia_export", kwargs={"pk": self.pk})),
+                ("oppiaPublish", reverse("courses_oppia_publish", kwargs={"pk": self.pk})),
+            ])),
+        ])
+        if user:
+            course["editable"] = (user == self.create_user or user.is_staff)
+        return course
+
+    @classmethod
+    def empty_json_repr(cls):
+        return OrderedDict([
+            ("id", ""),
+            ("title", "New Course"),
+            ("status", text_type(CourseStatus.draft)),
+        ])
 
 
 class OppiaPublisherQuerySet(models.QuerySet):
