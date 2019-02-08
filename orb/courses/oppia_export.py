@@ -33,11 +33,11 @@ class OppiaExport(CourseExport):
 
 
     """
+
     default_filename = "orb-course.zip"
 
     def __init__(self, *args, **kwargs):
         super(OppiaExport, self).__init__(*args, **kwargs)
-
 
         for section in self.sections:
             for activity in section["activities"]:
@@ -49,51 +49,48 @@ class OppiaExport(CourseExport):
             raise ValueError("Oppia backup file names must end with the .zip extension")
 
     def format_page(self, activity):
-        return render_to_string("orb/courses/oppia_page.html", {
-            "content": format_page_as_markdown(activity)
-        }).encode("utf8")
+        return render_to_string(
+            "orb/courses/oppia_page.html",
+            {"content": format_page_as_markdown(activity)},
+        ).encode("utf8")
 
     def page_filename(self, activity):
         return "{}_{}_{}.html".format(
-            activity["section"],
-            activity["digest"][-5:],
-            "en",
+            activity["section"], activity["digest"][-5:], "en"
         )
 
     def page_filename_fullpath(self, activity):
-        return "{}/{}".format(
-            self.slug,
-            self.page_filename(activity),
-        )
+        return "{}/{}".format(self.slug, self.page_filename(activity))
 
     def write_pages(self, backup_file):
         for course_resource in self.pages():
             page_html = self.format_page(course_resource)
             backup_file.writestr(
-                self.page_filename_fullpath(course_resource),
-                page_html,
+                self.page_filename_fullpath(course_resource), page_html
             )
 
     def write_resources(self, backup_file):
         for course_resource in self.resources():
-            with open(course_resource['file_path'], 'rb') as rf:
+            with open(course_resource["file_path"], "rb") as rf:
                 backup_file.writestr(
-                    "{}/resources/{}".format(
-                        self.slug,
-                        course_resource["file_name"],
-                    ),
-                    rf.read()
+                    "{}/resources/{}".format(self.slug, course_resource["file_name"]),
+                    rf.read(),
                 )
 
     def module_xml(self, context):
         """Validates and returns the module.xml file contents"""
 
-        oppia_xml = render_to_string(str(
-            module_base.joinpath("templates/orb/courses/oppia_module.xml").absolute()
-        ), context).encode("utf8")
-        schema_source = etree.parse(str(
-            module_base.joinpath("oppia-schema.xsd").absolute()
-        ))
+        oppia_xml = render_to_string(
+            str(
+                module_base.joinpath(
+                    "templates/orb/courses/oppia_module.xml"
+                ).absolute()
+            ),
+            context,
+        ).encode("utf8")
+        schema_source = etree.parse(
+            str(module_base.joinpath("oppia-schema.xsd").absolute())
+        )
         oppia_schema = etree.XMLSchema(schema_source)
         oppia_xml_tree = etree.fromstring(oppia_xml)
         oppia_schema.assertValid(oppia_xml_tree)
@@ -119,13 +116,12 @@ class OppiaExport(CourseExport):
             backup_file, "a", compression=zipfile.ZIP_DEFLATED
         ) as updated_backup_file:
 
-            for file_path in base_export_path.glob('**/*.*'):
+            for file_path in base_export_path.glob("**/*.*"):
                 updated_backup_file.write(
                     str(file_path.absolute()),
                     arcname="{}/{}".format(
-                        self.slug,
-                        str(file_path.relative_to(base_export_path)),
-                    )
+                        self.slug, str(file_path.relative_to(base_export_path))
+                    ),
                 )
 
             updated_backup_file.writestr(

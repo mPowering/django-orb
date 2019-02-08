@@ -29,16 +29,13 @@ from orb.courses.oppia_export import OppiaExport
 from orb.models import ResourceFile
 from orb.models import TimestampBase
 
-logger = logging.getLogger('orb.courses')
+logger = logging.getLogger("orb.courses")
 
 
 class BaseChoices(Enum):
     @classmethod
     def as_choices(cls):
-        return [
-            (child.name, child.name)
-            for child in cls
-        ]
+        return [(child.name, child.name) for child in cls]
 
     @classmethod
     def initial(cls):
@@ -59,11 +56,11 @@ def page_activity(activity_id, intro, content, section):
     Separate function to ensure consistent re-use
     """
     return {
-        'id': activity_id,
-        'type': 'page',
-        'intro': intro,
-        'content': content,
-        'section': section,
+        "id": activity_id,
+        "type": "page",
+        "intro": intro,
+        "content": content,
+        "section": section,
     }
 
 
@@ -80,11 +77,11 @@ def render_activity(activity, resource_id, section_count):
             return resource_error(resource_id, activity, section_count, err)
 
         return {
-            'id': resource_id,
-            'type': 'resource',
-            'intro': activity['title'],
-            'content': activity['description'],
-            'section': section_count,
+            "id": resource_id,
+            "type": "resource",
+            "intro": activity["title"],
+            "content": activity["description"],
+            "section": section_count,
             "file_path": rf.full_path,
             "file_name": rf.filename(),
             "file_sha": sha1,
@@ -99,8 +96,8 @@ def render_activity(activity, resource_id, section_count):
 
     return page_activity(
         activity_id=resource_id,
-        intro=activity['title'],
-        content=activity['description'],
+        intro=activity["title"],
+        content=activity["description"],
         section=section_count,
     )
 
@@ -112,15 +109,21 @@ def resource_error(resource_id, activity, section_count, err):
         return page_activity(
             activity_id=resource_id,
             intro="[ERROR] File missing",
-            content="The file for '{}' could not be found for export".format(activity["title"]),
+            content="The file for '{}' could not be found for export".format(
+                activity["title"]
+            ),
             section=section_count,
         )
     if isinstance(err, ObjectDoesNotExist):
-        logger.error("ResourceFile missing for resourcefile_id={}".format(activity["id"]))
+        logger.error(
+            "ResourceFile missing for resourcefile_id={}".format(activity["id"])
+        )
         return page_activity(
             activity_id=resource_id,
             intro="[ERROR] Resource missing",
-            content="The specified resource for '{}' might have been deleted prior to export".format(activity["title"]),
+            content="The specified resource for '{}' might have been deleted prior to export".format(
+                activity["title"]
+            ),
             section=section_count,
         )
     else:
@@ -128,13 +131,14 @@ def resource_error(resource_id, activity, section_count, err):
         return page_activity(
             activity_id=resource_id,
             intro="[ERROR] Unknown error",
-            content="There was an unknown error export the resource for '{}'".format(activity["title"]),
+            content="There was an unknown error export the resource for '{}'".format(
+                activity["title"]
+            ),
             section=section_count,
         )
 
 
 class CourseQueryset(models.QuerySet):
-
     def active(self):
         return self.exclude(status=CourseStatus.archived.name)
 
@@ -148,13 +152,13 @@ class CourseQueryset(models.QuerySet):
         """Returns only those itesm the given user should be able to see"""
         if user == AnonymousUser():
             return self.filter(models.Q(create_user=0))
-        '''
+        """
         if user.is_staff:
             return self.active()
-        '''
+        """
         return self.filter(
-            #models.Q(status=CourseStatus.published.name) |
-            #models.Q(status=CourseStatus.draft.name, create_user=user)
+            # models.Q(status=CourseStatus.published.name) |
+            # models.Q(status=CourseStatus.draft.name, create_user=user)
             models.Q(create_user=user)
         )
 
@@ -176,23 +180,25 @@ class Course(TimestampBase):
     """
     Data container for a user-created course
     """
+
     status = models.CharField(
         max_length=50,
         choices=CourseStatus.as_choices(),
         default=CourseStatus.draft.name,
     )
-    create_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='course_create_user')
-    update_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='course_update_user')
+    create_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="course_create_user"
+    )
+    update_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name="course_update_user"
+    )
 
     title = models.CharField(max_length=200)
 
     # Previous work with a third party JSON field was unsuccessufl
     sections = models.TextField(default="[]")  # TODO use a proper JSON field
 
-    version = models.IntegerField(
-        editable=False,
-        default=1,
-    )
+    version = models.IntegerField(editable=False, default=1)
 
     courses = CourseQueryset.as_manager()
     objects = courses
@@ -222,7 +228,7 @@ class Course(TimestampBase):
         for index, section in enumerate(self.section_data(), start=1):
             start = resource_count
             end = resource_count + len(section) + 1
-            sections.append({'id': index, 'sequence': [i for i in range(start, end)]})
+            sections.append({"id": index, "sequence": [i for i in range(start, end)]})
             resource_count += len(section)
 
         return sections
@@ -239,14 +245,20 @@ class Course(TimestampBase):
                     try:
                         rf = ResourceFile.objects.get(pk=file_data["id"])
                     except ResourceFile.DoesNotExist:
-                        logger.error("ResourceFile missing for export, pk: '{}'".format(file_data["id"]))
+                        logger.error(
+                            "ResourceFile missing for export, pk: '{}'".format(
+                                file_data["id"]
+                            )
+                        )
                         continue
 
-                    file_data.update({
-                        "file_path": rf.full_path,
-                        "file_sha1": rf.sha1sum(),
-                        "file_size": rf.filesize(),
-                    })
+                    file_data.update(
+                        {
+                            "file_path": rf.full_path,
+                            "file_sha1": rf.sha1sum(),
+                            "file_size": rf.filesize(),
+                        }
+                    )
 
                     yield file_data
 
@@ -297,11 +309,11 @@ class Course(TimestampBase):
 
         for section_count, section in enumerate(self.section_data(), start=1):
             section_activities = []
-            for activity in section['resources']:
+            for activity in section["resources"]:
                 activities.append(render_activity(activity, resource_id, section_count))
                 section_activities.append(resource_id)
                 resource_id += 1
-            sections.append({'id': section_count, 'sequence': section_activities})
+            sections.append({"id": section_count, "sequence": section_activities})
 
         return sections, activities
 
@@ -317,9 +329,7 @@ class Course(TimestampBase):
 
     def oppia_exporter(self):
         return OppiaExport(
-            name=self.title,
-            id=self.pk,
-            backup_filename=self.oppia_file_name,
+            name=self.title, id=self.pk, backup_filename=self.oppia_file_name
         )
 
     def oppia_backup(self, backup_file=None):
@@ -356,29 +366,51 @@ class Course(TimestampBase):
     def json_repr(self, user=None):
         # type: (Optional[User]) -> OrderedDict
         """JSON-ready representation, useful for templates"""
-        course = OrderedDict([
-            ("id", self.pk),
-            ("title", self.title),
-            ("status", self.status),
-            ("sections", json.loads(self.sections)),
-            ("url", self.get_absolute_url()),
-            ("exportRoutes", OrderedDict([
-                ("moodleExport", reverse("courses_moodle_export", kwargs={"pk": self.pk})),
-                ("oppiaExport", reverse("courses_oppia_export", kwargs={"pk": self.pk})),
-                ("oppiaPublish", reverse("courses_oppia_publish", kwargs={"pk": self.pk})),
-            ])),
-        ])
+        course = OrderedDict(
+            [
+                ("id", self.pk),
+                ("title", self.title),
+                ("status", self.status),
+                ("sections", json.loads(self.sections)),
+                ("url", self.get_absolute_url()),
+                (
+                    "exportRoutes",
+                    OrderedDict(
+                        [
+                            (
+                                "moodleExport",
+                                reverse(
+                                    "courses_moodle_export", kwargs={"pk": self.pk}
+                                ),
+                            ),
+                            (
+                                "oppiaExport",
+                                reverse("courses_oppia_export", kwargs={"pk": self.pk}),
+                            ),
+                            (
+                                "oppiaPublish",
+                                reverse(
+                                    "courses_oppia_publish", kwargs={"pk": self.pk}
+                                ),
+                            ),
+                        ]
+                    ),
+                ),
+            ]
+        )
         if user:
-            course["editable"] = (user == self.create_user or user.is_staff)
+            course["editable"] = user == self.create_user or user.is_staff
         return course
 
     @classmethod
     def empty_json_repr(cls):
-        return OrderedDict([
-            ("id", ""),
-            ("title", "New Course"),
-            ("status", text_type(CourseStatus.draft)),
-        ])
+        return OrderedDict(
+            [
+                ("id", ""),
+                ("title", "New Course"),
+                ("status", text_type(CourseStatus.draft)),
+            ]
+        )
 
 
 class OppiaPublisherQuerySet(models.QuerySet):
@@ -387,16 +419,12 @@ class OppiaPublisherQuerySet(models.QuerySet):
     def publish(self, course, user, export_file, **kwargs):
         host = kwargs["host"]
         client = OppiaClient(
-            host=host,
-            username=kwargs["username"],
-            password=kwargs["password"],
+            host=host, username=kwargs["username"], password=kwargs["password"]
         )
         tags = kwargs["tags"]
         is_draft = kwargs["is_draft"]
         success, status, message, response = client.publish_course(
-            tags,
-            is_draft,
-            export_file,
+            tags, is_draft, export_file
         )
         self.create(
             course=course,
@@ -413,14 +441,8 @@ class OppiaPublisherQuerySet(models.QuerySet):
 class OppiaLog(TimestampBase):
     """Logs attempts to publish a course to Oppia"""
 
-    course = models.ForeignKey(
-        'Course',
-        related_name="oppia_logs",
-    )
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        related_name="oppia_logs",
-    )
+    course = models.ForeignKey("Course", related_name="oppia_logs")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="oppia_logs")
     oppia_host = models.URLField()
     status = models.SmallIntegerField(help_text="HTTP status code of the response")
     success = models.BooleanField(default=False)

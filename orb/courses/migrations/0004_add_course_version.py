@@ -7,14 +7,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('courses', '0003_auto_20180501_1654'),
-    ]
+    dependencies = [("courses", "0003_auto_20180501_1654")]
 
     operations = [
         migrations.AddField(
-            model_name='course',
-            name='version',
+            model_name="course",
+            name="version",
             field=models.IntegerField(default=1, editable=False),
-        ),
+        )
     ]

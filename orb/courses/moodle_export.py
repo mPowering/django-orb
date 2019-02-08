@@ -49,6 +49,7 @@ class MoodleCourse(CourseExport):
     """
     Represents a Moodle course
     """
+
     encoding_string = '<?xml version="1.0" encoding="UTF-8" ?>'
     default_filename = "orb-course.mbz"
 
@@ -61,15 +62,19 @@ class MoodleCourse(CourseExport):
             content: all course content in a list by sections
             **kwargs:
         """
-        super(MoodleCourse, self).__init__(name, id, sections=sections, activities=activities, **kwargs)
+        super(MoodleCourse, self).__init__(
+            name, id, sections=sections, activities=activities, **kwargs
+        )
 
         # Add an empty 'general' section
-        self.sections.insert(0, {'id': 1, 'sequence': []})
-        self.hashed_site_identifier = kwargs.pop('hashed_site_identifier', '')  # md5
+        self.sections.insert(0, {"id": 1, "sequence": []})
+        self.hashed_site_identifier = kwargs.pop("hashed_site_identifier", "")  # md5
 
     def validate_backup_filename(self):
         if not self.backup_filename.endswith(".mbz"):
-            raise ValueError("Moodle backup file names must end with the .mbz extension")
+            raise ValueError(
+                "Moodle backup file names must end with the .mbz extension"
+            )
 
     def files_xml(self):
         """
@@ -97,8 +102,9 @@ class MoodleCourse(CourseExport):
   </file>
         """
         wrapper = """<?xml version="1.0" encoding="UTF-8"?><files>{}</files>"""
-        inner = "".join([
-            """
+        inner = "".join(
+            [
+                """
           <file id="{id}">
     <contenthash>{sha}</contenthash>
     <contextid>{contextid}</contextid>
@@ -121,21 +127,21 @@ class MoodleCourse(CourseExport):
     <repositoryid>$@NULL@$</repositoryid>
     <reference>$@NULL@$</reference>
   </file>""".format(
-                id=f['id'],
-                contextid=f['id'],
-                author=f['author'],
-                sha=f['file_sha'],
-                size=f['file_size'],
-                filename=f['file_name'],
-                mimetype=f['file_mimetype'],
-                created=f['created'],
-                modified=f['modified'],
-                license=f['license'],
-            )
-            for f in self.resources()
-        ])
+                    id=f["id"],
+                    contextid=f["id"],
+                    author=f["author"],
+                    sha=f["file_sha"],
+                    size=f["file_size"],
+                    filename=f["file_name"],
+                    mimetype=f["file_mimetype"],
+                    created=f["created"],
+                    modified=f["modified"],
+                    license=f["license"],
+                )
+                for f in self.resources()
+            ]
+        )
         return wrapper.format(inner)
-
 
     def convert_xml(self, keys, pretty=False):
         if isinstance(keys, str) or isinstance(keys, unicode):
@@ -180,7 +186,9 @@ class MoodleCourse(CourseExport):
             should be unique enough. Add one random part at the end
 
         """
-        return hashlib.md5(self.name + self.original_wwwroot + self.backup_date).hexdigest()
+        return hashlib.md5(
+            self.name + self.original_wwwroot + self.backup_date
+        ).hexdigest()
 
     def moodle_activities(self):
         # type: () -> List[Dict[str, str]]
@@ -217,11 +225,13 @@ class MoodleCourse(CourseExport):
         """
         return [
             {
-                "moduleid": str(activity['id']),
-                "sectionid": str(activity['section']),
-                "modulename": activity['type'],
-                "title": activity['intro'],
-                "directory": "activities/{}_{}".format(activity['type'], activity['id']),
+                "moduleid": str(activity["id"]),
+                "sectionid": str(activity["section"]),
+                "modulename": activity["type"],
+                "title": activity["intro"],
+                "directory": "activities/{}_{}".format(
+                    activity["type"], activity["id"]
+                ),
             }
             for activity in self.activities
         ]
@@ -246,9 +256,9 @@ class MoodleCourse(CourseExport):
         """
         return [
             {
-                "sectionid": str(section['id']),
-                "title": str(section['id']),
-                "directory": "sections/section_{}".format(section['id']),
+                "sectionid": str(section["id"]),
+                "title": str(section["id"]),
+                "directory": "sections/section_{}".format(section["id"]),
             }
             for section in self.sections
         ]
@@ -259,75 +269,23 @@ class MoodleCourse(CourseExport):
         As-is this is a set of default settings extracted from a limited Moodle export.
         """
         return [
-            {
-                "level": "root",
-                "name": "filename",
-                "value": self.backup_filename,
-            }, {
-                "level": "root",
-                "name": "imscc11",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "users",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "anonymize",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "role_assignments",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "activities",
-                "value": "1"
-            }, {
-                "level": "root",
-                "name": "blocks",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "filters",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "comments",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "badges",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "calendarevents",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "userscompletion",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "logs",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "grade_histories",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "questionbank",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "groups",
-                "value": "0"
-            }, {
-                "level": "root",
-                "name": "competencies",
-                "value": "0"
-            },
+            {"level": "root", "name": "filename", "value": self.backup_filename},
+            {"level": "root", "name": "imscc11", "value": "0"},
+            {"level": "root", "name": "users", "value": "0"},
+            {"level": "root", "name": "anonymize", "value": "0"},
+            {"level": "root", "name": "role_assignments", "value": "0"},
+            {"level": "root", "name": "activities", "value": "1"},
+            {"level": "root", "name": "blocks", "value": "0"},
+            {"level": "root", "name": "filters", "value": "0"},
+            {"level": "root", "name": "comments", "value": "0"},
+            {"level": "root", "name": "badges", "value": "0"},
+            {"level": "root", "name": "calendarevents", "value": "0"},
+            {"level": "root", "name": "userscompletion", "value": "0"},
+            {"level": "root", "name": "logs", "value": "0"},
+            {"level": "root", "name": "grade_histories", "value": "0"},
+            {"level": "root", "name": "questionbank", "value": "0"},
+            {"level": "root", "name": "groups", "value": "0"},
+            {"level": "root", "name": "competencies", "value": "0"},
         ]
 
     def course_settings(self):
@@ -337,30 +295,32 @@ class MoodleCourse(CourseExport):
             settings_data += [
                 {
                     "level": "section",
-                    "section": "section_{}".format(section['id']),
-                    "name": "section_{}_included".format(section['id']),
-                    "value": "1"
-                }, {
+                    "section": "section_{}".format(section["id"]),
+                    "name": "section_{}_included".format(section["id"]),
+                    "value": "1",
+                },
+                {
                     "level": "section",
-                    "section": "section_{}".format(section['id']),
-                    "name": "section_{}_userinfo".format(section['id']),
-                    "value": "0"
-                }
+                    "section": "section_{}".format(section["id"]),
+                    "name": "section_{}_userinfo".format(section["id"]),
+                    "value": "0",
+                },
             ]
 
         for activity in self.activities:
             settings_data += [
                 {
                     "level": "activity",
-                    "activity": "{}_{}".format(activity['type'], activity['id']),
-                    "name": "{}_{}_included".format(activity['type'], activity['id']),
-                    "value": "1"
-                }, {
+                    "activity": "{}_{}".format(activity["type"], activity["id"]),
+                    "name": "{}_{}_included".format(activity["type"], activity["id"]),
+                    "value": "1",
+                },
+                {
                     "level": "activity",
-                    "activity": "{}_{}".format(activity['type'], activity['id']),
-                    "name": "{}_{}_userinfo".format(activity['type'], activity['id']),
-                    "value": "0"
-                }
+                    "activity": "{}_{}".format(activity["type"], activity["id"]),
+                    "name": "{}_{}_userinfo".format(activity["type"], activity["id"]),
+                    "value": "0",
+                },
             ]
 
         return settings_data
@@ -368,7 +328,7 @@ class MoodleCourse(CourseExport):
     def moodle_backup(self, context):
         # type: (dict) -> SafeText
         """Renders the primary moodle_backup.xml file"""
-        return render_to_string('orb/courses/moodle_backup.xml', context).encode('utf8')
+        return render_to_string("orb/courses/moodle_backup.xml", context).encode("utf8")
 
     def moodle_backup_context(self):
 
@@ -407,21 +367,15 @@ class MoodleCourse(CourseExport):
                 }
             },
             "contents": {
-                "activities": {
-                    "activity": self.moodle_activities(),
-                },
-                "sections": {
-                    "section": self.moodle_sections(),
-                },
+                "activities": {"activity": self.moodle_activities()},
+                "sections": {"section": self.moodle_sections()},
                 "course": {
                     "courseid": self.courseid,
                     "title": self.name,
                     "directory": "course",
-                }
+                },
             },
-            "settings": {
-                "setting": self.moodle_settings() + self.course_settings(),
-            }
+            "settings": {"setting": self.moodle_settings() + self.course_settings()},
         }
 
     def course_xml(self):
@@ -483,10 +437,10 @@ class MoodleCourse(CourseExport):
     <timemodified>{timestamp}</timemodified>
   </resource>
 </activity>""".format(
-            id=activity['id'],
-            moduleid=activity['id'],
-            contextid=activity['id'],
-            name=activity['intro'],
+            id=activity["id"],
+            moduleid=activity["id"],
+            contextid=activity["id"],
+            name=activity["intro"],
             timestamp="{}".format(int(time.time())),
         )
 
@@ -511,17 +465,21 @@ class MoodleCourse(CourseExport):
     <timemodified>{timestamp}</timemodified>
   </page>
 </activity>""".format(
-            id=activity['id'],
-            moduleid=activity['id'],
-            contextid=activity['id'],
-            name=activity['intro'],
-            intro_html=activity['intro'],
+            id=activity["id"],
+            moduleid=activity["id"],
+            contextid=activity["id"],
+            name=activity["intro"],
+            intro_html=activity["intro"],
             content_html=escape(format_page_as_markdown(activity)),
             timestamp="{}".format(int(time.time())),
         )
 
     def activity_xml(self, activity):
-        return self.resource_xml(activity) if activity['type'] == 'resource' else self.page_xml(activity)
+        return (
+            self.resource_xml(activity)
+            if activity["type"] == "resource"
+            else self.page_xml(activity)
+        )
 
     def activity_module_xml(self, activity):
         return """<?xml version="1.0" encoding="UTF-8"?>
@@ -547,10 +505,10 @@ class MoodleCourse(CourseExport):
   <tags>
   </tags>
 </module>""".format(
-            activity_type=activity['type'],
-            moduleid=activity['id'],
-            sectionid=activity['section'],
-            sectionnum=activity['section'],
+            activity_type=activity["type"],
+            moduleid=activity["id"],
+            sectionid=activity["section"],
+            sectionnum=activity["section"],
             versionid=2017051500,
         )
 
@@ -565,7 +523,9 @@ class MoodleCourse(CourseExport):
   <sequence>{sequence}</sequence>
   <visible>1</visible>
   <availabilityjson>$@NULL@$</availabilityjson>
-</section>""".format(id=section['id'], sequence=sequenced_string(section['sequence']))
+</section>""".format(
+            id=section["id"], sequence=sequenced_string(section["sequence"])
+        )
 
     def course_enrollments(self):
         return """<?xml version="1.0" encoding="UTF-8"?>
@@ -716,17 +676,11 @@ class MoodleCourse(CourseExport):
 
     def activity_inforef_xml(self, activity):
         """Returns the inforef.xml content for an activity"""
-        if activity['type'] == 'resource':
-            return self.convert_xml({
-                'inforef': {
-                    'fileref': {
-                        'file': {
-                            'id': activity['id'],
-                        }
-                    }
-                }
-            })
-        return self.convert_xml('inforef')
+        if activity["type"] == "resource":
+            return self.convert_xml(
+                {"inforef": {"fileref": {"file": {"id": activity["id"]}}}}
+            )
+        return self.convert_xml("inforef")
 
     def export(self):
         """
@@ -738,41 +692,64 @@ class MoodleCourse(CourseExport):
 
         backup_file = StringIO()
 
-        with ZipFile(backup_file, 'w') as moodle_backup:
+        with ZipFile(backup_file, "w") as moodle_backup:
 
-            moodle_backup.writestr('completion.xml', self.convert_xml('course_completion'))
-            moodle_backup.writestr('files.xml', self.files_xml())
+            moodle_backup.writestr(
+                "completion.xml", self.convert_xml("course_completion")
+            )
+            moodle_backup.writestr("files.xml", self.files_xml())
             # moodle_backup.writestr('completion.xml', self.convert_xml('course_completion'))
 
-            moodle_backup.writestr('grade_history.xml', self.convert_xml({'grade_history': {'grade_grades': None}}))
-            moodle_backup.writestr('gradebook.xml', self.gradebook_xml())
-            moodle_backup.writestr('groups.xml', self.convert_xml({'groups': {'groupings': None}}))
-            moodle_backup.writestr('moodle_backup.log', '')
-            moodle_backup.writestr('moodle_backup.xml', self.moodle_backup(self.moodle_backup_context()))
-            moodle_backup.writestr('outcomes.xml', self.convert_xml('outcomes_definition'))
-            moodle_backup.writestr('questions.xml', self.convert_xml('question_categories'))
-            moodle_backup.writestr('roles.xml', self.roles_xml())
-            moodle_backup.writestr('scales.xml', self.convert_xml('scales_definition'))
+            moodle_backup.writestr(
+                "grade_history.xml",
+                self.convert_xml({"grade_history": {"grade_grades": None}}),
+            )
+            moodle_backup.writestr("gradebook.xml", self.gradebook_xml())
+            moodle_backup.writestr(
+                "groups.xml", self.convert_xml({"groups": {"groupings": None}})
+            )
+            moodle_backup.writestr("moodle_backup.log", "")
+            moodle_backup.writestr(
+                "moodle_backup.xml", self.moodle_backup(self.moodle_backup_context())
+            )
+            moodle_backup.writestr(
+                "outcomes.xml", self.convert_xml("outcomes_definition")
+            )
+            moodle_backup.writestr(
+                "questions.xml", self.convert_xml("question_categories")
+            )
+            moodle_backup.writestr("roles.xml", self.roles_xml())
+            moodle_backup.writestr("scales.xml", self.convert_xml("scales_definition"))
 
-            moodle_backup.writestr('course/course.xml', self.course_xml()),
-            moodle_backup.writestr('course/completiondefaults.xml', self.convert_xml('course_completion_defaults'))
-            moodle_backup.writestr('course/roles.xml',
-                                   self.convert_xml({'roles': {'role_overrides': None, 'role_assignments': None}}))
-            moodle_backup.writestr('course/inforef.xml',
-                                   self.convert_xml({'inforef': {'roleref': {'role': 5}}}))
+            moodle_backup.writestr("course/course.xml", self.course_xml()),
+            moodle_backup.writestr(
+                "course/completiondefaults.xml",
+                self.convert_xml("course_completion_defaults"),
+            )
+            moodle_backup.writestr(
+                "course/roles.xml",
+                self.convert_xml(
+                    {"roles": {"role_overrides": None, "role_assignments": None}}
+                ),
+            )
+            moodle_backup.writestr(
+                "course/inforef.xml",
+                self.convert_xml({"inforef": {"roleref": {"role": 5}}}),
+            )
 
             for course_resource in self.resources():
-                with open(course_resource['file_path'], 'rb') as rf:
-                    moodle_backup.writestr(
-                        course_resource["export_path"],
-                        rf.read()
-                    )
+                with open(course_resource["file_path"], "rb") as rf:
+                    moodle_backup.writestr(course_resource["export_path"], rf.read())
 
             for section in self.sections:
-                moodle_backup.writestr('sections/section_{id}/inforef.xml'.format(id=section['id']),
-                                       self.convert_xml('inforef'))
-                moodle_backup.writestr('sections/section_{id}/section.xml'.format(id=section['id']),
-                                       self.section_xml(section))
+                moodle_backup.writestr(
+                    "sections/section_{id}/inforef.xml".format(id=section["id"]),
+                    self.convert_xml("inforef"),
+                )
+                moodle_backup.writestr(
+                    "sections/section_{id}/section.xml".format(id=section["id"]),
+                    self.section_xml(section),
+                )
 
             for activity in self.activities:
                 # [x] grade_history
@@ -782,22 +759,30 @@ class MoodleCourse(CourseExport):
                 # [ ] page
                 # [x] roles
                 moodle_backup.writestr(
-                    'activities/{type}_{id}/inforef.xml'.format(type=activity['type'], id=activity['id']),
+                    "activities/{type}_{id}/inforef.xml".format(
+                        type=activity["type"], id=activity["id"]
+                    ),
                     self.activity_inforef_xml(activity),
                 )
 
                 moodle_backup.writestr(
-                    'activities/{type}_{id}/{type}.xml'.format(type=activity['type'], id=activity['id']),
-                    self.activity_xml(activity)
+                    "activities/{type}_{id}/{type}.xml".format(
+                        type=activity["type"], id=activity["id"]
+                    ),
+                    self.activity_xml(activity),
                 )
 
                 moodle_backup.writestr(
-                    'activities/{type}_{id}/module.xml'.format(type=activity['type'], id=activity['id']),
-                    self.activity_module_xml(activity)
+                    "activities/{type}_{id}/module.xml".format(
+                        type=activity["type"], id=activity["id"]
+                    ),
+                    self.activity_module_xml(activity),
                 )
 
                 moodle_backup.writestr(
-                    'activities/{type}_{id}/roles.xml'.format(type=activity['type'], id=activity['id']),
+                    "activities/{type}_{id}/roles.xml".format(
+                        type=activity["type"], id=activity["id"]
+                    ),
                     """<?xml version="1.0" encoding="UTF-8"?>
 <roles>
   <role_overrides>
@@ -807,28 +792,32 @@ class MoodleCourse(CourseExport):
 </roles>""",
                 ),
                 moodle_backup.writestr(
-                    'activities/{type}_{id}/grade_history.xml'.format(type=activity['type'], id=activity['id']),
+                    "activities/{type}_{id}/grade_history.xml".format(
+                        type=activity["type"], id=activity["id"]
+                    ),
                     """<?xml version="1.0" encoding="UTF-8"?>
 <grade_history>
   <grade_grades>
   </grade_grades>
-</grade_history>"""
+</grade_history>""",
                 ),
                 moodle_backup.writestr(
-                    'activities/{type}_{id}/grades.xml'.format(type=activity['type'], id=activity['id']),
+                    "activities/{type}_{id}/grades.xml".format(
+                        type=activity["type"], id=activity["id"]
+                    ),
                     """<?xml version="1.0" encoding="UTF-8"?>
 <activity_gradebook>
   <grade_items>
   </grade_items>
   <grade_letters>
   </grade_letters>
-</activity_gradebook>"""
+</activity_gradebook>""",
                 ),
 
         backup_file.seek(0)
         return backup_file
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     course = MoodleCourse("My test", 45)
     sys.stdout.write(course.export().getvalue())

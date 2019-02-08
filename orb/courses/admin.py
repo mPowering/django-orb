@@ -9,10 +9,10 @@ from orb.courses import models
 @admin.register(models.Course)
 class CourseAdmin(admin.ModelAdmin):
     form = forms.CourseAdminForm
-    list_display = ['title', 'status', 'create_user']
+    list_display = ["title", "status", "create_user"]
 
 
 @admin.register(models.OppiaLog)
 class OppiaLogAdmin(admin.ModelAdmin):
-    list_display = ['create_date', 'oppia_host', 'user', 'status', 'success']
-    list_filter = ['success', 'status']
+    list_display = ["create_date", "oppia_host", "user", "status", "success"]
+    list_filter = ["success", "status"]

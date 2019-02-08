@@ -75,8 +75,7 @@ class OppiaClient(object):
                 False,
                 response.status_code,
                 oppia_response_message(
-                    response,
-                    "There was an unknown error on the remote server",
+                    response, "There was an unknown error on the remote server"
                 ),
                 response.text,
             )
@@ -94,8 +93,7 @@ class OppiaClient(object):
             True,
             response.status_code,
             oppia_response_message(
-                response,
-                "Your course has been published to {}".format(self.host),
+                response, "Your course has been published to {}".format(self.host)
             ),
             response.text,
         )
@@ -124,8 +122,13 @@ class OppiaClient(object):
                     "is_draft": is_draft,
                 },
                 files={
-                    "course_file": ('orb_export.zip', course_file, 'application/zip', {'Expires': '0'})
-                }
+                    "course_file": (
+                        "orb_export.zip",
+                        course_file,
+                        "application/zip",
+                        {"Expires": "0"},
+                    )
+                },
             )
         else:
             with open(course_file, "rb") as export_file:
@@ -137,9 +140,7 @@ class OppiaClient(object):
                         "tags": tags,
                         "is_draft": is_draft,
                     },
-                    files={
-                        "course_file": export_file,
-                    }
-            )
+                    files={"course_file": export_file},
+                )
 
         return response

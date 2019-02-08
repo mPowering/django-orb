@@ -11,25 +11,50 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('courses', '0004_add_course_version'),
+        ("courses", "0004_add_course_version"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='OppiaLog',
+            name="OppiaLog",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('create_date', models.DateTimeField(auto_now_add=True)),
-                ('update_date', models.DateTimeField(auto_now=True)),
-                ('oppia_host', models.URLField()),
-                ('status', models.SmallIntegerField(help_text='HTTP status code of the response')),
-                ('success', models.BooleanField(default=False)),
-                ('response', models.TextField(blank=True)),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='oppia_logs', to='courses.Course')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='oppia_logs', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("create_date", models.DateTimeField(auto_now_add=True)),
+                ("update_date", models.DateTimeField(auto_now=True)),
+                ("oppia_host", models.URLField()),
+                (
+                    "status",
+                    models.SmallIntegerField(
+                        help_text="HTTP status code of the response"
+                    ),
+                ),
+                ("success", models.BooleanField(default=False)),
+                ("response", models.TextField(blank=True)),
+                (
+                    "course",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="oppia_logs",
+                        to="courses.Course",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="oppia_logs",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
-            options={
-                'abstract': False,
-            },
-        ),
+            options={"abstract": False},
+        )
     ]

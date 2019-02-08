@@ -22,15 +22,29 @@ def short_course():
     yield MoodleCourse(
         "Short course",
         9,
-        sections=[
-            {'id': 1, 'sequence': [1, 2]},
-            {'id': 2, 'sequence': [3]},
-        ],
+        sections=[{"id": 1, "sequence": [1, 2]}, {"id": 2, "sequence": [3]}],
         activities=[
-            {'id': 1, 'type': 'page', 'intro': 'First slide', 'content': 'Hello world', 'section': 1},
-            {'id': 2, 'type': 'page', 'intro': 'Intermission', 'content': 'Olé!', 'section': 1},
-            {'id': 3, 'type': 'page', 'intro': 'Second section title', 'content': 'Second section description',
-             'section': 2},
+            {
+                "id": 1,
+                "type": "page",
+                "intro": "First slide",
+                "content": "Hello world",
+                "section": 1,
+            },
+            {
+                "id": 2,
+                "type": "page",
+                "intro": "Intermission",
+                "content": "Olé!",
+                "section": 1,
+            },
+            {
+                "id": 3,
+                "type": "page",
+                "intro": "Second section title",
+                "content": "Second section description",
+                "section": 2,
+            },
         ],
     )
 
@@ -54,19 +68,9 @@ def test_backup_filename(empty_course, short_course):
 
 def test_moodle_sections(short_course):
     assert short_course.moodle_sections() == [
-        {
-            "sectionid": "1",
-            "title": "1",
-            "directory": "sections/section_1"
-        }, {
-            "sectionid": "2",
-            "title": "2",
-            "directory": "sections/section_2"
-        }, {
-           "sectionid": "3",
-           "title": "3",
-           "directory": "sections/section_3"
-       },
+        {"sectionid": "1", "title": "1", "directory": "sections/section_1"},
+        {"sectionid": "2", "title": "2", "directory": "sections/section_2"},
+        {"sectionid": "3", "title": "3", "directory": "sections/section_3"},
     ]
 
 
@@ -93,14 +97,13 @@ def test_moodle_activities(short_course):
             "modulename": "page",
             "title": "Second section title",
             "directory": "activities/page_3",
-        }
+        },
     ]
 
 
 def test_course_settings(short_course):
-
     def settings_sorter(setting):
-        return setting['name']
+        return setting["name"]
 
     expected = [
         {
@@ -108,57 +111,68 @@ def test_course_settings(short_course):
             "section": "section_1",
             "name": "section_1_included",
             "value": "1",
-        }, {
+        },
+        {
             "level": "section",
             "section": "section_1",
             "name": "section_1_userinfo",
             "value": "0",
-        }, {
+        },
+        {
             "level": "section",
             "section": "section_2",
             "name": "section_2_included",
             "value": "1",
-        }, {
+        },
+        {
             "level": "section",
             "section": "section_2",
             "name": "section_2_userinfo",
             "value": "0",
-        }, {
+        },
+        {
             "level": "activity",
             "activity": "page_1",
             "name": "page_1_included",
             "value": "1",
-        }, {
+        },
+        {
             "level": "activity",
             "activity": "page_1",
             "name": "page_1_userinfo",
             "value": "0",
-        }, {
+        },
+        {
             "level": "activity",
             "activity": "page_2",
             "name": "page_2_included",
             "value": "1",
-        }, {
+        },
+        {
             "level": "activity",
             "activity": "page_2",
             "name": "page_2_userinfo",
             "value": "0",
-        }, {
+        },
+        {
             "level": "section",
             "section": "section_3",
             "name": "section_3_included",
             "value": "1",
-        }, {
+        },
+        {
             "level": "section",
             "section": "section_3",
             "name": "section_3_userinfo",
             "value": "0",
-        }, {
+        },
+        {
             "level": "activity",
             "activity": "page_3",
             "name": "page_3_included",
             "value": "1",
-        }, {
+        },
+        {
             "level": "activity",
             "activity": "page_3",
             "name": "page_3_userinfo",
@@ -175,7 +189,13 @@ def test_course_settings(short_course):
 
 def test_page_activity_formatting():
     """Should render as HTML"""
-    activity = {'id': 1, 'type': 'page', 'intro': 'First slide', 'content': 'Hello world!\n\nFoo bar.', 'section': 1}
+    activity = {
+        "id": 1,
+        "type": "page",
+        "intro": "First slide",
+        "content": "Hello world!\n\nFoo bar.",
+        "section": 1,
+    }
     expected = """<h1>First slide</h1>\n<p>Hello world!</p>\n<p>Foo bar.</p>"""
     result = format_page_as_markdown(activity).strip()
     assert expected == result

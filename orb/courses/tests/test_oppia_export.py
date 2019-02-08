@@ -91,5 +91,7 @@ def test_module_xml(orb_course):
 
 def test_publish_to_oppia(client, orb_course):
     """Test that the page loads"""
-    response = client.get(reverse("courses_oppia_publish", kwargs={"pk": orb_course.pk}))
+    response = client.get(
+        reverse("courses_oppia_publish", kwargs={"pk": orb_course.pk})
+    )
     assert response.status_code == 200

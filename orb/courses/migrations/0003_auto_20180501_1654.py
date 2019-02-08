@@ -7,14 +7,20 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('courses', '0002_reset_status'),
-    ]
+    dependencies = [("courses", "0002_reset_status")]
 
     operations = [
         migrations.AlterField(
-            model_name='course',
-            name='status',
-            field=models.CharField(choices=[(b'archived', b'archived'), (b'draft', b'draft'), (b'published', b'published')], default=b'draft', max_length=50),
-        ),
+            model_name="course",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    (b"archived", b"archived"),
+                    (b"draft", b"draft"),
+                    (b"published", b"published"),
+                ],
+                default=b"draft",
+                max_length=50,
+            ),
+        )
     ]

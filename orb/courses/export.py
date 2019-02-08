@@ -22,8 +22,8 @@ def format_page_as_markdown(activity):
     # type: (Dict) -> Text
     """Create an HTML fo
     rmatted page from a simple course activity"""
-    header = "# {}\n\n".format(activity['intro'])
-    content = header + activity['content']
+    header = "# {}\n\n".format(activity["intro"])
+    content = header + activity["content"]
     return markdown.markdown(content)
 
 
@@ -52,6 +52,7 @@ class CourseExport(object):
     everythign has a digest.
 
     """
+
     default_filename = ""
 
     def __init__(self, name, id, sections=None, activities=None, version=1, **kwargs):
@@ -76,7 +77,8 @@ class CourseExport(object):
         for section in self.sections:
             section["id"] += 1
             section["activities"] = [
-                activity for activity in self.activities
+                activity
+                for activity in self.activities
                 if activity["section"] == section["id"]
             ]
 
@@ -92,7 +94,7 @@ class CourseExport(object):
 
     def _by_resource_type(self, resource_type):
         for course_resource in self.activities:
-            if course_resource['type'] == resource_type:
+            if course_resource["type"] == resource_type:
                 yield course_resource
 
     def pages(self):
