@@ -13,7 +13,7 @@ export default {
             return [
                 {
                     label: this.$i18n.COURSES_VIEW,
-                    href: this.$router.options.base, // @info    used to drive regular link
+                    href: this.$router.resolve({ name: "courseList" }).href, // @info    used to drive regular link
                     to: { name: "courseList" }, // @info    used to drive router link
                     useRoute: !!(Course.query().count() > 1) // @info    if we came here on an initial load, we'll only have one course, so we'll need to reload to get the full available course list
                 }

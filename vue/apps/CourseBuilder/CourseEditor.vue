@@ -26,6 +26,11 @@ export default {
         SectionRiver,
     },
     props: {
+        editable: {
+            type: Boolean,
+            default: false
+        },
+
         // @prop    exportRoutes
         // @desc    object for Moodle and Oppia export routes
         exportRoutes: {
@@ -66,11 +71,12 @@ export default {
             // @prop    course
             // @desc    locally initialized current course based on passed rops
             course: new Course({
+                editable: this.editable,
+                exportRoutes: this.exportRoutes || {},
                 id: this.id.length ? this.id : "",
                 title: this.title || this.$i18n.COURSE_TITLE_NEW,
                 status: this.status || COURSE_STATUS.INACTIVE,
                 sections: this.sections || [defaultSectionSchema],
-                exportRoutes: this.exportRoutes || {}
             }),
 
             // @prop    isTitleEditable
@@ -145,7 +151,7 @@ export default {
                 // @        if on a reloaded course detail form, get the first store entry (comes from template)
                 // @        this.id is automatically provided by VueRouter
                 if (this.$route.meta.action == COURSE_STATUS.CREATE) return
-                this.course = Course.query().whereId(this.id).first()
+                this.course = Course.find(this.id)
             }
         }
     },
@@ -336,7 +342,7 @@ export default {
         <div
             class="lead panel"
             v-html="$i18n.EDITOR_CONTENT"
-            v-if="initialCourseView"
+            v-if="initialCourseView && $i18n.EDITOR_CONTENT"
         ></div>
 
         <section class="editor-river">

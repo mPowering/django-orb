@@ -17,7 +17,13 @@
 
 {% block content %}
     {% include "includes/messages.html" %}
-    <div id="app"></div>
+    <div id="app">
+        {% comment %}
+        This course intro content will be loaded through the app, please add content to script_initializations.html
+        under the EDITOR_CONTENT constant.
+        <div class="lead panel"><p></p></div>
+        {% endcomment %}
+    </div>
     <script id="courseData" type="application/data">
         {{ course_json|safe }}
     </script>

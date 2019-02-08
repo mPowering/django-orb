@@ -1,5 +1,13 @@
 {% load i18n review_tags static %}
 
+<script id="routeData" type="application/json">
+{
+    "courseList": "{% url 'courses_list' %}",
+    "createCourse": "{% url 'courses_create' %}",
+    "editCourse": "{% url 'courses_list' %}:id/"
+}
+</script>
+
 {% if user.is_authenticated %}
 <script id="userData" type="application/json">
 {
@@ -33,33 +41,12 @@ window.i18n = {
     COURSE_TITLE_NEW: "New Course",
     COURSE_TITLE_SAVE: "Save Course Title",
 
-    COURSES_CONTENT: `
-        <p>
-            Course List text. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum.
-        </p>
-        <p>
-            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-            nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-            officia deserunt mollit anim id est laborum.
-        </p>
-    `,
+    COURSES_CONTENT: ``,
     COURSES_EMPTY: "{% trans 'You haven\'t created any courses yet.' %}",
     COURSES_LABEL: "{% trans 'Courses' %}",
     COURSES_VIEW: "View Course List",
 
-    EDITOR_CONTENT: `
-        <p>
-            Course Editor text. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Excepteur sint
-            occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
-            id est laborum.
-        </p>
-    `,
+    EDITOR_CONTENT: ``,
 
     EXPORT_MOODLE: "Export to Moodle",
     EXPORT_OPPIA: "Export to Oppia",

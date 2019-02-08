@@ -42,6 +42,7 @@ export default {
             return {
                 name: "createCourse",
                 params: {
+                    editable: true,
                     action: COURSE_STATUS.CREATE
                 }
             }
@@ -78,6 +79,7 @@ export default {
     <div
         class="lead panel"
         v-html="$i18n.COURSES_CONTENT"
+        v-if="$i18n.COURSES_CONTENT"
     ></div>
 
     <template v-if="processedCourses.length">

@@ -35,7 +35,11 @@
         {% comment %} Doesn't seem to be used as of yet {% endcomment %}
         {% comment %} {% include "includes/messages.html" %} {% endcomment %}
         {% if user.is_authenticated %}
-{#            <div class="lead panel"><p></p></div>#}
+            {% comment %}
+            This intro content will be loaded through the app, please add content to script_initializations.html
+            under the COURSES_CONTENT constant.
+            <div class="lead panel"><p></p></div>
+            {% endcomment %}
         {% else %}
             {% url 'profile_login' as login %}
             {% url 'profile_register' as register %}

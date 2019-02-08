@@ -2,23 +2,22 @@
 // @desc    data object models for use within CourseBuilder
 // @reqs    required Vuex and VuexOrm (loaded through vendors/bundle)
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-
+import { parseTemplateData } from "@utils/django"
 import COURSE_STATUS from "@CourseBuilder/config/status.yaml"
 
 import { defaultSectionSchema } from "@CourseBuilder/CourseSection"
 
 
-// @func    parseTemplateData
-// @desc    used to parse json data embedded within a server delivered template
-const parseTemplateData = function ({ id }) {
-    try {
-        return JSON.parse(document.getElementById(id).innerHTML)
-    }
-    catch (err) {
-        return false
-    }
-}
+// // @func    parseTemplateData
+// // @desc    used to parse json data embedded within a server delivered template
+// const parseTemplateData = function ({ id }) {
+//     try {
+//         return JSON.parse(document.getElementById(id).innerHTML)
+//     }
+//     catch (err) {
+//         return false
+//     }
+// }
 
 
 // @class   User
@@ -46,7 +45,7 @@ export class User extends VuexORM.Model {
     // @desc    look for <script #userData> and load it as JSON into our model
     static async stageFromTemplate () {
         try {
-            let data = parseTemplateData({ id: "userData" })
+            let data = parseTemplateData({ id: "userData", required: true })
 
             if (data) await User.insertOrUpdate({ data })
             else {
@@ -73,6 +72,7 @@ export class Course extends VuexORM.Model {
     // @desc    normalized data for the UI
     static fields () {
         return {
+            editable: this.boolean(false),
             exportRoutes: this.attr({}),
             id: this.attr(),
             sections: this.attr([defaultSectionSchema]),

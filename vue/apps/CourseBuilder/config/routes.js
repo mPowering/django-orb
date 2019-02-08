@@ -1,7 +1,4 @@
-// import Vue from "vue"
-// import VueRouter from 'vue-router'
-Vue.use(VueRouter)
-
+import { parseTemplateData } from "@utils/django"
 import COURSE_STATUS from "@CourseBuilder/config/status"
 
 import CourseEditor from "@CourseBuilder/CourseEditor"
@@ -24,15 +21,19 @@ import RouterControl from "@controls/RouterControl"
 Vue.component("RouterControl", RouterControl)
 
 
+Vue.use(VueRouter)
+
+const INIT_ROUTES = parseTemplateData({ id: "routeData" })
+
 const routes = [
     {
         name: "courseList",
-        path: "/",
+        path: INIT_ROUTES.courseList,
         component: CourseList,
     },
     {
         name: "createCourse",
-        path: "/new",
+        path: INIT_ROUTES.createCourse,
         component: CourseEditor,
         props: true,
         meta: {
@@ -42,7 +43,7 @@ const routes = [
     },
     {
         name: "editCourse",
-        path: "/:id",
+        path: INIT_ROUTES.editCourse,
         component: CourseEditor,
         props: true,
         meta: {
@@ -54,6 +55,5 @@ const routes = [
 
 export default new VueRouter({
     mode: "history",
-    base: "/courses",
     routes,
 })
