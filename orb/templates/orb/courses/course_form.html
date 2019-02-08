@@ -19,21 +19,7 @@
     {% include "includes/messages.html" %}
     <div id="app"></div>
     <script id="courseData" type="application/data">
-        {
-            "id": "{{ course.id }}",
-            "title": "{{ course.title|default:'New Course' }}",
-            {% if course.sections %}
-                "sections": {{ course.sections|safe }},
-            {% endif %}
-            {% if user.is_authenticated and course.pk %}
-                "exportRoutes": {
-                    "moodleExport": "{% url 'courses_moodle_export' course.pk %}",
-                    "oppiaExport": "{% url 'courses_oppia_export' course.pk %}",
-                    "oppiaPublish": "{% url 'courses_oppia_publish' course.pk %}"
-                },
-            {% endif %}
-            "status": "{{ course.status|default:'draft' }}"
-        }
+        {{ course_json|safe }}
     </script>
     {% include "orb/courses/script_initializations.html" %}
     <div id="course-manager"></div>

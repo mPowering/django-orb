@@ -59,6 +59,11 @@ class CoursesListView(generic.ListView):
     def get_queryset(self):
         return models.Course.courses.viewable(self.request.user).order_by('-id')
 
+    def get_context_data(self, **kwargs):
+        context = super(CoursesListView, self).get_context_data(**kwargs)
+        context["courses_json"] = json.dumps(list(self.get_queryset().json_repr(self.request.user)))
+        return context
+
 
 class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
     """
@@ -71,6 +76,13 @@ class CourseCreateView(mixins.LoginRequiredMixin, generic.CreateView):
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super(CourseCreateView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(CourseCreateView, self).get_context_data(**kwargs)
+        context.update({
+            "course_json": json.dumps(models.Course.empty_json_repr()),
+        })
+        return context
 
     def post(self, request, *args, **kwargs):
         """
@@ -138,7 +150,10 @@ class CourseView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CourseView, self).get_context_data(**kwargs)
-        context.update({'can_edit': self.user_can_edit(self.request.user)})
+        context.update({
+            "can_edit": self.user_can_edit(self.request.user),
+            "course_json": json.dumps(self.get_object().json_repr(self.request.user)),
+        })
         return context
 
     @method_decorator(login_required)

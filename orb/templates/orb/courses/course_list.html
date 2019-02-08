@@ -35,21 +35,7 @@
         {% comment %} Doesn't seem to be used as of yet {% endcomment %}
         {% comment %} {% include "includes/messages.html" %} {% endcomment %}
         {% if user.is_authenticated %}
-            <div class="lead panel">
-                <p>
-                    Course List text. Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
-                </p>
-                <p>
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                    nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                    officia deserunt mollit anim id est laborum.
-                </p>
-            </div>
+{#            <div class="lead panel"><p></p></div>#}
         {% else %}
             {% url 'profile_login' as login %}
             {% url 'profile_register' as register %}
@@ -67,24 +53,7 @@
     </div>
 
     <script id="courseListData" type="application/json">
-        [
-            {% for course in courses %}
-            {
-                "id": "{{ course.pk }}",
-                "title": "{{ course|safe }}",
-                "status": "{{ course.status }}",
-                "sections": {{ course.sections|safe }},
-                "url": "{{ course.get_absolute_url }}",
-                {% if user.is_authenticated %}
-                "exportRoutes": {
-                    "moodleExport": "{% url 'courses_moodle_export' course.pk %}",
-                    "oppiaExport": "{% url 'courses_oppia_export' course.pk %}",
-                    "oppiaPublish": "{% url 'courses_oppia_publish' course.pk %}"
-                }
-                {% endif %}
-            }{% if not forloop.last %},{% endif %}
-            {% endfor %}
-        ]
+        {{ courses_json|safe }}
     </script>
 
     {% include "orb/courses/script_initializations.html" %}
