@@ -50,6 +50,13 @@ const routes = [
             // @info    this lets s know the primary action is to update a course
             action: COURSE_STATUS.UPDATE
         }
+    },
+    {
+        name: "searchResources",
+        path: INIT_ROUTES.searchResources,
+        meta: {
+            apiOnly: true
+        }
     }
 ]
 

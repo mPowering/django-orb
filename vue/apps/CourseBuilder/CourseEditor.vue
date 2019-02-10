@@ -3,7 +3,6 @@ import COURSE_STATUS from "@CourseBuilder/config/status"
 import COURSE_ALERTS from "@CourseBuilder/config/alerts"
 
 import { api } from "@services/api"
-import API_ROUTES from "@CourseBuilder/config/apiRoutes"
 
 import { Course, User } from "@CourseBuilder/config/models"
 
@@ -133,6 +132,14 @@ export default {
                 }
         },
 
+        // @prop    routes
+        // @desc    define local api routes based on course id
+        routes () {
+            return {
+                [COURSE_STATUS.CREATE]: `${ this.$router.resolve({ name: "createCourse" }).href }/`,
+                [COURSE_STATUS.UPDATE]: `${ this.$router.resolve({ name: "editCourse", params: { id: this.course.id } }).href }/`,
+            }
+        },
         // @prop    user
         // @desc    get the current user from the Vuex Store
         user () {
@@ -150,8 +157,12 @@ export default {
                 // @        if we're on a new course form, we don't need to go to the store
                 // @        if on a reloaded course detail form, get the first store entry (comes from template)
                 // @        this.id is automatically provided by VueRouter
-                if (this.$route.meta.action == COURSE_STATUS.CREATE) return
-                this.course = Course.find(this.id)
+                if (this.$route.meta.action == COURSE_STATUS.CREATE) {
+                    this.course.editable = true
+                } else {
+                    this.course = Course.find(this.id)
+                }
+                return
             }
         }
     },
@@ -166,7 +177,7 @@ export default {
         async getExportRoutes ({ id } = { id: this.course.id }) {
             try {
                 const parser = new DOMParser()
-                let html = await api.fetch({ route: `${ API_ROUTES.UPDATE }${ this.course.id }` })
+                let html = await api.fetch({ route: this.routes[COURSE_STATUS.UPDATE] })
                 const { exportRoutes } = JSON.parse(
                     parser
                         .parseFromString(html, "text/html")
@@ -217,13 +228,10 @@ export default {
         // @        if newly created, redirect to edit form and state
         // @        update the action mode to the update state
         async saveCourse ({ status = "200" }) {
-            let data = this.course
+            const route = this.routes[this.saveAction]
+            const data = this.course
+
             try {
-                let route = (this.saveAction === COURSE_STATUS.CREATE)
-                    ? API_ROUTES.CREATE
-                    : `${ API_ROUTES.UPDATE }${ this.course.id }/`
-
-
                 const {
                     course_id,
                     course_status,
@@ -238,7 +246,7 @@ export default {
                 await this.course.$save()
                 this.setNotification({ status, message })
                 await this.redirectOnCreate()
-                // this.saveAction = COURSE_STATUS.UPDATE
+                this.saveAction = COURSE_STATUS.UPDATE
             }
             catch (error) {
                 this.setNotification({status: "500", message: error.message })

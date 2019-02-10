@@ -1,6 +1,5 @@
 <script>
 import { api } from "@services/api"
-import API_ROUTES from "@CourseBuilder/config/apiRoutes"
 
 import Draggable from "vuedraggable"
 import SearchField from "@fields/SearchField"
@@ -59,6 +58,9 @@ export default {
                     },
                     []
                 )
+        },
+        apiRoute () {
+            return this.$router.resolve({ name: "searchResources"}).href || false
         }
     },
     filters: {
@@ -86,7 +88,7 @@ export default {
             try {
                 let { objects: resources } = await api
                     .fetch({
-                        route: API_ROUTES.RESOURCE_SEARCH,
+                        route: this.apiRoute,
                         params: {
                             format: "json",
                             q: this.q

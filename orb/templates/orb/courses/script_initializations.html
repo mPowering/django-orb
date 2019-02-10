@@ -3,8 +3,11 @@
 <script id="routeData" type="application/json">
 {
     "courseList": "{% url 'courses_list' %}",
+    {% if user.is_authenticated %}
     "createCourse": "{% url 'courses_create' %}",
-    "editCourse": "{% url 'courses_list' %}:id/"
+    {% endif %}
+    "editCourse": "{% url 'courses_list' %}:id/",
+    "searchResources": "/api/v1/resource/search/"
 }
 </script>
 

@@ -1,5 +1,7 @@
 # course instance status (used for actions within the course builder)
 ACTIVE: published
+ARCHIVED: archived
 CREATE: create
 INACTIVE: draft
+READ_ONLY: read only
 UPDATE: update

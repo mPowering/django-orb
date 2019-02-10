@@ -9,7 +9,12 @@ export default {
         // @prop    courses
         // @desc    course data retrieved from Vuex store
         courses () {
-            return Course.query().orderBy("title").all()
+            return Course.query()
+                .where("status", status => status !== COURSE_STATUS.ARCHIVED)
+                .orderBy("editable", "desc")
+                .orderBy("status")
+                .orderBy("title")
+                .all()
         },
 
         // @prop    user
@@ -53,7 +58,7 @@ export default {
         // @desc    determine if a passed course is in draft status
         isDraft ({ status }) {
             return status === COURSE_STATUS.INACTIVE
-        }
+        },
     },
 }
 </script>
@@ -101,6 +106,7 @@ export default {
 
             <div
                 class="label pad:xyEq25 iso:xStartAuto iso:xEnd50"
+                v-if="course.editable"
                 :class="`label-${ course.labelTheme }`"
             >
                 {{ course.status }}
@@ -108,6 +114,7 @@ export default {
 
             <div
                 class="btn-group"
+                :class="{ 'iso:xStartAuto': !course.editable }"
                 v-if="user.isAuthenticated"
             >
                 <action-link
