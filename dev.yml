@@ -17,6 +17,7 @@ services:
         MYSQL_PASSWORD: orb
     volumes:
       - ./local_data/mysql-data:/var/lib/mysql
+      - ./local_data/mysql-backups:/tmp/backups
       - ./local_data/mysql-init:/docker-entrypoint-initdb.d
 
   solr:
