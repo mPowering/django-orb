@@ -3,10 +3,10 @@
 {% load static %}
 
 {% for category, category_tags in organized_topics.items %}
-  <div class="resource-collections">
+  <section class="resource-collection">
   <h2>{{ category }}</h2>
   {% for tag in category_tags %}
-	<div style="display:inline-block; min-width:270px; min-height:240px; text-align:center; margin: auto;">
+    <div class="resource-collection-block">
 		<a href="{% url 'orb_tags' tag.slug %}">
 			{% thumbnail tag.image "220x150" crop="center" as im %}
 				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
@@ -18,5 +18,5 @@
 		</a>
 	</div>
 {% endfor %}
-  </div>
+  </section>
 {% endfor %}

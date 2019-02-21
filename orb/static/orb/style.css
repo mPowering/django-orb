@@ -172,6 +172,34 @@ span.bookmark:hover, span.bookmark:focus {
     color: #fff;
 }
 
+
+/*
+ * Home page
+ */
+
+section.resource-collection {
+    display: inline-block;
+    max-width: 820px;
+}
+
+.resource-collection:not(:last-of-type) {
+    border-bottom: 1px solid #EF485B;
+}
+
+.resource-collection > h2 {
+    margin: 50px;
+    /*margin: 30px 0 30px 30px;*/
+    /*text-align: left;*/
+}
+.resource-collection-block {
+    display:inline-block;
+    min-width:270px;
+    min-height:240px;
+    text-align:center;
+    margin: auto;
+}
+
+
 /*
  * Main content
  */
