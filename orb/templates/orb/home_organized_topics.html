@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load thumbnail %}
+{% load static %}
+
+{% for category, category_tags in organized_topics.items %}
+  <div class="resource-collections">
+  <h2>{{ category }}</h2>
+  {% for tag in category_tags %}
+	<div style="display:inline-block; min-width:270px; min-height:240px; text-align:center; margin: auto;">
+		<a href="{% url 'orb_tags' tag.slug %}">
+			{% thumbnail tag.image "220x150" crop="center" as im %}
+				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+			{% empty %}
+    			<p>No image</p>
+			{% endthumbnail %}
+			<h3 class="homepage">{{ tag.name }}</h3>
+			{% blocktrans count tag.resource_count as resource_count %}{{ resource_count }} resource{% plural %}{{ resource_count }} resources{% endblocktrans %}
+		</a>
+	</div>
+{% endfor %}
+  </div>
+{% endfor %}

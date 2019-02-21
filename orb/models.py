@@ -6,6 +6,7 @@ import mimetypes
 import os
 import time
 import uuid
+from collections import OrderedDict
 
 import parsedatetime as pdt
 from django.conf import settings
@@ -623,11 +624,19 @@ class ResourceCriteria(models.Model):
         verbose_name_plural = _("resource criteria")
 
 
+class CategoryQuerySet(models.QuerySet):
+    def top_level(self):
+        return self.filter(top_level=True).order_by('order_by')
+
+
 class Category(models.Model):
     name = models.CharField(max_length=100)
     top_level = models.BooleanField(default=False)
     slug = AutoSlugField(populate_from='name', max_length=100, blank=True, null=True)
     order_by = models.IntegerField(default=0)
+
+    categories = CategoryQuerySet.as_manager()
+    objects = CategoryQuerySet.as_manager()
 
     class Meta:
         verbose_name = _('Category')
@@ -1075,3 +1084,22 @@ def clean_api_data(data, *fields):
         for key, value in data.items()
         if allowed_field(key)
     }
+
+
+def home_resources():
+    """
+    Returns an ordered dictionary of top level categories and tags
+
+    Tags are included with approved resource counts.
+    """
+    category_topics = OrderedDict()
+    for category in Category.objects.top_level():
+        for tag in category.tag_set.public().top_level():
+            tag.resource_count = Resource.objects.approved().filter(
+                models.Q(resourcetag__tag__parent_tag=tag) |
+                models.Q(resourcetag__tag=tag)).distinct().count()
+            try:
+                category_topics[category].append(tag)
+            except KeyError:
+                category_topics[category] = [tag]
+    return category_topics

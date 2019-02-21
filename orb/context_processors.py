@@ -1,17 +1,14 @@
-# orb/context_processors.py
-from datetime import date
+from __future__ import unicode_literals
 
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
-from django.utils.translation import ugettext_lazy as _
 
 import orb
-from orb.models import Tag, TagOwner
+from orb.models import TagOwner
+from orb.models import home_resources
 
 
 def get_menu(request):
-    topics = Tag.tags.public().top_level()
-
     if request.user.is_authenticated():
         tags = TagOwner.objects.filter(user=request.user)
     else:
@@ -29,11 +26,10 @@ def get_menu(request):
         reviewer = False
 
     return {
-        'header_menu_categories': topics,
+        'header_menu_categories': home_resources(),
         'header_owns_tags': tags,
         'settings': settings,
         'reviewer': reviewer,
-
     }
 
 

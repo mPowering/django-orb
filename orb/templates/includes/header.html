@@ -21,9 +21,17 @@
                                         class="dropdown-toggle">{% trans 'Browse Resources' %} <b
                         class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        {% for t in header_menu_categories %}
-                            <li><a href="{% url 'orb_tags' t.slug %}">{{ t.name }}</a></li>
+                      {% for category_tags in header_menu_categories.values %}
+                        {% for t in category_tags %}
+                            <li
+                              {% if forloop.last %}
+                                style="border-bottom: 1px solid #c0c0c0;
+                                margin-bottom: 10px;
+                                padding-bottom: 10px;"
+                              {% endif %}
+                                ><a href="{% url 'orb_tags' t.slug %}">{{ t.name }}</a></li>
                         {% endfor %}
+                    {% endfor %}
                         <li><a href="{% url 'orb_country_map' %}">{% trans 'Country Map' %}</a></li>
                         <li><a href="{% url 'orb_toolkits' %}">{% trans 'Toolkits' %}</a></li>
                     </ul>

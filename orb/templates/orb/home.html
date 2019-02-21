@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load thumbnail %}
-{% load static %}
 
 {% block extra_head_title %}{% trans 'ORB by mPowering' %}{% endblock extra_head_title %}
 
@@ -19,27 +18,14 @@
 </h3>
 
 <div style="position: relative; margin: 20px auto; overflow: hidden; text-align: center;">
-{% for t in topics %}
-	<div style="display:inline-block; min-width:270px; min-height:240px; text-align:center; margin: auto;">
-		{% if not t.custom %}
-		<a href="{% url 'orb_tags' t.tag.slug %}">
-			{% thumbnail t.tag.image "220x150" crop="center" as im %}
-				<img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
-			{% empty %}
-    			<p>No image</p>
-			{% endthumbnail %}
-			<h3 class="homepage">{{ t.tag.name }}</h3>
-			{% blocktrans count t.resource_count as resource_count %}{{ resource_count }} resource{% plural %}{{ resource_count }} resources{% endblocktrans %}
-		</a>
-		{% else %}
-		<a href="{{ t.url }}">
-			<img src="{% get_static_prefix %}orb/images/{{ t.image }}" width="220" height="150">
-			<h3 class="homepage">{{ t.title }}</h3>
-			{% blocktrans count t.resource_count as resource_count %}{{ resource_count }} resource{% plural %}{{ resource_count }} resources{% endblocktrans %}
-		</a>
-		{% endif %}
-	</div>
-{% endfor %}
+
+{% if organized_topics %}
+  {% include "orb/home_organized_topics.html" %}
+{% else %}
+  {% include "orb/home_topics.html" %}
+{% endif %}
+
+
 	<div style="clear:both"></div>
 </div>
 

@@ -1,4 +1,5 @@
 import os
+from collections import defaultdict
 
 from django.conf import settings
 from django.contrib import messages
@@ -13,6 +14,7 @@ from haystack.query import SearchQuerySet
 from orb.forms import (ResourceStep1Form, ResourceStep2Form, SearchForm,
                        ResourceRejectForm, AdvancedSearchForm)
 from orb.models import Collection
+from orb.models import home_resources
 from orb.models import ResourceFile, ResourceTag, ResourceCriteria, ResourceRating
 from orb.models import ReviewerRole
 from orb.models import Tag, Resource, ResourceURL, Category, TagOwner, SearchTracker
@@ -21,13 +23,21 @@ from orb.signals import (resource_viewed, resource_url_viewed, resource_file_vie
 from orb.tags.forms import TagPageForm
 
 
+
 def home_view(request):
     topics = []
+    organized_topics = defaultdict(list)
     for tag in Tag.tags.public().top_level():
-
         child_tags = tag.children.values_list('id')
         resource_count = Resource.objects.filter(status=Resource.APPROVED).filter(
             Q(resourcetag__tag__pk__in=child_tags) | Q(resourcetag__tag=tag)).distinct().count()
+
+        for category_slug in ["health-domain"]:
+            if tag.category.slug == category_slug:
+                organized_topics[category_slug.replace("-", "_")].append({
+                    'resource_count': resource_count,
+                    'tag': tag,
+                })
 
         topics.append({
             'resource_count': resource_count,
@@ -36,6 +46,7 @@ def home_view(request):
 
     return render(request, 'orb/home.html', {
         'topics': topics,
+        'organized_topics': home_resources(),
         'page_title': _(u'ORB by mPowering'),
     })
 
