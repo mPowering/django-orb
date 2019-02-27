@@ -13,7 +13,10 @@
 			{% empty %}
     			<p>No image</p>
 			{% endthumbnail %}
+      {% if tag.name != category.name %}
 			<h3 class="homepage">{{ tag.name }}</h3>
+        {% endif %}
+
 			{% blocktrans count tag.resource_count as resource_count %}{{ resource_count }} resource{% plural %}{{ resource_count }} resources{% endblocktrans %}
 		</a>
 	</div>
