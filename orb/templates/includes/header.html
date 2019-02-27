@@ -21,7 +21,10 @@
                                         class="dropdown-toggle">{% trans 'Browse Resources' %} <b
                         class="caret"></b></a>
                     <ul class="dropdown-menu">
-                      {% for category_tags in header_menu_categories.values %}
+                      {% for category, category_tags in header_menu_categories.items %}
+                        {% if category_tags|length != 1 %}
+                          <li style="padding: 3px 20px;"><strong>{{ category }}</strong></li>
+                        {% endif %}
                         {% for t in category_tags %}
                             <li
                               {% if forloop.last %}
