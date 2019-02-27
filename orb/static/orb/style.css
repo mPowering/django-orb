@@ -179,7 +179,7 @@ span.bookmark:hover, span.bookmark:focus {
 
 section.resource-collection {
     display: inline-block;
-    max-width: 820px;
+    /*max-width: 820px;*/
 }
 
 .resource-collection:not(:last-of-type) {
